@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SimNeuro · Precio y valor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#fbf8f5; --surface:#ffffff; --surface2:#f4eeea; --fg:#231a1d; --muted:#6b5c61; --line:#e6dcd7;
+  --accent:#8c2f4b; --accent-fg:#ffffff; --accent-soft:#f6e6eb;
+  --sim:#4a55c4; --sim-soft:#e8eafa; --real:#14796a; --real-soft:#dff2ee; --warn:#9a5b00; --warn-soft:#fbefd9; --bad:#b3261e;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; --head:'Space Grotesk','Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#171214; --surface:#211a1d; --surface2:#2a2125; --fg:#f3eaec; --muted:#b2a2a7; --line:#3a2f33;
+  --accent:#e58aa5; --accent-fg:#2a0f19; --accent-soft:#3a2430;
+  --sim:#a3abf3; --sim-soft:#262a4a; --real:#55c9b3; --real-soft:#16332e; --warn:#f0b35a; --warn-soft:#3a2d14; --bad:#ff8a80;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#171214; --surface:#211a1d; --surface2:#2a2125; --fg:#f3eaec; --muted:#b2a2a7; --line:#3a2f33;
+  --accent:#e58aa5; --accent-fg:#2a0f19; --accent-soft:#3a2430;
+  --sim:#a3abf3; --sim-soft:#262a4a; --real:#55c9b3; --real-soft:#16332e; --warn:#f0b35a; --warn-soft:#3a2d14; --bad:#ff8a80;
+  color-scheme:dark; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--font);padding-block:8px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:780px;margin:0 auto}
+h1,h2,h3{font-family:var(--head);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:1.55rem;font-weight:700}
+h2{font-size:1.2rem;font-weight:600;margin-bottom:6px}
+h3{font-size:1rem;font-weight:600;margin-bottom:4px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)} .small{font-size:.85rem}
+.eyebrow{font:600 .72rem/1 var(--head);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+header{padding:14px 0 10px;display:flex;flex-direction:column;gap:6px}
+nav{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:6px 0 16px;overflow-x:auto}
+nav a{flex:1 0 auto;text-align:center;padding:10px 12px;color:var(--muted);text-decoration:none;font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.card.soft{background:var(--surface2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2>*{min-width:0}
+@media (max-width:520px){.grid2.stack{grid-template-columns:1fr}}
+label{display:block;font-weight:500;font-size:.85rem;margin-bottom:4px}
+input[type=text],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--accent)}
+button{font:inherit;min-height:44px;padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;font-weight:500}
+button.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600}
+button.ghost{background:transparent}
+button.danger{color:var(--bad)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:999px;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.rate{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (min-width:560px){.rate{grid-template-columns:repeat(10,1fr)}}
+.rate button{padding:8px 0}
+.rate button[aria-pressed="true"]{background:var(--real);border-color:var(--real);color:var(--bg);font-weight:700}
+.tag{display:inline-block;font:600 .68rem/1 var(--head);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:5px}
+.tag.sim{background:var(--sim-soft);color:var(--sim);background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(127,127,200,.16) 5px 7px)}
+.tag.real{background:var(--real-soft);color:var(--real)}
+.cond{border-left:4px solid var(--line);padding-left:12px}
+.cond.a{border-left-color:var(--sim)} .cond.b{border-left-color:var(--accent)}
+.tablewrap{overflow-x:auto}
+.tablewrap.w th,.tablewrap.w td{white-space:normal;vertical-align:top}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:.78rem}
+td.num,th.num{text-align:right}
+.stat{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.stat div{flex:1 1 90px;background:var(--surface2);border-radius:8px;padding:8px 10px}
+.stat b{display:block;font:600 1.15rem var(--head);font-variant-numeric:tabular-nums}
+.stat span{font-size:.75rem;color:var(--muted)}
+.note{background:var(--warn-soft);color:var(--fg);border-left:4px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:.88rem;margin-bottom:12px}
+.okbox{background:var(--real-soft);border-left:4px solid var(--real);padding:10px 12px;border-radius:6px;font-size:.9rem;margin:10px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+ol.steps{padding-left:20px;margin:6px 0 10px} ol.steps li{margin-bottom:6px}
+details summary{cursor:pointer;font-weight:600;min-height:32px}
+svg text{fill:var(--fg);font:11.5px var(--font)}
+svg .ax{stroke:var(--line);stroke-width:1} svg .zero{stroke:var(--muted);stroke-dasharray:3 3}
+svg .lab{fill:var(--muted)}
+.f-sim{stroke:var(--sim);fill:var(--sim)} .f-real{stroke:var(--real);fill:var(--real)} .f-class{stroke:var(--accent);fill:var(--accent)}
+.hist rect.lo{fill:var(--sim)} .hist rect.hi{fill:var(--accent)}
+.legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted);margin-top:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+footer{margin-top:24px;font-size:.8rem;color:var(--muted)}
+.hidden-tab{display:none}
+.canbox{display:flex;justify-content:center;background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:12px}
+.canbox svg text{fill:inherit}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair>div{background:var(--surface2);border-radius:10px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+textarea.csv{font:12px/1.4 ui-monospace,monospace;min-height:120px}
+
+body.pm .nopm{display:none!important}
+html{color-scheme:light dark}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+</style>
+</head><body>
+<div class="wrap">
+<header class="nopm">
+  <span class="eyebrow">SimNeuro · Módulo 2</span>
+  <h1>Precio y valor percibido</h1>
+  <p class="muted" style="margin:0">Neurociencias aplicado al Consumidor. Primero simulas, luego mides a tus compañeros y comparas.</p>
+</header>
+
+<div id="banner" class="note nopm" hidden></div>
+
+<nav id="nav" class="nopm" aria-label="Secciones">
+  <a href="#simular" data-t="simular">1 · Simular</a>
+  <a href="#experimento" data-t="experimento">2 · Experimento</a>
+  <a href="#comparar" data-t="comparar">3 · Comparar</a>
+  <a href="#docente" data-t="docente">Docente</a>
+</nav>
+
+<!-- Entrada a la clase -->
+<section class="card" id="login" hidden>
+  <h2>Entrar a la clase</h2>
+  <p class="small muted">Usa el código que te dio tu docente. No escribas tu nombre real: un alias basta.</p>
+  <div class="grid2 stack">
+    <div><label for="lgCode">Código de clase</label><input type="text" id="lgCode" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+    <div><label for="lgAlias">Alias</label><input type="text" id="lgAlias" maxlength="24" autocomplete="off" placeholder="p. ej. Equipo Jaguar"></div>
+  </div>
+  <label for="lgTeam" style="margin-top:12px">Tu equipo (define tu producto)</label>
+  <select id="lgTeam"></select>
+  <p class="small" id="lgMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+  <button class="primary" id="lgGo" style="margin-top:12px">Entrar</button>
+</section>
+
+<section class="card soft nopm" id="bar" hidden>
+  <div class="row" style="justify-content:space-between">
+    <div><b id="barWho"></b><div class="small muted" id="barProd"></div></div>
+    <button class="ghost" id="barChange" style="min-height:36px;padding:4px 12px">Cambiar</button>
+  </div>
+  <p class="small muted" id="status" style="margin:8px 0 0"></p>
+</section>
+
+<!-- 1 SIMULAR -->
+<main id="t-simular" data-student>
+  <div class="card">
+    <h2>Escenario</h2>
+    <p>Eres gerente de producto de <b id="scProd"></b>. Vas a mostrar <b>el mismo producto</b> con dos ofertas de precio a un panel de consumidores. Tú decides el precio y la presentación de cada oferta; el simulador genera la <b>calidad esperada</b> que cada consumidor asigna (escala 1–10) y un índice ilustrativo de activación de la corteza orbitofrontal medial (mOFC), región asociada al valor.</p>
+    <p class="small muted" style="margin:0"><span class="tag sim">Simulado</span>&nbsp; Cada consumidor simulado ve A y B (diseño intrasujeto). Parte de la idea de Plassmann et al. (2008): el precio de marketing modula el valor percibido. Los parámetros son didácticos, no estimaciones empíricas.</p>
+  </div>
+
+  <div class="card">
+    <h3>Paso 1. Tu hipótesis</h3>
+    <p class="small muted">Antes de simular, predice qué oferta recibirá mayor calidad esperada.</p>
+    <div class="chips" id="predChips" role="group" aria-label="Predicción">
+      <button class="chip" data-p="A" aria-pressed="false">Mayor en A</button>
+      <button class="chip" data-p="B" aria-pressed="false">Mayor en B</button>
+      <button class="chip" data-p="=" aria-pressed="false">Sin diferencia</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Paso 2. Diseña las ofertas</h3>
+    <div class="grid2 stack">
+      <div class="cond a"><b>Oferta A</b>
+        <label for="aTier" style="margin-top:8px">Precio en la etiqueta</label><select id="aTier"></select>
+        <label for="aPres" style="margin-top:8px">Presentación</label>
+        <select id="aPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
+      </div>
+      <div class="cond b"><b>Oferta B</b>
+        <label for="bTier" style="margin-top:8px">Precio en la etiqueta</label><select id="bTier"></select>
+        <label for="bPres" style="margin-top:8px">Presentación</label>
+        <select id="bPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
+      </div>
+    </div>
+    <label for="nSim" style="margin-top:14px">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
+    <input type="range" id="nSim" min="10" max="80" step="5" value="30">
+    <p class="small muted">Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
+    <button class="primary" id="runSim">Ejecutar ronda de simulación</button>
+  </div>
+  <div id="simOut"></div>
+</main>
+
+<!-- 2 EXPERIMENTO -->
+<main id="t-experimento" class="hidden-tab" data-student>
+  <div class="card nopm">
+    <h2>Experimento real con tus compañeros</h2>
+    <p><span class="tag real">Real</span>&nbsp; Mides a compañeros de <b>otros equipos</b>: ellos no conocen tu producto ni tu hipótesis. Diseño <b>intrasujeto</b>: cada participante ve las dos ofertas y se compara consigo mismo.</p>
+    <ol class="steps">
+      <li>Busca a un compañero de otro equipo y siéntense separados del resto, para que nadie oiga precios ni respuestas.</li>
+      <li>Elige su equipo y pulsa «Entregar el celular». El orden de las ofertas se sortea de forma balanceada.</li>
+      <li>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</li>
+      <li>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</li>
+      <li>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</li>
+    </ol>
+    <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
+  </div>
+  <div class="card" id="runCard">
+    <h3 class="nopm">Participante <span class="muted small" id="pCode"></span></h3>
+    <div id="expRun"></div>
+  </div>
+  <div class="card nopm">
+    <h3>Tus registros</h3>
+    <div id="obsList"></div>
+  </div>
+</main>
+
+<!-- 3 COMPARAR -->
+<main id="t-comparar" class="hidden-tab" data-student>
+  <div id="cmpOut"></div>
+  <div class="card">
+    <h3>Tu interpretación</h3>
+    <ul style="margin:0 0 10px;padding-left:20px">
+      <li>¿El efecto real tiene la misma dirección y tamaño que el simulado? ¿Por qué sí o por qué no?</li>
+      <li>¿Qué diferencia a tu muestra (tamaño, selección, ambiente) del panel simulado?</li>
+      <li>¿Qué haría falta para afirmar que el precio cambia la <i>experiencia</i> y no solo lo que la persona dice?</li>
+    </ul>
+    <label for="nota">Escribe tu conclusión (la verá tu docente)</label>
+    <textarea id="nota" maxlength="1200"></textarea>
+  </div>
+</main>
+
+<!-- 4 DOCENTE -->
+<main id="t-docente" class="hidden-tab">
+  <div class="card">
+    <h2>Panel docente</h2>
+    <p class="small muted" style="margin:0 0 10px">Ingresa tu código de docente para ver los datos de la clase en vivo (se actualizan solos cada 15 segundos).</p>
+    <div class="row">
+      <input type="password" id="tCode" autocomplete="off" placeholder="Código de docente" style="flex:1 1 200px;width:auto">
+      <button class="primary" id="tGo">Cargar datos</button>
+      <button id="tDemo">Ver clase de ejemplo</button>
+    </div>
+    <p class="small" id="tMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p>
+  </div>
+  <div id="docOut"></div>
+</main>
+
+<footer class="nopm">
+  <p><b>Referencias.</b> Plassmann, H., O'Doherty, J., Shiv, B., &amp; Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>PNAS, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105 · Kurz, J., Efendic, E., &amp; Goukens, C. (2023). Pricey therefore good? Price affects expectations, but not quality perceptions and liking. <i>Psychology &amp; Marketing, 40</i>(6), 1115–1129. https://doi.org/10.1002/mar.21799 · Cohen, J. (1988). <i>Statistical power analysis for the behavioral sciences</i> (2.ª ed.). Erlbaum.</p>
+  <p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica.</p>
+</footer>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN (edita solo este bloque)
+   ===================================================================== */
+const CONFIG={
+  SUPABASE_URL:'https://pljkdljylizifokgvhsl.supabase.co',   // ej.: 'https://abcdxyz.supabase.co'  (vacío = modo práctica, sin servidor)
+  SUPABASE_KEY:'sb_publishable_tFKexrBNDu73728vYDf2ag_fvUWJJah',   // clave pública: 'sb_publishable_...' o la 'anon' (JWT). Nunca la 'service_role'.
+  CURRENCY:'US$',
+  PRICES_PROVISIONAL:true,   // pon false cuando valides los precios con el estudio de mercado
+  PRODUCTS:[
+    {id:1,name:'Bebida energética',short:'Energética',brand:'VOLTA',art:'can',  detail:'Lata de 473 ml',prices:{low:1.00,mid:1.50,high:2.25},mu:5.4},
+    {id:2,name:'Audífonos inalámbricos',short:'Audífonos',brand:'AURA',art:'phones',detail:'Bluetooth, con micrófono',prices:{low:12,mid:18,high:27},mu:5.8},
+    {id:3,name:'Zapatillas deportivas',short:'Zapatillas',brand:'PASO',art:'shoe',detail:'Para correr, par',prices:{low:30,mid:45,high:68},mu:5.6}
+  ]
+};
+
+/*ENGINE*/
+const PARAMS={beta:{low:0,mid:0.55,high:0.95},prem:0.25,sdSubj:0.9,sdErr:1.1,ofcSlope:7,ofcSd:5};
+function hashSeed(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),16777619)>>>0;}return h>>>0;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function makeNormal(rng){let spare=null;return function(){if(spare!==null){const s=spare;spare=null;return s;}let u=0,v=0;while(u===0)u=rng();v=rng();const r=Math.sqrt(-2*Math.log(u));spare=r*Math.sin(2*Math.PI*v);return r*Math.cos(2*Math.PI*v);};}
+function clamp(x,a,b){return Math.min(b,Math.max(a,x));}
+/* Diseño intrasujeto: cada consumidor simulado ve A y B; comparten el gusto propio u. */
+function simulatePaired(cfgA,cfgB,n,seedStr,mu){
+  const rng=mulberry32(hashSeed(seedStr)),nrm=makeNormal(rng);
+  const bA=mu+PARAMS.beta[cfgA.tier]+(cfgA.pres==='premium'?PARAMS.prem:0);
+  const bB=mu+PARAMS.beta[cfgB.tier]+(cfgB.pres==='premium'?PARAMS.prem:0);
+  const a={y:[],ofc:[]},b={y:[],ofc:[]};
+  for(let i=0;i<n;i++){
+    const u=nrm()*PARAMS.sdSubj,rA=bA+u+nrm()*PARAMS.sdErr,rB=bB+u+nrm()*PARAMS.sdErr;
+    a.y.push(clamp(Math.round(rA*10)/10,1,10));b.y.push(clamp(Math.round(rB*10)/10,1,10));
+    a.ofc.push(100+PARAMS.ofcSlope*(rA-mu)+nrm()*PARAMS.ofcSd);
+    b.ofc.push(100+PARAMS.ofcSlope*(rB-mu)+nrm()*PARAMS.ofcSd);
+  }
+  return {a,b};
+}
+function mean(a){return a.reduce((s,x)=>s+x,0)/a.length;}
+function sd(a){if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/(a.length-1));}
+function lgamma(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++){y+=1;s+=c[j]/y;}return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){const FP=1e-300;let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<FP)d=FP;d=1/d;let h=d;
+  for(let m=1;m<=300;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}
+  return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function tTwoP(t,df){return betai(df/2,0.5,df/(df+t*t));}
+function tCrit(df){let lo=0,hi=60;for(let i=0;i<80;i++){const mid=(lo+hi)/2;if(tTwoP(mid,df)>0.05)lo=mid;else hi=mid;}return (lo+hi)/2;}
+/* t pareada: diferencia = y - x; d = dz */
+function pairedT(x,y){
+  const n=Math.min(x.length,y.length);if(n<2)return null;
+  const d=[];for(let i=0;i<n;i++)d.push(y[i]-x[i]);
+  const m=mean(d),s=sd(d);
+  if(s===0)return {diff:m,t:0,df:n-1,p:m===0?1:0,d:0,lo:m,hi:m,n};
+  const se=s/Math.sqrt(n),t=m/se,df=n-1,k=tCrit(df);
+  return {diff:m,t,df,p:tTwoP(t,df),d:m/s,lo:m-k*se,hi:m+k*se,n};
+}
+/* Prueba binomial exacta bilateral contra 0,5 */
+function binomTwo(k,n){
+  if(n<1)return null;
+  const lp=i=>lgamma(n+1)-lgamma(i+1)-lgamma(n-i+1)+n*Math.log(0.5);
+  const pk=lp(k);let p=0;for(let i=0;i<=n;i++){const q=lp(i);if(q<=pk+1e-9)p+=Math.exp(q);}
+  return Math.min(1,p);
+}
+function counts10(a){const c=new Array(10).fill(0);a.forEach(v=>{const i=clamp(Math.round(v),1,10)-1;c[i]++;});return c;}
+/*END ENGINE*/
+
+/* ---------- utilidades ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f=(x,d=2)=>(x==null||isNaN(x))?'–':Number(x).toFixed(d).replace('.',',').replace('-','−');
+const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
+const LS='simneuro-v3';
+const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
+const TABS=['simular','experimento','comparar','docente'];
+const TIERL={low:'descuento',mid:'normal',high:'alto'};
+const prod=id=>CONFIG.PRODUCTS.find(p=>p.id===id)||CONFIG.PRODUCTS[0];
+const money=v=>CONFIG.CURRENCY+' '+((v<10||!Number.isInteger(v))?v.toFixed(2).replace('.',','):String(v));
+const priceOf=(p,t)=>prod(p).prices[t];
+const tierText=(p,t)=>money(priceOf(p,t))+' ('+TIERL[t]+')';
+const presL=p=>p==='premium'?'presentación premium':'presentación estándar';
+const uid=()=>{try{return crypto.randomUUID();}catch(e){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);}};
+const ago=t=>{const m=Math.round((Date.now()-new Date(t).getTime())/60000);return m<1?'ahora':m<60?'hace '+m+' min':'hace '+Math.round(m/60)+' h';};
+
+/* ---------- estado ---------- */
+let S={joined:false,codigo:'',alias:'',equipo:1,sims:[],obs:[],nota:'',notaDirty:false,ts:0,
+  cfg:{a:{tier:'low',pres:'sencilla'},b:{tier:'mid',pres:'sencilla'},n:30},pred:null,
+  draft:{step:0,order:null,v:{},pe:null,pm:false}};
+try{const raw=localStorage.getItem(LS);if(raw){S=Object.assign(S,JSON.parse(raw));}}catch(e){}
+function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
+let T=null,TCODE='',demoOn=false;   // datos del docente
+let conn='ok';             // ok | offline | codigo
+
+/* ---------- conexión (Supabase, solo funciones RPC) ---------- */
+async function rpc(fn,args){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),15000);
+  const key=CONFIG.SUPABASE_KEY;const h={'Content-Type':'application/json',apikey:key};
+  if(key.startsWith('eyJ'))h.Authorization='Bearer '+key;
+  try{
+    const r=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(args),signal:ctl.signal});
+    if(!r.ok)throw new Error('http '+r.status);
+    return await r.json();
+  }finally{clearTimeout(to);}
+}
+let syncing=false;
+async function sync(){
+  if(!BACKEND||syncing||!S.joined)return;syncing=true;
+  try{
+    for(const o of S.obs.filter(x=>!x.sent)){
+      const r=await rpc('sn_enviar_obs',{p_codigo:S.codigo,p_cid:o.cid,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_producto:o.prod,p_part_equipo:o.pe,p_orden:o.o,p_qd:o.qd,p_gd:o.gd,p_qr:o.qr,p_gr:o.gr,p_eleccion:o.el});
+      if(r&&r.ok){o.sent=true;conn='ok';}else if(r&&r.error==='codigo'){conn='codigo';break;}else{o.sent=true;o.bad=true;}
+    }
+    if(conn!=='codigo')for(const s of S.sims.filter(x=>!x.sent)){
+      const r=await rpc('sn_enviar_sim',{p_codigo:S.codigo,p_cid:s.cid,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_producto:s.prod,p_datos:{r:s.r,a:s.a,b:s.b,w:s.w,pref:s.pref,pred:s.pred}});
+      if(r&&r.ok){s.sent=true;}else if(r&&r.error==='codigo'){conn='codigo';break;}else{s.sent=true;}
+    }
+    if(conn!=='codigo'&&S.notaDirty){
+      const r=await rpc('sn_enviar_nota',{p_codigo:S.codigo,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_nota:S.nota||''});
+      if(r&&r.ok){S.notaDirty=false;}
+    }
+    if(conn!=='codigo')conn='ok';
+  }catch(e){conn='offline';}
+  finally{syncing=false;lsSave();renderStatus();}
+}
+function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
+function renderStatus(){
+  const el=$('status');if(!el)return;
+  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este dispositivo.';return;}
+  const n=pending();
+  el.textContent=conn==='codigo'?'El código de clase ya no es válido. Pide uno nuevo a tu docente.':
+    conn==='offline'?'Sin conexión. Tus datos están guardados aquí y se enviarán solos'+(n?' ('+n+' pendientes).':'.'):
+    n?'Enviando '+n+' dato(s)…':'Todo enviado a tu docente ✓';
+}
+function touch(rerender=true){S.ts=Date.now();lsSave();renderStatus();sync();if(rerender)renderAll();}
+setInterval(()=>{if(BACKEND&&pending())sync();},15000);
+window.addEventListener('online',()=>sync());
+
+/* ---------- navegación ---------- */
+function currentTab(){const h=(location.hash||'').slice(1);return TABS.includes(h)?h:'simular';}
+function showTab(){
+  const t=currentTab();
+  TABS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&!S.joined));});
+  document.querySelectorAll('#nav a').forEach(a=>{if(a.dataset.t===t)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  $('login').hidden=!(t!=='docente'&&!S.joined);
+  $('bar').hidden=!(t!=='docente'&&S.joined);
+  document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
+}
+window.addEventListener('hashchange',()=>{showTab();renderAll();if(currentTab()==='comparar')loadResumen();});
+
+/* ---------- entrada ---------- */
+function fillTeams(){
+  $('lgTeam').innerHTML=CONFIG.PRODUCTS.map(p=>`<option value="${p.id}">Equipo ${p.id} · ${esc(p.name)}</option>`).join('');
+}
+function bindLogin(){
+  fillTeams();
+  $('lgCode').value=S.codigo||'';$('lgAlias').value=S.alias||'';$('lgTeam').value=String(S.equipo||1);
+  $('lgGo').addEventListener('click',async()=>{
+    const code=$('lgCode').value.trim(),alias=$('lgAlias').value.trim().slice(0,24),team=+$('lgTeam').value;
+    const msg=$('lgMsg');msg.textContent='';
+    if(code.length<(BACKEND?6:1)||!alias){msg.textContent='Escribe el código de clase y tu alias.';return;}
+    if(BACKEND){
+      $('lgGo').disabled=true;
+      try{const r=await rpc('sn_resumen',{p_codigo:code});if(!r||!r.ok){msg.textContent='Código de clase incorrecto.';$('lgGo').disabled=false;return;}CLASSROWS=r.obs||[];}
+      catch(e){msg.textContent='No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.';$('lgGo').disabled=false;return;}
+      $('lgGo').disabled=false;
+    }
+    if(S.equipo!==team){S.cfg.a.tier='low';S.cfg.b.tier='mid';}
+    S.codigo=code;S.alias=alias;S.equipo=team;S.joined=true;conn='ok';
+    fillSimSelects();bindSimValues();touch(false);showTab();renderAll();
+  });
+  $('barChange').addEventListener('click',()=>{S.joined=false;lsSave();$('lgCode').value=S.codigo;$('lgAlias').value=S.alias;$('lgTeam').value=String(S.equipo);showTab();});
+}
+
+/* ---------- arte de los productos ---------- */
+function productSVG(pid,ver,w){
+  const p=prod(pid),D=ver==='D',price=priceOf(pid,D?'low':'mid');
+  const ink='#1b2a41',gold='#f2b705';
+  const txt=(x,y,s,st)=>`<text x="${x}" y="${y}" text-anchor="middle" style="${st}">${s}</text>`;
+  let art='';
+  if(p.art==='can'){
+    art=`<rect x="62" y="24" width="96" height="190" rx="14" fill="${ink}"/><rect x="62" y="24" width="96" height="20" rx="9" fill="#a9b3bf"/><rect x="62" y="202" width="96" height="12" rx="6" fill="#a9b3bf"/>
+    <path d="M62 84 L158 64 L158 104 L62 124 Z" fill="${gold}"/>${txt(110,100,esc(p.brand),`fill:${ink};font:700 20px 'Space Grotesk',sans-serif`)}
+    ${txt(110,146,'BEBIDA',"fill:#fff;font:600 10px Inter,sans-serif;letter-spacing:.1em")}${txt(110,160,'ENERGÉTICA',"fill:#fff;font:600 10px Inter,sans-serif;letter-spacing:.1em")}${txt(110,180,'473 ml',"fill:#c9d1da;font:500 10px Inter,sans-serif")}`;
+  }else if(p.art==='phones'){
+    art=`<path d="M52 150 C52 60 168 60 168 150" fill="none" stroke="${ink}" stroke-width="12" stroke-linecap="round"/>
+    <rect x="34" y="132" width="40" height="78" rx="18" fill="${ink}"/><rect x="146" y="132" width="40" height="78" rx="18" fill="${ink}"/>
+    <rect x="46" y="146" width="22" height="50" rx="11" fill="${gold}"/><rect x="152" y="146" width="22" height="50" rx="11" fill="${gold}"/>
+    ${txt(110,118,esc(p.brand),`fill:${ink};font:700 18px 'Space Grotesk',sans-serif;letter-spacing:.12em`)}`;
+  }else{
+    art=`<path d="M28 168 L28 118 Q28 104 42 104 L84 104 Q102 132 130 138 L176 148 Q204 154 204 178 L204 192 L28 192 Z" fill="${ink}"/>
+    <rect x="22" y="188" width="188" height="16" rx="8" fill="#e8e8e8"/>
+    <path d="M60 160 Q110 136 170 168 L170 176 Q110 150 60 172 Z" fill="${gold}"/>
+    <path d="M92 112 L104 124 M104 108 L116 120 M116 108 L128 124" stroke="#c9d1da" stroke-width="3" stroke-linecap="round"/>
+    ${txt(118,186,esc(p.brand),"fill:#fff;font:700 11px 'Space Grotesk',sans-serif;letter-spacing:.14em")}`;
+  }
+  const tag=`<g transform="translate(160,232)"><circle r="36" fill="${D?'#d62839':'#ffffff'}" stroke="${ink}" stroke-width="2.5"/>
+    ${txt(0,-12,CONFIG.CURRENCY,`fill:${D?'#fff':ink};font:600 11px Inter,sans-serif`)}
+    ${txt(0,12,(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price),`fill:${D?'#fff':ink};font:700 ${price>=100?18:22}px 'Space Grotesk',sans-serif`)}</g>`;
+  const cap=D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
+  return `<svg viewBox="0 0 220 300" width="${w||190}" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price))}">${art}${tag}<text x="110" y="290" text-anchor="middle" style="font:500 12px Inter,sans-serif">${esc(cap)}</text></svg>`;
+}
+
+/* ---------- gráfico de bosque ---------- */
+function forest(rows,xlabel){
+  const W=400,L=122,R=384,RH=36,H=rows.length*RH+50;
+  const ok=rows.filter(r=>r.est!=null);
+  let mn=Math.min(0,...ok.map(r=>r.lo)),mx=Math.max(0,...ok.map(r=>r.hi));
+  if(!isFinite(mn)){mn=-1;mx=1;}
+  const pad=(mx-mn)*0.12||1;mn-=pad;mx+=pad;
+  const X=v=>L+(v-mn)/(mx-mn)*(R-L);
+  const step=(mx-mn)>8?2:(mx-mn)>3?1:0.5;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(xlabel)}">`;
+  for(let v=Math.ceil(mn/step)*step;v<=mx;v+=step){s+=`<line class="ax" x1="${X(v)}" x2="${X(v)}" y1="8" y2="${H-34}"/><text class="lab" x="${X(v)}" y="${H-20}" text-anchor="middle">${f(v,step<1?1:0)}</text>`;}
+  s+=`<line class="zero" x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H-34}"/>`;
+  rows.forEach((r,i)=>{
+    const cy=8+RH*i+RH/2;
+    s+=`<text x="0" y="${cy+4}">${esc(r.label)}</text>`;
+    if(r.est==null){s+=`<text class="lab" x="${L+8}" y="${cy+4}">sin datos suficientes</text>`;return;}
+    s+=`<g class="${r.cls}"><line x1="${X(r.lo)}" x2="${X(r.hi)}" y1="${cy}" y2="${cy}" stroke-width="3" stroke-linecap="round"/><circle cx="${X(r.est)}" cy="${cy}" r="6" stroke="none"/></g>`;
+  });
+  s+=`<text class="lab" x="${(L+R)/2}" y="${H-2}" text-anchor="middle" style="font-size:10.5px">${esc(xlabel)}</text></svg>`;
+  return s;
+}
+function verdict(w,labelHi,labelLo){
+  if(!w)return 'Faltan datos (se necesitan al menos 2 participantes).';
+  const mag=Math.abs(w.d)<0.2?'trivial':Math.abs(w.d)<0.5?'pequeño':Math.abs(w.d)<0.8?'moderado':'grande';
+  if(w.p>=0.05)return `No hay diferencia estadísticamente significativa (p = ${fp(w.p)}). Con estos datos no puedes descartar que sea azar. Tamaño del efecto: d_z = ${f(w.d)} (${mag}).`;
+  return `${w.diff>0?labelHi:labelLo} recibe mayor valoración (p = ${fp(w.p)}; d_z = ${f(Math.abs(w.d))}, efecto ${mag}).`;
+}
+
+/* ---------- 1. simular ---------- */
+function fillSimSelects(){
+  const p=S.equipo,opts=['low','mid','high'].map(t=>`<option value="${t}">${esc(tierText(p,t))}</option>`).join('');
+  $('aTier').innerHTML=opts;$('bTier').innerHTML=opts;
+  $('scProd').textContent='una marca de '+prod(p).name.toLowerCase();
+}
+function bindSimValues(){
+  const c=S.cfg;$('aTier').value=c.a.tier;$('aPres').value=c.a.pres;$('bTier').value=c.b.tier;$('bPres').value=c.b.pres;$('nSim').value=c.n;$('nSimV').textContent=c.n;
+}
+function bindSim(){
+  fillSimSelects();bindSimValues();
+  [['aTier','a','tier'],['aPres','a','pres'],['bTier','b','tier'],['bPres','b','pres']].forEach(([id,k,p])=>{$(id).addEventListener('change',e=>{S.cfg[k][p]=e.target.value;touch(false);});});
+  $('nSim').addEventListener('input',e=>{S.cfg.n=+e.target.value;$('nSimV').textContent=S.cfg.n;touch(false);});
+  $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;touch(true);});
+  $('runSim').addEventListener('click',runSim);
+}
+function runSim(){
+  const round=S.sims.filter(s=>s.prod===S.equipo).length+1,n=S.cfg.n,ca=S.cfg.a,cb=S.cfg.b,pr=prod(S.equipo);
+  const R=simulatePaired(ca,cb,n,`${S.codigo||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
+  const w=pairedT(R.a.y,R.b.y);
+  let pb=0,pa=0;for(let i=0;i<n;i++){if(R.b.y[i]>R.a.y[i])pb++;else if(R.a.y[i]>R.b.y[i])pa++;}
+  S.sims.push({cid:uid(),r:round,prod:S.equipo,a:[ca.tier,ca.pres,n,mean(R.a.y),sd(R.a.y),mean(R.a.ofc),sd(R.a.ofc)],b:[cb.tier,cb.pres,n,mean(R.b.y),sd(R.b.y),mean(R.b.ofc),sd(R.b.ofc)],pred:S.pred,w:{diff:w.diff,p:w.p,d:w.d,lo:w.lo,hi:w.hi},pref:[pb,pa],sent:false});
+  S.pred=null;touch(true);
+  setTimeout(()=>{const el=$('simOut');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},50);
+}
+function mriCard(r){
+  const p=r.prod,a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
+  const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
+  return `<div class="card">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Laboratorio de resonancia magnética</h2><span class="tag sim">Simulado</span></div>
+    <p class="small muted" style="margin-top:6px">Tus ofertas A y B pasan ahora a una etapa que, en una investigación real, exige un resonador. En esta clase no existe, así que el informe de abajo lo genera el simulador.</p>
+    <h3 style="margin-top:12px">Cómo sería el estudio real</h3>
+    <ol class="steps">
+      <li>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</li>
+      <li>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</li>
+      <li>El equipo registra la señal dependiente del nivel de oxígeno en sangre (BOLD) y, en paralelo, el participante califica la calidad que espera.</li>
+      <li>Un especialista procesa las imágenes y compara la activación en la <b>corteza orbitofrontal medial (mOFC)</b>, región asociada al valor, entre ofertas.</li>
+    </ol>
+    <h3>Informe del laboratorio (simulado)</h3>
+    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">Oferta A</th><th class="num">Oferta B</th></tr></thead><tbody>
+      <tr><th>Estímulo</th><td class="num">${esc(tierText(p,a[0]))}</td><td class="num">${esc(tierText(p,b[0]))}</td></tr>
+      <tr><th>Calidad esperada (reportada)</th><td class="num">${f(a[3])}</td><td class="num">${f(b[3])}</td></tr>
+      <tr><th>Índice mOFC (referencia = 100)</th><td class="num">${f(a[5],1)}</td><td class="num">${f(b[5],1)}</td></tr>
+    </tbody></table></div>
+    <p class="small muted" style="margin:10px 0 4px">Cambio simulado de la señal mOFC respecto a la referencia (calidad media del producto)</p>
+    <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--sim')}</div><div><span class="small">B</span>${bar(dB,'--accent')}</div></div>
+    <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
+  </div>
+  <div class="card soft"><h3>Qué requeriría hacerlo de verdad</h3>
+    <ul style="margin:0;padding-left:20px">
+      <li><b>Equipo:</b> un resonador magnético de uso hospitalario o de investigación, con sistema para proyectar estímulos.</li>
+      <li><b>Personal:</b> técnico de resonancia y especialista en análisis de neuroimagen.</li>
+      <li><b>Permisos:</b> aprobación de un comité de ética, consentimiento y revisión de seguridad de cada participante.</li>
+      <li><b>Costo y tiempo por sesión:</b> por verificar; no hay cifra confiable en esta versión.</li>
+    </ul>
+    <p class="small muted" style="margin:8px 0 0">Por eso estos estudios se hacen en centros de investigación y rara vez en una empresa corriente.</p></div>`;
+}
+function renderSim(){
+  document.querySelectorAll('#predChips button').forEach(b=>b.setAttribute('aria-pressed',String(S.pred===b.dataset.p)));
+  const out=$('simOut');
+  const mine=S.sims.filter(s=>s.prod===S.equipo);
+  if(!mine.length){out.innerHTML='<div class="card soft muted">Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.</div>';return;}
+  const r=mine[mine.length-1];
+  const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
+  let fb='';
+  if(r.pred){const hit=r.pred===outcome;fb=`<div class="${hit?'okbox':'note'}">${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'} Predijiste «${r.pred==='='?'sin diferencia':'mayor en '+r.pred}»; el resultado fue «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}».</div>`;}
+  const a=r.a,b=r.b,pref=r.pref||[0,0],np=pref[0]+pref[1],pbin=np?binomTwo(pref[0],np):null;
+  out.innerHTML=`<div class="card">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Ronda ${r.r}</h2><span class="tag sim">Simulado</span></div>
+    <p class="small muted">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
+    ${fb}
+    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">A</th><th class="num">B</th></tr></thead><tbody>
+      <tr><th>Precio / presentación</th><td class="num">${esc(tierText(r.prod,a[0]))} · ${presL(a[1])}</td><td class="num">${esc(tierText(r.prod,b[0]))} · ${presL(b[1])}</td></tr>
+      <tr><th>Consumidores</th><td class="num" colspan="2">${a[2]} (cada uno ve A y B)</td></tr>
+      <tr><th>Calidad esperada M (DE)</th><td class="num">${f(a[3])} (${f(a[4])})</td><td class="num">${f(b[3])} (${f(b[4])})</td></tr>
+      <tr><th>Índice mOFC ilustrativo M (DE)</th><td class="num">${f(a[5],1)} (${f(a[6],1)})</td><td class="num">${f(b[5],1)} (${f(b[6],1)})</td></tr>
+    </tbody></table></div>
+    <div class="stat">
+      <div><b>${f(r.w.diff)}</b><span>B − A (puntos)</span></div>
+      <div><b>${fp(r.w.p)}</b><span>p (t pareada)</span></div>
+      <div><b>${f(r.w.d)}</b><span>d_z de Cohen</span></div>
+      <div><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · p = '+fp(pbin):''}</span></div>
+    </div>
+    ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}
+    <p style="margin-top:8px">${esc(verdict(r.w,'B','A'))}</p>
+    <p class="small muted" style="margin:0">Cuidado: en datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI.</p>
+  </div>
+  ${mriCard(r)}
+  ${mine.length>1?`<div class="card"><h3>Rondas anteriores</h3><div class="tablewrap w"><table><thead><tr><th>#</th><th>A</th><th>B</th><th class="num">B − A</th><th class="num">p</th></tr></thead><tbody>${mine.slice(0,-1).reverse().map(x=>`<tr><td>${x.r}</td><td>${esc(tierText(x.prod,x.a[0]))}</td><td>${esc(tierText(x.prod,x.b[0]))}</td><td class="num">${f(x.w.diff)}</td><td class="num">${fp(x.w.p)}</td></tr>`).join('')}</tbody></table></div></div>`:''}`;
+}
+
+/* ---------- 2. experimento (imagen, intrasujeto, el participante responde) ---------- */
+const rbtns=cur=>Array.from({length:10},(_,i)=>`<button data-r="${i+1}" aria-pressed="${cur===i+1}">${i+1}</button>`).join('');
+function bindExp(){
+  $('expRun').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;let d=S.draft;
+    if(b.dataset.pe){d.pe=+b.dataset.pe;}
+    else if(b.dataset.act==='start'){
+      if(!d.pe)return;
+      const dr=S.obs.filter(o=>o.o==='DR').length,rd=S.obs.filter(o=>o.o==='RD').length;
+      const order=dr<rd?'DR':rd<dr?'RD':(Math.random()<0.5?'DR':'RD');
+      S.draft={step:1,order,v:{},pe:d.pe,pm:true};
+    }
+    else if(b.dataset.r){const ver=d.order[d.step-1],k=b.closest('[data-k]').dataset.k;d.v[k+ver]=+b.dataset.r;}
+    else if(b.dataset.act==='next'){d.step++;}
+    else if(b.dataset.act==='cancel'){S.draft={step:0,order:null,v:{},pe:null,pm:false};}
+    else if(b.dataset.pref){
+      const v=d.v;
+      S.obs.push({cid:uid(),o:d.order,qd:v.qD,gd:v.gD,qr:v.qR,gr:v.gR,el:b.dataset.pref.toLowerCase(),prod:S.equipo,pe:d.pe,sent:false,t:Date.now()});
+      S.draft={step:4,order:null,v:{},pe:null,pm:true};touch(true);showTab();return;
+    }
+    else if(b.dataset.act==='back'){S.draft={step:0,order:null,v:{},pe:null,pm:false,saved:true};lsSave();showTab();renderExp();return;}
+    else return;
+    lsSave();showTab();renderExp();
+  });
+  $('obsList').addEventListener('click',e=>{const b=e.target.closest('button[data-del]');if(!b)return;
+    if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
+    S.obs.splice(+b.dataset.del,1);touch(true);});
+}
+function renderExp(){
+  const d=S.draft,n=S.obs.length,pad=x=>String(x).padStart(2,'0'),pr=prod(S.equipo);
+  $('pCode').textContent='· #'+pad(n+(d.step===4?0:1));
+  let h='';
+  if(d.step===0){
+    const others=CONFIG.PRODUCTS.filter(p=>p.id!==S.equipo);
+    h=`${d.saved?'<div class="okbox">Participante guardado. Puedes medir al siguiente.</div>':''}
+    <p>Tu producto es <b>${esc(pr.name)}</b>. Mides a compañeros de otros equipos.</p>
+    <label>¿De qué equipo es el participante?</label>
+    <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">Equipo ${p.id} · ${esc(p.short)}</button>`).join('')}</div>
+    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el celular al participante</button>`;
+  } else if(d.step===1||d.step===2){
+    const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
+    h=`<p class="small muted" style="margin:0 0 8px">Para el participante · oferta ${d.step} de 2</p>
+    <div class="canbox">${productSVG(S.equipo,ver)}</div>
+    <p class="small muted" style="margin:0 0 10px;text-align:center">${esc(pr.name)} ${esc(pr.brand)} · ${esc(pr.detail)}</p>
+    <label>¿Qué calidad esperas de este producto? (1 = muy mala, 10 = excelente)</label><div class="rate" data-k="q">${rbtns(q)}</div>
+    <label style="margin-top:12px">¿Cuánto te gusta esta oferta? (1 = nada, 10 = muchísimo)</label><div class="rate" data-k="g">${rbtns(g)}</div>
+    <button class="primary" data-act="next" style="margin-top:14px" ${q&&g?'':'disabled'}>${d.step===1?'Ver la segunda oferta':'Continuar'}</button>`;
+  } else if(d.step===3){
+    const o=d.order;
+    h=`<p style="margin:0 0 6px"><b>Para terminar: ¿cuál de las dos ofertas elegirías?</b></p>
+    <div class="pair" style="margin-top:10px">${[0,1].map(i=>`<div>${productSVG(S.equipo,o[i],130)}<button class="primary" data-pref="${o[i]}" style="width:100%">Elijo la oferta ${i+1}</button></div>`).join('')}</div>`;
+  } else if(d.step===4){
+    h=`<div class="okbox" style="text-align:center"><b>¡Gracias por participar!</b><br>Devuelve el celular al investigador.</div>
+    <button class="primary" data-act="back" style="width:100%">Soy el investigador</button>`;
+  }
+  $('expRun').innerHTML=h;
+  const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
+  let t=`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
+  else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>Eq. ${o.pe||'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
+  $('obsList').innerHTML=t;
+}
+
+/* ---------- análisis ---------- */
+function rowsOfLocal(){return S.obs.map(o=>[o.prod,o.o,o.qd,o.gd,o.qr,o.gr,o.el]);}
+function cols(rows,pid){
+  const q={D:[],R:[]},g={D:[],R:[]};let rPref=0,n=0;
+  rows.forEach(o=>{if(pid&&o[0]!==pid)return;q.D.push(o[2]);g.D.push(o[3]);q.R.push(o[4]);g.R.push(o[5]);n++;if(o[6]==='r')rPref++;});
+  return {q,g,rPref,n,wq:pairedT(q.D,q.R),wg:pairedT(g.D,g.R),pbin:n?binomTwo(rPref,n):null};
+}
+async function loadResumen(){
+  if(!BACKEND||!S.joined)return;
+  try{const r=await rpc('sn_resumen',{p_codigo:S.codigo});if(r&&r.ok){CLASSROWS=r.obs||[];conn=conn==='codigo'?'codigo':'ok';renderCmp();}else if(r&&r.error==='codigo'){conn='codigo';renderStatus();}}
+  catch(e){conn='offline';renderStatus();}
+}
+setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},20000);
+
+/* ---------- 3. comparar ---------- */
+function renderCmp(){
+  if(!S.joined){$('cmpOut').innerHTML='';return;}
+  const pid=S.equipo,pr=prod(pid);
+  const rows=BACKEND?CLASSROWS:rowsOfLocal();
+  const m=cols(rowsOfLocal(),pid);        // mis mediciones
+  const cp=cols(rows,pid);                // todo el curso, mi producto
+  const nRef=Math.max(20,cp.n);
+  const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.codigo||'local'}|ref|p${pid}`,pr.mu);
+  const wSim=pairedT(ref.a.y,ref.b.y);
+  const fr=[{label:'Simulado · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
+  CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
+    fr.push({label:p.short+' · calidad',est:c.wq&&c.wq.diff,lo:c.wq&&c.wq.lo,hi:c.wq&&c.wq.hi,cls:p.id===pid?'f-real':'f-class'});
+    fr.push({label:p.short+' · gusto',est:c.wg&&c.wg.diff,lo:c.wg&&c.wg.lo,hi:c.wg&&c.wg.hi,cls:p.id===pid?'f-real':'f-class'});});
+  let reading='';
+  if(cp.wq){
+    const same=Math.sign(cp.wq.diff)===Math.sign(wSim.diff);
+    reading=`<p><b>${esc(pr.name)} · calidad esperada.</b> ${esc(verdict(cp.wq,'La oferta a precio normal','La oferta con descuento'))}</p>
+    <p><b>Gusto.</b> ${esc(verdict(cp.wg,'La oferta a precio normal','La oferta con descuento'))}</p>
+    <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (p exacta = '+fp(cp.pbin)+')':''}.</p>
+    <p>${same?'La dirección de la calidad esperada coincide con la réplica simulada.':'La dirección de la calidad esperada <b>no</b> coincide con la réplica simulada.'} Simulado: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor simulado cae dentro del IC 95 % de la medición real.':'El valor simulado queda fuera del IC 95 % de la medición real.'}</p>`;
+  }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
+  $('cmpOut').innerHTML=`<div class="card">
+    <h2>Simulado frente a real</h2>
+    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más. ${BACKEND?'«Real» agrupa a toda la clase.':'Modo práctica: «real» solo incluye tus mediciones.'} Réplica simulada pareada, n = ${nRef}. Tú mediste ${m.n} participante(s).</p>
+    ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
+    <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:var(--accent)"></i>Real, otros productos</span></div>
+    <div style="margin-top:12px">${reading}</div>
+    ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">Actualizar datos de la clase</button>':''}
+  </div>
+  <div class="card soft"><h3>Por qué pueden diferir</h3>
+    <ul style="margin:0;padding-left:20px"><li><b>Solo expectativa:</b> con una imagen nadie usa el producto. Kurz et al. (2023) hallaron efectos de precio sobre las expectativas, pero no de forma consistente sobre calidad percibida y agrado tras la experiencia.</li><li><b>Efecto de demanda:</b> son compañeros de una clase sobre precios y ven dos precios seguidos; el orden alternado reparte ese sesgo, pero no lo elimina.</li><li><b>Muestra pequeña:</b> los IC son anchos con pocos participantes.</li><li><b>Parámetros:</b> el efecto simulado es didáctico; no es una estimación empírica.</li><li><b>Productos distintos:</b> el efecto del precio puede variar entre productos.</li></ul></div>`;
+  const rb=$('cmpReload');if(rb)rb.onclick=loadResumen;
+}
+
+/* ---------- 4. docente ---------- */
+function demoData(){
+  const rng=mulberry32(hashSeed('demo-uab-v3')),nrm=makeNormal(rng);
+  const eff={1:0.7,2:0.35,3:0.5};const obs=[],sims=[],notas=[];let id=1;
+  for(let i=0;i<24;i++){
+    const eq=1+(i%3),inv='Estudiante '+(i+1),k=5+Math.floor(rng()*3);
+    for(let j=0;j<k;j++){
+      const pe=eq===1?(j%2?2:3):eq===2?(j%2?1:3):(j%2?1:2);
+      const qd=clamp(Math.round(5.1+nrm()*1.6),1,10),qr=clamp(Math.round(qd+eff[eq]+nrm()*1.2),1,10);
+      const gd=clamp(Math.round(5.3+nrm()*1.7),1,10),gr=clamp(Math.round(gd+eff[eq]*0.3+nrm()*1.5),1,10);
+      obs.push({id:id++,inv,eq,prod:eq,pe,orden:(i+j)%2?'DR':'RD',qd,gd,qr,gr,el:(qr+gr+nrm())>(qd+gd)?'r':'d',t:new Date(Date.now()-rng()*3e6).toISOString()});
+    }
+    sims.push({inv,eq,prod:eq,datos:{r:1},t:new Date(Date.now()-rng()*3e6).toISOString()});
+    if(i<4)notas.push({inv,eq,nota:'(ejemplo) El precio normal elevó la calidad esperada, pero no sé si eso cambiaría la experiencia real.',t:new Date().toISOString()});
+  }
+  return {ok:true,clase:'Clase de ejemplo',obs,sims,notas};
+}
+function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
+async function loadTeacher(){
+  const msg=$('tMsg');
+  if(!BACKEND){msg.textContent='Esta página no tiene servidor configurado (modo práctica). Usa «Ver clase de ejemplo».';return;}
+  const code=TCODE||$('tCode').value.trim();if(!code){msg.textContent='Escribe el código de docente.';return;}
+  try{const r=await rpc('sn_docente',{p_codigo_doc:code});
+    if(!r||!r.ok){msg.textContent='Código de docente incorrecto.';T=null;TCODE='';renderDoc();return;}
+    msg.textContent='';T=r;TCODE=code;demoOn=false;try{sessionStorage.setItem('sn-doc',code);}catch(e){}renderDoc();}
+  catch(e){msg.textContent='Sin conexión con el servidor.';}
+}
+function bindDoc(){
+  try{const c=sessionStorage.getItem('sn-doc');if(c&&BACKEND){TCODE=c;}}catch(e){}
+  $('tGo').addEventListener('click',()=>{TCODE='';loadTeacher();});
+  $('tCode').addEventListener('keydown',e=>{if(e.key==='Enter'){TCODE='';loadTeacher();}});
+  $('tDemo').addEventListener('click',()=>{demoOn=!demoOn;if(demoOn){T=demoData();}else{T=null;}renderDoc();});
+  $('docOut').addEventListener('click',async e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
+    else if(b.id==='exObs')download('observaciones_reales.csv',csvObs(T));
+    else if(b.id==='exSim')download('rondas_simuladas.csv',csvSims(T));
+    else if(b.dataset.del&&!demoOn){
+      if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
+      try{await rpc('sn_docente_borrar',{p_codigo_doc:TCODE,p_id:+b.dataset.del});await loadTeacher();}catch(err){b.textContent='Error';}
+    }
+  });
+  if(TCODE&&BACKEND)loadTeacher();
+  setInterval(()=>{if(currentTab()==='docente'&&TCODE&&BACKEND&&!document.hidden)loadTeacher();},15000);
+}
+let docProd=0;
+function toCSV(rows){return rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');}
+function csvObs(t){const r=[['investigador','equipo','producto','equipo_participante','orden','calidad_descuento','gusto_descuento','calidad_normal','gusto_normal','eleccion','fecha']];t.obs.forEach(o=>r.push([o.inv,o.eq,prod(o.prod).name,o.pe,o.orden,o.qd,o.gd,o.qr,o.gr,o.el==='d'?'descuento':'normal',o.t]));return toCSV(r);}
+function csvSims(t){const r=[['investigador','equipo','producto','ronda','A_precio','A_present','B_precio','B_present','n','A_media','B_media','diff','p','dz','prediccion']];t.sims.forEach(s=>{const d=s.datos||{},a=d.a||[],b=d.b||[],w=d.w||{};r.push([s.inv,s.eq,prod(s.prod).name,d.r,a[0],a[1],b[0],b[1],a[2],f(a[3],3),f(b[3],3),f(w.diff,3),f(w.p,4),f(w.d,3),d.pred||'']);});return toCSV(r);}
+function download(name,text){
+  try{const u=URL.createObjectURL(new Blob(['﻿'+text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
+  catch(e){const ta=$('csvBox');if(ta){ta.hidden=false;ta.value=text;ta.select();}}
+}
+function renderDoc(){
+  const el=$('docOut');
+  if(!T){el.innerHTML='';return;}
+  const rows=rowsOfT(T),c=cols(rows,docProd||0);
+  const invs={};T.obs.forEach(o=>{const k=o.inv+'|'+o.eq;(invs[k]=invs[k]||{inv:o.inv,eq:o.eq,n:0,s:0,t:0});invs[k].n++;invs[k].t=Math.max(invs[k].t,new Date(o.t).getTime());});
+  T.sims.forEach(s=>{const k=s.inv+'|'+s.eq;(invs[k]=invs[k]||{inv:s.inv,eq:s.eq,n:0,s:0,t:0});invs[k].s++;invs[k].t=Math.max(invs[k].t,new Date(s.t).getTime());});
+  const list=Object.values(invs).sort((a,b)=>a.eq-b.eq||String(a.inv).localeCompare(String(b.inv)));
+  const fr=[];CONFIG.PRODUCTS.forEach(p=>{const x=cols(rows,p.id);
+    fr.push({label:p.short+' · calidad',est:x.wq&&x.wq.diff,lo:x.wq&&x.wq.lo,hi:x.wq&&x.wq.hi,cls:'f-class'});
+    fr.push({label:p.short+' · gusto',est:x.wg&&x.wg.diff,lo:x.wg&&x.wg.lo,hi:x.wg&&x.wg.hi,cls:'f-real'});});
+  const perProd=CONFIG.PRODUCTS.map(p=>{const x=cols(rows,p.id);const teamInv=list.filter(i=>i.eq===p.id).length;
+    return `<tr><td>${p.id}</td><td>${esc(p.name)}</td><td class="num">${teamInv}</td><td class="num">${x.n}</td><td class="num">${x.wq?f(x.wq.diff):'–'}</td><td class="num">${x.wq?fp(x.wq.p):'–'}</td><td class="num">${x.wg?f(x.wg.diff):'–'}</td><td class="num">${x.n?Math.round(x.rPref/x.n*100)+' %':'–'}</td></tr>`;}).join('');
+  const c1=counts10(c.q.D),c2=counts10(c.q.R),mx=Math.max(1,...c1,...c2);
+  let hist=`<svg class="hist" viewBox="0 0 400 150" width="100%" role="img" aria-label="Distribución de calidad esperada por oferta">`;
+  for(let i=0;i<10;i++){const x=14+i*38,h1=c1[i]/mx*100,h2=c2[i]/mx*100;
+    hist+=`<rect class="lo" x="${x}" y="${120-h1}" width="14" height="${h1}" rx="2"/><rect class="hi" x="${x+15}" y="${120-h2}" width="14" height="${h2}" rx="2"/><text class="lab" x="${x+15}" y="136" text-anchor="middle">${i+1}</text>`;}
+  hist+='</svg>';
+  const chips=[['all','Todos'],...CONFIG.PRODUCTS.map(p=>[String(p.id),p.short])].map(([v,l])=>`<button class="chip" data-chip="${v}" aria-pressed="${(docProd===0&&v==='all')||String(docProd)===v}">${esc(l)}</button>`).join('');
+  const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Investigador</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${i.eq}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
+  const last=T.obs.slice(-25).reverse();
+  const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
+  const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· equipo ${n.eq}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
+  el.innerHTML=`${demoOn?'<div class="note">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
+  ${CONFIG.PRICES_PROVISIONAL?'<div class="note">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
+  <div class="card"><h3>${esc(T.clase||'Clase')}</h3>
+    <div class="stat"><div><b>${list.length}</b><span>investigadores activos</span></div><div><b>${T.obs.length}</b><span>participantes medidos</span></div><div><b>${T.sims.length}</b><span>rondas simuladas</span></div><div><b>${T.notas.length}</b><span>conclusiones</span></div></div>
+    <div class="row" style="margin-top:8px"><button id="exObs">CSV de participantes</button><button id="exSim">CSV de rondas simuladas</button></div>
+    <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
+  <div class="card"><h3>Efecto por producto (normal − descuento)</h3>
+    ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}
+    <div class="tablewrap w" style="margin-top:8px"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Invest.</th><th class="num">n</th><th class="num">Δ cal.</th><th class="num">p</th><th class="num">Δ gusto</th><th class="num">Elige normal</th></tr></thead><tbody>${perProd}</tbody></table></div>
+    <p class="small muted" style="margin:8px 0 0">Con pocos participantes por producto la mayoría de los efectos moderados no saldrá significativa: discútelo como parte de la lección.</p></div>
+  <div class="card"><h3>Calidad esperada por oferta</h3><div class="chips" style="margin-bottom:8px">${chips}</div>${hist}
+    <div class="legend"><span><i style="background:var(--sim)"></i>Descuento</span><span><i style="background:var(--accent)"></i>Normal</span></div></div>
+  <div class="card"><h3>Avance por investigador</h3>${body}</div>
+  ${del}
+  <div class="card"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
+  <details class="card"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
+    <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
+    <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código, simula 2 o 3 rondas (incluye una A = B) y lee el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
+    <ol class="steps"><li><b>0–30 min.</b> Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li><b>30–70 min.</b> Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li><b>70–100 min.</b> Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
+    <p class="small muted" style="margin:4px 0 0">Tiempos estimados, sin cronometrar con estudiantes reales.</p></details>`;
+}
+
+/* ---------- arranque ---------- */
+function renderAll(){
+  if(!S.joined){renderStatus();return;}
+  const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent='Equipo '+S.equipo+' · '+pr.name;
+  renderSim();renderExp();renderCmp();renderStatus();
+}
+function init(){
+  const ban=$('banner');
+  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este dispositivo y el docente no los verá.';}
+  bindLogin();bindSim();bindExp();bindDoc();
+  $('nota').value=S.nota||'';
+  let nt=null;
+  $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
+  showTab();renderAll();
+  if(S.joined){sync();if(currentTab()==='comparar')loadResumen();else loadResumen();}
+  if(TCODE&&BACKEND){/* se carga en bindDoc */}
+}
+init();
+
+</script>
+</body></html>
