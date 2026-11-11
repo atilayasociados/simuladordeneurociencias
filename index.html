@@ -40,7 +40,7 @@ nav .menu a.on{background:var(--azul);color:#fff;border-color:var(--azul)}
 .grid2>*{min-width:0}
 @media (max-width:520px){.grid2.stack{grid-template-columns:1fr}}
 label{display:block;font-weight:bold;font-size:.85rem;margin-bottom:4px}
-input[type=text],input[type=password],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--fg);font:inherit;min-height:44px}
+input[type=text],input[type=password],input[type=email],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--fg);font:inherit;min-height:44px}
 textarea{min-height:90px;resize:vertical}
 input[type=range]{width:100%;accent-color:var(--azul)}
 button{font:inherit;min-height:44px;padding:8px 14px;border-radius:6px;border:1px solid var(--azul);background:#fff;color:var(--azul);cursor:pointer}
@@ -93,12 +93,13 @@ footer{margin-top:24px;font-size:.8rem;color:var(--muted)}
 textarea.csv{font:12px/1.4 ui-monospace,monospace;min-height:120px}
 body.pm .nopm{display:none!important}
 [hidden]{display:none!important}
+
 </style>
 </head><body>
 <header class="nopm">
   <div><h1>Neurociencias · UAB 2026</h1><div class="sub1">Precio y valor percibido · Clases Espejo</div></div>
   <div class="meta" id="metaBar">
-    <span id="bar" hidden><b id="barWho"></b> · <span id="barProd"></span> · Ronda <span id="barRound">0</span> <button class="pill" id="barChange">Salir</button></span>
+    <span id="bar" hidden><b id="barWho"></b> · <span id="barProd"></span> · Ronda <span id="barRound">0</span> <button class="pill" id="barSwitch">Cambiar alias</button> <button class="pill" id="barChange">Salir</button></span>
     <a class="pill" href="#manual">Manual</a>
   </div>
 </header>
@@ -109,16 +110,62 @@ body.pm .nopm{display:none!important}
 <div class="wrap">
 <!-- Entrada a la clase -->
 <section class="card" id="login" hidden>
-  <h2>Entrar a la clase</h2>
-  <p class="small muted">Usa el código que te dio tu docente. No escribas tu nombre real: un alias basta.</p>
-  <div class="grid2 stack">
-    <div><label for="lgCode">Código de clase</label><input type="text" id="lgCode" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
-    <div><label for="lgAlias">Alias</label><input type="text" id="lgAlias" maxlength="24" autocomplete="off" placeholder="p. ej. Equipo Jaguar"></div>
+  <div id="lgPractice" hidden>
+    <h2>Modo práctica</h2>
+    <p class="small muted">Esta copia no está conectada a un servidor. Escribe un alias (no tu nombre real) y elige un producto.</p>
+    <div class="grid2 stack">
+      <div><label for="pAlias">Alias</label><input type="text" id="pAlias" maxlength="24" autocomplete="off"></div>
+      <div><label for="pProd">Producto</label><select id="pProd"></select></div>
+    </div>
+    <p class="small" id="pMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <button class="primary" id="pGo" style="margin-top:12px">Entrar</button>
   </div>
-  <label for="lgTeam" style="margin-top:12px">Tu equipo (define tu producto)</label>
-  <select id="lgTeam"></select>
-  <p class="small" id="lgMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-  <button class="primary" id="lgGo" style="margin-top:12px">Entrar</button>
+  <div id="lgAuth" hidden>
+    <div class="chips" style="margin-bottom:12px"><button class="chip" id="tabIn" aria-pressed="true">Ingresar</button><button class="chip" id="tabReg" aria-pressed="false">Registrar mi equipo</button></div>
+    <div id="paneIn">
+      <h2>Ingresar con tu equipo</h2>
+      <p class="small muted">Usa el código de clase de tu docente, el nombre de tu equipo y su contraseña. Después elegirás tu alias.</p>
+      <label for="liCode">Código de clase</label><input type="text" id="liCode" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <label for="liTeam" style="margin-top:10px">Nombre del equipo</label><input type="text" id="liTeam" autocomplete="username" maxlength="40">
+      <label for="liPass" style="margin-top:10px">Contraseña del equipo</label><input type="password" id="liPass" autocomplete="current-password">
+      <p class="small" id="liMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+      <button class="primary" id="liGo" style="margin-top:12px">Ingresar</button>
+    </div>
+    <div id="paneReg" hidden>
+      <h2>Registrar mi equipo</h2>
+      <p class="small muted">Un integrante registra al equipo; los demás ingresan después con el nombre y la contraseña. <b>No uses nombres reales:</b> solo alias.</p>
+      <label for="rgCode">Código de clase</label><input type="text" id="rgCode" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="grid2 stack" style="margin-top:10px">
+        <div><label for="rgName">Nombre del equipo</label><input type="text" id="rgName" maxlength="40" autocomplete="off" placeholder="p. ej. Los Jaguares"></div>
+        <div><label for="rgProd">Producto que estudia</label><select id="rgProd"></select></div>
+      </div>
+      <div class="grid2 stack" style="margin-top:10px">
+        <div><label for="rgPass">Contraseña (mín. 4)</label><input type="password" id="rgPass" autocomplete="new-password"></div>
+        <div><label for="rgPass2">Repite la contraseña</label><input type="password" id="rgPass2" autocomplete="new-password"></div>
+      </div>
+      <label for="rgAl" style="margin-top:10px">Alias de los integrantes (uno por línea, máx. 12)</label>
+      <textarea id="rgAl" rows="4" placeholder="Jaguar&#10;Colibrí&#10;Quetzal"></textarea>
+      <p class="small" id="rgMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+      <button class="primary" id="rgGo" style="margin-top:12px">Registrar equipo</button>
+    </div>
+  </div>
+  <div id="stClave" hidden>
+    <h2>Cambia la contraseña temporal</h2>
+    <p class="small muted">Tu docente reinició la contraseña del equipo. Define una nueva para continuar.</p>
+    <label for="cpAct">Contraseña temporal</label><input type="password" id="cpAct" autocomplete="current-password">
+    <label for="cpNew" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="cpNew" autocomplete="new-password">
+    <label for="cpNew2" style="margin-top:10px">Repite la nueva contraseña</label><input type="password" id="cpNew2" autocomplete="new-password">
+    <p class="small" id="cpMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <div class="row" style="margin-top:12px"><button class="primary" id="cpGo">Guardar y continuar</button><button id="cpOut">Salir</button></div>
+  </div>
+  <div id="stElegir" hidden>
+    <h2>¿Quién eres en el equipo <span id="elTeam"></span>?</h2>
+    <p class="small muted">Elige tu alias. Tus rondas y mediciones quedarán a tu nombre de alias.</p>
+    <div id="elList" class="row" style="gap:8px;margin-bottom:12px"></div>
+    <div class="row"><input type="text" id="elNew" maxlength="24" placeholder="Mi alias no está: agregarlo" autocomplete="off" style="flex:1 1 200px;width:auto"><button id="elAdd">Agregar</button></div>
+    <p class="small" id="elMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <div class="row" style="margin-top:12px"><button id="elOut">Salir</button></div>
+  </div>
 </section>
 
 <!-- SITUACIÓN · El caso -->
@@ -243,21 +290,45 @@ body.pm .nopm{display:none!important}
 
 <!-- DOCENTE -->
 <main id="t-docente" class="hidden-tab">
-  <div class="card">
+  <div class="card" id="dLogin">
     <h2>Panel docente</h2>
-    <p class="small muted" style="margin:0 0 10px">Ingresa tu código de docente para ver los datos de la clase en vivo (se actualizan solos cada 15 segundos).</p>
-    <div class="row">
-      <input type="password" id="tCode" autocomplete="off" placeholder="Código de docente" style="flex:1 1 200px;width:auto">
-      <button class="primary" id="tGo">Cargar datos</button>
-      <button id="tDemo">Ver clase de ejemplo</button>
+    <p class="small muted">Ingresa con tu correo y tu contraseña de docente.</p>
+    <label for="dEmail">Correo</label><input type="email" id="dEmail" autocomplete="username">
+    <label for="dPass" style="margin-top:10px">Contraseña</label><input type="password" id="dPass" autocomplete="current-password">
+    <p class="small" id="tMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <div class="row" style="margin-top:12px"><button class="primary" id="dGo">Ingresar</button><button id="dForgot">Olvidé mi contraseña</button><button id="tDemo">Ver clase de ejemplo</button></div>
+  </div>
+  <div class="card" id="dClave" hidden>
+    <h2>Cambia tu contraseña temporal</h2>
+    <label for="dcAct">Contraseña temporal</label><input type="password" id="dcAct" autocomplete="current-password">
+    <label for="dcNew" style="margin-top:10px">Nueva contraseña (mín. 8)</label><input type="password" id="dcNew" autocomplete="new-password">
+    <label for="dcNew2" style="margin-top:10px">Repite la nueva contraseña</label><input type="password" id="dcNew2" autocomplete="new-password">
+    <p class="small" id="tMsg2" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <div class="row" style="margin-top:12px"><button class="primary" id="dcGo">Guardar y continuar</button><button id="dcOut">Salir</button></div>
+  </div>
+  <div class="card" id="dRec" hidden>
+    <h2>Recuperar contraseña</h2>
+    <label for="drEmail">Correo de docente</label><input type="email" id="drEmail" autocomplete="username">
+    <div class="row" style="margin-top:10px"><button id="drGet">Ver pregunta secreta</button></div>
+    <div id="drStep2" hidden>
+      <p style="margin:12px 0 4px"><b id="drQ"></b></p>
+      <label for="drAns">Respuesta</label><input type="text" id="drAns" autocomplete="off">
+      <label for="drNew" style="margin-top:10px">Nueva contraseña (mín. 8)</label><input type="password" id="drNew" autocomplete="new-password">
+      <div class="row" style="margin-top:12px"><button class="primary" id="drGo">Cambiar contraseña</button></div>
     </div>
-    <p class="small" id="tMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p>
+    <p class="small" id="tMsg3" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
+    <div class="row" style="margin-top:8px"><button id="drBack">Volver</button></div>
+  </div>
+  <div class="card" id="dBar" hidden>
+    <div class="row" style="justify-content:space-between"><span><b id="dWho"></b> · docente</span>
+    <span class="row"><select id="dClase" hidden style="width:auto"></select><button class="ghost" id="dOut">Salir</button></span></div>
   </div>
   <div id="docOut"></div>
 </main>
 
 <footer class="nopm"><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
 </div>
+
 
 <script>
 /* =====================================================================
@@ -330,7 +401,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const f=(x,d=2)=>(x==null||isNaN(x))?'–':Number(x).toFixed(d).replace('.',',').replace('-','−');
 const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
-const LS='simneuro-b1';
+const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
 const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
@@ -344,14 +415,20 @@ const uid=()=>{try{return crypto.randomUUID();}catch(e){return 'c'+Date.now().to
 const ago=t=>{const m=Math.round((Date.now()-new Date(t).getTime())/60000);return m<1?'ahora':m<60?'hace '+m+' min':'hace '+Math.round(m/60)+' h';};
 
 /* ---------- estado ---------- */
-let S={joined:false,codigo:'',alias:'',equipo:1,sims:[],obs:[],nota:'',notaDirty:false,ts:0,
-  cfg:{a:{tier:'low',pres:'sencilla'},b:{tier:'mid',pres:'sencilla'},n:30},pred:null,
-  draft:{step:0,order:null,v:{},pe:null,pm:false}};
+const NEWCFG=()=>({a:{tier:'low',pres:'sencilla'},b:{tier:'mid',pres:'sencilla'},n:30});
+const NEWDRAFT=()=>({step:0,order:null,v:{},pe:null,pm:false});
+let S={stage:'login',joined:false,token:'',equipoId:'',equipoNombre:'',iid:'',integrantes:[],byId:{},alias:'',equipo:1,
+  sims:[],obs:[],nota:'',notaDirty:false,ts:0,cfg:NEWCFG(),pred:null,draft:NEWDRAFT()};
 try{const raw=localStorage.getItem(LS);if(raw){S=Object.assign(S,JSON.parse(raw));}}catch(e){}
+S.joined=S.stage==='listo';
 function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
-let T=null,TCODE='',demoOn=false;   // datos del docente
-let conn='ok';             // ok | offline | codigo
+let T=null,demoOn=false;   // datos del docente
+let conn='ok';             // ok | offline | sesion
+const ERR={datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de clase incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 12 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
+function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
+function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
 
 /* ---------- conexión (Supabase, solo funciones RPC) ---------- */
 async function rpc(fn,args){
@@ -365,31 +442,38 @@ async function rpc(fn,args){
   }finally{clearTimeout(to);}
 }
 let syncing=false;
+function sesionPerdida(r){
+  if(!r||r.ok)return false;
+  if(r.error==='sesion'){S.token='';stash();setStage('login');return true;}
+  if(r.error==='tmp'){setStage('clave');return true;}
+  if(r.error==='integrante'){setStage('elegir');return true;}
+  return false;
+}
 async function sync(){
-  if(!BACKEND||syncing||!S.joined)return;syncing=true;
+  if(!BACKEND||syncing||!S.joined||!S.token)return;syncing=true;
   try{
     for(const o of S.obs.filter(x=>!x.sent)){
-      const r=await rpc('sn_enviar_obs',{p_codigo:S.codigo,p_cid:o.cid,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_producto:o.prod,p_part_equipo:o.pe,p_orden:o.o,p_qd:o.qd,p_gd:o.gd,p_qr:o.qr,p_gr:o.gr,p_eleccion:o.el});
-      if(r&&r.ok){o.sent=true;conn='ok';}else if(r&&r.error==='codigo'){conn='codigo';break;}else{o.sent=true;o.bad=true;}
+      const r=await rpc('sn_enviar_obs',{p_token:S.token,p_cid:o.cid,p_part_producto:o.pe,p_orden:o.o,p_qd:o.qd,p_gd:o.gd,p_qr:o.qr,p_gr:o.gr,p_eleccion:o.el});
+      if(r&&r.ok){o.sent=true;conn='ok';}else if(sesionPerdida(r)){conn='sesion';break;}else{o.sent=true;o.bad=true;}
     }
-    if(conn!=='codigo')for(const s of S.sims.filter(x=>!x.sent)){
-      const r=await rpc('sn_enviar_sim',{p_codigo:S.codigo,p_cid:s.cid,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_producto:s.prod,p_datos:{r:s.r,a:s.a,b:s.b,w:s.w,pref:s.pref,pred:s.pred}});
-      if(r&&r.ok){s.sent=true;}else if(r&&r.error==='codigo'){conn='codigo';break;}else{s.sent=true;}
+    if(conn!=='sesion')for(const s of S.sims.filter(x=>!x.sent)){
+      const r=await rpc('sn_enviar_sim',{p_token:S.token,p_cid:s.cid,p_datos:{r:s.r,a:s.a,b:s.b,w:s.w,pref:s.pref,pred:s.pred,prod:s.prod}});
+      if(r&&r.ok){s.sent=true;}else if(sesionPerdida(r)){conn='sesion';break;}else{s.sent=true;}
     }
-    if(conn!=='codigo'&&S.notaDirty){
-      const r=await rpc('sn_enviar_nota',{p_codigo:S.codigo,p_inv:S.alias||'Anónimo',p_equipo:S.equipo,p_nota:S.nota||''});
-      if(r&&r.ok){S.notaDirty=false;}
+    if(conn!=='sesion'&&S.notaDirty){
+      const r=await rpc('sn_enviar_nota',{p_token:S.token,p_nota:S.nota||''});
+      if(r&&r.ok){S.notaDirty=false;}else if(sesionPerdida(r))conn='sesion';
     }
-    if(conn!=='codigo')conn='ok';
+    if(conn!=='sesion')conn='ok';
   }catch(e){conn='offline';}
   finally{syncing=false;lsSave();renderStatus();}
 }
 function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
 function renderStatus(){
-  const el=$('status');if(!el)return;
+  const el=$('status');if(!el)return;if(!S.joined){el.textContent='';return;}
   if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este dispositivo.';return;}
   const n=pending();
-  el.textContent=conn==='codigo'?'El código de clase ya no es válido. Pide uno nuevo a tu docente.':
+  el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
     conn==='offline'?'Sin conexión. Tus datos están guardados aquí y se enviarán solos'+(n?' ('+n+' pendientes).':'.'):
     n?'Enviando '+n+' dato(s)…':'Todo enviado a tu docente ✓';
 }
@@ -410,27 +494,144 @@ function showTab(){
 window.addEventListener('hashchange',()=>{showTab();window.scrollTo(0,0);renderAll();if(currentTab()==='comparar')loadResumen();});
 
 /* ---------- entrada ---------- */
-function fillTeams(){
-  $('lgTeam').innerHTML=CONFIG.PRODUCTS.map(p=>`<option value="${p.id}">Equipo ${p.id} · ${esc(p.name)}</option>`).join('');
+let PW='';
+function setStage(st){S.stage=st;S.joined=st==='listo';lsSave();showTab();renderLogin();renderAll();}
+function prodOptions(){return CONFIG.PRODUCTS.map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.brand)})</option>`).join('');}
+function renderLogin(){
+  const st=S.stage;
+  $('lgPractice').hidden=!(!BACKEND&&st!=='listo');
+  $('lgAuth').hidden=!(BACKEND&&st==='login');
+  $('stClave').hidden=!(BACKEND&&st==='clave');
+  $('stElegir').hidden=!(BACKEND&&st==='elegir');
+  if(st==='clave')$('cpAct').value=PW||'';
+  if(st==='elegir')drawElegir();
+}
+function drawElegir(){
+  $('elTeam').textContent=S.equipoNombre;
+  $('elList').innerHTML=S.integrantes.map(i=>`<button class="primary" data-iid="${esc(i.id)}">${esc(i.alias)}</button>`).join('');
+}
+function applyEquipo(r){
+  S.token=r.token||S.token;S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
+}
+function entrarComo(iid,alias){
+  stash();unstash(iid);S.alias=alias;conn='ok';
+  fillSimSelects();bindSimValues();$('nota').value=S.nota||'';
+  setStage('listo');sync();loadResumen();
+}
+async function salir(){
+  const tok=S.token;
+  if(BACKEND&&tok){try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}try{await rpc('sn_salir',{p_token:tok});}catch(e){}}
+  stash();S.token='';PW='';S.iid='';S.alias='';S.equipoId='';S.equipoNombre='';S.integrantes=[];
+  S.sims=[];S.obs=[];S.nota='';S.notaDirty=false;S.cfg=NEWCFG();S.pred=null;S.draft=NEWDRAFT();
+  $('nota').value='';setStage('login');
 }
 function bindLogin(){
-  fillTeams();
-  $('lgCode').value=S.codigo||'';$('lgAlias').value=S.alias||'';$('lgTeam').value=String(S.equipo||1);
-  $('lgGo').addEventListener('click',async()=>{
-    const code=$('lgCode').value.trim(),alias=$('lgAlias').value.trim().slice(0,24),team=+$('lgTeam').value;
-    const msg=$('lgMsg');msg.textContent='';
-    if(code.length<(BACKEND?6:1)||!alias){msg.textContent='Escribe el código de clase y tu alias.';return;}
-    if(BACKEND){
-      $('lgGo').disabled=true;
-      try{const r=await rpc('sn_resumen',{p_codigo:code});if(!r||!r.ok){msg.textContent='Código de clase incorrecto.';$('lgGo').disabled=false;return;}CLASSROWS=r.obs||[];}
-      catch(e){msg.textContent='No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.';$('lgGo').disabled=false;return;}
-      $('lgGo').disabled=false;
+  $('pProd').innerHTML=prodOptions();$('rgProd').innerHTML=prodOptions();
+  const mode=m=>{$('paneIn').hidden=m!=='in';$('paneReg').hidden=m!=='reg';$('tabIn').setAttribute('aria-pressed',m==='in');$('tabReg').setAttribute('aria-pressed',m==='reg');};
+  $('tabIn').onclick=()=>mode('in');$('tabReg').onclick=()=>mode('reg');
+  $('liTeam').value=S.equipoNombre||'';
+  /* práctica */
+  $('pGo').onclick=()=>{
+    const al=$('pAlias').value.trim().slice(0,24),pr=+$('pProd').value;
+    if(al.length<2){$('pMsg').textContent='Escribe un alias de al menos 2 letras.';return;}
+    S.equipo=pr;S.equipoNombre='Práctica';S.equipoId='local';S.integrantes=[];
+    entrarComo('local',al);
+  };
+  /* ingresar */
+  const doLogin=async()=>{
+    const code=$('liCode').value.trim(),team=$('liTeam').value.trim(),pw=$('liPass').value,m=$('liMsg');m.textContent='';
+    if(!code||!team||!pw){m.textContent=ERR.vacio;return;}
+    $('liGo').disabled=true;
+    try{
+      const r=await rpc('sn_login',{p_usuario:team,p_clave:pw,p_codigo:code});
+      if(!r||!r.ok||r.tipo!=='equipo'){m.textContent=em(r);return;}
+      applyEquipo(r);PW=pw;$('liPass').value='';
+      setStage(r.cambiar_clave?'clave':'elegir');
+    }catch(e){m.textContent='No hay conexión con el servidor. Revisa tu internet.';}
+    finally{$('liGo').disabled=false;}
+  };
+  $('liGo').onclick=doLogin;$('liPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  /* registrar */
+  $('rgGo').onclick=async()=>{
+    const m=$('rgMsg');m.textContent='';
+    const code=$('rgCode').value.trim(),nom=$('rgName').value.trim(),pw=$('rgPass').value,pw2=$('rgPass2').value;
+    const al=$('rgAl').value.split('\n').map(x=>x.trim()).filter(Boolean);
+    if(!code||!nom||!pw){m.textContent=ERR.vacio;return;}
+    if(pw.length<4){m.textContent='La contraseña debe tener al menos 4 caracteres.';return;}
+    if(pw!==pw2){m.textContent='Las contraseñas no coinciden.';return;}
+    if(!al.length){m.textContent=ERR.integrantes;return;}
+    $('rgGo').disabled=true;
+    try{
+      const r=await rpc('sn_registrar_equipo',{p_codigo:code,p_nombre:nom,p_producto:+$('rgProd').value,p_clave:pw,p_integrantes:al});
+      if(!r||!r.ok){m.textContent=em(r);return;}
+      applyEquipo(r);PW='';$('rgPass').value=$('rgPass2').value='';
+      setStage('elegir');
+    }catch(e){m.textContent='No hay conexión con el servidor. Revisa tu internet.';}
+    finally{$('rgGo').disabled=false;}
+  };
+  /* cambiar contraseña temporal */
+  $('cpGo').onclick=async()=>{
+    const m=$('cpMsg');m.textContent='';const a=$('cpAct').value,n=$('cpNew').value,n2=$('cpNew2').value;
+    if(!a||!n){m.textContent=ERR.vacio;return;}
+    if(n.length<4){m.textContent='La nueva contraseña debe tener al menos 4 caracteres.';return;}
+    if(n!==n2){m.textContent='Las contraseñas no coinciden.';return;}
+    try{const r=await rpc('sn_cambiar_clave',{p_token:S.token,p_actual:a,p_nueva:n});
+      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+      PW='';$('cpNew').value=$('cpNew2').value='';setStage('elegir');
+    }catch(e){m.textContent='No hay conexión con el servidor.';}
+  };
+  $('cpOut').onclick=salir;$('elOut').onclick=salir;
+  /* elegir alias */
+  $('elList').onclick=async e=>{
+    const b=e.target.closest('button');if(!b)return;const m=$('elMsg');m.textContent='';
+    try{const r=await rpc('sn_elegir',{p_token:S.token,p_integrante:b.dataset.iid});
+      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+      entrarComo(r.integrante,r.alias);
+    }catch(err){m.textContent='No hay conexión con el servidor.';}
+  };
+  $('elAdd').onclick=async()=>{
+    const m=$('elMsg');m.textContent='';const a=$('elNew').value.trim();if(!a)return;
+    try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
+      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+      S.integrantes=r.integrantes||S.integrantes;$('elNew').value='';lsSave();drawElegir();
+    }catch(err){m.textContent='No hay conexión con el servidor.';}
+  };
+  $('barSwitch').onclick=async()=>{
+    if(!BACKEND||!S.token){salir();return;}
+    try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}
+    stash();setStage('elegir');
+  };
+  $('barChange').onclick=salir;
+  $('equipoOut').addEventListener('click',async e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.id==='eqAdd'){
+      const m=$('eqMsg');m.textContent='';const a=$('eqNew').value.trim();if(!a)return;
+      try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
+        if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+        S.integrantes=r.integrantes||S.integrantes;lsSave();renderEquipo();
+      }catch(err){m.textContent='No hay conexión con el servidor.';}
+    }else if(b.id==='eqPw'){
+      const m=$('eqPwMsg');m.style.color='var(--bad)';m.textContent='';const a=$('eqPwA').value,n=$('eqPwN').value;
+      if(!a||n.length<4){m.textContent='Escribe la contraseña actual y una nueva de al menos 4 caracteres.';return;}
+      try{const r=await rpc('sn_cambiar_clave',{p_token:S.token,p_actual:a,p_nueva:n});
+        if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+        m.style.color='var(--real)';m.textContent='Contraseña cambiada.';$('eqPwA').value=$('eqPwN').value='';
+      }catch(err){m.textContent='No hay conexión con el servidor.';}
     }
-    if(S.equipo!==team){S.cfg.a.tier='low';S.cfg.b.tier='mid';}
-    S.codigo=code;S.alias=alias;S.equipo=team;S.joined=true;conn='ok';
-    fillSimSelects();bindSimValues();touch(false);showTab();renderAll();
   });
-  $('barChange').addEventListener('click',()=>{S.joined=false;lsSave();$('lgCode').value=S.codigo;$('lgAlias').value=S.alias;$('lgTeam').value=String(S.equipo);showTab();});
+}
+async function restaurar(){
+  if(!BACKEND){if(S.stage!=='listo'||!S.alias)setStage('login');return;}
+  if(!S.token){if(S.stage!=='login'){stash();S.stage='login';S.joined=false;}return;}
+  try{
+    const r=await rpc('sn_sesion_info',{p_token:S.token});
+    if(!r||!r.ok){S.token='';stash();setStage('login');return;}
+    if(r.tipo!=='equipo'){S.token='';setStage('login');return;}
+    S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
+    if(r.cambiar_clave)setStage('clave');
+    else if(r.integrante){if(S.iid!==r.integrante){stash();unstash(r.integrante);}S.alias=r.alias;fillSimSelects();bindSimValues();$('nota').value=S.nota||'';setStage('listo');sync();loadResumen();}
+    else setStage('elegir');
+  }catch(e){conn='offline';renderStatus();}
 }
 
 /* ---------- arte de los productos ---------- */
@@ -508,7 +709,7 @@ function bindSim(){
 }
 function runSim(){
   const round=S.sims.filter(s=>s.prod===S.equipo).length+1,n=S.cfg.n,ca=S.cfg.a,cb=S.cfg.b,pr=prod(S.equipo);
-  const R=simulatePaired(ca,cb,n,`${S.codigo||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
+  const R=simulatePaired(ca,cb,n,`${S.equipoId||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
   const w=pairedT(R.a.y,R.b.y);
   let pb=0,pa=0;for(let i=0;i<n;i++){if(R.b.y[i]>R.a.y[i])pb++;else if(R.a.y[i]>R.b.y[i])pa++;}
   S.sims.push({cid:uid(),r:round,prod:S.equipo,a:[ca.tier,ca.pres,n,mean(R.a.y),sd(R.a.y),mean(R.a.ofc),sd(R.a.ofc)],b:[cb.tier,cb.pres,n,mean(R.b.y),sd(R.b.y),mean(R.b.ofc),sd(R.b.ofc)],pred:S.pred,w:{diff:w.diff,p:w.p,d:w.d,lo:w.lo,hi:w.hi},pref:[pb,pa],sent:false});
@@ -618,7 +819,7 @@ function renderExp(){
     h=`${d.saved?'<div class="okbox">Participante guardado. Puedes medir al siguiente.</div>':''}
     <p>Tu producto es <b>${esc(pr.name)}</b>. Mides a compañeros de otros equipos.</p>
     <label>¿De qué equipo es el participante?</label>
-    <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">Equipo ${p.id} · ${esc(p.short)}</button>`).join('')}</div>
+    <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${esc(p.name)}</button>`).join('')}</div>
     <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el celular al participante</button>`;
   } else if(d.step===1||d.step===2){
     const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
@@ -640,7 +841,7 @@ function renderExp(){
   const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
   let t=`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
   if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
-  else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>Eq. ${o.pe||'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
+  else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
   $('obsList').innerHTML=t;
 }
 
@@ -652,8 +853,8 @@ function cols(rows,pid){
   return {q,g,rPref,n,wq:pairedT(q.D,q.R),wg:pairedT(g.D,g.R),pbin:n?binomTwo(rPref,n):null};
 }
 async function loadResumen(){
-  if(!BACKEND||!S.joined)return;
-  try{const r=await rpc('sn_resumen',{p_codigo:S.codigo});if(r&&r.ok){CLASSROWS=r.obs||[];conn=conn==='codigo'?'codigo':'ok';renderCmp();}else if(r&&r.error==='codigo'){conn='codigo';renderStatus();}}
+  if(!BACKEND||!S.joined||!S.token)return;
+  try{const r=await rpc('sn_resumen',{p_token:S.token});if(r&&r.ok){CLASSROWS=r.obs||[];if(conn!=='sesion')conn='ok';renderCmp();}else if(sesionPerdida(r)){conn='sesion';renderStatus();}}
   catch(e){conn='offline';renderStatus();}
 }
 setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},20000);
@@ -666,7 +867,7 @@ function renderCmp(){
   const m=cols(rowsOfLocal(),pid);        // mis mediciones
   const cp=cols(rows,pid);                // todo el curso, mi producto
   const nRef=Math.max(20,cp.n);
-  const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.codigo||'local'}|ref|p${pid}`,pr.mu);
+  const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
   const fr=[{label:'Simulado · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
   CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
@@ -694,49 +895,125 @@ function renderCmp(){
 }
 
 /* ---------- 4. docente ---------- */
+const DEMO_EQ=['Los Voltios','Sonido Claro','Pasos Firmes'];
 function demoData(){
   const rng=mulberry32(hashSeed('demo-uab-v3')),nrm=makeNormal(rng);
   const eff={1:0.7,2:0.35,3:0.5};const obs=[],sims=[],notas=[];let id=1;
   for(let i=0;i<24;i++){
-    const eq=1+(i%3),inv='Estudiante '+(i+1),k=5+Math.floor(rng()*3);
+    const pr=1+(i%3),eq=DEMO_EQ[pr-1],inv='Alias '+(i+1),k=5+Math.floor(rng()*3);
     for(let j=0;j<k;j++){
-      const pe=eq===1?(j%2?2:3):eq===2?(j%2?1:3):(j%2?1:2);
-      const qd=clamp(Math.round(5.1+nrm()*1.6),1,10),qr=clamp(Math.round(qd+eff[eq]+nrm()*1.2),1,10);
-      const gd=clamp(Math.round(5.3+nrm()*1.7),1,10),gr=clamp(Math.round(gd+eff[eq]*0.3+nrm()*1.5),1,10);
-      obs.push({id:id++,inv,eq,prod:eq,pe,orden:(i+j)%2?'DR':'RD',qd,gd,qr,gr,el:(qr+gr+nrm())>(qd+gd)?'r':'d',t:new Date(Date.now()-rng()*3e6).toISOString()});
+      const pe=pr===1?(j%2?2:3):pr===2?(j%2?1:3):(j%2?1:2);
+      const qd=clamp(Math.round(5.1+nrm()*1.6),1,10),qr=clamp(Math.round(qd+eff[pr]+nrm()*1.2),1,10);
+      const gd=clamp(Math.round(5.3+nrm()*1.7),1,10),gr=clamp(Math.round(gd+eff[pr]*0.3+nrm()*1.5),1,10);
+      obs.push({id:id++,inv,eq,prod:pr,pe,orden:(i+j)%2?'DR':'RD',qd,gd,qr,gr,el:(qr+gr+nrm())>(qd+gd)?'r':'d',t:new Date(Date.now()-rng()*3e6).toISOString()});
     }
-    sims.push({inv,eq,prod:eq,datos:{r:1},t:new Date(Date.now()-rng()*3e6).toISOString()});
+    sims.push({inv,eq,prod:pr,datos:{r:1},t:new Date(Date.now()-rng()*3e6).toISOString()});
     if(i<4)notas.push({inv,eq,nota:'(ejemplo) El precio normal elevó la calidad esperada, pero no sé si eso cambiaría la experiencia real.',t:new Date().toISOString()});
   }
-  return {ok:true,clase:'Clase de ejemplo',obs,sims,notas};
+  const equipos=DEMO_EQ.map((n,i)=>({id:'d'+i,nombre:n,producto:i+1,temporal:false,integrantes:Array.from({length:8},(_,k)=>({alias:'Alias '+(i+1+3*k)}))}));
+  return {ok:true,clase:{nombre:'Clase de ejemplo',registro:true},equipos,obs,sims,notas};
 }
 function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
-async function loadTeacher(){
-  const msg=$('tMsg');
-  if(!BACKEND){msg.textContent='Esta página no tiene servidor configurado (modo práctica). Usa «Ver clase de ejemplo».';return;}
-  const code=TCODE||$('tCode').value.trim();if(!code){msg.textContent='Escribe el código de docente.';return;}
-  try{const r=await rpc('sn_docente',{p_codigo_doc:code});
-    if(!r||!r.ok){msg.textContent='Código de docente incorrecto.';T=null;TCODE='';renderDoc();return;}
-    msg.textContent='';T=r;TCODE=code;demoOn=false;try{sessionStorage.setItem('sn-doc',code);}catch(e){}renderDoc();}
-  catch(e){msg.textContent='Sin conexión con el servidor.';}
+let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null;
+try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
+function showD(st){
+  ['dLogin','dClave','dRec'].forEach(id=>$(id).hidden=true);
+  const panel=st==='panel'||demoOn;
+  $('dBar').hidden=!(st==='panel');
+  if(st==='login')$('dLogin').hidden=false;
+  if(st==='clave'){$('dClave').hidden=false;$('dcAct').value=DPW||'';}
+  if(st==='rec')$('dRec').hidden=false;
+  if(demoOn&&st==='login')$('dLogin').hidden=false;
+  $('docOut').hidden=!panel;
 }
+function docLogout(){DTOK='';DPW='';T=null;demoOn=false;dReset=null;try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}showD('login');renderDoc();}
+function docSesion(r){
+  if(!r||r.ok)return false;
+  if(r.error==='sesion'){docLogout();return true;}
+  if(r.error==='tmp'){showD('clave');return true;}
+  return false;
+}
+async function loadTeacher(){
+  if(!BACKEND||!DTOK)return;
+  try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
+    if(!r||!r.ok){if(docSesion(r))return;$('tMsg').textContent=em(r);return;}
+    T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    const sel=$('dClase');
+    if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
+    showD('panel');renderDoc();}
+  catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
+}
+function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);(crypto||window.crypto).getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
 function bindDoc(){
-  try{const c=sessionStorage.getItem('sn-doc');if(c&&BACKEND){TCODE=c;}}catch(e){}
-  $('tGo').addEventListener('click',()=>{TCODE='';loadTeacher();});
-  $('tCode').addEventListener('keydown',e=>{if(e.key==='Enter'){TCODE='';loadTeacher();}});
-  $('tDemo').addEventListener('click',()=>{demoOn=!demoOn;if(demoOn){T=demoData();}else{T=null;}renderDoc();});
+  $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD(DTOK&&!demoOn?'panel':'login');renderDoc();$('tDemo').textContent=demoOn?'Ocultar ejemplo':'Ver clase de ejemplo';};
+  const go=async()=>{
+    const em_=$('dEmail').value.trim(),pw=$('dPass').value,m=$('tMsg');m.textContent='';
+    if(!em_||!pw){m.textContent=ERR.vacio;return;}
+    if(!BACKEND){m.textContent='Esta página no tiene servidor configurado (modo práctica). Usa «Ver clase de ejemplo».';return;}
+    $('dGo').disabled=true;
+    try{const r=await rpc('sn_login',{p_usuario:em_,p_clave:pw,p_codigo:''});
+      if(!r||!r.ok||r.tipo!=='docente'){m.textContent=em(r);return;}
+      DTOK=r.token;DNAME=r.nombre;DPW=pw;$('dPass').value='';demoOn=false;T=null;
+      try{sessionStorage.setItem('sn-doc-b2',DTOK);}catch(e){}
+      $('dWho').textContent=DNAME;
+      if(r.cambiar_clave)showD('clave');else loadTeacher();
+    }catch(e){m.textContent='Sin conexión con el servidor.';}
+    finally{$('dGo').disabled=false;}
+  };
+  $('dGo').onclick=go;$('dPass').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+  $('dcGo').onclick=async()=>{
+    const m=$('tMsg2');m.textContent='';const a=$('dcAct').value,n=$('dcNew').value,n2=$('dcNew2').value;
+    if(!a||!n){m.textContent=ERR.vacio;return;}
+    if(n.length<8){m.textContent='La nueva contraseña debe tener al menos 8 caracteres.';return;}
+    if(n!==n2){m.textContent='Las contraseñas no coinciden.';return;}
+    try{const r=await rpc('sn_cambiar_clave',{p_token:DTOK,p_actual:a,p_nueva:n});
+      if(!r||!r.ok){if(r&&r.error==='sesion'){docLogout();return;}m.textContent=em(r);return;}
+      DPW='';$('dcNew').value=$('dcNew2').value='';loadTeacher();
+    }catch(e){m.textContent='Sin conexión con el servidor.';}
+  };
+  $('dcOut').onclick=()=>{if(BACKEND&&DTOK)rpc('sn_salir',{p_token:DTOK}).catch(()=>{});docLogout();};
+  $('dOut').onclick=$('dcOut').onclick;
+  $('dForgot').onclick=()=>{$('drEmail').value=$('dEmail').value;$('drStep2').hidden=true;$('tMsg3').textContent='';showD('rec');};
+  $('drBack').onclick=()=>showD('login');
+  $('drGet').onclick=async()=>{
+    const m=$('tMsg3');m.textContent='';const e_=$('drEmail').value.trim();if(!e_)return;
+    try{const r=await rpc('sn_doc_pregunta',{p_email:e_});
+      if(!r||!r.ok){m.textContent='No hay recuperación disponible para ese correo.';return;}
+      $('drQ').textContent=r.pregunta;$('drStep2').hidden=false;
+    }catch(e){m.textContent='Sin conexión con el servidor.';}
+  };
+  $('drGo').onclick=async()=>{
+    const m=$('tMsg3');m.textContent='';const n=$('drNew').value;
+    if($('drAns').value.trim()===''||n.length<8){m.textContent='Escribe la respuesta y una contraseña nueva de al menos 8 caracteres.';return;}
+    try{const r=await rpc('sn_doc_recuperar',{p_email:$('drEmail').value.trim(),p_respuesta:$('drAns').value,p_nueva:n});
+      if(!r||!r.ok){m.textContent=em(r);return;}
+      $('dEmail').value=$('drEmail').value;$('drAns').value=$('drNew').value='';showD('login');
+      $('tMsg').style.color='var(--real)';$('tMsg').textContent='Contraseña cambiada. Ya puedes ingresar.';
+    }catch(e){m.textContent='Sin conexión con el servidor.';}
+  };
+  $('dClase').onchange=e=>{DCLASE=e.target.value;loadTeacher();};
   $('docOut').addEventListener('click',async e=>{
     const b=e.target.closest('button');if(!b)return;
     if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
     else if(b.id==='exObs')download('observaciones_reales.csv',csvObs(T));
     else if(b.id==='exSim')download('rondas_simuladas.csv',csvSims(T));
-    else if(b.dataset.del&&!demoOn){
-      if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
-      try{await rpc('sn_docente_borrar',{p_codigo_doc:TCODE,p_id:+b.dataset.del});await loadTeacher();}catch(err){b.textContent='Error';}
+    else if(b.id==='regTog'&&!demoOn){
+      try{const r=await rpc('sn_docente_config',{p_token:DTOK,p_clase:T.clase.id,p_registro:!T.clase.registro});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}
+    }
+    else if((b.dataset.del||b.dataset.eqdel||b.dataset.eqrst)&&!demoOn){
+      if(b.dataset.armed!=='1'){b.dataset.armed='1';b.dataset.t0=b.textContent;b.textContent='¿Seguro?';setTimeout(()=>{if(b.isConnected){b.dataset.armed='';b.textContent=b.dataset.t0;}},4000);return;}
+      try{
+        let r;
+        if(b.dataset.del)r=await rpc('sn_docente_borrar',{p_token:DTOK,p_id:+b.dataset.del});
+        else if(b.dataset.eqdel){r=await rpc('sn_docente_equipo',{p_token:DTOK,p_accion:'borrar',p_equipo:b.dataset.eqdel,p_valor:''});dReset=null;}
+        else{const pw=tempPw();r=await rpc('sn_docente_equipo',{p_token:DTOK,p_accion:'reiniciar',p_equipo:b.dataset.eqrst,p_valor:pw});if(r&&r.ok)dReset={nombre:b.dataset.nom,clave:pw};}
+        if(docSesion(r))return;
+        await loadTeacher();
+      }catch(err){b.textContent='Error';}
     }
   });
-  if(TCODE&&BACKEND)loadTeacher();
-  setInterval(()=>{if(currentTab()==='docente'&&TCODE&&BACKEND&&!document.hidden)loadTeacher();},15000);
+  if(BACKEND&&DTOK){showD('panel');loadTeacher();}else showD('login');
+  setInterval(()=>{if(currentTab()==='docente'&&DTOK&&BACKEND&&!demoOn&&!document.hidden)loadTeacher();},15000);
 }
 let docProd=0;
 function toCSV(rows){return rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');}
@@ -750,13 +1027,13 @@ function renderDoc(){
   const el=$('docOut');
   if(!T){el.innerHTML='';return;}
   const rows=rowsOfT(T),c=cols(rows,docProd||0);
-  const invs={};T.obs.forEach(o=>{const k=o.inv+'|'+o.eq;(invs[k]=invs[k]||{inv:o.inv,eq:o.eq,n:0,s:0,t:0});invs[k].n++;invs[k].t=Math.max(invs[k].t,new Date(o.t).getTime());});
-  T.sims.forEach(s=>{const k=s.inv+'|'+s.eq;(invs[k]=invs[k]||{inv:s.inv,eq:s.eq,n:0,s:0,t:0});invs[k].s++;invs[k].t=Math.max(invs[k].t,new Date(s.t).getTime());});
-  const list=Object.values(invs).sort((a,b)=>a.eq-b.eq||String(a.inv).localeCompare(String(b.inv)));
+  const invs={};T.obs.forEach(o=>{const k=o.inv+'|'+o.eq;(invs[k]=invs[k]||{inv:o.inv,eq:o.eq,prod:o.prod,n:0,s:0,t:0});invs[k].n++;invs[k].t=Math.max(invs[k].t,new Date(o.t).getTime());});
+  T.sims.forEach(s=>{const k=s.inv+'|'+s.eq;(invs[k]=invs[k]||{inv:s.inv,eq:s.eq,prod:s.prod,n:0,s:0,t:0});invs[k].s++;invs[k].t=Math.max(invs[k].t,new Date(s.t).getTime());});
+  const list=Object.values(invs).sort((a,b)=>String(a.eq).localeCompare(String(b.eq))||String(a.inv).localeCompare(String(b.inv)));
   const fr=[];CONFIG.PRODUCTS.forEach(p=>{const x=cols(rows,p.id);
     fr.push({label:p.short+' · calidad',est:x.wq&&x.wq.diff,lo:x.wq&&x.wq.lo,hi:x.wq&&x.wq.hi,cls:'f-class'});
     fr.push({label:p.short+' · gusto',est:x.wg&&x.wg.diff,lo:x.wg&&x.wg.lo,hi:x.wg&&x.wg.hi,cls:'f-real'});});
-  const perProd=CONFIG.PRODUCTS.map(p=>{const x=cols(rows,p.id);const teamInv=list.filter(i=>i.eq===p.id).length;
+  const perProd=CONFIG.PRODUCTS.map(p=>{const x=cols(rows,p.id);const teamInv=list.filter(i=>i.prod===p.id).length;
     return `<tr><td>${p.id}</td><td>${esc(p.name)}</td><td class="num">${teamInv}</td><td class="num">${x.n}</td><td class="num">${x.wq?f(x.wq.diff):'–'}</td><td class="num">${x.wq?fp(x.wq.p):'–'}</td><td class="num">${x.wg?f(x.wg.diff):'–'}</td><td class="num">${x.n?Math.round(x.rPref/x.n*100)+' %':'–'}</td></tr>`;}).join('');
   const c1=counts10(c.q.D),c2=counts10(c.q.R),mx=Math.max(1,...c1,...c2);
   let hist=`<svg class="hist" viewBox="0 0 400 150" width="100%" role="img" aria-label="Distribución de calidad esperada por oferta">`;
@@ -764,16 +1041,23 @@ function renderDoc(){
     hist+=`<rect class="lo" x="${x}" y="${120-h1}" width="14" height="${h1}" rx="2"/><rect class="hi" x="${x+15}" y="${120-h2}" width="14" height="${h2}" rx="2"/><text class="lab" x="${x+15}" y="136" text-anchor="middle">${i+1}</text>`;}
   hist+='</svg>';
   const chips=[['all','Todos'],...CONFIG.PRODUCTS.map(p=>[String(p.id),p.short])].map(([v,l])=>`<button class="chip" data-chip="${v}" aria-pressed="${(docProd===0&&v==='all')||String(docProd)===v}">${esc(l)}</button>`).join('');
-  const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Investigador</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${i.eq}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
+  const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Alias</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${esc(i.eq)}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
   const last=T.obs.slice(-25).reverse();
-  const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
-  const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· equipo ${n.eq}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
+  const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
+  const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
+  const eqs=T.equipos||[];
+  const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
+  const teamsCard=`<div class="card"><h3>Equipos registrados (${eqs.length})</h3>
+    ${dReset?`<div class="note">Contraseña temporal de <b>${esc(dReset.nombre)}</b>: <b style="font-family:ui-monospace,monospace;font-size:1.1em">${esc(dReset.clave)}</b>. Díctasela al equipo; deberá cambiarla al ingresar. Anótala ahora: no se volverá a mostrar.</div>`:''}
+    <div class="row" style="margin-bottom:8px"><span class="small">Registro de equipos: <b>${T.clase&&T.clase.registro?'abierto':'cerrado'}</b></span>${demoOn?'':`<button class="ghost" id="regTog">${T.clase&&T.clase.registro?'Cerrar registro':'Abrir registro'}</button>`}</div>
+    ${eqs.length?`<div class="tablewrap w"><table><thead><tr><th>Equipo</th><th>Producto</th><th>Alias</th><th></th></tr></thead><tbody>${teamsRows}</tbody></table></div>`:'<p class="muted">Todavía no se registró ningún equipo.</p>'}</div>`;
   el.innerHTML=`${demoOn?'<div class="note">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
   ${CONFIG.PRICES_PROVISIONAL?'<div class="note">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
-  <div class="card"><h3>${esc(T.clase||'Clase')}</h3>
+  <div class="card"><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3>
     <div class="stat"><div><b>${list.length}</b><span>investigadores activos</span></div><div><b>${T.obs.length}</b><span>participantes medidos</span></div><div><b>${T.sims.length}</b><span>rondas simuladas</span></div><div><b>${T.notas.length}</b><span>conclusiones</span></div></div>
     <div class="row" style="margin-top:8px"><button id="exObs">CSV de participantes</button><button id="exSim">CSV de rondas simuladas</button></div>
     <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
+  ${teamsCard}
   <div class="card"><h3>Efecto por producto (normal − descuento)</h3>
     ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}
     <div class="tablewrap w" style="margin-top:8px"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Invest.</th><th class="num">n</th><th class="num">Δ cal.</th><th class="num">p</th><th class="num">Δ gusto</th><th class="num">Elige normal</th></tr></thead><tbody>${perProd}</tbody></table></div>
@@ -811,16 +1095,24 @@ function renderCaso(){
 }
 function renderEquipo(){
   const pr=prod(S.equipo),mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length,pend=pending();
-  $('equipoOut').innerHTML=`<div class="card"><h2>Mi equipo</h2>
-    <div class="stat"><div><b>${esc(S.alias)}</b><span>alias</span></div><div><b>Equipo ${S.equipo}</b><span>${esc(pr.name)}</span></div><div><b>${mine}</b><span>rondas simuladas</span></div><div><b>${n}</b><span>participantes medidos</span></div></div>
+  const mem=(S.integrantes||[]).map(i=>`<span class="tag${i.id===S.iid?' sim':''}">${esc(i.alias)}</span>`).join(' ');
+  $('equipoOut').innerHTML=`<div class="card"><h2>${esc(S.equipoNombre||'Mi equipo')}</h2>
+    <div class="stat"><div><b>${esc(S.alias)}</b><span>tu alias</span></div><div><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><b>${mine}</b><span>rondas simuladas</span></div><div><b>${n}</b><span>participantes medidos</span></div></div>
     <p class="small muted" style="margin:6px 0 0">${BACKEND?(pend?pend+' dato(s) pendientes de envío.':'Todos tus datos están enviados a tu docente.'):'Modo práctica: tus datos quedan solo en este dispositivo.'}</p></div>
+  ${BACKEND?`<div class="card"><h3>Integrantes</h3><p>${mem||'–'}</p>
+    <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
+    <p class="small" id="eqMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p></div>
+  <details class="card"><summary>Cambiar la contraseña del equipo</summary>
+    <label for="eqPwA" style="margin-top:10px">Contraseña actual</label><input type="password" id="eqPwA" autocomplete="current-password">
+    <label for="eqPwN" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="eqPwN" autocomplete="new-password">
+    <p class="small" id="eqPwMsg" style="margin:8px 0 0" role="alert"></p><button id="eqPw" style="margin-top:8px">Cambiar</button></details>`:''}
   <div class="card"><h2>Tu producto en las dos ofertas</h2>
     <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
 function renderAll(){
   if(!S.joined){renderStatus();return;}
-  const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent='Equipo '+S.equipo+' · '+pr.short;
+  const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=S.sims.filter(s=>s.prod===S.equipo).length;
   renderCaso();renderEquipo();renderSim();renderExp();renderCmp();renderStatus();
 }
@@ -831,9 +1123,8 @@ function init(){
   $('nota').value=S.nota||'';
   let nt=null;
   $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
-  showTab();renderAll();
-  if(S.joined){sync();loadResumen();}
-  if(TCODE&&BACKEND){/* se carga en bindDoc */}
+  showTab();renderLogin();renderAll();
+  restaurar();
 }
 init();
 
