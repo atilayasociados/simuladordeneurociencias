@@ -199,7 +199,7 @@ begin
   if (select count(*) from sn_intentos where clave = 'cod|global' and not ok and fecha > now() - interval '1 minute') >= 60 then
     return null;
   end if;
-  select id into v from sn_clases where activa and cod_hash = crypt(trim(p_codigo), cod_hash) limit 1;
+  select id into v from sn_clases where activa and cod_hash = crypt(upper(trim(p_codigo)), cod_hash) limit 1;
   if v is null then perform sn_intento('cod|global', false); end if;
   return v;
 end $$;
@@ -222,7 +222,7 @@ language plpgsql security definer set search_path = public, extensions as $$
 declare v uuid;
 begin
   if char_length(coalesce(p_codigo,'')) < 8 then raise exception 'El código debe tener al menos 8 caracteres'; end if;
-  insert into sn_clases(nombre, cod_hash) values (p_nombre, crypt(trim(p_codigo), gen_salt('bf'))) returning id into v;
+  insert into sn_clases(nombre, cod_hash) values (p_nombre, crypt(upper(trim(p_codigo)), gen_salt('bf'))) returning id into v;
   return v;
 end $$;
 

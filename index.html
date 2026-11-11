@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SimNeuro · Neurociencias UAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
 :root{
   --bg:#F7F8FA; --surface:#ffffff; --surface2:#EEF2F9; --fg:#1d2433; --muted:#5b6577; --line:#D0D7E2;
@@ -93,6 +94,67 @@ footer{margin-top:24px;font-size:.8rem;color:var(--muted)}
 textarea.csv{font:12px/1.4 ui-monospace,monospace;min-height:120px}
 body.pm .nopm{display:none!important}
 [hidden]{display:none!important}
+/* ============ Acceso v2.3 · tema SMAA ============ */
+:root{--ax-bg:#0e1e35;--ax-bg2:#162840;--ax-bg3:#1d3352;--ax-bg4:#254062;--ax-border:#2a4d72;--ax-border2:#3a6090;--ax-text:#e8f0f8;--ax-text2:#a8c0d8;--ax-text3:#88b0cc;--ax-accent:#0d6ecc;--ax-accent-h:#1a85e8;--ax-accent2:#5ab40c;--ax-accent2-h:#6acc18;--ax-accent3:#e8a820;--ax-accent4:#e84040;--ax-gold:#f0c040;--ax-r:14px;--ax-sans:'Sora',Arial,Helvetica,sans-serif;--ax-mono:'Space Mono',ui-monospace,Menlo,monospace}
+body.ax-on{background:#0A1A33}
+body.ax-on>header,body.ax-on>nav,body.ax-on>main,body.ax-on>footer{display:none!important}
+#ax{display:none}
+body.ax-on #ax{display:block;position:fixed;inset:0;overflow-y:auto;font-family:var(--ax-sans);color:var(--ax-text);
+background-color:#0A1A33;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='g' cx='62%25' cy='45%25' r='78%25'%3E%3Cstop offset='0' stop-color='%232A5599'/%3E%3Cstop offset='.5' stop-color='%231B3A6B'/%3E%3Cstop offset='1' stop-color='%230A1A33'/%3E%3C/radialGradient%3E%3CradialGradient id='v' cx='50%25' cy='50%25' r='72%25'%3E%3Cstop offset='.62' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.6'/%3E%3C/radialGradient%3E%3Cfilter id='b' x='-50%25' y='-10%25' width='200%25' height='120%25'%3E%3CfeGaussianBlur stdDeviation='9'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='1000' fill='url(%23g)'/%3E%3Cg transform='rotate(-17 260 500)'%3E%3Crect x='40' y='-400' width='12' height='1900' fill='%231E5BB8' opacity='.85'/%3E%3Crect x='86' y='-400' width='7' height='1900' fill='%231E5BB8' opacity='.7'/%3E%3Crect x='150' y='-400' width='86' height='1900' fill='%235BC22E' opacity='.45' filter='url(%23b)'/%3E%3Crect x='162' y='-400' width='60' height='1900' fill='%235BC22E' opacity='.9'/%3E%3C/g%3E%3Crect width='1600' height='1000' fill='url(%23v)'/%3E%3C/svg%3E");background-size:cover;background-position:center}
+.ax-wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 12px 18px;box-sizing:border-box;gap:14px}
+.ax-card{width:380px;max-width:94vw;box-sizing:border-box;background:rgba(10,26,51,.82);border:1px solid rgba(91,194,46,.28);border-radius:var(--ax-r);padding:32px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 40px rgba(10,26,51,.55)}
+.ax-card.ax-wide{width:560px}
+.ax-logos{display:flex;justify-content:center;gap:12px;margin-bottom:14px}
+.ax-logo{width:80px;height:80px;background:#fff;border-radius:12px;padding:8px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);overflow:hidden}
+.ax-logo img{width:100%;height:100%;object-fit:contain}
+.ax-logo span{font:700 9px var(--ax-mono);color:#7a8ba3;text-align:center}
+.ax-title{font-family:var(--ax-mono);font-weight:700;color:#fff;letter-spacing:3px;text-align:center;font-size:19px;margin:4px 0 2px;line-height:1.25}
+.ax-sub{text-align:center;color:var(--ax-accent2);font-weight:600;font-size:14px;margin:2px 0}
+.ax-sub2{text-align:center;color:var(--ax-text3);font-size:11.5px;margin:2px 0 18px}
+.ax-card h2{font:700 15px var(--ax-mono);letter-spacing:1px;color:#fff;margin:0 0 12px;text-align:center}
+.ax-card label{display:block;font-size:12.5px;color:var(--ax-text2);margin:12px 0 5px;font-weight:500}
+#ax input.ax-in,.ax-in{width:100%;box-sizing:border-box;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:10px;color:#fff;font:400 14px var(--ax-sans);padding:11px 12px;outline:none;transition:border-color .15s}
+#ax input.ax-in::placeholder,.ax-in::placeholder{color:rgba(255,255,255,.38)}
+#ax input.ax-in:focus,.ax-in:focus{border-color:var(--ax-accent-h);box-shadow:0 0 0 3px rgba(13,110,204,.25)}
+#ax input.ax-code,.ax-code{font-family:var(--ax-mono);text-transform:uppercase;letter-spacing:2px}
+.ax-pw{position:relative}#ax .ax-pw input.ax-in{padding-right:44px}
+.ax-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ax-text2);font-size:16px;cursor:pointer;padding:6px;border-radius:8px}
+.ax-eye:focus-visible,.ax-btn:focus-visible,.ax-ghost:focus-visible,.ax-green:focus-visible,.ax-back:focus-visible,.ax-link:focus-visible,.ax-pick:focus-visible{outline:2px solid var(--ax-gold);outline-offset:2px}
+.ax-hint{font-size:11.5px;color:var(--ax-text3);margin:5px 0 0}
+.ax-ok{color:var(--ax-accent2);font-size:12.5px;margin:6px 0 0;font-weight:600}.ax-bad{color:#ff7272;font-size:12.5px;margin:6px 0 0;font-weight:600}
+.ax-btn,.ax-ghost,.ax-green{display:block;width:100%;box-sizing:border-box;border-radius:10px;padding:12px 14px;font:600 14.5px var(--ax-sans);cursor:pointer;text-align:center;text-decoration:none;margin-top:16px;transition:background .15s,border-color .15s}
+.ax-btn{background:var(--ax-accent);color:#fff;border:0}.ax-btn:hover{background:var(--ax-accent-h)}
+.ax-green{background:var(--ax-accent2);color:#0a1a33;border:0}.ax-green:hover{background:var(--ax-accent2-h)}
+.ax-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}.ax-ghost:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.ax-btn:disabled,.ax-green:disabled{opacity:.6;cursor:default}
+.ax-back{display:inline-block;background:none;border:0;color:var(--ax-text2);font:500 13px var(--ax-sans);cursor:pointer;margin-top:14px;padding:4px 0}
+.ax-link{color:var(--ax-text2);font-size:12.5px;text-decoration:underline;background:none;border:0;cursor:pointer;padding:2px}
+.ax-center{text-align:center;margin:12px 0 0}
+.ax-div{display:flex;align-items:center;gap:10px;color:var(--ax-text3);font-size:12px;margin:18px 0 0}
+.ax-div:before,.ax-div:after{content:"";flex:1;height:1px;background:rgba(255,255,255,.18)}
+.ax-err{color:#ff7272;font-size:13px;margin-top:10px;min-height:0;text-align:center;font-weight:500}
+.ax-info{color:var(--ax-accent2);font-size:13px;margin-top:10px;text-align:center}
+.ax-warn{background:rgba(232,168,32,.12);border:1px solid rgba(232,168,32,.45);color:var(--ax-accent3);border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:14px}
+.ax-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.ax-inth{display:flex;justify-content:space-between;align-items:center;margin:18px 0 6px}
+.ax-inth b{font:700 12px var(--ax-mono);letter-spacing:1.5px;color:var(--ax-accent2)}
+.ax-add{background:none;border:1px solid var(--ax-accent2);color:var(--ax-accent2);border-radius:8px;padding:5px 10px;font:600 12px var(--ax-sans);cursor:pointer}
+.ax-add:disabled{opacity:.4;cursor:default}
+.ax-fila{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px;margin-top:8px;position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+#ax .ax-fila input.ax-in{padding:8px 10px;font-size:13px}
+.ax-fila .ax-n{grid-column:1/-1;font:700 11px var(--ax-mono);color:var(--ax-text3);letter-spacing:1px}
+.ax-x{position:absolute;top:6px;right:8px;background:none;border:0;color:#ff8a8a;font-size:15px;cursor:pointer}
+.ax-pick{display:block;width:100%;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:12px 14px;margin-top:8px;cursor:pointer;font:500 14px var(--ax-sans)}
+.ax-pick:hover{border-color:var(--ax-accent2)}
+.ax-foot{color:var(--ax-text2);font-size:11.5px;text-align:center;max-width:560px;opacity:.9}
+@media (max-height:900px){.ax-wrap{padding:12px 12px 10px;gap:8px}.ax-card{padding:20px 28px}.ax-logos{margin-bottom:8px;gap:10px}.ax-logo{width:58px;height:58px;padding:6px}.ax-title{font-size:16px;letter-spacing:2px;white-space:nowrap}.ax-sub2{margin:2px 0 10px}.ax-card h2{margin:0 0 6px}.ax-card label{margin:8px 0 4px}}
+@media (max-width:600px){.ax-card{padding:24px 18px}.ax-logo{width:60px;height:60px;padding:6px}.ax-2col,.ax-fila{grid-template-columns:1fr}.ax-title{font-size:16px;letter-spacing:2px}}
+
+body.ax-on>*:not(#ax):not(script){display:none!important}
+#ax .ax-code{text-transform:uppercase}
+#ax select.ax-in{appearance:auto;background:#162840;color:#fff}
+#ax textarea.ax-in{min-height:70px}
+.ax-fila{grid-template-columns:1fr!important}
 
 </style>
 </head><body>
@@ -109,64 +171,7 @@ body.pm .nopm{display:none!important}
 
 <div class="wrap">
 <!-- Entrada a la clase -->
-<section class="card" id="login" hidden>
-  <div id="lgPractice" hidden>
-    <h2>Modo práctica</h2>
-    <p class="small muted">Esta copia no está conectada a un servidor. Escribe un alias (no tu nombre real) y elige un producto.</p>
-    <div class="grid2 stack">
-      <div><label for="pAlias">Alias</label><input type="text" id="pAlias" maxlength="24" autocomplete="off"></div>
-      <div><label for="pProd">Producto</label><select id="pProd"></select></div>
-    </div>
-    <p class="small" id="pMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <button class="primary" id="pGo" style="margin-top:12px">Entrar</button>
-  </div>
-  <div id="lgAuth" hidden>
-    <div class="chips" style="margin-bottom:12px"><button class="chip" id="tabIn" aria-pressed="true">Ingresar</button><button class="chip" id="tabReg" aria-pressed="false">Registrar mi equipo</button></div>
-    <div id="paneIn">
-      <h2>Ingresar con tu equipo</h2>
-      <p class="small muted">Usa el código de clase de tu docente, el nombre de tu equipo y su contraseña. Después elegirás tu alias.</p>
-      <label for="liCode">Código de clase</label><input type="text" id="liCode" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <label for="liTeam" style="margin-top:10px">Nombre del equipo</label><input type="text" id="liTeam" autocomplete="username" maxlength="40">
-      <label for="liPass" style="margin-top:10px">Contraseña del equipo</label><input type="password" id="liPass" autocomplete="current-password">
-      <p class="small" id="liMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-      <button class="primary" id="liGo" style="margin-top:12px">Ingresar</button>
-    </div>
-    <div id="paneReg" hidden>
-      <h2>Registrar mi equipo</h2>
-      <p class="small muted">Un integrante registra al equipo; los demás ingresan después con el nombre y la contraseña. <b>No uses nombres reales:</b> solo alias.</p>
-      <label for="rgCode">Código de clase</label><input type="text" id="rgCode" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <div class="grid2 stack" style="margin-top:10px">
-        <div><label for="rgName">Nombre del equipo</label><input type="text" id="rgName" maxlength="40" autocomplete="off" placeholder="p. ej. Los Jaguares"></div>
-        <div><label for="rgProd">Producto que estudia</label><select id="rgProd"></select></div>
-      </div>
-      <div class="grid2 stack" style="margin-top:10px">
-        <div><label for="rgPass">Contraseña (mín. 4)</label><input type="password" id="rgPass" autocomplete="new-password"></div>
-        <div><label for="rgPass2">Repite la contraseña</label><input type="password" id="rgPass2" autocomplete="new-password"></div>
-      </div>
-      <label for="rgAl" style="margin-top:10px">Alias de los integrantes (uno por línea, máx. 12)</label>
-      <textarea id="rgAl" rows="4" placeholder="Jaguar&#10;Colibrí&#10;Quetzal"></textarea>
-      <p class="small" id="rgMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-      <button class="primary" id="rgGo" style="margin-top:12px">Registrar equipo</button>
-    </div>
-  </div>
-  <div id="stClave" hidden>
-    <h2>Cambia la contraseña temporal</h2>
-    <p class="small muted">Tu docente reinició la contraseña del equipo. Define una nueva para continuar.</p>
-    <label for="cpAct">Contraseña temporal</label><input type="password" id="cpAct" autocomplete="current-password">
-    <label for="cpNew" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="cpNew" autocomplete="new-password">
-    <label for="cpNew2" style="margin-top:10px">Repite la nueva contraseña</label><input type="password" id="cpNew2" autocomplete="new-password">
-    <p class="small" id="cpMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <div class="row" style="margin-top:12px"><button class="primary" id="cpGo">Guardar y continuar</button><button id="cpOut">Salir</button></div>
-  </div>
-  <div id="stElegir" hidden>
-    <h2>¿Quién eres en el equipo <span id="elTeam"></span>?</h2>
-    <p class="small muted">Elige tu alias. Tus rondas y mediciones quedarán a tu nombre de alias.</p>
-    <div id="elList" class="row" style="gap:8px;margin-bottom:12px"></div>
-    <div class="row"><input type="text" id="elNew" maxlength="24" placeholder="Mi alias no está: agregarlo" autocomplete="off" style="flex:1 1 200px;width:auto"><button id="elAdd">Agregar</button></div>
-    <p class="small" id="elMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <div class="row" style="margin-top:12px"><button id="elOut">Salir</button></div>
-  </div>
-</section>
+
 
 <!-- SITUACIÓN · El caso -->
 <main id="t-caso" data-student><div id="casoOut"></div></main>
@@ -290,39 +295,16 @@ body.pm .nopm{display:none!important}
 
 <!-- DOCENTE -->
 <main id="t-docente" class="hidden-tab">
-  <div class="card" id="dLogin">
+  <div class="card" id="dNo">
     <h2>Panel docente</h2>
-    <p class="small muted">Ingresa con tu correo y tu contraseña de docente.</p>
-    <label for="dEmail">Correo</label><input type="email" id="dEmail" autocomplete="username">
-    <label for="dPass" style="margin-top:10px">Contraseña</label><input type="password" id="dPass" autocomplete="current-password">
-    <p class="small" id="tMsg" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <div class="row" style="margin-top:12px"><button class="primary" id="dGo">Ingresar</button><button id="dForgot">Olvidé mi contraseña</button><button id="tDemo">Ver clase de ejemplo</button></div>
-  </div>
-  <div class="card" id="dClave" hidden>
-    <h2>Cambia tu contraseña temporal</h2>
-    <label for="dcAct">Contraseña temporal</label><input type="password" id="dcAct" autocomplete="current-password">
-    <label for="dcNew" style="margin-top:10px">Nueva contraseña (mín. 8)</label><input type="password" id="dcNew" autocomplete="new-password">
-    <label for="dcNew2" style="margin-top:10px">Repite la nueva contraseña</label><input type="password" id="dcNew2" autocomplete="new-password">
-    <p class="small" id="tMsg2" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <div class="row" style="margin-top:12px"><button class="primary" id="dcGo">Guardar y continuar</button><button id="dcOut">Salir</button></div>
-  </div>
-  <div class="card" id="dRec" hidden>
-    <h2>Recuperar contraseña</h2>
-    <label for="drEmail">Correo de docente</label><input type="email" id="drEmail" autocomplete="username">
-    <div class="row" style="margin-top:10px"><button id="drGet">Ver pregunta secreta</button></div>
-    <div id="drStep2" hidden>
-      <p style="margin:12px 0 4px"><b id="drQ"></b></p>
-      <label for="drAns">Respuesta</label><input type="text" id="drAns" autocomplete="off">
-      <label for="drNew" style="margin-top:10px">Nueva contraseña (mín. 8)</label><input type="password" id="drNew" autocomplete="new-password">
-      <div class="row" style="margin-top:12px"><button class="primary" id="drGo">Cambiar contraseña</button></div>
-    </div>
-    <p class="small" id="tMsg3" style="margin:10px 0 0;color:var(--bad)" role="alert"></p>
-    <div class="row" style="margin-top:8px"><button id="drBack">Volver</button></div>
+    <p class="small muted">El panel es solo para el docente. Ingresa desde la pantalla de acceso con tu correo y tu contraseña.</p>
+    <div class="row"><button class="primary" id="dIr">Ingresar como docente</button><button id="tDemo">Ver clase de ejemplo</button></div>
   </div>
   <div class="card" id="dBar" hidden>
     <div class="row" style="justify-content:space-between"><span><b id="dWho"></b> · docente</span>
     <span class="row"><select id="dClase" hidden style="width:auto"></select><button class="ghost" id="dOut">Salir</button></span></div>
   </div>
+  <p class="small" id="tMsg" style="margin:0 0 8px;color:var(--bad)" role="alert"></p>
   <div id="docOut"></div>
 </main>
 
@@ -470,7 +452,7 @@ async function sync(){
 }
 function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
 function renderStatus(){
-  const el=$('status');if(!el)return;if(!S.joined){el.textContent='';return;}
+  const el=$('status');if(!el)return;
   if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este dispositivo.';return;}
   const n=pending();
   el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
@@ -487,29 +469,188 @@ function showTab(){
   const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
   VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&!S.joined));});
   $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
-  $('login').hidden=!(t!=='docente'&&t!=='manual'&&!S.joined);
+  if(!S.joined&&t!=='docente'&&t!=='manual'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
   $('bar').hidden=!S.joined;
   document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
 }
 window.addEventListener('hashchange',()=>{showTab();window.scrollTo(0,0);renderAll();if(currentTab()==='comparar')loadResumen();});
 
-/* ---------- entrada ---------- */
-let PW='';
-function setStage(st){S.stage=st;S.joined=st==='listo';lsSave();showTab();renderLogin();renderAll();}
+/* ---------- entrada: pantalla de acceso (mismo esquema que el simulador de innovación) ---------- */
+let PW='',AXM=null,AXWHO='eq',AXREG={ok:false},AXT=null;
+const AXPIE='Clases Espejo · Universidad Dr. Andrés Bello · Mercadeo Estratégico · Neurociencias aplicado al Consumidor · Prof. Jhonny David Atila Lijerón';
+function AX_$(id){return document.getElementById(id);}
+function AX_el(){let e=AX_$('ax');if(!e){e=document.createElement('div');e.id='ax';e.setAttribute('role','main');e.setAttribute('aria-live','polite');document.body.appendChild(e);}return e;}
+function AX_pw(id,ph,ac){return '<div class="ax-pw"><input class="ax-in" type="password" id="'+id+'" placeholder="'+esc(ph||'')+'" autocomplete="'+(ac||'current-password')+'"><button type="button" class="ax-eye" aria-label="Mostrar u ocultar la contraseña" onclick="AX_ojo(\''+id+'\')">👁</button></div>';}
+function AX_ojo(id){const e=AX_$(id);e.type=e.type==='password'?'text':'password';}
+function AX_err(m){const e=AX_$('axErr');if(e){e.className='ax-err';e.textContent=m||'';}}
+function AX_info(m){const e=AX_$('axErr');if(e){e.className='ax-info';e.textContent=m||'';}}
+function AX_busy(b,on){if(!b)return;if(on){b.dataset.t=b.textContent;b.textContent='Procesando…';b.disabled=true;}else{b.textContent=b.dataset.t||b.textContent;b.disabled=false;}}
+function AX_enter(ev,fn){if(ev.key==='Enter'){ev.preventDefault();fn();}}
+function AX_cerrar(){AXM=null;document.body.classList.remove('ax-on');const e=AX_$('ax');if(e)e.innerHTML='';}
+function AX_manual(){AX_cerrar();location.hash='manual';showTab();}
+function AX_cab(){return '<div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
+function AX_mostrar(modo,msg){
+  AXM=modo;document.body.classList.add('ax-on');let h='',w=false;
+  if(modo==='ingresar'){
+    h='<h2>Ingresar</h2><label for="axU">Nombre de equipo · Correo del profesor</label><input class="ax-in" id="axU" autocomplete="username" maxlength="80" oninput="AX_codVis()" onkeydown="AX_enter(event,AX_ingresar)">'+
+      '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
+      '<div id="axCodBox"><label for="axC">Código de clase</label><input class="ax-in ax-code" id="axC" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="AX_enter(event,AX_ingresar)"></div>'+
+      '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
+      '<p class="ax-center"><button class="ax-link" onclick="AX_mostrar(\'recuperar\')">¿Olvidaste tu contraseña?</button></p>'+
+      '<div class="ax-div">¿Primera vez?</div><button class="ax-ghost" onclick="AX_mostrar(\'registro\')">Registrar mi equipo</button>'+
+      '<button class="ax-ghost" onclick="AX_manual()">📘 Ver Manual</button>';
+  }else if(modo==='registro'){
+    w=true;AXREG={ok:false};
+    h='<h2>Registrar mi equipo</h2><label for="axRn">Nombre del equipo</label><input class="ax-in" id="axRn" maxlength="40" placeholder="Ejemplo: Los Jaguares">'+
+      '<p class="ax-hint">📌 Es el nombre con el que ingresarán.</p>'+
+      '<div class="ax-2col"><div><label for="axRp">Contraseña</label>'+AX_pw('axRp','Mínimo 4 caracteres','new-password')+'</div><div><label for="axRp2">Confirmar contraseña</label>'+AX_pw('axRp2','','new-password')+'</div></div>'+
+      '<label for="axRc">Código de clase</label><input class="ax-in ax-code" id="axRc" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase();AX_validarCod()"><div id="axRcm"></div>'+
+      '<label for="axRpr">Producto que estudia el equipo</label><select class="ax-in" id="axRpr">'+prodOptions()+'</select>'+
+      '<div class="ax-inth"><b>INTEGRANTES DEL EQUIPO</b><button class="ax-add" id="axAdd" onclick="AX_fila()">+ Agregar integrante</button></div><div id="axFilas"></div>'+
+      '<p class="ax-hint">📌 Usa solo un alias por integrante (2 a 24 caracteres), nunca tu nombre real.</p>'+
+      '<div class="ax-warn">⚠ Guarda bien la contraseña — la necesitará todo el equipo en cada sesión.</div>'+
+      '<button class="ax-green" id="axGo" onclick="AX_registrar()">✓ Registrar Equipo</button><div id="axErr" class="ax-err"></div>'+
+      '<button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='recuperar'){
+    h='<h2>Recuperar contraseña</h2><div class="ax-warn">Equipos: pide a tu docente una contraseña temporal. Con ella ingresas y el sistema te pedirá crear una nueva.</div>'+
+      '<label for="axRe">Docentes: tu correo</label><input class="ax-in" id="axRe" type="email" autocomplete="username" onkeydown="AX_enter(event,AX_verPregunta)"><button class="ax-btn" id="axGoP" onclick="AX_verPregunta()">Ver mi pregunta de seguridad</button>'+
+      '<div id="axPreg"></div><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='clave'){
+    const doc=AXWHO==='doc',min=doc?8:4,known=doc?DPW:PW;
+    h='<h2>Crea tu contraseña</h2><p class="ax-hint" style="text-align:center">📌 Ingresaste con una contraseña temporal. Crea una nueva para continuar (mínimo '+min+' caracteres).</p>'+
+      (known?'':'<label for="axN0">Contraseña temporal</label>'+AX_pw('axN0','','current-password'))+
+      '<label for="axN1">Contraseña nueva</label>'+AX_pw('axN1','','new-password')+'<label for="axN2">Confirmar contraseña nueva</label>'+AX_pw('axN2','','new-password')+
+      '<button class="ax-btn" id="axGo" onclick="AX_cambiarTemp()">Guardar y continuar →</button><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
+  }else if(modo==='elegir'){
+    h='<h2>¿Quién eres?</h2><p class="ax-hint" style="text-align:center">📌 '+esc(S.equipoNombre||'Tu equipo')+': elige tu alias para que tus aportes queden registrados con él.</p>'+
+      (S.integrantes||[]).map(i=>'<button class="ax-pick" onclick="AX_elegir(\''+esc(i.id)+'\')">'+esc(i.alias)+'</button>').join('')+
+      '<label for="axNa">¿Tu alias no está?</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>'+
+      '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
+  }else if(modo==='practica'){
+    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este dispositivo.</p>'+
+      '<label for="axPa">Alias</label><input class="ax-in" id="axPa" maxlength="24" autocomplete="off" onkeydown="AX_enter(event,AX_practica)">'+
+      '<label for="axPp">Producto</label><select class="ax-in" id="axPp">'+prodOptions()+'</select>'+
+      '<button class="ax-btn" id="axGo" onclick="AX_practica()">Entrar →</button><div id="axErr" class="ax-err"></div>'+
+      '<button class="ax-ghost" onclick="AX_manual()">📘 Ver Manual</button>';
+  }
+  AX_el().innerHTML='<div class="ax-wrap"><div class="ax-card'+(w?' ax-wide':'')+'">'+AX_cab()+h+'</div><div class="ax-foot">'+esc(AXPIE)+'</div></div>';
+  if(modo==='registro')AX_fila();
+  if(modo==='ingresar'){AX_codVis();if(S.equipoNombre&&S.stage==='login'&&AXWHO==='eq')AX_$('axU').value=S.equipoNombre;}
+  if(msg)AX_info(msg);
+  const f1=AX_el().querySelector('input,select');if(f1&&modo!=='elegir')try{f1.focus({preventScroll:true});}catch(e){}
+}
+function AX_codVis(){const u=AX_$('axU');if(u)AX_$('axCodBox').style.display=u.value.indexOf('@')>0?'none':'';}
+function AX_volver(){if(AXWHO==='doc'){docLogout();}else salir();}
+/* ingresar */
+async function AX_ingresar(){
+  const u=AX_$('axU').value.trim(),p=AX_$('axP').value,c=AX_$('axC')?AX_$('axC').value.trim():'',b=AX_$('axGo');AX_err('');
+  if(!u||!p){AX_err('Completa el usuario y la contraseña.');return;}
+  const esDoc=u.indexOf('@')>0;
+  if(!esDoc&&!c){AX_err('Escribe el código de clase.');return;}
+  if(!BACKEND){AX_err('Esta copia no tiene servidor configurado.');return;}
+  AX_busy(b,true);
+  try{
+    const r=await rpc('sn_login',{p_usuario:u,p_clave:p,p_codigo:esDoc?'':c});
+    if(!r||!r.ok){AX_busy(b,false);AX_err(em(r));return;}
+    if(r.tipo==='docente'){
+      DTOK=r.token;DNAME=r.nombre;DPW=p;AXWHO='doc';demoOn=false;T=null;
+      try{sessionStorage.setItem('sn-doc-b2',DTOK);}catch(e){}
+      $('dWho').textContent=DNAME;
+      if(r.cambiar_clave){AX_mostrar('clave');return;}
+      AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();return;
+    }
+    AXWHO='eq';applyEquipo(r);PW=p;
+    setStage(r.cambiar_clave?'clave':'elegir');
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor. Revisa tu internet.');}
+}
+/* registrar */
+function AX_numFilas(){const f=AX_$('axFilas');if(!f)return;[...f.children].forEach((d,i)=>{d.querySelector('.ax-n').textContent='INTEGRANTE '+(i+1);d.querySelector('.ax-x').style.display=f.children.length>1?'':'none';});AX_$('axAdd').disabled=f.children.length>=12;}
+function AX_fila(){const f=AX_$('axFilas');if(f.children.length>=12)return;const d=document.createElement('div');d.className='ax-fila';
+  d.innerHTML='<span class="ax-n"></span><button class="ax-x" title="Quitar integrante" aria-label="Quitar integrante" onclick="AX_quitarFila(this)">✕</button><input class="ax-in" maxlength="24" placeholder="Alias (no uses tu nombre real)" autocomplete="off" aria-label="Alias">';
+  f.appendChild(d);AX_numFilas();}
+function AX_quitarFila(b){b.parentNode.remove();AX_numFilas();}
+function AX_validarCod(){
+  clearTimeout(AXT);const c=AX_$('axRc').value.trim(),m=AX_$('axRcm');AXREG.ok=false;m.innerHTML='';
+  if(c.length<4||!BACKEND)return;
+  AXT=setTimeout(async()=>{try{const r=await rpc('sn_inicio',{p_codigo:c});
+    if(AX_$('axRc')&&AX_$('axRc').value.trim()!==c)return;
+    if(r&&r.ok){AXREG.ok=!!r.registro;m.innerHTML=r.registro?'<div class="ax-ok">✓ '+esc(r.clase)+'</div>':'<div class="ax-bad">El registro de equipos está cerrado.</div>';}
+    else m.innerHTML='<div class="ax-bad">Código de clase incorrecto.</div>';
+  }catch(e){}},450);
+}
+async function AX_registrar(){
+  AX_err('');const b=AX_$('axGo');
+  const nom=AX_$('axRn').value.trim(),pw=AX_$('axRp').value,pw2=AX_$('axRp2').value,code=AX_$('axRc').value.trim();
+  const al=[...AX_$('axFilas').querySelectorAll('input')].map(i=>i.value.trim()).filter(Boolean);
+  if(nom.length<3){AX_err(ERR.nombre);return;}
+  if(pw.length<4){AX_err('La contraseña debe tener al menos 4 caracteres.');return;}
+  if(pw!==pw2){AX_err('Las contraseñas no coinciden.');return;}
+  if(!code){AX_err('Escribe el código de clase.');return;}
+  if(!al.length){AX_err(ERR.integrantes);return;}
+  if(al.some(a=>a.length<2)){AX_err(ERR.alias);return;}
+  if(!BACKEND){AX_err('Esta copia no tiene servidor configurado.');return;}
+  AX_busy(b,true);
+  try{const r=await rpc('sn_registrar_equipo',{p_codigo:code,p_nombre:nom,p_producto:+AX_$('axRpr').value,p_clave:pw,p_integrantes:al});
+    if(!r||!r.ok){AX_busy(b,false);AX_err(em(r));return;}
+    AXWHO='eq';applyEquipo(r);PW='';setStage('elegir');
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor. Revisa tu internet.');}
+}
+/* contraseña temporal */
+async function AX_cambiarTemp(){
+  AX_err('');const doc=AXWHO==='doc',min=doc?8:4;
+  const a=AX_$('axN0')?AX_$('axN0').value:(doc?DPW:PW),n=AX_$('axN1').value,n2=AX_$('axN2').value,b=AX_$('axGo');
+  if(!a||!n){AX_err(ERR.vacio);return;}
+  if(n.length<min){AX_err('La nueva contraseña debe tener al menos '+min+' caracteres.');return;}
+  if(n!==n2){AX_err('Las contraseñas no coinciden.');return;}
+  AX_busy(b,true);
+  try{const r=await rpc('sn_cambiar_clave',{p_token:doc?DTOK:S.token,p_actual:a,p_nueva:n});
+    if(!r||!r.ok){AX_busy(b,false);if(!doc&&sesionPerdida(r))return;if(doc&&r&&r.error==='sesion'){docLogout();return;}AX_err(em(r));return;}
+    if(doc){DPW='';AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();}
+    else{PW='';setStage('elegir');}
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor.');}
+}
+/* elegir alias */
+async function AX_elegir(id){
+  AX_err('');
+  try{const r=await rpc('sn_elegir',{p_token:S.token,p_integrante:id});
+    if(!r||!r.ok){if(sesionPerdida(r))return;AX_err(em(r));return;}
+    entrarComo(r.integrante,r.alias);
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+async function AX_addAlias(){
+  AX_err('');const a=AX_$('axNa').value.trim();if(!a)return;
+  try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
+    if(!r||!r.ok){if(sesionPerdida(r))return;AX_err(em(r));return;}
+    S.integrantes=r.integrantes||S.integrantes;lsSave();AX_mostrar('elegir');
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+/* recuperar (docentes) */
+async function AX_verPregunta(){
+  AX_err('');const e_=AX_$('axRe').value.trim();if(!e_){AX_err('Escribe tu correo.');return;}
+  try{const r=await rpc('sn_doc_pregunta',{p_email:e_});
+    if(!r||!r.ok){AX_err('No hay recuperación disponible para ese correo. Los equipos deben pedir una contraseña temporal a su docente.');return;}
+    AX_$('axPreg').innerHTML='<label for="axRr">'+esc(r.pregunta)+'</label><input class="ax-in" id="axRr" autocomplete="off"><label for="axRn1">Contraseña nueva</label>'+AX_pw('axRn1','Mínimo 8 caracteres','new-password')+'<button class="ax-green" id="axGoR" onclick="AX_recuperar()">Cambiar contraseña</button>';
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+async function AX_recuperar(){
+  AX_err('');const n=AX_$('axRn1').value,a=AX_$('axRr').value;
+  if(!a.trim()||n.length<8){AX_err('Escribe la respuesta y una contraseña nueva de al menos 8 caracteres.');return;}
+  try{const r=await rpc('sn_doc_recuperar',{p_email:AX_$('axRe').value.trim(),p_respuesta:a,p_nueva:n});
+    if(!r||!r.ok){AX_err(em(r));return;}
+    AX_mostrar('ingresar','Contraseña cambiada. Ya puedes ingresar.');
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+function AX_practica(){
+  const al=AX_$('axPa').value.trim().slice(0,24);if(al.length<2){AX_err('Escribe un alias de al menos 2 letras.');return;}
+  S.equipo=+AX_$('axPp').value;S.equipoNombre='Práctica';S.equipoId='local';S.integrantes=[];entrarComo('local',al);
+}
+
+function setStage(st){
+  S.stage=st;S.joined=st==='listo';lsSave();
+  if(S.joined)AX_cerrar();else if(st==='clave'){AXWHO='eq';AX_mostrar('clave');}else if(st==='elegir')AX_mostrar('elegir');else AX_mostrar(BACKEND?'ingresar':'practica');
+  showTab();renderAll();
+}
 function prodOptions(){return CONFIG.PRODUCTS.map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.brand)})</option>`).join('');}
-function renderLogin(){
-  const st=S.stage;
-  $('lgPractice').hidden=!(!BACKEND&&st!=='listo');
-  $('lgAuth').hidden=!(BACKEND&&st==='login');
-  $('stClave').hidden=!(BACKEND&&st==='clave');
-  $('stElegir').hidden=!(BACKEND&&st==='elegir');
-  if(st==='clave')$('cpAct').value=PW||'';
-  if(st==='elegir')drawElegir();
-}
-function drawElegir(){
-  $('elTeam').textContent=S.equipoNombre;
-  $('elList').innerHTML=S.integrantes.map(i=>`<button class="primary" data-iid="${esc(i.id)}">${esc(i.alias)}</button>`).join('');
-}
 function applyEquipo(r){
   S.token=r.token||S.token;S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
 }
@@ -523,79 +664,9 @@ async function salir(){
   if(BACKEND&&tok){try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}try{await rpc('sn_salir',{p_token:tok});}catch(e){}}
   stash();S.token='';PW='';S.iid='';S.alias='';S.equipoId='';S.equipoNombre='';S.integrantes=[];
   S.sims=[];S.obs=[];S.nota='';S.notaDirty=false;S.cfg=NEWCFG();S.pred=null;S.draft=NEWDRAFT();
-  $('nota').value='';setStage('login');
+  $('nota').value='';AXWHO='eq';setStage('login');
 }
 function bindLogin(){
-  $('pProd').innerHTML=prodOptions();$('rgProd').innerHTML=prodOptions();
-  const mode=m=>{$('paneIn').hidden=m!=='in';$('paneReg').hidden=m!=='reg';$('tabIn').setAttribute('aria-pressed',m==='in');$('tabReg').setAttribute('aria-pressed',m==='reg');};
-  $('tabIn').onclick=()=>mode('in');$('tabReg').onclick=()=>mode('reg');
-  $('liTeam').value=S.equipoNombre||'';
-  /* práctica */
-  $('pGo').onclick=()=>{
-    const al=$('pAlias').value.trim().slice(0,24),pr=+$('pProd').value;
-    if(al.length<2){$('pMsg').textContent='Escribe un alias de al menos 2 letras.';return;}
-    S.equipo=pr;S.equipoNombre='Práctica';S.equipoId='local';S.integrantes=[];
-    entrarComo('local',al);
-  };
-  /* ingresar */
-  const doLogin=async()=>{
-    const code=$('liCode').value.trim(),team=$('liTeam').value.trim(),pw=$('liPass').value,m=$('liMsg');m.textContent='';
-    if(!code||!team||!pw){m.textContent=ERR.vacio;return;}
-    $('liGo').disabled=true;
-    try{
-      const r=await rpc('sn_login',{p_usuario:team,p_clave:pw,p_codigo:code});
-      if(!r||!r.ok||r.tipo!=='equipo'){m.textContent=em(r);return;}
-      applyEquipo(r);PW=pw;$('liPass').value='';
-      setStage(r.cambiar_clave?'clave':'elegir');
-    }catch(e){m.textContent='No hay conexión con el servidor. Revisa tu internet.';}
-    finally{$('liGo').disabled=false;}
-  };
-  $('liGo').onclick=doLogin;$('liPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-  /* registrar */
-  $('rgGo').onclick=async()=>{
-    const m=$('rgMsg');m.textContent='';
-    const code=$('rgCode').value.trim(),nom=$('rgName').value.trim(),pw=$('rgPass').value,pw2=$('rgPass2').value;
-    const al=$('rgAl').value.split('\n').map(x=>x.trim()).filter(Boolean);
-    if(!code||!nom||!pw){m.textContent=ERR.vacio;return;}
-    if(pw.length<4){m.textContent='La contraseña debe tener al menos 4 caracteres.';return;}
-    if(pw!==pw2){m.textContent='Las contraseñas no coinciden.';return;}
-    if(!al.length){m.textContent=ERR.integrantes;return;}
-    $('rgGo').disabled=true;
-    try{
-      const r=await rpc('sn_registrar_equipo',{p_codigo:code,p_nombre:nom,p_producto:+$('rgProd').value,p_clave:pw,p_integrantes:al});
-      if(!r||!r.ok){m.textContent=em(r);return;}
-      applyEquipo(r);PW='';$('rgPass').value=$('rgPass2').value='';
-      setStage('elegir');
-    }catch(e){m.textContent='No hay conexión con el servidor. Revisa tu internet.';}
-    finally{$('rgGo').disabled=false;}
-  };
-  /* cambiar contraseña temporal */
-  $('cpGo').onclick=async()=>{
-    const m=$('cpMsg');m.textContent='';const a=$('cpAct').value,n=$('cpNew').value,n2=$('cpNew2').value;
-    if(!a||!n){m.textContent=ERR.vacio;return;}
-    if(n.length<4){m.textContent='La nueva contraseña debe tener al menos 4 caracteres.';return;}
-    if(n!==n2){m.textContent='Las contraseñas no coinciden.';return;}
-    try{const r=await rpc('sn_cambiar_clave',{p_token:S.token,p_actual:a,p_nueva:n});
-      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
-      PW='';$('cpNew').value=$('cpNew2').value='';setStage('elegir');
-    }catch(e){m.textContent='No hay conexión con el servidor.';}
-  };
-  $('cpOut').onclick=salir;$('elOut').onclick=salir;
-  /* elegir alias */
-  $('elList').onclick=async e=>{
-    const b=e.target.closest('button');if(!b)return;const m=$('elMsg');m.textContent='';
-    try{const r=await rpc('sn_elegir',{p_token:S.token,p_integrante:b.dataset.iid});
-      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
-      entrarComo(r.integrante,r.alias);
-    }catch(err){m.textContent='No hay conexión con el servidor.';}
-  };
-  $('elAdd').onclick=async()=>{
-    const m=$('elMsg');m.textContent='';const a=$('elNew').value.trim();if(!a)return;
-    try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
-      if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
-      S.integrantes=r.integrantes||S.integrantes;$('elNew').value='';lsSave();drawElegir();
-    }catch(err){m.textContent='No hay conexión con el servidor.';}
-  };
   $('barSwitch').onclick=async()=>{
     if(!BACKEND||!S.token){salir();return;}
     try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}
@@ -625,8 +696,7 @@ async function restaurar(){
   if(!S.token){if(S.stage!=='login'){stash();S.stage='login';S.joined=false;}return;}
   try{
     const r=await rpc('sn_sesion_info',{p_token:S.token});
-    if(!r||!r.ok){S.token='';stash();setStage('login');return;}
-    if(r.tipo!=='equipo'){S.token='';setStage('login');return;}
+    if(!r||!r.ok||r.tipo!=='equipo'){S.token='';stash();setStage('login');return;}
     S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
     if(r.cambiar_clave)setStage('clave');
     else if(r.integrante){if(S.iid!==r.integrante){stash();unstash(r.integrante);}S.alias=r.alias;fillSimSelects();bindSimValues();$('nota').value=S.nota||'';setStage('listo');sync();loadResumen();}
@@ -916,81 +986,40 @@ function demoData(){
 function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
 let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
-function showD(st){
-  ['dLogin','dClave','dRec'].forEach(id=>$(id).hidden=true);
-  const panel=st==='panel'||demoOn;
-  $('dBar').hidden=!(st==='panel');
-  if(st==='login')$('dLogin').hidden=false;
-  if(st==='clave'){$('dClave').hidden=false;$('dcAct').value=DPW||'';}
-  if(st==='rec')$('dRec').hidden=false;
-  if(demoOn&&st==='login')$('dLogin').hidden=false;
-  $('docOut').hidden=!panel;
+function showD(){
+  $('dNo').hidden=!!DTOK;
+  $('dBar').hidden=!DTOK;
+  $('docOut').hidden=!(T&&(DTOK||demoOn));
+  $('tDemo').textContent=demoOn?'Ocultar ejemplo':'Ver clase de ejemplo';
+  if(DNAME)$('dWho').textContent=DNAME;
 }
-function docLogout(){DTOK='';DPW='';T=null;demoOn=false;dReset=null;try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}showD('login');renderDoc();}
+function docLogout(){
+  const t=DTOK;if(BACKEND&&t)rpc('sn_salir',{p_token:t}).catch(()=>{});
+  DTOK='';DPW='';DNAME='';T=null;demoOn=false;dReset=null;AXWHO='eq';try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}
+  showD();renderDoc();
+  if(!S.joined)AX_mostrar(BACKEND?'ingresar':'practica');else AX_cerrar();
+}
 function docSesion(r){
   if(!r||r.ok)return false;
   if(r.error==='sesion'){docLogout();return true;}
-  if(r.error==='tmp'){showD('clave');return true;}
+  if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
   return false;
 }
 async function loadTeacher(){
   if(!BACKEND||!DTOK)return;
   try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
     if(!r||!r.ok){if(docSesion(r))return;$('tMsg').textContent=em(r);return;}
-    T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    $('tMsg').textContent='';T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
-    showD('panel');renderDoc();}
+    showD();renderDoc();}
   catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
 }
-function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);(crypto||window.crypto).getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
+function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);crypto.getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
 function bindDoc(){
-  $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD(DTOK&&!demoOn?'panel':'login');renderDoc();$('tDemo').textContent=demoOn?'Ocultar ejemplo':'Ver clase de ejemplo';};
-  const go=async()=>{
-    const em_=$('dEmail').value.trim(),pw=$('dPass').value,m=$('tMsg');m.textContent='';
-    if(!em_||!pw){m.textContent=ERR.vacio;return;}
-    if(!BACKEND){m.textContent='Esta página no tiene servidor configurado (modo práctica). Usa «Ver clase de ejemplo».';return;}
-    $('dGo').disabled=true;
-    try{const r=await rpc('sn_login',{p_usuario:em_,p_clave:pw,p_codigo:''});
-      if(!r||!r.ok||r.tipo!=='docente'){m.textContent=em(r);return;}
-      DTOK=r.token;DNAME=r.nombre;DPW=pw;$('dPass').value='';demoOn=false;T=null;
-      try{sessionStorage.setItem('sn-doc-b2',DTOK);}catch(e){}
-      $('dWho').textContent=DNAME;
-      if(r.cambiar_clave)showD('clave');else loadTeacher();
-    }catch(e){m.textContent='Sin conexión con el servidor.';}
-    finally{$('dGo').disabled=false;}
-  };
-  $('dGo').onclick=go;$('dPass').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
-  $('dcGo').onclick=async()=>{
-    const m=$('tMsg2');m.textContent='';const a=$('dcAct').value,n=$('dcNew').value,n2=$('dcNew2').value;
-    if(!a||!n){m.textContent=ERR.vacio;return;}
-    if(n.length<8){m.textContent='La nueva contraseña debe tener al menos 8 caracteres.';return;}
-    if(n!==n2){m.textContent='Las contraseñas no coinciden.';return;}
-    try{const r=await rpc('sn_cambiar_clave',{p_token:DTOK,p_actual:a,p_nueva:n});
-      if(!r||!r.ok){if(r&&r.error==='sesion'){docLogout();return;}m.textContent=em(r);return;}
-      DPW='';$('dcNew').value=$('dcNew2').value='';loadTeacher();
-    }catch(e){m.textContent='Sin conexión con el servidor.';}
-  };
-  $('dcOut').onclick=()=>{if(BACKEND&&DTOK)rpc('sn_salir',{p_token:DTOK}).catch(()=>{});docLogout();};
-  $('dOut').onclick=$('dcOut').onclick;
-  $('dForgot').onclick=()=>{$('drEmail').value=$('dEmail').value;$('drStep2').hidden=true;$('tMsg3').textContent='';showD('rec');};
-  $('drBack').onclick=()=>showD('login');
-  $('drGet').onclick=async()=>{
-    const m=$('tMsg3');m.textContent='';const e_=$('drEmail').value.trim();if(!e_)return;
-    try{const r=await rpc('sn_doc_pregunta',{p_email:e_});
-      if(!r||!r.ok){m.textContent='No hay recuperación disponible para ese correo.';return;}
-      $('drQ').textContent=r.pregunta;$('drStep2').hidden=false;
-    }catch(e){m.textContent='Sin conexión con el servidor.';}
-  };
-  $('drGo').onclick=async()=>{
-    const m=$('tMsg3');m.textContent='';const n=$('drNew').value;
-    if($('drAns').value.trim()===''||n.length<8){m.textContent='Escribe la respuesta y una contraseña nueva de al menos 8 caracteres.';return;}
-    try{const r=await rpc('sn_doc_recuperar',{p_email:$('drEmail').value.trim(),p_respuesta:$('drAns').value,p_nueva:n});
-      if(!r||!r.ok){m.textContent=em(r);return;}
-      $('dEmail').value=$('drEmail').value;$('drAns').value=$('drNew').value='';showD('login');
-      $('tMsg').style.color='var(--real)';$('tMsg').textContent='Contraseña cambiada. Ya puedes ingresar.';
-    }catch(e){m.textContent='Sin conexión con el servidor.';}
-  };
+  $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD();renderDoc();};
+  $('dIr').onclick=()=>{AXWHO='eq';AX_mostrar(BACKEND?'ingresar':'practica');};
+  $('dOut').onclick=docLogout;
   $('dClase').onchange=e=>{DCLASE=e.target.value;loadTeacher();};
   $('docOut').addEventListener('click',async e=>{
     const b=e.target.closest('button');if(!b)return;
@@ -1012,7 +1041,8 @@ function bindDoc(){
       }catch(err){b.textContent='Error';}
     }
   });
-  if(BACKEND&&DTOK){showD('panel');loadTeacher();}else showD('login');
+  showD();
+  if(BACKEND&&DTOK){loadTeacher();}
   setInterval(()=>{if(currentTab()==='docente'&&DTOK&&BACKEND&&!demoOn&&!document.hidden)loadTeacher();},15000);
 }
 let docProd=0;
@@ -1123,7 +1153,8 @@ function init(){
   $('nota').value=S.nota||'';
   let nt=null;
   $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
-  showTab();renderLogin();renderAll();
+  if(DTOK&&BACKEND&&!S.joined&&!location.hash)location.hash='docente';
+  showTab();renderAll();
   restaurar();
 }
 init();
