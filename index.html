@@ -488,7 +488,7 @@ function AX_busy(b,on){if(!b)return;if(on){b.dataset.t=b.textContent;b.textConte
 function AX_enter(ev,fn){if(ev.key==='Enter'){ev.preventDefault();fn();}}
 function AX_cerrar(){AXM=null;document.body.classList.remove('ax-on');const e=AX_$('ax');if(e)e.innerHTML='';}
 function AX_manual(){AX_cerrar();location.hash='manual';showTab();}
-function AX_cab(){return '<div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
+function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
 function AX_mostrar(modo,msg){
   AXM=modo;document.body.classList.add('ax-on');let h='',w=false;
   if(modo==='ingresar'){
