@@ -320,11 +320,11 @@ const CONFIG={
   SUPABASE_URL:'https://pljkdljylizifokgvhsl.supabase.co',   // ej.: 'https://abcdxyz.supabase.co'  (vacío = modo práctica, sin servidor)
   SUPABASE_KEY:'sb_publishable_tFKexrBNDu73728vYDf2ag_fvUWJJah',   // clave pública: 'sb_publishable_...' o la 'anon' (JWT). Nunca la 'service_role'.
   CURRENCY:'US$',
-  PRICES_PROVISIONAL:true,   // pon false cuando valides los precios con el estudio de mercado
+  PRICES_PROVISIONAL:false,   // pon false cuando valides los precios con el estudio de mercado
   PRODUCTS:[
-    {id:1,name:'Bebida energética',short:'Energética',brand:'VOLTA',art:'can',  detail:'Lata de 473 ml',prices:{low:1.00,mid:1.50,high:2.25},mu:5.4},
-    {id:2,name:'Audífonos inalámbricos',short:'Audífonos',brand:'AURA',art:'phones',detail:'Bluetooth, con micrófono',prices:{low:12,mid:18,high:27},mu:5.8},
-    {id:3,name:'Zapatillas deportivas',short:'Zapatillas',brand:'PASO',art:'shoe',detail:'Para correr, par',prices:{low:30,mid:45,high:68},mu:5.6}
+    {id:1,name:'Bebida energética',short:'Energética',brand:'VOLTA',art:'can',  detail:'Lata de 473 ml',prices:{low:1.40,mid:2.10,high:3.15},mu:5.4},
+    {id:2,name:'Audífonos inalámbricos',short:'Audífonos',brand:'AURA',art:'phones',detail:'Bluetooth, con micrófono',prices:{low:36,mid:54,high:81},mu:5.8},
+    {id:3,name:'Zapatillas deportivas',short:'Zapatillas',brand:'PASO',art:'shoe',detail:'Para correr, par',prices:{low:34.95,mid:49.95,high:74.95},mu:5.6}
   ]
 };
 
@@ -1119,7 +1119,7 @@ function renderCaso(){
     <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
   <div class="card"><h2>Los tres productos de la clase</h2>
     <div class="tablewrap w"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Descuento</th><th class="num">Normal</th><th class="num">Alto</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <p class="small muted" style="margin:8px 0 0">Tu producto va en negrita. Cada equipo estudia uno y mide a compañeros de los otros dos.</p></div>
+    <p class="small muted" style="margin:8px 0 0">Tu producto va en negrita. Cada equipo estudia uno y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
   <div class="card soft"><h2>Cómo se trabaja</h2>
     <ol class="steps" style="margin-bottom:0"><li><b>Decidir → Simular.</b> Formulas tu hipótesis, diseñas las ofertas A y B y ejecutas rondas con consumidores virtuales.</li><li><b>Decidir → Experimento.</b> Mides a unos 6 compañeros reales de otros equipos.</li><li><b>Resultados.</b> Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.</li><li><b>Aprender.</b> Interpretas las diferencias y escribes tu conclusión.</li></ol></div>`;
 }
