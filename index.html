@@ -388,6 +388,8 @@ const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
 const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
+const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
+if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
 const TIERL={low:'descuento',mid:'normal',high:'alto'};
 const prod=id=>CONFIG.PRODUCTS.find(p=>p.id===id)||CONFIG.PRODUCTS[0];
 const money=v=>CONFIG.CURRENCY+'\u00a0'+((v<10||!Number.isInteger(v))?v.toFixed(2).replace('.',','):String(v));
@@ -465,8 +467,9 @@ setInterval(()=>{if(BACKEND&&pending())sync();},15000);
 window.addEventListener('online',()=>sync());
 
 /* ---------- navegación ---------- */
-function currentTab(){const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
+function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
 function showTab(){
+  if(DOCMODE){VIEWS.forEach(x=>$('t-'+x).classList.toggle('hidden-tab',x!=='docente'));$('nav').innerHTML='';$('bar').hidden=true;$('status').hidden=true;if(!DTOK&&!demoOn&&AXM===null)AX_mostrar('ingresar');return;}
   const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
   VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&!S.joined));});
   $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
@@ -488,12 +491,19 @@ function AX_info(m){const e=AX_$('axErr');if(e){e.className='ax-info';e.textCont
 function AX_busy(b,on){if(!b)return;if(on){b.dataset.t=b.textContent;b.textContent='Procesando…';b.disabled=true;}else{b.textContent=b.dataset.t||b.textContent;b.disabled=false;}}
 function AX_enter(ev,fn){if(ev.key==='Enter'){ev.preventDefault();fn();}}
 function AX_cerrar(){AXM=null;document.body.classList.remove('ax-on');const e=AX_$('ax');if(e)e.innerHTML='';}
-function AX_manual(){AX_cerrar();location.hash='manual';showTab();}
-function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
+function AX_manual(){if(DOCMODE){location.href=BASE+'#manual';return;}AX_cerrar();location.hash='manual';showTab();}
+function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="'+BASE+'img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
 function AX_mostrar(modo,msg){
   AXM=modo;document.body.classList.add('ax-on');let h='',w=false;
-  if(modo==='ingresar'){
-    h='<h2>Ingresar</h2><label for="axU">Nombre de equipo · Correo del profesor</label><input class="ax-in" id="axU" autocomplete="username" maxlength="80" oninput="AX_codVis()" onkeydown="AX_enter(event,AX_ingresar)">'+
+  if(modo==='ingresar'&&DOCMODE){
+    h='<h2>Panel docente</h2><label for="axU">Correo del profesor</label><input class="ax-in" id="axU" type="email" autocomplete="username" maxlength="80" onkeydown="AX_enter(event,AX_ingresar)">'+
+      '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
+      '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
+      '<p class="ax-center"><button class="ax-link" onclick="AX_mostrar(\'recuperar\')">¿Olvidaste tu contraseña?</button></p>'+
+      '<div class="ax-div">Sin ingresar</div><button class="ax-ghost" onclick="AX_demo()">Ver clase de ejemplo</button>'+
+      '<p class="ax-center"><a class="ax-link" href="'+BASE+'">¿Eres estudiante? Ir a la página de los equipos</a></p>';
+  }else if(modo==='ingresar'){
+    h='<h2>Ingresar</h2><label for="axU">Nombre del equipo</label><input class="ax-in" id="axU" autocomplete="username" maxlength="80" onkeydown="AX_enter(event,AX_ingresar)">'+
       '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
       '<div id="axCodBox"><label for="axC">Código de clase</label><input class="ax-in ax-code" id="axC" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="AX_enter(event,AX_ingresar)"></div>'+
       '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
@@ -512,10 +522,12 @@ function AX_mostrar(modo,msg){
       '<div class="ax-warn">⚠ Guarda bien la contraseña — la necesitará todo el equipo en cada sesión.</div>'+
       '<button class="ax-green" id="axGo" onclick="AX_registrar()">✓ Registrar Equipo</button><div id="axErr" class="ax-err"></div>'+
       '<button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
-  }else if(modo==='recuperar'){
-    h='<h2>Recuperar contraseña</h2><div class="ax-warn">Equipos: pide a tu docente una contraseña temporal. Con ella ingresas y el sistema te pedirá crear una nueva.</div>'+
-      '<label for="axRe">Docentes: tu correo</label><input class="ax-in" id="axRe" type="email" autocomplete="username" onkeydown="AX_enter(event,AX_verPregunta)"><button class="ax-btn" id="axGoP" onclick="AX_verPregunta()">Ver mi pregunta de seguridad</button>'+
+  }else if(modo==='recuperar'&&DOCMODE){
+    h='<h2>Recuperar contraseña</h2><label for="axRe">Tu correo</label><input class="ax-in" id="axRe" type="email" autocomplete="username" onkeydown="AX_enter(event,AX_verPregunta)"><button class="ax-btn" id="axGoP" onclick="AX_verPregunta()">Ver mi pregunta de seguridad</button>'+
       '<div id="axPreg"></div><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='recuperar'){
+    h='<h2>Recuperar contraseña</h2><div class="ax-warn">Pide a tu docente una contraseña temporal para tu equipo. Con ella ingresas y el sistema te pedirá crear una nueva.</div>'+
+      '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
   }else if(modo==='clave'){
     const doc=AXWHO==='doc',min=doc?8:4,known=doc?DPW:PW;
     h='<h2>Crea tu contraseña</h2><p class="ax-hint" style="text-align:center">📌 Ingresaste con una contraseña temporal. Crea una nueva para continuar (mínimo '+min+' caracteres).</p>'+
@@ -537,17 +549,20 @@ function AX_mostrar(modo,msg){
   }
   AX_el().innerHTML='<div class="ax-wrap"><div class="ax-card'+(w?' ax-wide':'')+'">'+AX_cab()+h+'</div><div class="ax-foot">'+esc(AXPIE)+'</div></div>';
   if(modo==='registro')AX_fila();
-  if(modo==='ingresar'){AX_codVis();if(S.equipoNombre&&S.stage==='login'&&AXWHO==='eq')AX_$('axU').value=S.equipoNombre;}
+  if(modo==='ingresar'&&!DOCMODE){if(S.equipoNombre&&S.stage==='login'&&AXWHO==='eq')AX_$('axU').value=S.equipoNombre;}
   if(msg)AX_info(msg);
   const f1=AX_el().querySelector('input,select');if(f1&&modo!=='elegir')try{f1.focus({preventScroll:true});}catch(e){}
 }
-function AX_codVis(){const u=AX_$('axU');if(u)AX_$('axCodBox').style.display=u.value.indexOf('@')>0?'none':'';}
+function AX_codVis(){const u=AX_$('axU');if(u&&AX_$('axCodBox'))AX_$('axCodBox').style.display=u.value.indexOf('@')>0?'none':'';}
+function AX_demo(){AX_cerrar();demoOn=true;T=demoData();showD();renderDoc();}
 function AX_volver(){if(AXWHO==='doc'){docLogout();}else salir();}
 /* ingresar */
 async function AX_ingresar(){
   const u=AX_$('axU').value.trim(),p=AX_$('axP').value,c=AX_$('axC')?AX_$('axC').value.trim():'',b=AX_$('axGo');AX_err('');
   if(!u||!p){AX_err('Completa el usuario y la contraseña.');return;}
   const esDoc=u.indexOf('@')>0;
+  if(DOCMODE&&!esDoc){AX_err('Escribe tu correo de profesor. Los equipos ingresan en la página de estudiantes.');return;}
+  if(!DOCMODE&&esDoc){AX_err('El profesor ingresa en la página /docente.');return;}
   if(!esDoc&&!c){AX_err('Escribe el código de clase.');return;}
   if(!BACKEND){AX_err('Esta copia no tiene servidor configurado.');return;}
   AX_busy(b,true);
@@ -559,7 +574,7 @@ async function AX_ingresar(){
       try{sessionStorage.setItem('sn-doc-b2',DTOK);}catch(e){}
       $('dWho').textContent=DNAME;
       if(r.cambiar_clave){AX_mostrar('clave');return;}
-      AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();return;
+      AX_cerrar();if(!DOCMODE)location.hash='docente';showTab();showD();loadTeacher();return;
     }
     AXWHO='eq';applyEquipo(r);PW=p;
     setStage(r.cambiar_clave?'clave':'elegir');
@@ -611,7 +626,7 @@ async function AX_cambiarTemp(){
     if(!r||!r.ok){AX_busy(b,false);if(!doc&&sesionPerdida(r))return;if(doc&&r&&r.error==='sesion'){docLogout();return;}AX_err(em(r));return;}
     if(doc){const r2=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:n,p_pregunta:q,p_respuesta:an});
       if(!r2||!r2.ok){AX_busy(b,false);AX_err(em(r2));return;}
-      DPW='';AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();}
+      DPW='';AX_cerrar();if(!DOCMODE)location.hash='docente';showTab();showD();loadTeacher();}
     else{PW='';setStage('elegir');}
   }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor.');}
 }
@@ -1003,7 +1018,7 @@ function docLogout(){
   const t=DTOK;if(BACKEND&&t)rpc('sn_salir',{p_token:t}).catch(()=>{});
   DTOK='';DPW='';DNAME='';DACC=null;T=null;demoOn=false;dReset=null;AXWHO='eq';try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}
   showD();renderDoc();renderAcc();
-  if(!S.joined)AX_mostrar(BACKEND?'ingresar':'practica');else AX_cerrar();
+  if(DOCMODE||!S.joined)AX_mostrar(BACKEND?'ingresar':'practica');else AX_cerrar();
 }
 function docSesion(r){
   if(!r||r.ok)return false;
@@ -1058,7 +1073,7 @@ async function acClick(b){
 function bindDoc(){
   $('acOut').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&/^ac/.test(b.id))acClick(b);});
   $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD();renderDoc();};
-  $('dIr').onclick=()=>{AXWHO='eq';AX_mostrar(BACKEND?'ingresar':'practica');};
+  $('dIr').onclick=()=>{AXWHO=DOCMODE?'doc':'eq';AX_mostrar(BACKEND?'ingresar':'practica');};
   $('dOut').onclick=docLogout;
   $('dClase').onchange=e=>{DCLASE=e.target.value;loadTeacher();};
   $('docOut').addEventListener('click',async e=>{
@@ -1082,7 +1097,7 @@ function bindDoc(){
     }
   });
   showD();
-  if(BACKEND&&DTOK){loadTeacher();}
+  if(DOCMODE&&BACKEND&&DTOK){loadTeacher();}
   setInterval(()=>{if(currentTab()==='docente'&&DTOK&&BACKEND&&!demoOn&&!document.hidden)loadTeacher();},15000);
 }
 let docProd=0;
@@ -1193,7 +1208,7 @@ function init(){
   $('nota').value=S.nota||'';
   let nt=null;
   $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
-  if(DTOK&&BACKEND&&!S.joined&&!location.hash)location.hash='docente';
+  if(DOCMODE){S.joined=false;document.title='Panel docente · '+document.title;showTab();showD();return;}
   showTab();renderAll();
   restaurar();
 }

@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SimNeuro · Neurociencias UAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#ffffff; --surface2:#EEF2F9; --fg:#1d2433; --muted:#5b6577; --line:#D0D7E2;
+  --azul:#1F3864; --azul2:#2F5496;
+  --accent:#1F3864; --accent-fg:#ffffff; --accent-soft:#EEF2F9;
+  --sim:#6B4FBB; --sim-soft:#EEEAF8; --real:#1E7B46; --real-soft:#E3F4EA; --warn:#9A6700; --warn-soft:#FFF4D6; --bad:#B42318;
+  --font:Arial,Helvetica,sans-serif; --head:Arial,Helvetica,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--font);padding-bottom:48px}
+.wrap{max-width:900px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+h1,h2,h3{font-family:var(--head);line-height:1.25;text-wrap:balance;margin:0}
+h2{font-size:16px;color:var(--azul);margin:0 0 10px}
+h3{font-size:14px;color:var(--azul2);margin:12px 0 6px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)} .small{font-size:.85rem}
+header{background:var(--azul);color:#fff;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
+header h1{font-size:17px;color:#fff}
+header .sub1{font-size:12px;opacity:.85}
+header .meta{font-size:13px;display:flex;gap:10px 14px;flex-wrap:wrap;align-items:center}
+header .meta>*{min-width:0}
+.pill{display:inline-block;background:#fff;color:var(--azul);border:none;border-radius:999px;padding:5px 12px;min-height:0;font-weight:bold;font-size:12px;text-decoration:none;cursor:pointer;margin-left:6px}
+nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+nav .menu,nav .sub{display:flex;gap:4px;flex-wrap:wrap}
+nav .sub{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+nav a{border:1px solid transparent;border-radius:6px;padding:6px 10px;color:var(--azul);text-decoration:none;font-size:13px}
+nav .menu a{font-size:15px;padding:8px 16px;font-weight:bold}
+nav .sub a.on{background:var(--surface2);border-color:var(--line);font-weight:bold}
+nav .menu a.on{background:var(--azul);color:#fff;border-color:var(--azul)}
+.statusline{font-size:12px;color:var(--muted);padding:6px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));max-width:932px;margin:0 auto}
+#banner{margin:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:14px}
+.card.soft{background:var(--surface2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2>*{min-width:0}
+@media (max-width:520px){.grid2.stack{grid-template-columns:1fr}}
+label{display:block;font-weight:bold;font-size:.85rem;margin-bottom:4px}
+input[type=text],input[type=password],input[type=email],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--fg);font:inherit;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--azul)}
+button{font:inherit;min-height:44px;padding:8px 14px;border-radius:6px;border:1px solid var(--azul);background:#fff;color:var(--azul);cursor:pointer}
+button.primary{background:var(--azul);color:#fff;border-color:var(--azul)}
+button.ghost{background:transparent;border-color:var(--line)}
+button.danger{color:var(--bad);border-color:var(--bad)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--azul2);outline-offset:2px}
+header .pill:focus-visible{outline-color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:999px;min-height:40px;border-color:var(--line)}
+.chip[aria-pressed="true"]{background:var(--surface2);border-color:var(--azul);color:var(--azul);font-weight:bold}
+.rate{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (min-width:560px){.rate{grid-template-columns:repeat(10,1fr)}}
+.rate button{padding:8px 0;border-color:var(--line)}
+.rate button[aria-pressed="true"]{background:var(--azul);border-color:var(--azul);color:#fff;font-weight:bold}
+.tag{display:inline-block;font:bold .68rem/1 var(--head);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:5px}
+.tag.sim{background:var(--sim-soft);color:var(--sim);background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(107,79,187,.14) 5px 7px)}
+.tag.real{background:var(--real-soft);color:var(--real)}
+.cond{border-left:4px solid var(--line);padding-left:12px}
+.cond.a{border-left-color:var(--sim)} .cond.b{border-left-color:var(--azul)}
+.tablewrap{overflow-x:auto}
+.tablewrap.w th,.tablewrap.w td{white-space:normal;vertical-align:top}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:bold;color:var(--muted);font-size:.78rem}
+td.num,th.num{text-align:right}
+.stat{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.stat div{flex:1 1 90px;background:var(--surface2);border-radius:6px;padding:8px 10px}
+.stat b{display:block;font:bold 1.15rem var(--head);font-variant-numeric:tabular-nums;color:var(--azul)}
+.stat span{font-size:.75rem;color:var(--muted)}
+.note{background:var(--warn-soft);color:var(--fg);border-left:4px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:.88rem;margin-bottom:12px}
+.okbox{background:var(--real-soft);border-left:4px solid var(--real);padding:10px 12px;border-radius:6px;font-size:.9rem;margin:10px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+ol.steps{padding-left:20px;margin:6px 0 10px} ol.steps li{margin-bottom:6px}
+details summary{cursor:pointer;font-weight:bold;min-height:32px;color:var(--azul)}
+svg text{fill:var(--fg);font:11.5px var(--font)}
+svg .ax{stroke:var(--line);stroke-width:1} svg .zero{stroke:var(--muted);stroke-dasharray:3 3}
+svg .lab{fill:var(--muted)}
+.f-sim{stroke:var(--sim);fill:var(--sim)} .f-real{stroke:var(--real);fill:var(--real)} .f-class{stroke:var(--azul);fill:var(--azul)}
+.hist rect.lo{fill:var(--sim)} .hist rect.hi{fill:var(--azul)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+footer{margin-top:24px;font-size:.8rem;color:var(--muted)}
+.hidden-tab{display:none}
+.canbox{display:flex;justify-content:center;background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:12px}
+.canbox svg text{fill:inherit}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair>div{background:var(--surface2);border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+textarea.csv{font:12px/1.4 ui-monospace,monospace;min-height:120px}
+body.pm .nopm{display:none!important}
+[hidden]{display:none!important}
+/* ============ Acceso v2.3 · tema SMAA ============ */
+:root{--ax-bg:#0e1e35;--ax-bg2:#162840;--ax-bg3:#1d3352;--ax-bg4:#254062;--ax-border:#2a4d72;--ax-border2:#3a6090;--ax-text:#e8f0f8;--ax-text2:#a8c0d8;--ax-text3:#88b0cc;--ax-accent:#0d6ecc;--ax-accent-h:#1a85e8;--ax-accent2:#5ab40c;--ax-accent2-h:#6acc18;--ax-accent3:#e8a820;--ax-accent4:#e84040;--ax-gold:#f0c040;--ax-r:14px;--ax-sans:'Sora',Arial,Helvetica,sans-serif;--ax-mono:'Space Mono',ui-monospace,Menlo,monospace}
+body.ax-on{background:#0A1A33}
+body.ax-on>header,body.ax-on>nav,body.ax-on>main,body.ax-on>footer{display:none!important}
+#ax{display:none}
+body.ax-on #ax{display:block;position:fixed;inset:0;overflow-y:auto;font-family:var(--ax-sans);color:var(--ax-text);
+background-color:#0A1A33;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='g' cx='62%25' cy='45%25' r='78%25'%3E%3Cstop offset='0' stop-color='%232A5599'/%3E%3Cstop offset='.5' stop-color='%231B3A6B'/%3E%3Cstop offset='1' stop-color='%230A1A33'/%3E%3C/radialGradient%3E%3CradialGradient id='v' cx='50%25' cy='50%25' r='72%25'%3E%3Cstop offset='.62' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.6'/%3E%3C/radialGradient%3E%3Cfilter id='b' x='-50%25' y='-10%25' width='200%25' height='120%25'%3E%3CfeGaussianBlur stdDeviation='9'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='1000' fill='url(%23g)'/%3E%3Cg transform='rotate(-17 260 500)'%3E%3Crect x='40' y='-400' width='12' height='1900' fill='%231E5BB8' opacity='.85'/%3E%3Crect x='86' y='-400' width='7' height='1900' fill='%231E5BB8' opacity='.7'/%3E%3Crect x='150' y='-400' width='86' height='1900' fill='%235BC22E' opacity='.45' filter='url(%23b)'/%3E%3Crect x='162' y='-400' width='60' height='1900' fill='%235BC22E' opacity='.9'/%3E%3C/g%3E%3Crect width='1600' height='1000' fill='url(%23v)'/%3E%3C/svg%3E");background-size:cover;background-position:center}
+.ax-wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 12px 18px;box-sizing:border-box;gap:14px}
+.ax-card{width:380px;max-width:94vw;box-sizing:border-box;background:rgba(10,26,51,.82);border:1px solid rgba(91,194,46,.28);border-radius:var(--ax-r);padding:32px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 40px rgba(10,26,51,.55)}
+.ax-card.ax-wide{width:560px}
+.ax-logos{display:flex;justify-content:center;gap:12px;margin-bottom:14px}
+.ax-logo{width:80px;height:80px;background:#fff;border-radius:12px;padding:8px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);overflow:hidden}
+.ax-logo img{width:100%;height:100%;object-fit:contain}
+.ax-logo span{font:700 9px var(--ax-mono);color:#7a8ba3;text-align:center}
+.ax-title{font-family:var(--ax-mono);font-weight:700;color:#fff;letter-spacing:3px;text-align:center;font-size:19px;margin:4px 0 2px;line-height:1.25}
+.ax-sub{text-align:center;color:var(--ax-accent2);font-weight:600;font-size:14px;margin:2px 0}
+.ax-sub2{text-align:center;color:var(--ax-text3);font-size:11.5px;margin:2px 0 18px}
+.ax-card h2{font:700 15px var(--ax-mono);letter-spacing:1px;color:#fff;margin:0 0 12px;text-align:center}
+.ax-card label{display:block;font-size:12.5px;color:var(--ax-text2);margin:12px 0 5px;font-weight:500}
+#ax input.ax-in,.ax-in{width:100%;box-sizing:border-box;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:10px;color:#fff;font:400 14px var(--ax-sans);padding:11px 12px;outline:none;transition:border-color .15s}
+#ax input.ax-in::placeholder,.ax-in::placeholder{color:rgba(255,255,255,.38)}
+#ax input.ax-in:focus,.ax-in:focus{border-color:var(--ax-accent-h);box-shadow:0 0 0 3px rgba(13,110,204,.25)}
+#ax input.ax-code,.ax-code{font-family:var(--ax-mono);text-transform:uppercase;letter-spacing:2px}
+.ax-pw{position:relative}#ax .ax-pw input.ax-in{padding-right:44px}
+.ax-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ax-text2);font-size:16px;cursor:pointer;padding:6px;border-radius:8px}
+.ax-eye:focus-visible,.ax-btn:focus-visible,.ax-ghost:focus-visible,.ax-green:focus-visible,.ax-back:focus-visible,.ax-link:focus-visible,.ax-pick:focus-visible{outline:2px solid var(--ax-gold);outline-offset:2px}
+.ax-hint{font-size:11.5px;color:var(--ax-text3);margin:5px 0 0}
+.ax-ok{color:var(--ax-accent2);font-size:12.5px;margin:6px 0 0;font-weight:600}.ax-bad{color:#ff7272;font-size:12.5px;margin:6px 0 0;font-weight:600}
+.ax-btn,.ax-ghost,.ax-green{display:block;width:100%;box-sizing:border-box;border-radius:10px;padding:12px 14px;font:600 14.5px var(--ax-sans);cursor:pointer;text-align:center;text-decoration:none;margin-top:16px;transition:background .15s,border-color .15s}
+.ax-btn{background:var(--ax-accent);color:#fff;border:0}.ax-btn:hover{background:var(--ax-accent-h)}
+.ax-green{background:var(--ax-accent2);color:#0a1a33;border:0}.ax-green:hover{background:var(--ax-accent2-h)}
+.ax-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}.ax-ghost:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.ax-btn:disabled,.ax-green:disabled{opacity:.6;cursor:default}
+.ax-back{display:inline-block;background:none;border:0;color:var(--ax-text2);font:500 13px var(--ax-sans);cursor:pointer;margin-top:14px;padding:4px 0}
+.ax-link{color:var(--ax-text2);font-size:12.5px;text-decoration:underline;background:none;border:0;cursor:pointer;padding:2px}
+.ax-center{text-align:center;margin:12px 0 0}
+.ax-div{display:flex;align-items:center;gap:10px;color:var(--ax-text3);font-size:12px;margin:18px 0 0}
+.ax-div:before,.ax-div:after{content:"";flex:1;height:1px;background:rgba(255,255,255,.18)}
+.ax-err{color:#ff7272;font-size:13px;margin-top:10px;min-height:0;text-align:center;font-weight:500}
+.ax-info{color:var(--ax-accent2);font-size:13px;margin-top:10px;text-align:center}
+.ax-warn{background:rgba(232,168,32,.12);border:1px solid rgba(232,168,32,.45);color:var(--ax-accent3);border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:14px}
+.ax-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.ax-inth{display:flex;justify-content:space-between;align-items:center;margin:18px 0 6px}
+.ax-inth b{font:700 12px var(--ax-mono);letter-spacing:1.5px;color:var(--ax-accent2)}
+.ax-add{background:none;border:1px solid var(--ax-accent2);color:var(--ax-accent2);border-radius:8px;padding:5px 10px;font:600 12px var(--ax-sans);cursor:pointer}
+.ax-add:disabled{opacity:.4;cursor:default}
+.ax-fila{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px;margin-top:8px;position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+#ax .ax-fila input.ax-in{padding:8px 10px;font-size:13px}
+.ax-fila .ax-n{grid-column:1/-1;font:700 11px var(--ax-mono);color:var(--ax-text3);letter-spacing:1px}
+.ax-x{position:absolute;top:6px;right:8px;background:none;border:0;color:#ff8a8a;font-size:15px;cursor:pointer}
+.ax-pick{display:block;width:100%;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:12px 14px;margin-top:8px;cursor:pointer;font:500 14px var(--ax-sans)}
+.ax-pick:hover{border-color:var(--ax-accent2)}
+.ax-foot{color:var(--ax-text2);font-size:11.5px;text-align:center;max-width:560px;opacity:.9}
+@media (max-height:900px){.ax-wrap{padding:12px 12px 10px;gap:8px}.ax-card{padding:20px 28px}.ax-logos{margin-bottom:8px;gap:10px}.ax-logo{width:58px;height:58px;padding:6px}.ax-title{font-size:16px;letter-spacing:2px;white-space:nowrap}.ax-sub2{margin:2px 0 10px}.ax-card h2{margin:0 0 6px}.ax-card label{margin:8px 0 4px}}
+@media (max-width:600px){.ax-card{padding:24px 18px}.ax-logo{width:60px;height:60px;padding:6px}.ax-2col,.ax-fila{grid-template-columns:1fr}.ax-title{font-size:16px;letter-spacing:2px}}
+
+body.ax-on>*:not(#ax):not(script){display:none!important}
+#ax .ax-code{text-transform:uppercase}
+#ax select.ax-in{appearance:auto;background:#162840;color:#fff}
+#ax textarea.ax-in{min-height:70px}
+.ax-fila{grid-template-columns:1fr!important}
+
+</style>
+</head><body>
+<header class="nopm">
+  <div><h1>Neurociencias · UAB 2026</h1><div class="sub1">Precio y valor percibido · Clases Espejo</div></div>
+  <div class="meta" id="metaBar">
+    <span id="bar" hidden><b id="barWho"></b> · <span id="barProd"></span> · Ronda <span id="barRound">0</span> <button class="pill" id="barSwitch">Cambiar alias</button> <button class="pill" id="barChange">Salir</button></span>
+    <a class="pill" href="#manual">Manual</a>
+  </div>
+</header>
+<nav id="nav" class="nopm" aria-label="Secciones"></nav>
+<div id="banner" class="note nopm" hidden></div>
+<div class="statusline nopm" id="status"></div>
+
+<div class="wrap">
+<!-- Entrada a la clase -->
+
+
+<!-- SITUACIÓN · El caso -->
+<main id="t-caso" data-student><div id="casoOut"></div></main>
+
+<!-- SITUACIÓN · Mi equipo -->
+<main id="t-equipo" class="hidden-tab" data-student><div id="equipoOut"></div></main>
+
+<!-- DECIDIR · Simular -->
+<main id="t-simular" class="hidden-tab" data-student>
+  <div class="card">
+    <h2>Paso 1. Tu hipótesis</h2>
+    <p class="small muted">Antes de simular, predice qué oferta recibirá mayor calidad esperada.</p>
+    <div class="chips" id="predChips" role="group" aria-label="Predicción">
+      <button class="chip" data-p="A" aria-pressed="false">Mayor en A</button>
+      <button class="chip" data-p="B" aria-pressed="false">Mayor en B</button>
+      <button class="chip" data-p="=" aria-pressed="false">Sin diferencia</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Paso 2. Diseña las ofertas de <span id="scProd"></span></h2>
+    <p class="small muted"><span class="tag sim">Simulado</span>&nbsp; Cada consumidor simulado ve A y B (diseño intrasujeto). Los parámetros son didácticos, no estimaciones empíricas.</p>
+    <div class="grid2 stack">
+      <div class="cond a"><b>Oferta A</b>
+        <label for="aTier" style="margin-top:8px">Precio en la etiqueta</label><select id="aTier"></select>
+        <label for="aPres" style="margin-top:8px">Presentación</label>
+        <select id="aPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
+      </div>
+      <div class="cond b"><b>Oferta B</b>
+        <label for="bTier" style="margin-top:8px">Precio en la etiqueta</label><select id="bTier"></select>
+        <label for="bPres" style="margin-top:8px">Presentación</label>
+        <select id="bPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
+      </div>
+    </div>
+    <label for="nSim" style="margin-top:14px">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
+    <input type="range" id="nSim" min="10" max="80" step="5" value="30">
+    <p class="small muted">Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
+    <button class="primary" id="runSim">Ejecutar ronda de simulación</button>
+    <p class="small muted" style="margin:8px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
+  </div>
+</main>
+
+<!-- DECIDIR · Experimento -->
+<main id="t-experimento" class="hidden-tab" data-student>
+  <div class="card nopm">
+    <h2>Experimento real con tus compañeros</h2>
+    <p><span class="tag real">Real</span>&nbsp; Mides a compañeros de <b>otros equipos</b>: ellos no conocen tu producto ni tu hipótesis. Diseño <b>intrasujeto</b>: cada participante ve las dos ofertas y se compara consigo mismo.</p>
+    <ol class="steps">
+      <li>Busca a un compañero de otro equipo y siéntense separados del resto, para que nadie oiga precios ni respuestas.</li>
+      <li>Elige su equipo y pulsa «Entregar el celular». El orden de las ofertas se sortea de forma balanceada.</li>
+      <li>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</li>
+      <li>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</li>
+      <li>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</li>
+    </ol>
+    <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
+  </div>
+  <div class="card" id="runCard">
+    <h3 class="nopm">Participante <span class="muted small" id="pCode"></span></h3>
+    <div id="expRun"></div>
+  </div>
+  <div class="card nopm"><h3>Tus registros</h3><div id="obsList"></div></div>
+</main>
+
+<!-- RESULTADOS · Simulación -->
+<main id="t-resultados" class="hidden-tab" data-student><div id="simOut"></div></main>
+
+<!-- RESULTADOS · Real vs simulado -->
+<main id="t-comparar" class="hidden-tab" data-student><div id="cmpOut"></div></main>
+
+<!-- APRENDER · Interpretación -->
+<main id="t-interpretacion" class="hidden-tab" data-student>
+  <div class="card">
+    <h2>Tu interpretación</h2>
+    <ul style="margin:0 0 10px;padding-left:20px">
+      <li>¿El efecto real tiene la misma dirección y tamaño que el simulado? ¿Por qué sí o por qué no?</li>
+      <li>¿Qué diferencia a tu muestra (tamaño, selección, ambiente) del panel simulado?</li>
+      <li>¿Qué haría falta para afirmar que el precio cambia la <i>experiencia</i> y no solo lo que la persona dice?</li>
+    </ul>
+    <label for="nota">Escribe tu conclusión (la verá tu docente)</label>
+    <textarea id="nota" maxlength="1200"></textarea>
+  </div>
+</main>
+
+<!-- APRENDER · Manual -->
+<main id="t-manual" class="hidden-tab">
+  <div class="card">
+    <h2>Manual del simulador</h2>
+    <h3>¿Qué se estudia?</h3>
+    <p>Si el <b>precio de marketing</b> (etiqueta de descuento frente a precio normal) cambia lo que una persona espera de la calidad de un producto y cuánto le gusta. Parte de Plassmann et al. (2008), que midió con resonancia magnética funcional cómo el precio modula la actividad de la corteza orbitofrontal medial (mOFC), una región asociada al valor. Kurz, Efendic y Goukens (2023) matizan: el precio mueve las expectativas, pero no siempre la calidad percibida ni el agrado tras probar el producto.</p>
+    <h3>Cómo está organizado</h3>
+    <ol class="steps">
+      <li><b>Situación.</b> El caso, tu producto y tu equipo.</li>
+      <li><b>Decidir.</b> Simular ofertas A y B con consumidores virtuales y medir a compañeros reales de otros equipos.</li>
+      <li><b>Resultados.</b> El informe de la simulación, el laboratorio de resonancia (simulado) y la comparación entre lo simulado y lo real.</li>
+      <li><b>Aprender.</b> Interpretar, escribir tu conclusión y consultar este manual.</li>
+    </ol>
+    <h3>Diseño intrasujeto</h3>
+    <p>Cada participante ve las dos ofertas (descuento y precio normal) y califica <b>calidad esperada</b> y <b>gusto</b> de 1 a 10; después elige una. El orden se alterna para repartir el sesgo de orden. Al comparar a cada persona consigo misma, desaparecen las diferencias de gusto entre personas.</p>
+    <h3>Cómo leer los resultados</h3>
+    <ul style="padding-left:20px;margin:0 0 10px">
+      <li><b>Diferencia:</b> promedio de (precio normal − descuento) en puntos de la escala 1–10.</li>
+      <li><b>p (t pareada):</b> probabilidad de ver una diferencia así si en realidad no existiera. Menos de 0,05 se considera significativo, pero no mide la importancia práctica.</li>
+      <li><b>d<sub>z</sub> de Cohen:</b> tamaño del efecto (≈ 0,2 pequeño, 0,5 moderado, 0,8 grande; Cohen, 1988).</li>
+      <li><b>IC 95 %:</b> rango plausible de la diferencia real. Si incluye 0, no se puede descartar que no haya efecto.</li>
+      <li><b>Elección final:</b> prueba binomial exacta contra 50 %.</li>
+    </ul>
+    <h3>Límites</h3>
+    <ul style="padding-left:20px;margin:0 0 10px">
+      <li>Los datos simulados salen de parámetros didácticos: no son evidencia empírica.</li>
+      <li>Con imágenes se mide solo la expectativa. Los precios son de referencia de tiendas de El Salvador (noviembre de 2026).</li>
+      <li>El índice mOFC es una ilustración: medirlo de verdad exige un resonador, personal especializado y aprobación ética.</li>
+      <li>Con pocos participantes los intervalos son anchos y casi cualquier efecto moderado puede no salir significativo.</li>
+    </ul>
+    <h3>Privacidad</h3>
+    <p>Usa un alias, no tu nombre. Solo se guardan alias, equipo y respuestas, protegidos por el código de clase.</p>
+    <h3>Referencias</h3>
+    <p class="small">Cohen, J. (1988). <i>Statistical power analysis for the behavioral sciences</i> (2.ª ed.). Erlbaum.</p>
+    <p class="small">Kurz, J., Efendic, E., &amp; Goukens, C. (2023). Pricey therefore good? Price affects expectations, but not quality perceptions and liking. <i>Psychology &amp; Marketing, 40</i>(6), 1115–1129. https://doi.org/10.1002/mar.21799</p>
+    <p class="small" style="margin:0">Plassmann, H., O'Doherty, J., Shiv, B., &amp; Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>PNAS, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105</p>
+  </div>
+</main>
+
+<!-- DOCENTE -->
+<main id="t-docente" class="hidden-tab">
+  <div class="card" id="dNo">
+    <h2>Panel docente</h2>
+    <p class="small muted">El panel es solo para el docente. Ingresa desde la pantalla de acceso con tu correo y tu contraseña.</p>
+    <div class="row"><button class="primary" id="dIr">Ingresar como docente</button><button id="tDemo">Ver clase de ejemplo</button></div>
+  </div>
+  <div class="card" id="dBar" hidden>
+    <div class="row" style="justify-content:space-between"><span><b id="dWho"></b> · docente</span>
+    <span class="row"><select id="dClase" hidden style="width:auto"></select><button class="ghost" id="dOut">Salir</button></span></div>
+  </div>
+  <p class="small" id="tMsg" style="margin:0 0 8px;color:var(--bad)" role="alert"></p>
+  <div id="acOut"></div>
+  <div id="docOut"></div>
+</main>
+
+<footer class="nopm"><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
+</div>
+
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN (edita solo este bloque)
+   ===================================================================== */
+const CONFIG={
+  SUPABASE_URL:'https://pljkdljylizifokgvhsl.supabase.co',   // ej.: 'https://abcdxyz.supabase.co'  (vacío = modo práctica, sin servidor)
+  SUPABASE_KEY:'sb_publishable_tFKexrBNDu73728vYDf2ag_fvUWJJah',   // clave pública: 'sb_publishable_...' o la 'anon' (JWT). Nunca la 'service_role'.
+  CURRENCY:'US$',
+  PRICES_PROVISIONAL:false,   // pon false cuando valides los precios con el estudio de mercado
+  PRODUCTS:[
+    {id:1,name:'Bebida energética',short:'Energética',brand:'VOLTA',art:'can',  detail:'Lata de 473 ml',prices:{low:1.40,mid:2.10,high:3.15},mu:5.4},
+    {id:2,name:'Audífonos inalámbricos',short:'Audífonos',brand:'AURA',art:'phones',detail:'Bluetooth, con micrófono',prices:{low:36,mid:54,high:81},mu:5.8},
+    {id:3,name:'Zapatillas deportivas',short:'Zapatillas',brand:'PASO',art:'shoe',detail:'Para correr, par',prices:{low:34.95,mid:49.95,high:74.95},mu:5.6}
+  ]
+};
+
+/*ENGINE*/
+const PARAMS={beta:{low:0,mid:0.55,high:0.95},prem:0.25,sdSubj:0.9,sdErr:1.1,ofcSlope:7,ofcSd:5};
+function hashSeed(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),16777619)>>>0;}return h>>>0;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function makeNormal(rng){let spare=null;return function(){if(spare!==null){const s=spare;spare=null;return s;}let u=0,v=0;while(u===0)u=rng();v=rng();const r=Math.sqrt(-2*Math.log(u));spare=r*Math.sin(2*Math.PI*v);return r*Math.cos(2*Math.PI*v);};}
+function clamp(x,a,b){return Math.min(b,Math.max(a,x));}
+/* Diseño intrasujeto: cada consumidor simulado ve A y B; comparten el gusto propio u. */
+function simulatePaired(cfgA,cfgB,n,seedStr,mu){
+  const rng=mulberry32(hashSeed(seedStr)),nrm=makeNormal(rng);
+  const bA=mu+PARAMS.beta[cfgA.tier]+(cfgA.pres==='premium'?PARAMS.prem:0);
+  const bB=mu+PARAMS.beta[cfgB.tier]+(cfgB.pres==='premium'?PARAMS.prem:0);
+  const a={y:[],ofc:[]},b={y:[],ofc:[]};
+  for(let i=0;i<n;i++){
+    const u=nrm()*PARAMS.sdSubj,rA=bA+u+nrm()*PARAMS.sdErr,rB=bB+u+nrm()*PARAMS.sdErr;
+    a.y.push(clamp(Math.round(rA*10)/10,1,10));b.y.push(clamp(Math.round(rB*10)/10,1,10));
+    a.ofc.push(100+PARAMS.ofcSlope*(rA-mu)+nrm()*PARAMS.ofcSd);
+    b.ofc.push(100+PARAMS.ofcSlope*(rB-mu)+nrm()*PARAMS.ofcSd);
+  }
+  return {a,b};
+}
+function mean(a){return a.reduce((s,x)=>s+x,0)/a.length;}
+function sd(a){if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/(a.length-1));}
+function lgamma(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++){y+=1;s+=c[j]/y;}return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){const FP=1e-300;let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<FP)d=FP;d=1/d;let h=d;
+  for(let m=1;m<=300;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}
+  return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function tTwoP(t,df){return betai(df/2,0.5,df/(df+t*t));}
+function tCrit(df){let lo=0,hi=60;for(let i=0;i<80;i++){const mid=(lo+hi)/2;if(tTwoP(mid,df)>0.05)lo=mid;else hi=mid;}return (lo+hi)/2;}
+/* t pareada: diferencia = y - x; d = dz */
+function pairedT(x,y){
+  const n=Math.min(x.length,y.length);if(n<2)return null;
+  const d=[];for(let i=0;i<n;i++)d.push(y[i]-x[i]);
+  const m=mean(d),s=sd(d);
+  if(s===0)return {diff:m,t:0,df:n-1,p:m===0?1:0,d:0,lo:m,hi:m,n};
+  const se=s/Math.sqrt(n),t=m/se,df=n-1,k=tCrit(df);
+  return {diff:m,t,df,p:tTwoP(t,df),d:m/s,lo:m-k*se,hi:m+k*se,n};
+}
+/* Prueba binomial exacta bilateral contra 0,5 */
+function binomTwo(k,n){
+  if(n<1)return null;
+  const lp=i=>lgamma(n+1)-lgamma(i+1)-lgamma(n-i+1)+n*Math.log(0.5);
+  const pk=lp(k);let p=0;for(let i=0;i<=n;i++){const q=lp(i);if(q<=pk+1e-9)p+=Math.exp(q);}
+  return Math.min(1,p);
+}
+function counts10(a){const c=new Array(10).fill(0);a.forEach(v=>{const i=clamp(Math.round(v),1,10)-1;c[i]++;});return c;}
+/*END ENGINE*/
+
+/* ---------- utilidades ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f=(x,d=2)=>(x==null||isNaN(x))?'–':Number(x).toFixed(d).replace('.',',').replace('-','−');
+const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
+const LS='simneuro-b2';
+const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
+const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
+const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
+const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
+if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
+const TIERL={low:'descuento',mid:'normal',high:'alto'};
+const prod=id=>CONFIG.PRODUCTS.find(p=>p.id===id)||CONFIG.PRODUCTS[0];
+const money=v=>CONFIG.CURRENCY+'\u00a0'+((v<10||!Number.isInteger(v))?v.toFixed(2).replace('.',','):String(v));
+const priceOf=(p,t)=>prod(p).prices[t];
+const tierText=(p,t)=>money(priceOf(p,t))+' ('+TIERL[t]+')';
+const presL=p=>p==='premium'?'presentación premium':'presentación estándar';
+const uid=()=>{try{return crypto.randomUUID();}catch(e){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);}};
+const ago=t=>{const m=Math.round((Date.now()-new Date(t).getTime())/60000);return m<1?'ahora':m<60?'hace '+m+' min':'hace '+Math.round(m/60)+' h';};
+
+/* ---------- estado ---------- */
+const NEWCFG=()=>({a:{tier:'low',pres:'sencilla'},b:{tier:'mid',pres:'sencilla'},n:30});
+const NEWDRAFT=()=>({step:0,order:null,v:{},pe:null,pm:false});
+let S={stage:'login',joined:false,token:'',equipoId:'',equipoNombre:'',iid:'',integrantes:[],byId:{},alias:'',equipo:1,
+  sims:[],obs:[],nota:'',notaDirty:false,ts:0,cfg:NEWCFG(),pred:null,draft:NEWDRAFT()};
+try{const raw=localStorage.getItem(LS);if(raw){S=Object.assign(S,JSON.parse(raw));}}catch(e){}
+S.joined=S.stage==='listo';
+function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
+let T=null,demoOn=false;   // datos del docente
+let conn='ok';             // ok | offline | sesion
+const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 8 caracteres.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de clase incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 12 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
+function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
+function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
+
+/* ---------- conexión (Supabase, solo funciones RPC) ---------- */
+async function rpc(fn,args){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),15000);
+  const key=CONFIG.SUPABASE_KEY;const h={'Content-Type':'application/json',apikey:key};
+  if(key.startsWith('eyJ'))h.Authorization='Bearer '+key;
+  try{
+    const r=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(args),signal:ctl.signal});
+    if(!r.ok)throw new Error('http '+r.status);
+    return await r.json();
+  }finally{clearTimeout(to);}
+}
+let syncing=false;
+function sesionPerdida(r){
+  if(!r||r.ok)return false;
+  if(r.error==='sesion'){S.token='';stash();setStage('login');return true;}
+  if(r.error==='tmp'){setStage('clave');return true;}
+  if(r.error==='integrante'){setStage('elegir');return true;}
+  return false;
+}
+async function sync(){
+  if(!BACKEND||syncing||!S.joined||!S.token)return;syncing=true;
+  try{
+    for(const o of S.obs.filter(x=>!x.sent)){
+      const r=await rpc('sn_enviar_obs',{p_token:S.token,p_cid:o.cid,p_part_producto:o.pe,p_orden:o.o,p_qd:o.qd,p_gd:o.gd,p_qr:o.qr,p_gr:o.gr,p_eleccion:o.el});
+      if(r&&r.ok){o.sent=true;conn='ok';}else if(sesionPerdida(r)){conn='sesion';break;}else{o.sent=true;o.bad=true;}
+    }
+    if(conn!=='sesion')for(const s of S.sims.filter(x=>!x.sent)){
+      const r=await rpc('sn_enviar_sim',{p_token:S.token,p_cid:s.cid,p_datos:{r:s.r,a:s.a,b:s.b,w:s.w,pref:s.pref,pred:s.pred,prod:s.prod}});
+      if(r&&r.ok){s.sent=true;}else if(sesionPerdida(r)){conn='sesion';break;}else{s.sent=true;}
+    }
+    if(conn!=='sesion'&&S.notaDirty){
+      const r=await rpc('sn_enviar_nota',{p_token:S.token,p_nota:S.nota||''});
+      if(r&&r.ok){S.notaDirty=false;}else if(sesionPerdida(r))conn='sesion';
+    }
+    if(conn!=='sesion')conn='ok';
+  }catch(e){conn='offline';}
+  finally{syncing=false;lsSave();renderStatus();}
+}
+function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
+function renderStatus(){
+  const el=$('status');if(!el)return;
+  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este dispositivo.';return;}
+  const n=pending();
+  el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
+    conn==='offline'?'Sin conexión. Tus datos están guardados aquí y se enviarán solos'+(n?' ('+n+' pendientes).':'.'):
+    n?'Enviando '+n+' dato(s)…':'Todo enviado a tu docente ✓';
+}
+function touch(rerender=true){S.ts=Date.now();lsSave();renderStatus();sync();if(rerender)renderAll();}
+setInterval(()=>{if(BACKEND&&pending())sync();},15000);
+window.addEventListener('online',()=>sync());
+
+/* ---------- navegación ---------- */
+function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
+function showTab(){
+  if(DOCMODE){VIEWS.forEach(x=>$('t-'+x).classList.toggle('hidden-tab',x!=='docente'));$('nav').innerHTML='';$('bar').hidden=true;$('status').hidden=true;if(!DTOK&&!demoOn&&AXM===null)AX_mostrar('ingresar');return;}
+  const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
+  VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&!S.joined));});
+  $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
+  if(!S.joined&&t!=='docente'&&t!=='manual'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
+  $('bar').hidden=!S.joined;
+  document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
+}
+window.addEventListener('hashchange',()=>{showTab();window.scrollTo(0,0);renderAll();if(currentTab()==='comparar')loadResumen();});
+
+/* ---------- entrada: pantalla de acceso (mismo esquema que el simulador de innovación) ---------- */
+let PW='',AXM=null,AXWHO='eq',AXREG={ok:false},AXT=null;
+const AXPIE='Clases Espejo · Universidad Dr. Andrés Bello · Mercadeo Estratégico · Neurociencias aplicado al Consumidor · Prof. Jhonny David Atila Lijerón';
+function AX_$(id){return document.getElementById(id);}
+function AX_el(){let e=AX_$('ax');if(!e){e=document.createElement('div');e.id='ax';e.setAttribute('role','main');e.setAttribute('aria-live','polite');document.body.appendChild(e);}return e;}
+function AX_pw(id,ph,ac){return '<div class="ax-pw"><input class="ax-in" type="password" id="'+id+'" placeholder="'+esc(ph||'')+'" autocomplete="'+(ac||'current-password')+'"><button type="button" class="ax-eye" aria-label="Mostrar u ocultar la contraseña" onclick="AX_ojo(\''+id+'\')">👁</button></div>';}
+function AX_ojo(id){const e=AX_$(id);e.type=e.type==='password'?'text':'password';}
+function AX_err(m){const e=AX_$('axErr');if(e){e.className='ax-err';e.textContent=m||'';}}
+function AX_info(m){const e=AX_$('axErr');if(e){e.className='ax-info';e.textContent=m||'';}}
+function AX_busy(b,on){if(!b)return;if(on){b.dataset.t=b.textContent;b.textContent='Procesando…';b.disabled=true;}else{b.textContent=b.dataset.t||b.textContent;b.disabled=false;}}
+function AX_enter(ev,fn){if(ev.key==='Enter'){ev.preventDefault();fn();}}
+function AX_cerrar(){AXM=null;document.body.classList.remove('ax-on');const e=AX_$('ax');if(e)e.innerHTML='';}
+function AX_manual(){if(DOCMODE){location.href=BASE+'#manual';return;}AX_cerrar();location.hash='manual';showTab();}
+function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="'+BASE+'img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
+function AX_mostrar(modo,msg){
+  AXM=modo;document.body.classList.add('ax-on');let h='',w=false;
+  if(modo==='ingresar'&&DOCMODE){
+    h='<h2>Panel docente</h2><label for="axU">Correo del profesor</label><input class="ax-in" id="axU" type="email" autocomplete="username" maxlength="80" onkeydown="AX_enter(event,AX_ingresar)">'+
+      '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
+      '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
+      '<p class="ax-center"><button class="ax-link" onclick="AX_mostrar(\'recuperar\')">¿Olvidaste tu contraseña?</button></p>'+
+      '<div class="ax-div">Sin ingresar</div><button class="ax-ghost" onclick="AX_demo()">Ver clase de ejemplo</button>'+
+      '<p class="ax-center"><a class="ax-link" href="'+BASE+'">¿Eres estudiante? Ir a la página de los equipos</a></p>';
+  }else if(modo==='ingresar'){
+    h='<h2>Ingresar</h2><label for="axU">Nombre del equipo</label><input class="ax-in" id="axU" autocomplete="username" maxlength="80" onkeydown="AX_enter(event,AX_ingresar)">'+
+      '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
+      '<div id="axCodBox"><label for="axC">Código de clase</label><input class="ax-in ax-code" id="axC" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="AX_enter(event,AX_ingresar)"></div>'+
+      '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
+      '<p class="ax-center"><button class="ax-link" onclick="AX_mostrar(\'recuperar\')">¿Olvidaste tu contraseña?</button></p>'+
+      '<div class="ax-div">¿Primera vez?</div><button class="ax-ghost" onclick="AX_mostrar(\'registro\')">Registrar mi equipo</button>'+
+      '<button class="ax-ghost" onclick="AX_manual()">📘 Ver Manual</button>';
+  }else if(modo==='registro'){
+    w=true;AXREG={ok:false};
+    h='<h2>Registrar mi equipo</h2><label for="axRn">Nombre del equipo</label><input class="ax-in" id="axRn" maxlength="40" placeholder="Ejemplo: Los Jaguares">'+
+      '<p class="ax-hint">📌 Es el nombre con el que ingresarán.</p>'+
+      '<div class="ax-2col"><div><label for="axRp">Contraseña</label>'+AX_pw('axRp','Mínimo 4 caracteres','new-password')+'</div><div><label for="axRp2">Confirmar contraseña</label>'+AX_pw('axRp2','','new-password')+'</div></div>'+
+      '<label for="axRc">Código de clase</label><input class="ax-in ax-code" id="axRc" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase();AX_validarCod()"><div id="axRcm"></div>'+
+      '<label for="axRpr">Producto que estudia el equipo</label><select class="ax-in" id="axRpr">'+prodOptions()+'</select>'+
+      '<div class="ax-inth"><b>INTEGRANTES DEL EQUIPO</b><button class="ax-add" id="axAdd" onclick="AX_fila()">+ Agregar integrante</button></div><div id="axFilas"></div>'+
+      '<p class="ax-hint">📌 Usa solo un alias por integrante (2 a 24 caracteres), nunca tu nombre real.</p>'+
+      '<div class="ax-warn">⚠ Guarda bien la contraseña — la necesitará todo el equipo en cada sesión.</div>'+
+      '<button class="ax-green" id="axGo" onclick="AX_registrar()">✓ Registrar Equipo</button><div id="axErr" class="ax-err"></div>'+
+      '<button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='recuperar'&&DOCMODE){
+    h='<h2>Recuperar contraseña</h2><label for="axRe">Tu correo</label><input class="ax-in" id="axRe" type="email" autocomplete="username" onkeydown="AX_enter(event,AX_verPregunta)"><button class="ax-btn" id="axGoP" onclick="AX_verPregunta()">Ver mi pregunta de seguridad</button>'+
+      '<div id="axPreg"></div><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='recuperar'){
+    h='<h2>Recuperar contraseña</h2><div class="ax-warn">Pide a tu docente una contraseña temporal para tu equipo. Con ella ingresas y el sistema te pedirá crear una nueva.</div>'+
+      '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_mostrar(\'ingresar\')">← Volver</button>';
+  }else if(modo==='clave'){
+    const doc=AXWHO==='doc',min=doc?8:4,known=doc?DPW:PW;
+    h='<h2>Crea tu contraseña</h2><p class="ax-hint" style="text-align:center">📌 Ingresaste con una contraseña temporal. Crea una nueva para continuar (mínimo '+min+' caracteres).</p>'+
+      (known?'':'<label for="axN0">Contraseña temporal</label>'+AX_pw('axN0','','current-password'))+
+      '<label for="axN1">Contraseña nueva</label>'+AX_pw('axN1','','new-password')+'<label for="axN2">Confirmar contraseña nueva</label>'+AX_pw('axN2','','new-password')+
+      (doc?'<div class="ax-div">Pregunta de seguridad</div><p class="ax-hint">📌 Sirve para recuperar tu contraseña. Puedes cambiarla después desde el panel.</p><label for="axQ">Tu pregunta</label><input class="ax-in" id="axQ" maxlength="120" autocomplete="off" placeholder="Mínimo 8 caracteres"><label for="axA">Tu respuesta</label><input class="ax-in" id="axA" maxlength="80" autocomplete="off">':'')+
+      '<button class="ax-btn" id="axGo" onclick="AX_cambiarTemp()">Guardar y continuar →</button><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
+  }else if(modo==='elegir'){
+    h='<h2>¿Quién eres?</h2><p class="ax-hint" style="text-align:center">📌 '+esc(S.equipoNombre||'Tu equipo')+': elige tu alias para que tus aportes queden registrados con él.</p>'+
+      (S.integrantes||[]).map(i=>'<button class="ax-pick" onclick="AX_elegir(\''+esc(i.id)+'\')">'+esc(i.alias)+'</button>').join('')+
+      '<label for="axNa">¿Tu alias no está?</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>'+
+      '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
+  }else if(modo==='practica'){
+    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este dispositivo.</p>'+
+      '<label for="axPa">Alias</label><input class="ax-in" id="axPa" maxlength="24" autocomplete="off" onkeydown="AX_enter(event,AX_practica)">'+
+      '<label for="axPp">Producto</label><select class="ax-in" id="axPp">'+prodOptions()+'</select>'+
+      '<button class="ax-btn" id="axGo" onclick="AX_practica()">Entrar →</button><div id="axErr" class="ax-err"></div>'+
+      '<button class="ax-ghost" onclick="AX_manual()">📘 Ver Manual</button>';
+  }
+  AX_el().innerHTML='<div class="ax-wrap"><div class="ax-card'+(w?' ax-wide':'')+'">'+AX_cab()+h+'</div><div class="ax-foot">'+esc(AXPIE)+'</div></div>';
+  if(modo==='registro')AX_fila();
+  if(modo==='ingresar'&&!DOCMODE){if(S.equipoNombre&&S.stage==='login'&&AXWHO==='eq')AX_$('axU').value=S.equipoNombre;}
+  if(msg)AX_info(msg);
+  const f1=AX_el().querySelector('input,select');if(f1&&modo!=='elegir')try{f1.focus({preventScroll:true});}catch(e){}
+}
+function AX_codVis(){const u=AX_$('axU');if(u&&AX_$('axCodBox'))AX_$('axCodBox').style.display=u.value.indexOf('@')>0?'none':'';}
+function AX_demo(){AX_cerrar();demoOn=true;T=demoData();showD();renderDoc();}
+function AX_volver(){if(AXWHO==='doc'){docLogout();}else salir();}
+/* ingresar */
+async function AX_ingresar(){
+  const u=AX_$('axU').value.trim(),p=AX_$('axP').value,c=AX_$('axC')?AX_$('axC').value.trim():'',b=AX_$('axGo');AX_err('');
+  if(!u||!p){AX_err('Completa el usuario y la contraseña.');return;}
+  const esDoc=u.indexOf('@')>0;
+  if(DOCMODE&&!esDoc){AX_err('Escribe tu correo de profesor. Los equipos ingresan en la página de estudiantes.');return;}
+  if(!DOCMODE&&esDoc){AX_err('El profesor ingresa en la página /docente.');return;}
+  if(!esDoc&&!c){AX_err('Escribe el código de clase.');return;}
+  if(!BACKEND){AX_err('Esta copia no tiene servidor configurado.');return;}
+  AX_busy(b,true);
+  try{
+    const r=await rpc('sn_login',{p_usuario:u,p_clave:p,p_codigo:esDoc?'':c});
+    if(!r||!r.ok){AX_busy(b,false);AX_err(em(r));return;}
+    if(r.tipo==='docente'){
+      DTOK=r.token;DNAME=r.nombre;DPW=p;AXWHO='doc';demoOn=false;T=null;
+      try{sessionStorage.setItem('sn-doc-b2',DTOK);}catch(e){}
+      $('dWho').textContent=DNAME;
+      if(r.cambiar_clave){AX_mostrar('clave');return;}
+      AX_cerrar();if(!DOCMODE)location.hash='docente';showTab();showD();loadTeacher();return;
+    }
+    AXWHO='eq';applyEquipo(r);PW=p;
+    setStage(r.cambiar_clave?'clave':'elegir');
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor. Revisa tu internet.');}
+}
+/* registrar */
+function AX_numFilas(){const f=AX_$('axFilas');if(!f)return;[...f.children].forEach((d,i)=>{d.querySelector('.ax-n').textContent='INTEGRANTE '+(i+1);d.querySelector('.ax-x').style.display=f.children.length>1?'':'none';});AX_$('axAdd').disabled=f.children.length>=12;}
+function AX_fila(){const f=AX_$('axFilas');if(f.children.length>=12)return;const d=document.createElement('div');d.className='ax-fila';
+  d.innerHTML='<span class="ax-n"></span><button class="ax-x" title="Quitar integrante" aria-label="Quitar integrante" onclick="AX_quitarFila(this)">✕</button><input class="ax-in" maxlength="24" placeholder="Alias (no uses tu nombre real)" autocomplete="off" aria-label="Alias">';
+  f.appendChild(d);AX_numFilas();}
+function AX_quitarFila(b){b.parentNode.remove();AX_numFilas();}
+function AX_validarCod(){
+  clearTimeout(AXT);const c=AX_$('axRc').value.trim(),m=AX_$('axRcm');AXREG.ok=false;m.innerHTML='';
+  if(c.length<4||!BACKEND)return;
+  AXT=setTimeout(async()=>{try{const r=await rpc('sn_inicio',{p_codigo:c});
+    if(AX_$('axRc')&&AX_$('axRc').value.trim()!==c)return;
+    if(r&&r.ok){AXREG.ok=!!r.registro;m.innerHTML=r.registro?'<div class="ax-ok">✓ '+esc(r.clase)+'</div>':'<div class="ax-bad">El registro de equipos está cerrado.</div>';}
+    else m.innerHTML='<div class="ax-bad">Código de clase incorrecto.</div>';
+  }catch(e){}},450);
+}
+async function AX_registrar(){
+  AX_err('');const b=AX_$('axGo');
+  const nom=AX_$('axRn').value.trim(),pw=AX_$('axRp').value,pw2=AX_$('axRp2').value,code=AX_$('axRc').value.trim();
+  const al=[...AX_$('axFilas').querySelectorAll('input')].map(i=>i.value.trim()).filter(Boolean);
+  if(nom.length<3){AX_err(ERR.nombre);return;}
+  if(pw.length<4){AX_err('La contraseña debe tener al menos 4 caracteres.');return;}
+  if(pw!==pw2){AX_err('Las contraseñas no coinciden.');return;}
+  if(!code){AX_err('Escribe el código de clase.');return;}
+  if(!al.length){AX_err(ERR.integrantes);return;}
+  if(al.some(a=>a.length<2)){AX_err(ERR.alias);return;}
+  if(!BACKEND){AX_err('Esta copia no tiene servidor configurado.');return;}
+  AX_busy(b,true);
+  try{const r=await rpc('sn_registrar_equipo',{p_codigo:code,p_nombre:nom,p_producto:+AX_$('axRpr').value,p_clave:pw,p_integrantes:al});
+    if(!r||!r.ok){AX_busy(b,false);AX_err(em(r));return;}
+    AXWHO='eq';applyEquipo(r);PW='';setStage('elegir');
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor. Revisa tu internet.');}
+}
+/* contraseña temporal */
+async function AX_cambiarTemp(){
+  AX_err('');const doc=AXWHO==='doc',min=doc?8:4;
+  const a=AX_$('axN0')?AX_$('axN0').value:(doc?DPW:PW),n=AX_$('axN1').value,n2=AX_$('axN2').value,b=AX_$('axGo');
+  if(!a||!n){AX_err(ERR.vacio);return;}
+  if(n.length<min){AX_err('La nueva contraseña debe tener al menos '+min+' caracteres.');return;}
+  if(n!==n2){AX_err('Las contraseñas no coinciden.');return;}
+  const q=doc?AX_$('axQ').value.trim():'',an=doc?AX_$('axA').value.trim():'';
+  if(doc&&(q.length<8||an.length<2)){AX_err(ERR.pregunta);return;}
+  AX_busy(b,true);
+  try{const r=await rpc('sn_cambiar_clave',{p_token:doc?DTOK:S.token,p_actual:a,p_nueva:n});
+    if(!r||!r.ok){AX_busy(b,false);if(!doc&&sesionPerdida(r))return;if(doc&&r&&r.error==='sesion'){docLogout();return;}AX_err(em(r));return;}
+    if(doc){const r2=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:n,p_pregunta:q,p_respuesta:an});
+      if(!r2||!r2.ok){AX_busy(b,false);AX_err(em(r2));return;}
+      DPW='';AX_cerrar();if(!DOCMODE)location.hash='docente';showTab();showD();loadTeacher();}
+    else{PW='';setStage('elegir');}
+  }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor.');}
+}
+/* elegir alias */
+async function AX_elegir(id){
+  AX_err('');
+  try{const r=await rpc('sn_elegir',{p_token:S.token,p_integrante:id});
+    if(!r||!r.ok){if(sesionPerdida(r))return;AX_err(em(r));return;}
+    entrarComo(r.integrante,r.alias);
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+async function AX_addAlias(){
+  AX_err('');const a=AX_$('axNa').value.trim();if(!a)return;
+  try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
+    if(!r||!r.ok){if(sesionPerdida(r))return;AX_err(em(r));return;}
+    S.integrantes=r.integrantes||S.integrantes;lsSave();AX_mostrar('elegir');
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+/* recuperar (docentes) */
+async function AX_verPregunta(){
+  AX_err('');const e_=AX_$('axRe').value.trim();if(!e_){AX_err('Escribe tu correo.');return;}
+  try{const r=await rpc('sn_doc_pregunta',{p_email:e_});
+    if(!r||!r.ok){AX_err('No hay recuperación disponible para ese correo. Los equipos deben pedir una contraseña temporal a su docente.');return;}
+    AX_$('axPreg').innerHTML='<label for="axRr">'+esc(r.pregunta)+'</label><input class="ax-in" id="axRr" autocomplete="off"><label for="axRn1">Contraseña nueva</label>'+AX_pw('axRn1','Mínimo 8 caracteres','new-password')+'<button class="ax-green" id="axGoR" onclick="AX_recuperar()">Cambiar contraseña</button>';
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+async function AX_recuperar(){
+  AX_err('');const n=AX_$('axRn1').value,a=AX_$('axRr').value;
+  if(!a.trim()||n.length<8){AX_err('Escribe la respuesta y una contraseña nueva de al menos 8 caracteres.');return;}
+  try{const r=await rpc('sn_doc_recuperar',{p_email:AX_$('axRe').value.trim(),p_respuesta:a,p_nueva:n});
+    if(!r||!r.ok){AX_err(em(r));return;}
+    AX_mostrar('ingresar','Contraseña cambiada. Ya puedes ingresar.');
+  }catch(e){AX_err('No hay conexión con el servidor.');}
+}
+function AX_practica(){
+  const al=AX_$('axPa').value.trim().slice(0,24);if(al.length<2){AX_err('Escribe un alias de al menos 2 letras.');return;}
+  S.equipo=+AX_$('axPp').value;S.equipoNombre='Práctica';S.equipoId='local';S.integrantes=[];entrarComo('local',al);
+}
+
+function setStage(st){
+  S.stage=st;S.joined=st==='listo';lsSave();
+  if(S.joined)AX_cerrar();else if(st==='clave'){AXWHO='eq';AX_mostrar('clave');}else if(st==='elegir')AX_mostrar('elegir');else AX_mostrar(BACKEND?'ingresar':'practica');
+  showTab();renderAll();
+}
+function prodOptions(){return CONFIG.PRODUCTS.map(p=>`<option value="${p.id}">${esc(p.name)} (${esc(p.brand)})</option>`).join('');}
+function applyEquipo(r){
+  S.token=r.token||S.token;S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
+}
+function entrarComo(iid,alias){
+  stash();unstash(iid);S.alias=alias;conn='ok';
+  fillSimSelects();bindSimValues();$('nota').value=S.nota||'';
+  setStage('listo');sync();loadResumen();
+}
+async function salir(){
+  const tok=S.token;
+  if(BACKEND&&tok){try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}try{await rpc('sn_salir',{p_token:tok});}catch(e){}}
+  stash();S.token='';PW='';S.iid='';S.alias='';S.equipoId='';S.equipoNombre='';S.integrantes=[];
+  S.sims=[];S.obs=[];S.nota='';S.notaDirty=false;S.cfg=NEWCFG();S.pred=null;S.draft=NEWDRAFT();
+  $('nota').value='';AXWHO='eq';setStage('login');
+}
+function bindLogin(){
+  $('barSwitch').onclick=async()=>{
+    if(!BACKEND||!S.token){salir();return;}
+    try{await Promise.race([sync(),new Promise(r=>setTimeout(r,3000))]);}catch(e){}
+    stash();setStage('elegir');
+  };
+  $('barChange').onclick=salir;
+  $('equipoOut').addEventListener('click',async e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.id==='eqAdd'){
+      const m=$('eqMsg');m.textContent='';const a=$('eqNew').value.trim();if(!a)return;
+      try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
+        if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+        S.integrantes=r.integrantes||S.integrantes;lsSave();renderEquipo();
+      }catch(err){m.textContent='No hay conexión con el servidor.';}
+    }else if(b.id==='eqPw'){
+      const m=$('eqPwMsg');m.style.color='var(--bad)';m.textContent='';const a=$('eqPwA').value,n=$('eqPwN').value;
+      if(!a||n.length<4){m.textContent='Escribe la contraseña actual y una nueva de al menos 4 caracteres.';return;}
+      try{const r=await rpc('sn_cambiar_clave',{p_token:S.token,p_actual:a,p_nueva:n});
+        if(!r||!r.ok){if(sesionPerdida(r))return;m.textContent=em(r);return;}
+        m.style.color='var(--real)';m.textContent='Contraseña cambiada.';$('eqPwA').value=$('eqPwN').value='';
+      }catch(err){m.textContent='No hay conexión con el servidor.';}
+    }
+  });
+}
+async function restaurar(){
+  if(!BACKEND){if(S.stage!=='listo'||!S.alias)setStage('login');return;}
+  if(!S.token){if(S.stage!=='login'){stash();S.stage='login';S.joined=false;}return;}
+  try{
+    const r=await rpc('sn_sesion_info',{p_token:S.token});
+    if(!r||!r.ok||r.tipo!=='equipo'){S.token='';stash();setStage('login');return;}
+    S.equipoId=r.equipo.id;S.equipoNombre=r.equipo.nombre;S.equipo=r.equipo.producto;S.integrantes=r.integrantes||[];
+    if(r.cambiar_clave)setStage('clave');
+    else if(r.integrante){if(S.iid!==r.integrante){stash();unstash(r.integrante);}S.alias=r.alias;fillSimSelects();bindSimValues();$('nota').value=S.nota||'';setStage('listo');sync();loadResumen();}
+    else setStage('elegir');
+  }catch(e){conn='offline';renderStatus();}
+}
+
+/* ---------- arte de los productos ---------- */
+function productSVG(pid,ver,w){
+  const p=prod(pid),D=ver==='D',price=priceOf(pid,D?'low':'mid');
+  const ink='#1b2a41',gold='#f2b705';
+  const txt=(x,y,s,st)=>`<text x="${x}" y="${y}" text-anchor="middle" style="${st}">${s}</text>`;
+  let art='';
+  if(p.art==='can'){
+    art=`<rect x="62" y="24" width="96" height="190" rx="14" fill="${ink}"/><rect x="62" y="24" width="96" height="20" rx="9" fill="#a9b3bf"/><rect x="62" y="202" width="96" height="12" rx="6" fill="#a9b3bf"/>
+    <path d="M62 84 L158 64 L158 104 L62 124 Z" fill="${gold}"/>${txt(110,100,esc(p.brand),`fill:${ink};font:700 20px Arial,sans-serif`)}
+    ${txt(110,146,'BEBIDA',"fill:#fff;font:600 10px Arial,sans-serif;letter-spacing:.1em")}${txt(110,160,'ENERGÉTICA',"fill:#fff;font:600 10px Arial,sans-serif;letter-spacing:.1em")}${txt(110,180,'473 ml',"fill:#c9d1da;font:500 10px Arial,sans-serif")}`;
+  }else if(p.art==='phones'){
+    art=`<path d="M52 150 C52 60 168 60 168 150" fill="none" stroke="${ink}" stroke-width="12" stroke-linecap="round"/>
+    <rect x="34" y="132" width="40" height="78" rx="18" fill="${ink}"/><rect x="146" y="132" width="40" height="78" rx="18" fill="${ink}"/>
+    <rect x="46" y="146" width="22" height="50" rx="11" fill="${gold}"/><rect x="152" y="146" width="22" height="50" rx="11" fill="${gold}"/>
+    ${txt(110,118,esc(p.brand),`fill:${ink};font:700 18px Arial,sans-serif;letter-spacing:.12em`)}`;
+  }else{
+    art=`<path d="M28 168 L28 118 Q28 104 42 104 L84 104 Q102 132 130 138 L176 148 Q204 154 204 178 L204 192 L28 192 Z" fill="${ink}"/>
+    <rect x="22" y="188" width="188" height="16" rx="8" fill="#e8e8e8"/>
+    <path d="M60 160 Q110 136 170 168 L170 176 Q110 150 60 172 Z" fill="${gold}"/>
+    <path d="M92 112 L104 124 M104 108 L116 120 M116 108 L128 124" stroke="#c9d1da" stroke-width="3" stroke-linecap="round"/>
+    ${txt(118,186,esc(p.brand),"fill:#fff;font:700 11px Arial,sans-serif;letter-spacing:.14em")}`;
+  }
+  const tag=`<g transform="translate(160,232)"><circle r="36" fill="${D?'#d62839':'#ffffff'}" stroke="${ink}" stroke-width="2.5"/>
+    ${txt(0,-12,CONFIG.CURRENCY,`fill:${D?'#fff':ink};font:600 11px Arial,sans-serif`)}
+    ${txt(0,12,(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price),`fill:${D?'#fff':ink};font:700 ${price>=100?18:22}px Arial,sans-serif`)}</g>`;
+  const cap=D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
+  return `<svg viewBox="0 0 220 300" width="${w||190}" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price))}">${art}${tag}<text x="110" y="290" text-anchor="middle" style="font:500 12px Arial,sans-serif">${esc(cap)}</text></svg>`;
+}
+
+/* ---------- gráfico de bosque ---------- */
+function forest(rows,xlabel){
+  const W=400,L=122,R=384,RH=36,H=rows.length*RH+50;
+  const ok=rows.filter(r=>r.est!=null);
+  let mn=Math.min(0,...ok.map(r=>r.lo)),mx=Math.max(0,...ok.map(r=>r.hi));
+  if(!isFinite(mn)){mn=-1;mx=1;}
+  const pad=(mx-mn)*0.12||1;mn-=pad;mx+=pad;
+  const X=v=>L+(v-mn)/(mx-mn)*(R-L);
+  const step=(mx-mn)>8?2:(mx-mn)>3?1:0.5;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(xlabel)}">`;
+  for(let v=Math.ceil(mn/step)*step;v<=mx;v+=step){s+=`<line class="ax" x1="${X(v)}" x2="${X(v)}" y1="8" y2="${H-34}"/><text class="lab" x="${X(v)}" y="${H-20}" text-anchor="middle">${f(v,step<1?1:0)}</text>`;}
+  s+=`<line class="zero" x1="${X(0)}" x2="${X(0)}" y1="4" y2="${H-34}"/>`;
+  rows.forEach((r,i)=>{
+    const cy=8+RH*i+RH/2;
+    s+=`<text x="0" y="${cy+4}">${esc(r.label)}</text>`;
+    if(r.est==null){s+=`<text class="lab" x="${L+8}" y="${cy+4}">sin datos suficientes</text>`;return;}
+    s+=`<g class="${r.cls}"><line x1="${X(r.lo)}" x2="${X(r.hi)}" y1="${cy}" y2="${cy}" stroke-width="3" stroke-linecap="round"/><circle cx="${X(r.est)}" cy="${cy}" r="6" stroke="none"/></g>`;
+  });
+  s+=`<text class="lab" x="${(L+R)/2}" y="${H-2}" text-anchor="middle" style="font-size:10.5px">${esc(xlabel)}</text></svg>`;
+  return s;
+}
+function verdict(w,labelHi,labelLo){
+  if(!w)return 'Faltan datos (se necesitan al menos 2 participantes).';
+  const mag=Math.abs(w.d)<0.2?'trivial':Math.abs(w.d)<0.5?'pequeño':Math.abs(w.d)<0.8?'moderado':'grande';
+  if(w.p>=0.05)return `No hay diferencia estadísticamente significativa (p = ${fp(w.p)}). Con estos datos no puedes descartar que sea azar. Tamaño del efecto: d_z = ${f(w.d)} (${mag}).`;
+  return `${w.diff>0?labelHi:labelLo} recibe mayor valoración (p = ${fp(w.p)}; d_z = ${f(Math.abs(w.d))}, efecto ${mag}).`;
+}
+
+/* ---------- 1. simular ---------- */
+function fillSimSelects(){
+  const p=S.equipo,opts=['low','mid','high'].map(t=>`<option value="${t}">${esc(tierText(p,t))}</option>`).join('');
+  $('aTier').innerHTML=opts;$('bTier').innerHTML=opts;
+  $('scProd').textContent='una marca de '+prod(p).name.toLowerCase();
+}
+function bindSimValues(){
+  const c=S.cfg;$('aTier').value=c.a.tier;$('aPres').value=c.a.pres;$('bTier').value=c.b.tier;$('bPres').value=c.b.pres;$('nSim').value=c.n;$('nSimV').textContent=c.n;
+}
+function bindSim(){
+  fillSimSelects();bindSimValues();
+  [['aTier','a','tier'],['aPres','a','pres'],['bTier','b','tier'],['bPres','b','pres']].forEach(([id,k,p])=>{$(id).addEventListener('change',e=>{S.cfg[k][p]=e.target.value;touch(false);});});
+  $('nSim').addEventListener('input',e=>{S.cfg.n=+e.target.value;$('nSimV').textContent=S.cfg.n;touch(false);});
+  $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;touch(true);});
+  $('runSim').addEventListener('click',runSim);
+}
+function runSim(){
+  const round=S.sims.filter(s=>s.prod===S.equipo).length+1,n=S.cfg.n,ca=S.cfg.a,cb=S.cfg.b,pr=prod(S.equipo);
+  const R=simulatePaired(ca,cb,n,`${S.equipoId||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
+  const w=pairedT(R.a.y,R.b.y);
+  let pb=0,pa=0;for(let i=0;i<n;i++){if(R.b.y[i]>R.a.y[i])pb++;else if(R.a.y[i]>R.b.y[i])pa++;}
+  S.sims.push({cid:uid(),r:round,prod:S.equipo,a:[ca.tier,ca.pres,n,mean(R.a.y),sd(R.a.y),mean(R.a.ofc),sd(R.a.ofc)],b:[cb.tier,cb.pres,n,mean(R.b.y),sd(R.b.y),mean(R.b.ofc),sd(R.b.ofc)],pred:S.pred,w:{diff:w.diff,p:w.p,d:w.d,lo:w.lo,hi:w.hi},pref:[pb,pa],sent:false});
+  S.pred=null;touch(true);
+  location.hash='resultados';
+}
+function mriCard(r){
+  const p=r.prod,a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
+  const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
+  return `<div class="card">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Laboratorio de resonancia magnética</h2><span class="tag sim">Simulado</span></div>
+    <p class="small muted" style="margin-top:6px">Tus ofertas A y B pasan ahora a una etapa que, en una investigación real, exige un resonador. En esta clase no existe, así que el informe de abajo lo genera el simulador.</p>
+    <h3 style="margin-top:12px">Cómo sería el estudio real</h3>
+    <ol class="steps">
+      <li>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</li>
+      <li>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</li>
+      <li>El equipo registra la señal dependiente del nivel de oxígeno en sangre (BOLD) y, en paralelo, el participante califica la calidad que espera.</li>
+      <li>Un especialista procesa las imágenes y compara la activación en la <b>corteza orbitofrontal medial (mOFC)</b>, región asociada al valor, entre ofertas.</li>
+    </ol>
+    <h3>Informe del laboratorio (simulado)</h3>
+    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">Oferta A</th><th class="num">Oferta B</th></tr></thead><tbody>
+      <tr><th>Estímulo</th><td class="num">${esc(tierText(p,a[0]))}</td><td class="num">${esc(tierText(p,b[0]))}</td></tr>
+      <tr><th>Calidad esperada (reportada)</th><td class="num">${f(a[3])}</td><td class="num">${f(b[3])}</td></tr>
+      <tr><th>Índice mOFC (referencia = 100)</th><td class="num">${f(a[5],1)}</td><td class="num">${f(b[5],1)}</td></tr>
+    </tbody></table></div>
+    <p class="small muted" style="margin:10px 0 4px">Cambio simulado de la señal mOFC respecto a la referencia (calidad media del producto)</p>
+    <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--sim')}</div><div><span class="small">B</span>${bar(dB,'--accent')}</div></div>
+    <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
+  </div>
+  <div class="card soft"><h3>Qué requeriría hacerlo de verdad</h3>
+    <ul style="margin:0;padding-left:20px">
+      <li><b>Equipo:</b> un resonador magnético de uso hospitalario o de investigación, con sistema para proyectar estímulos.</li>
+      <li><b>Personal:</b> técnico de resonancia y especialista en análisis de neuroimagen.</li>
+      <li><b>Permisos:</b> aprobación de un comité de ética, consentimiento y revisión de seguridad de cada participante.</li>
+      <li><b>Costo y tiempo por sesión:</b> por verificar; no hay cifra confiable en esta versión.</li>
+    </ul>
+    <p class="small muted" style="margin:8px 0 0">Por eso estos estudios se hacen en centros de investigación y rara vez en una empresa corriente.</p></div>`;
+}
+function renderSim(){
+  document.querySelectorAll('#predChips button').forEach(b=>b.setAttribute('aria-pressed',String(S.pred===b.dataset.p)));
+  const out=$('simOut');
+  const mine=S.sims.filter(s=>s.prod===S.equipo);
+  if(!mine.length){out.innerHTML='<div class="card soft muted">Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.</div>';return;}
+  const r=mine[mine.length-1];
+  const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
+  let fb='';
+  if(r.pred){const hit=r.pred===outcome;fb=`<div class="${hit?'okbox':'note'}">${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'} Predijiste «${r.pred==='='?'sin diferencia':'mayor en '+r.pred}»; el resultado fue «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}».</div>`;}
+  const a=r.a,b=r.b,pref=r.pref||[0,0],np=pref[0]+pref[1],pbin=np?binomTwo(pref[0],np):null;
+  out.innerHTML=`<div class="card">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Ronda ${r.r}</h2><span class="tag sim">Simulado</span></div>
+    <p class="small muted">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
+    ${fb}
+    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">A</th><th class="num">B</th></tr></thead><tbody>
+      <tr><th>Precio / presentación</th><td class="num">${esc(tierText(r.prod,a[0]))} · ${presL(a[1])}</td><td class="num">${esc(tierText(r.prod,b[0]))} · ${presL(b[1])}</td></tr>
+      <tr><th>Consumidores</th><td class="num" colspan="2">${a[2]} (cada uno ve A y B)</td></tr>
+      <tr><th>Calidad esperada M (DE)</th><td class="num">${f(a[3])} (${f(a[4])})</td><td class="num">${f(b[3])} (${f(b[4])})</td></tr>
+      <tr><th>Índice mOFC ilustrativo M (DE)</th><td class="num">${f(a[5],1)} (${f(a[6],1)})</td><td class="num">${f(b[5],1)} (${f(b[6],1)})</td></tr>
+    </tbody></table></div>
+    <div class="stat">
+      <div><b>${f(r.w.diff)}</b><span>B − A (puntos)</span></div>
+      <div><b>${fp(r.w.p)}</b><span>p (t pareada)</span></div>
+      <div><b>${f(r.w.d)}</b><span>d_z de Cohen</span></div>
+      <div><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · p = '+fp(pbin):''}</span></div>
+    </div>
+    ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}
+    <p style="margin-top:8px">${esc(verdict(r.w,'B','A'))}</p>
+    <p class="small muted" style="margin:0">Cuidado: en datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI.</p>
+  </div>
+  ${mriCard(r)}
+  ${mine.length>1?`<div class="card"><h3>Rondas anteriores</h3><div class="tablewrap w"><table><thead><tr><th>#</th><th>A</th><th>B</th><th class="num">B − A</th><th class="num">p</th></tr></thead><tbody>${mine.slice(0,-1).reverse().map(x=>`<tr><td>${x.r}</td><td>${esc(tierText(x.prod,x.a[0]))}</td><td>${esc(tierText(x.prod,x.b[0]))}</td><td class="num">${f(x.w.diff)}</td><td class="num">${fp(x.w.p)}</td></tr>`).join('')}</tbody></table></div></div>`:''}`;
+}
+
+/* ---------- 2. experimento (imagen, intrasujeto, el participante responde) ---------- */
+const rbtns=cur=>Array.from({length:10},(_,i)=>`<button data-r="${i+1}" aria-pressed="${cur===i+1}">${i+1}</button>`).join('');
+function bindExp(){
+  $('expRun').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;let d=S.draft;
+    if(b.dataset.pe){d.pe=+b.dataset.pe;}
+    else if(b.dataset.act==='start'){
+      if(!d.pe)return;
+      const dr=S.obs.filter(o=>o.o==='DR').length,rd=S.obs.filter(o=>o.o==='RD').length;
+      const order=dr<rd?'DR':rd<dr?'RD':(Math.random()<0.5?'DR':'RD');
+      S.draft={step:1,order,v:{},pe:d.pe,pm:true};
+    }
+    else if(b.dataset.r){const ver=d.order[d.step-1],k=b.closest('[data-k]').dataset.k;d.v[k+ver]=+b.dataset.r;}
+    else if(b.dataset.act==='next'){d.step++;}
+    else if(b.dataset.act==='cancel'){S.draft={step:0,order:null,v:{},pe:null,pm:false};}
+    else if(b.dataset.pref){
+      const v=d.v;
+      S.obs.push({cid:uid(),o:d.order,qd:v.qD,gd:v.gD,qr:v.qR,gr:v.gR,el:b.dataset.pref.toLowerCase(),prod:S.equipo,pe:d.pe,sent:false,t:Date.now()});
+      S.draft={step:4,order:null,v:{},pe:null,pm:true};touch(true);showTab();return;
+    }
+    else if(b.dataset.act==='back'){S.draft={step:0,order:null,v:{},pe:null,pm:false,saved:true};lsSave();showTab();renderExp();return;}
+    else return;
+    lsSave();showTab();renderExp();
+  });
+  $('obsList').addEventListener('click',e=>{const b=e.target.closest('button[data-del]');if(!b)return;
+    if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
+    S.obs.splice(+b.dataset.del,1);touch(true);});
+}
+function renderExp(){
+  const d=S.draft,n=S.obs.length,pad=x=>String(x).padStart(2,'0'),pr=prod(S.equipo);
+  $('pCode').textContent='· #'+pad(n+(d.step===4?0:1));
+  let h='';
+  if(d.step===0){
+    const others=CONFIG.PRODUCTS.filter(p=>p.id!==S.equipo);
+    h=`${d.saved?'<div class="okbox">Participante guardado. Puedes medir al siguiente.</div>':''}
+    <p>Tu producto es <b>${esc(pr.name)}</b>. Mides a compañeros de otros equipos.</p>
+    <label>¿De qué equipo es el participante?</label>
+    <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${esc(p.name)}</button>`).join('')}</div>
+    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el celular al participante</button>`;
+  } else if(d.step===1||d.step===2){
+    const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
+    h=`<p class="small muted" style="margin:0 0 8px">Para el participante · oferta ${d.step} de 2</p>
+    <div class="canbox">${productSVG(S.equipo,ver)}</div>
+    <p class="small muted" style="margin:0 0 10px;text-align:center">${esc(pr.name)} ${esc(pr.brand)} · ${esc(pr.detail)}</p>
+    <label>¿Qué calidad esperas de este producto? (1 = muy mala, 10 = excelente)</label><div class="rate" data-k="q">${rbtns(q)}</div>
+    <label style="margin-top:12px">¿Cuánto te gusta esta oferta? (1 = nada, 10 = muchísimo)</label><div class="rate" data-k="g">${rbtns(g)}</div>
+    <button class="primary" data-act="next" style="margin-top:14px" ${q&&g?'':'disabled'}>${d.step===1?'Ver la segunda oferta':'Continuar'}</button>`;
+  } else if(d.step===3){
+    const o=d.order;
+    h=`<p style="margin:0 0 6px"><b>Para terminar: ¿cuál de las dos ofertas elegirías?</b></p>
+    <div class="pair" style="margin-top:10px">${[0,1].map(i=>`<div>${productSVG(S.equipo,o[i],130)}<button class="primary" data-pref="${o[i]}" style="width:100%">Elijo la oferta ${i+1}</button></div>`).join('')}</div>`;
+  } else if(d.step===4){
+    h=`<div class="okbox" style="text-align:center"><b>¡Gracias por participar!</b><br>Devuelve el celular al investigador.</div>
+    <button class="primary" data-act="back" style="width:100%">Soy el investigador</button>`;
+  }
+  $('expRun').innerHTML=h;
+  const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
+  let t=`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
+  else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
+  $('obsList').innerHTML=t;
+}
+
+/* ---------- análisis ---------- */
+function rowsOfLocal(){return S.obs.map(o=>[o.prod,o.o,o.qd,o.gd,o.qr,o.gr,o.el]);}
+function cols(rows,pid){
+  const q={D:[],R:[]},g={D:[],R:[]};let rPref=0,n=0;
+  rows.forEach(o=>{if(pid&&o[0]!==pid)return;q.D.push(o[2]);g.D.push(o[3]);q.R.push(o[4]);g.R.push(o[5]);n++;if(o[6]==='r')rPref++;});
+  return {q,g,rPref,n,wq:pairedT(q.D,q.R),wg:pairedT(g.D,g.R),pbin:n?binomTwo(rPref,n):null};
+}
+async function loadResumen(){
+  if(!BACKEND||!S.joined||!S.token)return;
+  try{const r=await rpc('sn_resumen',{p_token:S.token});if(r&&r.ok){CLASSROWS=r.obs||[];if(conn!=='sesion')conn='ok';renderCmp();}else if(sesionPerdida(r)){conn='sesion';renderStatus();}}
+  catch(e){conn='offline';renderStatus();}
+}
+setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},20000);
+
+/* ---------- 3. comparar ---------- */
+function renderCmp(){
+  if(!S.joined){$('cmpOut').innerHTML='';return;}
+  const pid=S.equipo,pr=prod(pid);
+  const rows=BACKEND?CLASSROWS:rowsOfLocal();
+  const m=cols(rowsOfLocal(),pid);        // mis mediciones
+  const cp=cols(rows,pid);                // todo el curso, mi producto
+  const nRef=Math.max(20,cp.n);
+  const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
+  const wSim=pairedT(ref.a.y,ref.b.y);
+  const fr=[{label:'Simulado · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
+  CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
+    fr.push({label:p.short+' · calidad',est:c.wq&&c.wq.diff,lo:c.wq&&c.wq.lo,hi:c.wq&&c.wq.hi,cls:p.id===pid?'f-real':'f-class'});
+    fr.push({label:p.short+' · gusto',est:c.wg&&c.wg.diff,lo:c.wg&&c.wg.lo,hi:c.wg&&c.wg.hi,cls:p.id===pid?'f-real':'f-class'});});
+  let reading='';
+  if(cp.wq){
+    const same=Math.sign(cp.wq.diff)===Math.sign(wSim.diff);
+    reading=`<p><b>${esc(pr.name)} · calidad esperada.</b> ${esc(verdict(cp.wq,'La oferta a precio normal','La oferta con descuento'))}</p>
+    <p><b>Gusto.</b> ${esc(verdict(cp.wg,'La oferta a precio normal','La oferta con descuento'))}</p>
+    <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (p exacta = '+fp(cp.pbin)+')':''}.</p>
+    <p>${same?'La dirección de la calidad esperada coincide con la réplica simulada.':'La dirección de la calidad esperada <b>no</b> coincide con la réplica simulada.'} Simulado: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor simulado cae dentro del IC 95 % de la medición real.':'El valor simulado queda fuera del IC 95 % de la medición real.'}</p>`;
+  }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
+  $('cmpOut').innerHTML=`<div class="card">
+    <h2>Simulado frente a real</h2>
+    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más. ${BACKEND?'«Real» agrupa a toda la clase.':'Modo práctica: «real» solo incluye tus mediciones.'} Réplica simulada pareada, n = ${nRef}. Tú mediste ${m.n} participante(s).</p>
+    ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
+    <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:var(--accent)"></i>Real, otros productos</span></div>
+    <div style="margin-top:12px">${reading}</div>
+    ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">Actualizar datos de la clase</button>':''}
+  </div>
+  <div class="card soft"><h3>Por qué pueden diferir</h3>
+    <ul style="margin:0;padding-left:20px"><li><b>Solo expectativa:</b> con una imagen nadie usa el producto. Kurz et al. (2023) hallaron efectos de precio sobre las expectativas, pero no de forma consistente sobre calidad percibida y agrado tras la experiencia.</li><li><b>Efecto de demanda:</b> son compañeros de una clase sobre precios y ven dos precios seguidos; el orden alternado reparte ese sesgo, pero no lo elimina.</li><li><b>Muestra pequeña:</b> los IC son anchos con pocos participantes.</li><li><b>Parámetros:</b> el efecto simulado es didáctico; no es una estimación empírica.</li><li><b>Productos distintos:</b> el efecto del precio puede variar entre productos.</li></ul></div>`;
+  const rb=$('cmpReload');if(rb)rb.onclick=loadResumen;
+}
+
+/* ---------- 4. docente ---------- */
+const DEMO_EQ=['Los Voltios','Sonido Claro','Pasos Firmes'];
+function demoData(){
+  const rng=mulberry32(hashSeed('demo-uab-v3')),nrm=makeNormal(rng);
+  const eff={1:0.7,2:0.35,3:0.5};const obs=[],sims=[],notas=[];let id=1;
+  for(let i=0;i<24;i++){
+    const pr=1+(i%3),eq=DEMO_EQ[pr-1],inv='Alias '+(i+1),k=5+Math.floor(rng()*3);
+    for(let j=0;j<k;j++){
+      const pe=pr===1?(j%2?2:3):pr===2?(j%2?1:3):(j%2?1:2);
+      const qd=clamp(Math.round(5.1+nrm()*1.6),1,10),qr=clamp(Math.round(qd+eff[pr]+nrm()*1.2),1,10);
+      const gd=clamp(Math.round(5.3+nrm()*1.7),1,10),gr=clamp(Math.round(gd+eff[pr]*0.3+nrm()*1.5),1,10);
+      obs.push({id:id++,inv,eq,prod:pr,pe,orden:(i+j)%2?'DR':'RD',qd,gd,qr,gr,el:(qr+gr+nrm())>(qd+gd)?'r':'d',t:new Date(Date.now()-rng()*3e6).toISOString()});
+    }
+    sims.push({inv,eq,prod:pr,datos:{r:1},t:new Date(Date.now()-rng()*3e6).toISOString()});
+    if(i<4)notas.push({inv,eq,nota:'(ejemplo) El precio normal elevó la calidad esperada, pero no sé si eso cambiaría la experiencia real.',t:new Date().toISOString()});
+  }
+  const equipos=DEMO_EQ.map((n,i)=>({id:'d'+i,nombre:n,producto:i+1,temporal:false,clave:['volt2026','sonido26','pasos26'][i],integrantes:Array.from({length:8},(_,k)=>({alias:'Alias '+(i+1+3*k)}))}));
+  return {ok:true,clase:{nombre:'Clase de ejemplo',registro:true},equipos,obs,sims,notas};
+}
+function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
+let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
+try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
+function showD(){
+  $('dNo').hidden=!!DTOK;
+  $('dBar').hidden=!DTOK;
+  $('docOut').hidden=!(T&&(DTOK||demoOn));
+  $('tDemo').textContent=demoOn?'Ocultar ejemplo':'Ver clase de ejemplo';
+  if(DNAME)$('dWho').textContent=DNAME;
+}
+function docLogout(){
+  const t=DTOK;if(BACKEND&&t)rpc('sn_salir',{p_token:t}).catch(()=>{});
+  DTOK='';DPW='';DNAME='';DACC=null;T=null;demoOn=false;dReset=null;AXWHO='eq';try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}
+  showD();renderDoc();renderAcc();
+  if(DOCMODE||!S.joined)AX_mostrar(BACKEND?'ingresar':'practica');else AX_cerrar();
+}
+function docSesion(r){
+  if(!r||r.ok)return false;
+  if(r.error==='sesion'){docLogout();return true;}
+  if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
+  return false;
+}
+async function loadTeacher(){
+  if(!BACKEND||!DTOK)return;
+  try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
+    if(!r||!r.ok){if(docSesion(r))return;$('tMsg').textContent=em(r);return;}
+    $('tMsg').textContent='';T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    const sel=$('dClase');
+    if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
+    showD();renderDoc();
+    if(DACC===null){try{const a=await rpc('sn_doc_cuenta_info',{p_token:DTOK});if(a&&a.ok){DACC=a;renderAcc();}}catch(e){}}}
+  catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
+}
+function renderAcc(){
+  const el=$('acOut');if(!el)return;
+  if(!DACC||demoOn||!DTOK){el.innerHTML='';return;}
+  const open=el.querySelector('details')&&el.querySelector('details').open;
+  el.innerHTML=`<details class="card"><summary>Mi cuenta: contraseña, pregunta secreta y código de clase</summary>
+    <p class="small muted" style="margin:8px 0">${esc(DACC.nombre||'')} · ${esc(DACC.email||'')}</p>
+    <h3>Cambiar mi contraseña</h3><div class="grid2 stack"><div><label for="acA">Actual</label><input type="password" id="acA" autocomplete="current-password"></div><div><label for="acN">Nueva (mín. 8)</label><input type="password" id="acN" autocomplete="new-password"></div></div><button id="acPw" style="margin-top:8px">Cambiar contraseña</button>
+    <h3 style="margin-top:16px">Cambiar la pregunta secreta</h3><p class="small muted" style="margin:0 0 6px">Pregunta actual: <b>${esc(DACC.pregunta||'')}</b></p>
+    <label for="acC">Tu contraseña actual</label><input type="password" id="acC" autocomplete="current-password"><label for="acQp" style="margin-top:8px">Nueva pregunta</label><input type="text" id="acQp" maxlength="120" autocomplete="off"><label for="acR" style="margin-top:8px">Nueva respuesta</label><input type="text" id="acR" maxlength="80" autocomplete="off"><button id="acQ" style="margin-top:8px">Cambiar pregunta</button>
+    <h3 style="margin-top:16px">Cambiar el código de clase</h3><p class="small muted" style="margin:0 0 6px">Los equipos ya registrados no se afectan; los nuevos ingresos usarán el código nuevo. Mínimo 8 caracteres.</p>
+    <input type="text" id="acK" maxlength="64" autocomplete="off" placeholder="Código nuevo" style="max-width:280px"><button id="acCod" style="margin-left:8px">Cambiar código</button>
+    <p class="small" id="acMsg" style="margin:10px 0 0" role="alert"></p></details>`;
+  if(open)el.querySelector('details').open=true;
+}
+function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);crypto.getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
+
+async function acClick(b){
+  if(demoOn)return;
+
+      const m=$('acMsg');m.style.color='var(--bad)';m.textContent='';
+      try{
+        let r;
+        if(b.id==='acPw'){const a=$('acA').value,n=$('acN').value;if(!a||n.length<8){m.textContent='Escribe tu contraseña actual y una nueva de al menos 8 caracteres.';return;}
+          r=await rpc('sn_cambiar_clave',{p_token:DTOK,p_actual:a,p_nueva:n});if(r&&r.ok){$('acA').value=$('acN').value='';}}
+        else if(b.id==='acQ'){const c=$('acC').value,q=$('acQp').value.trim(),an=$('acR').value.trim();if(!c){m.textContent='Escribe tu contraseña actual.';return;}if(q.length<8||an.length<2){m.textContent=ERR.pregunta;return;}
+          r=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:c,p_pregunta:q,p_respuesta:an});if(r&&r.ok){DACC=Object.assign({},DACC,{pregunta:q});$('acC').value=$('acR').value='';}}
+        else{const c=$('acK').value.trim();if(c.length<8){m.textContent=ERR.codigo_corto;return;}
+          r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:T.clase.id,p_codigo:c});if(r&&r.ok)$('acK').value='';}
+        if(docSesion(r))return;
+        if(r&&r.ok){if(b.id==='acQ')renderAcc();const m2=$('acMsg');m2.style.color='var(--real)';m2.textContent='Cambio guardado.';}else m.textContent=em(r);
+      }catch(err){m.textContent='Sin conexión con el servidor.';}
+    
+}
+function bindDoc(){
+  $('acOut').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&/^ac/.test(b.id))acClick(b);});
+  $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD();renderDoc();};
+  $('dIr').onclick=()=>{AXWHO=DOCMODE?'doc':'eq';AX_mostrar(BACKEND?'ingresar':'practica');};
+  $('dOut').onclick=docLogout;
+  $('dClase').onchange=e=>{DCLASE=e.target.value;loadTeacher();};
+  $('docOut').addEventListener('click',async e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
+    else if(b.id==='exObs')download('observaciones_reales.csv',csvObs(T));
+    else if(b.id==='exSim')download('rondas_simuladas.csv',csvSims(T));
+    else if(b.id==='regTog'&&!demoOn){
+      try{const r=await rpc('sn_docente_config',{p_token:DTOK,p_clase:T.clase.id,p_registro:!T.clase.registro});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}
+    }
+    else if((b.dataset.del||b.dataset.eqdel||b.dataset.eqrst)&&!demoOn){
+      if(b.dataset.armed!=='1'){b.dataset.armed='1';b.dataset.t0=b.textContent;b.textContent='¿Seguro?';setTimeout(()=>{if(b.isConnected){b.dataset.armed='';b.textContent=b.dataset.t0;}},4000);return;}
+      try{
+        let r;
+        if(b.dataset.del)r=await rpc('sn_docente_borrar',{p_token:DTOK,p_id:+b.dataset.del});
+        else if(b.dataset.eqdel){r=await rpc('sn_docente_equipo',{p_token:DTOK,p_accion:'borrar',p_equipo:b.dataset.eqdel,p_valor:''});dReset=null;}
+        else{const pw=tempPw();r=await rpc('sn_docente_equipo',{p_token:DTOK,p_accion:'reiniciar',p_equipo:b.dataset.eqrst,p_valor:pw});if(r&&r.ok)dReset={nombre:b.dataset.nom,clave:pw};}
+        if(docSesion(r))return;
+        await loadTeacher();
+      }catch(err){b.textContent='Error';}
+    }
+  });
+  showD();
+  if(DOCMODE&&BACKEND&&DTOK){loadTeacher();}
+  setInterval(()=>{if(currentTab()==='docente'&&DTOK&&BACKEND&&!demoOn&&!document.hidden)loadTeacher();},15000);
+}
+let docProd=0;
+function toCSV(rows){return rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');}
+function csvObs(t){const r=[['investigador','equipo','producto','equipo_participante','orden','calidad_descuento','gusto_descuento','calidad_normal','gusto_normal','eleccion','fecha']];t.obs.forEach(o=>r.push([o.inv,o.eq,prod(o.prod).name,o.pe,o.orden,o.qd,o.gd,o.qr,o.gr,o.el==='d'?'descuento':'normal',o.t]));return toCSV(r);}
+function csvSims(t){const r=[['investigador','equipo','producto','ronda','A_precio','A_present','B_precio','B_present','n','A_media','B_media','diff','p','dz','prediccion']];t.sims.forEach(s=>{const d=s.datos||{},a=d.a||[],b=d.b||[],w=d.w||{};r.push([s.inv,s.eq,prod(s.prod).name,d.r,a[0],a[1],b[0],b[1],a[2],f(a[3],3),f(b[3],3),f(w.diff,3),f(w.p,4),f(w.d,3),d.pred||'']);});return toCSV(r);}
+function download(name,text){
+  try{const u=URL.createObjectURL(new Blob(['﻿'+text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
+  catch(e){const ta=$('csvBox');if(ta){ta.hidden=false;ta.value=text;ta.select();}}
+}
+function renderDoc(){
+  const el=$('docOut');
+  if(!T){el.innerHTML='';return;}
+  const rows=rowsOfT(T),c=cols(rows,docProd||0);
+  const invs={};T.obs.forEach(o=>{const k=o.inv+'|'+o.eq;(invs[k]=invs[k]||{inv:o.inv,eq:o.eq,prod:o.prod,n:0,s:0,t:0});invs[k].n++;invs[k].t=Math.max(invs[k].t,new Date(o.t).getTime());});
+  T.sims.forEach(s=>{const k=s.inv+'|'+s.eq;(invs[k]=invs[k]||{inv:s.inv,eq:s.eq,prod:s.prod,n:0,s:0,t:0});invs[k].s++;invs[k].t=Math.max(invs[k].t,new Date(s.t).getTime());});
+  const list=Object.values(invs).sort((a,b)=>String(a.eq).localeCompare(String(b.eq))||String(a.inv).localeCompare(String(b.inv)));
+  const fr=[];CONFIG.PRODUCTS.forEach(p=>{const x=cols(rows,p.id);
+    fr.push({label:p.short+' · calidad',est:x.wq&&x.wq.diff,lo:x.wq&&x.wq.lo,hi:x.wq&&x.wq.hi,cls:'f-class'});
+    fr.push({label:p.short+' · gusto',est:x.wg&&x.wg.diff,lo:x.wg&&x.wg.lo,hi:x.wg&&x.wg.hi,cls:'f-real'});});
+  const perProd=CONFIG.PRODUCTS.map(p=>{const x=cols(rows,p.id);const teamInv=list.filter(i=>i.prod===p.id).length;
+    return `<tr><td>${p.id}</td><td>${esc(p.name)}</td><td class="num">${teamInv}</td><td class="num">${x.n}</td><td class="num">${x.wq?f(x.wq.diff):'–'}</td><td class="num">${x.wq?fp(x.wq.p):'–'}</td><td class="num">${x.wg?f(x.wg.diff):'–'}</td><td class="num">${x.n?Math.round(x.rPref/x.n*100)+' %':'–'}</td></tr>`;}).join('');
+  const c1=counts10(c.q.D),c2=counts10(c.q.R),mx=Math.max(1,...c1,...c2);
+  let hist=`<svg class="hist" viewBox="0 0 400 150" width="100%" role="img" aria-label="Distribución de calidad esperada por oferta">`;
+  for(let i=0;i<10;i++){const x=14+i*38,h1=c1[i]/mx*100,h2=c2[i]/mx*100;
+    hist+=`<rect class="lo" x="${x}" y="${120-h1}" width="14" height="${h1}" rx="2"/><rect class="hi" x="${x+15}" y="${120-h2}" width="14" height="${h2}" rx="2"/><text class="lab" x="${x+15}" y="136" text-anchor="middle">${i+1}</text>`;}
+  hist+='</svg>';
+  const chips=[['all','Todos'],...CONFIG.PRODUCTS.map(p=>[String(p.id),p.short])].map(([v,l])=>`<button class="chip" data-chip="${v}" aria-pressed="${(docProd===0&&v==='all')||String(docProd)===v}">${esc(l)}</button>`).join('');
+  const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Alias</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${esc(i.eq)}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
+  const last=T.obs.slice(-25).reverse();
+  const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
+  const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
+  const eqs=T.equipos||[];
+  const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td><span style="font-family:ui-monospace,monospace">${esc(q.clave||'–')}</span></td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
+  const teamsCard=`<div class="card"><h3>Equipos registrados (${eqs.length})</h3>
+    ${dReset?`<div class="note">Contraseña temporal de <b>${esc(dReset.nombre)}</b>: <b style="font-family:ui-monospace,monospace;font-size:1.1em">${esc(dReset.clave)}</b>. Díctasela al equipo; deberá cambiarla al ingresar. Las contraseñas de los equipos se ven en la tabla.</div>`:''}
+    <div class="row" style="margin-bottom:8px"><span class="small">Registro de equipos: <b>${T.clase&&T.clase.registro?'abierto':'cerrado'}</b></span>${demoOn?'':`<button class="ghost" id="regTog">${T.clase&&T.clase.registro?'Cerrar registro':'Abrir registro'}</button>`}</div>
+    ${eqs.length?`<div class="tablewrap w"><table><thead><tr><th>Equipo</th><th>Producto</th><th>Alias</th><th>Contraseña</th><th></th></tr></thead><tbody>${teamsRows}</tbody></table></div>`:'<p class="muted">Todavía no se registró ningún equipo.</p>'}</div>`;
+  el.innerHTML=`${demoOn?'<div class="note">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
+  ${CONFIG.PRICES_PROVISIONAL?'<div class="note">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
+  <div class="card"><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3>
+    <div class="stat"><div><b>${list.length}</b><span>investigadores activos</span></div><div><b>${T.obs.length}</b><span>participantes medidos</span></div><div><b>${T.sims.length}</b><span>rondas simuladas</span></div><div><b>${T.notas.length}</b><span>conclusiones</span></div></div>
+    <div class="row" style="margin-top:8px"><button id="exObs">CSV de participantes</button><button id="exSim">CSV de rondas simuladas</button></div>
+    <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
+  ${teamsCard}
+  <div class="card"><h3>Efecto por producto (normal − descuento)</h3>
+    ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}
+    <div class="tablewrap w" style="margin-top:8px"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Invest.</th><th class="num">n</th><th class="num">Δ cal.</th><th class="num">p</th><th class="num">Δ gusto</th><th class="num">Elige normal</th></tr></thead><tbody>${perProd}</tbody></table></div>
+    <p class="small muted" style="margin:8px 0 0">Con pocos participantes por producto la mayoría de los efectos moderados no saldrá significativa: discútelo como parte de la lección.</p></div>
+  <div class="card"><h3>Calidad esperada por oferta</h3><div class="chips" style="margin-bottom:8px">${chips}</div>${hist}
+    <div class="legend"><span><i style="background:var(--sim)"></i>Descuento</span><span><i style="background:var(--accent)"></i>Normal</span></div></div>
+  <div class="card"><h3>Avance por investigador</h3>${body}</div>
+  ${del}
+  <div class="card"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
+  <details class="card"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
+    <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
+    <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código, simula 2 o 3 rondas (incluye una A = B) y lee el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
+    <ol class="steps"><li><b>0–30 min.</b> Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li><b>30–70 min.</b> Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li><b>70–100 min.</b> Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
+    <p class="small muted" style="margin:4px 0 0">Tiempos estimados, sin cronometrar con estudiantes reales.</p></details>`;
+}
+
+/* ---------- arranque ---------- */
+function renderCaso(){
+  const pr=prod(S.equipo),P=pr.prices,prov=CONFIG.PRICES_PROVISIONAL;
+  const rows=CONFIG.PRODUCTS.map(p=>`<tr${p.id===S.equipo?' style="font-weight:bold"':''}><td>${p.id}</td><td>${esc(p.name)} ${esc(p.brand)}</td><td class="num">${esc(money(p.prices.low))}</td><td class="num">${esc(money(p.prices.mid))}</td><td class="num">${esc(money(p.prices.high))}</td></tr>`).join('');
+  $('casoOut').innerHTML=`<div class="card"><h2>${esc(pr.name)}: la situación en la que se encuentran</h2>
+    <p>Su equipo dirige el estudio de precio de <b>${esc(pr.name.toLowerCase())}</b> (marca ficticia <b>${esc(pr.brand)}</b>, ${esc(pr.detail.toLowerCase())}). La empresa debate si mostrar su producto con una <b>etiqueta de descuento</b> o con su <b>precio normal</b>, y quiere saber si esa etiqueta cambia lo que el consumidor espera de la calidad y cuánto le gusta.</p>
+    <p>Hoy se vende a <b>${esc(money(P.mid))}</b>; la oferta con descuento sería de <b>${esc(money(P.low))}</b>. Antes de decidir, el directorio pide evidencia: primero una simulación y después una medición real con compañeros de otros equipos.</p>
+    ${prov?'<div class="note" style="margin-bottom:0">Los precios de esta clase son <b>provisionales</b>: se validarán con un estudio de precios de mercado.</div>':''}</div>
+  <div class="card"><h2>El encargo del directorio (su mandato)</h2>
+    <p><b>Problema:</b> ¿el precio de marketing modifica la calidad esperada y el agrado de un producto idéntico?</p>
+    <ul style="margin:0 0 10px;padding-left:20px"><li><b>H1.</b> La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.</li><li><b>H2.</b> La oferta a precio normal recibe mayor <b>gusto</b>.</li><li><b>H3.</b> Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.</li></ul>
+    <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
+  <div class="card"><h2>Los tres productos de la clase</h2>
+    <div class="tablewrap w"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Descuento</th><th class="num">Normal</th><th class="num">Alto</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="small muted" style="margin:8px 0 0">Tu producto va en negrita. Cada equipo estudia uno y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
+  <div class="card soft"><h2>Cómo se trabaja</h2>
+    <ol class="steps" style="margin-bottom:0"><li><b>Decidir → Simular.</b> Formulas tu hipótesis, diseñas las ofertas A y B y ejecutas rondas con consumidores virtuales.</li><li><b>Decidir → Experimento.</b> Mides a unos 6 compañeros reales de otros equipos.</li><li><b>Resultados.</b> Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.</li><li><b>Aprender.</b> Interpretas las diferencias y escribes tu conclusión.</li></ol></div>`;
+}
+function renderEquipo(){
+  const pr=prod(S.equipo),mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length,pend=pending();
+  const mem=(S.integrantes||[]).map(i=>`<span class="tag${i.id===S.iid?' sim':''}">${esc(i.alias)}</span>`).join(' ');
+  $('equipoOut').innerHTML=`<div class="card"><h2>${esc(S.equipoNombre||'Mi equipo')}</h2>
+    <div class="stat"><div><b>${esc(S.alias)}</b><span>tu alias</span></div><div><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><b>${mine}</b><span>rondas simuladas</span></div><div><b>${n}</b><span>participantes medidos</span></div></div>
+    <p class="small muted" style="margin:6px 0 0">${BACKEND?(pend?pend+' dato(s) pendientes de envío.':'Todos tus datos están enviados a tu docente.'):'Modo práctica: tus datos quedan solo en este dispositivo.'}</p></div>
+  ${BACKEND?`<div class="card"><h3>Integrantes</h3><p>${mem||'–'}</p>
+    <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
+    <p class="small" id="eqMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p></div>
+  <details class="card"><summary>Cambiar la contraseña del equipo</summary>
+    <label for="eqPwA" style="margin-top:10px">Contraseña actual</label><input type="password" id="eqPwA" autocomplete="current-password">
+    <label for="eqPwN" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="eqPwN" autocomplete="new-password">
+    <p class="small" id="eqPwMsg" style="margin:8px 0 0" role="alert"></p><button id="eqPw" style="margin-top:8px">Cambiar</button></details>`:''}
+  <div class="card"><h2>Tu producto en las dos ofertas</h2>
+    <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
+    <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
+}
+function renderAll(){
+  if(!S.joined){renderStatus();return;}
+  const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
+  $('barRound').textContent=S.sims.filter(s=>s.prod===S.equipo).length;
+  renderCaso();renderEquipo();renderSim();renderExp();renderCmp();renderStatus();
+}
+function init(){
+  const ban=$('banner');
+  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este dispositivo y el docente no los verá.';}
+  bindLogin();bindSim();bindExp();bindDoc();
+  $('nota').value=S.nota||'';
+  let nt=null;
+  $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
+  if(DOCMODE){S.joined=false;document.title='Panel docente · '+document.title;showTab();showD();return;}
+  showTab();renderAll();
+  restaurar();
+}
+init();
+
+</script>
+</body></html>

@@ -21,3 +21,9 @@
 - 5 intentos fallidos → bloqueo de 15 min por equipo/correo. Docente → Equipos registrados → "Reiniciar clave" da una clave temporal de 6 caracteres que el equipo debe cambiar.
 - "Cerrar registro" impide equipos nuevos cuando ya estén todos.
 - Contraseñas con bcrypt; sesiones de 6 h; las tablas no son accesibles directamente.
+
+## Dos direcciones
+- Estudiantes: https://atilayasociados.github.io/simuladordeneurociencias/
+- Docente: https://atilayasociados.github.io/simuladordeneurociencias/docente
+
+`docente/index.html` es una copia exacta de `index.html`: la página detecta la ruta `/docente` y muestra solo el panel docente. Si cambias `index.html`, vuelve a copiarlo: `cp index.html docente/index.html`.
