@@ -305,6 +305,7 @@ body.ax-on>*:not(#ax):not(script){display:none!important}
     <span class="row"><select id="dClase" hidden style="width:auto"></select><button class="ghost" id="dOut">Salir</button></span></div>
   </div>
   <p class="small" id="tMsg" style="margin:0 0 8px;color:var(--bad)" role="alert"></p>
+  <div id="acOut"></div>
   <div id="docOut"></div>
 </main>
 
@@ -407,7 +408,7 @@ function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
 let T=null,demoOn=false;   // datos del docente
 let conn='ok';             // ok | offline | sesion
-const ERR={datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de clase incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 12 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 8 caracteres.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de clase incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 12 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
 const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
 function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
 function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
@@ -520,6 +521,7 @@ function AX_mostrar(modo,msg){
     h='<h2>Crea tu contraseña</h2><p class="ax-hint" style="text-align:center">📌 Ingresaste con una contraseña temporal. Crea una nueva para continuar (mínimo '+min+' caracteres).</p>'+
       (known?'':'<label for="axN0">Contraseña temporal</label>'+AX_pw('axN0','','current-password'))+
       '<label for="axN1">Contraseña nueva</label>'+AX_pw('axN1','','new-password')+'<label for="axN2">Confirmar contraseña nueva</label>'+AX_pw('axN2','','new-password')+
+      (doc?'<div class="ax-div">Pregunta de seguridad</div><p class="ax-hint">📌 Sirve para recuperar tu contraseña. Puedes cambiarla después desde el panel.</p><label for="axQ">Tu pregunta</label><input class="ax-in" id="axQ" maxlength="120" autocomplete="off" placeholder="Mínimo 8 caracteres"><label for="axA">Tu respuesta</label><input class="ax-in" id="axA" maxlength="80" autocomplete="off">':'')+
       '<button class="ax-btn" id="axGo" onclick="AX_cambiarTemp()">Guardar y continuar →</button><div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
   }else if(modo==='elegir'){
     h='<h2>¿Quién eres?</h2><p class="ax-hint" style="text-align:center">📌 '+esc(S.equipoNombre||'Tu equipo')+': elige tu alias para que tus aportes queden registrados con él.</p>'+
@@ -602,10 +604,14 @@ async function AX_cambiarTemp(){
   if(!a||!n){AX_err(ERR.vacio);return;}
   if(n.length<min){AX_err('La nueva contraseña debe tener al menos '+min+' caracteres.');return;}
   if(n!==n2){AX_err('Las contraseñas no coinciden.');return;}
+  const q=doc?AX_$('axQ').value.trim():'',an=doc?AX_$('axA').value.trim():'';
+  if(doc&&(q.length<8||an.length<2)){AX_err(ERR.pregunta);return;}
   AX_busy(b,true);
   try{const r=await rpc('sn_cambiar_clave',{p_token:doc?DTOK:S.token,p_actual:a,p_nueva:n});
     if(!r||!r.ok){AX_busy(b,false);if(!doc&&sesionPerdida(r))return;if(doc&&r&&r.error==='sesion'){docLogout();return;}AX_err(em(r));return;}
-    if(doc){DPW='';AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();}
+    if(doc){const r2=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:n,p_pregunta:q,p_respuesta:an});
+      if(!r2||!r2.ok){AX_busy(b,false);AX_err(em(r2));return;}
+      DPW='';AX_cerrar();location.hash='docente';showTab();showD();loadTeacher();}
     else{PW='';setStage('elegir');}
   }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor.');}
 }
@@ -980,11 +986,11 @@ function demoData(){
     sims.push({inv,eq,prod:pr,datos:{r:1},t:new Date(Date.now()-rng()*3e6).toISOString()});
     if(i<4)notas.push({inv,eq,nota:'(ejemplo) El precio normal elevó la calidad esperada, pero no sé si eso cambiaría la experiencia real.',t:new Date().toISOString()});
   }
-  const equipos=DEMO_EQ.map((n,i)=>({id:'d'+i,nombre:n,producto:i+1,temporal:false,integrantes:Array.from({length:8},(_,k)=>({alias:'Alias '+(i+1+3*k)}))}));
+  const equipos=DEMO_EQ.map((n,i)=>({id:'d'+i,nombre:n,producto:i+1,temporal:false,clave:['volt2026','sonido26','pasos26'][i],integrantes:Array.from({length:8},(_,k)=>({alias:'Alias '+(i+1+3*k)}))}));
   return {ok:true,clase:{nombre:'Clase de ejemplo',registro:true},equipos,obs,sims,notas};
 }
 function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
-let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null;
+let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
 function showD(){
   $('dNo').hidden=!!DTOK;
@@ -995,8 +1001,8 @@ function showD(){
 }
 function docLogout(){
   const t=DTOK;if(BACKEND&&t)rpc('sn_salir',{p_token:t}).catch(()=>{});
-  DTOK='';DPW='';DNAME='';T=null;demoOn=false;dReset=null;AXWHO='eq';try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}
-  showD();renderDoc();
+  DTOK='';DPW='';DNAME='';DACC=null;T=null;demoOn=false;dReset=null;AXWHO='eq';try{sessionStorage.removeItem('sn-doc-b2');}catch(e){}
+  showD();renderDoc();renderAcc();
   if(!S.joined)AX_mostrar(BACKEND?'ingresar':'practica');else AX_cerrar();
 }
 function docSesion(r){
@@ -1012,11 +1018,45 @@ async function loadTeacher(){
     $('tMsg').textContent='';T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
-    showD();renderDoc();}
+    showD();renderDoc();
+    if(DACC===null){try{const a=await rpc('sn_doc_cuenta_info',{p_token:DTOK});if(a&&a.ok){DACC=a;renderAcc();}}catch(e){}}}
   catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
 }
+function renderAcc(){
+  const el=$('acOut');if(!el)return;
+  if(!DACC||demoOn||!DTOK){el.innerHTML='';return;}
+  const open=el.querySelector('details')&&el.querySelector('details').open;
+  el.innerHTML=`<details class="card"><summary>Mi cuenta: contraseña, pregunta secreta y código de clase</summary>
+    <p class="small muted" style="margin:8px 0">${esc(DACC.nombre||'')} · ${esc(DACC.email||'')}</p>
+    <h3>Cambiar mi contraseña</h3><div class="grid2 stack"><div><label for="acA">Actual</label><input type="password" id="acA" autocomplete="current-password"></div><div><label for="acN">Nueva (mín. 8)</label><input type="password" id="acN" autocomplete="new-password"></div></div><button id="acPw" style="margin-top:8px">Cambiar contraseña</button>
+    <h3 style="margin-top:16px">Cambiar la pregunta secreta</h3><p class="small muted" style="margin:0 0 6px">Pregunta actual: <b>${esc(DACC.pregunta||'')}</b></p>
+    <label for="acC">Tu contraseña actual</label><input type="password" id="acC" autocomplete="current-password"><label for="acQp" style="margin-top:8px">Nueva pregunta</label><input type="text" id="acQp" maxlength="120" autocomplete="off"><label for="acR" style="margin-top:8px">Nueva respuesta</label><input type="text" id="acR" maxlength="80" autocomplete="off"><button id="acQ" style="margin-top:8px">Cambiar pregunta</button>
+    <h3 style="margin-top:16px">Cambiar el código de clase</h3><p class="small muted" style="margin:0 0 6px">Los equipos ya registrados no se afectan; los nuevos ingresos usarán el código nuevo. Mínimo 8 caracteres.</p>
+    <input type="text" id="acK" maxlength="64" autocomplete="off" placeholder="Código nuevo" style="max-width:280px"><button id="acCod" style="margin-left:8px">Cambiar código</button>
+    <p class="small" id="acMsg" style="margin:10px 0 0" role="alert"></p></details>`;
+  if(open)el.querySelector('details').open=true;
+}
 function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);crypto.getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
+
+async function acClick(b){
+  if(demoOn)return;
+
+      const m=$('acMsg');m.style.color='var(--bad)';m.textContent='';
+      try{
+        let r;
+        if(b.id==='acPw'){const a=$('acA').value,n=$('acN').value;if(!a||n.length<8){m.textContent='Escribe tu contraseña actual y una nueva de al menos 8 caracteres.';return;}
+          r=await rpc('sn_cambiar_clave',{p_token:DTOK,p_actual:a,p_nueva:n});if(r&&r.ok){$('acA').value=$('acN').value='';}}
+        else if(b.id==='acQ'){const c=$('acC').value,q=$('acQp').value.trim(),an=$('acR').value.trim();if(!c){m.textContent='Escribe tu contraseña actual.';return;}if(q.length<8||an.length<2){m.textContent=ERR.pregunta;return;}
+          r=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:c,p_pregunta:q,p_respuesta:an});if(r&&r.ok){DACC=Object.assign({},DACC,{pregunta:q});$('acC').value=$('acR').value='';}}
+        else{const c=$('acK').value.trim();if(c.length<8){m.textContent=ERR.codigo_corto;return;}
+          r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:T.clase.id,p_codigo:c});if(r&&r.ok)$('acK').value='';}
+        if(docSesion(r))return;
+        if(r&&r.ok){if(b.id==='acQ')renderAcc();const m2=$('acMsg');m2.style.color='var(--real)';m2.textContent='Cambio guardado.';}else m.textContent=em(r);
+      }catch(err){m.textContent='Sin conexión con el servidor.';}
+    
+}
 function bindDoc(){
+  $('acOut').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&/^ac/.test(b.id))acClick(b);});
   $('tDemo').onclick=()=>{demoOn=!demoOn;T=demoOn?demoData():null;showD();renderDoc();};
   $('dIr').onclick=()=>{AXWHO='eq';AX_mostrar(BACKEND?'ingresar':'practica');};
   $('dOut').onclick=docLogout;
@@ -1076,11 +1116,11 @@ function renderDoc(){
   const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
   const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
   const eqs=T.equipos||[];
-  const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
+  const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td><span style="font-family:ui-monospace,monospace">${esc(q.clave||'–')}</span></td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
   const teamsCard=`<div class="card"><h3>Equipos registrados (${eqs.length})</h3>
-    ${dReset?`<div class="note">Contraseña temporal de <b>${esc(dReset.nombre)}</b>: <b style="font-family:ui-monospace,monospace;font-size:1.1em">${esc(dReset.clave)}</b>. Díctasela al equipo; deberá cambiarla al ingresar. Anótala ahora: no se volverá a mostrar.</div>`:''}
+    ${dReset?`<div class="note">Contraseña temporal de <b>${esc(dReset.nombre)}</b>: <b style="font-family:ui-monospace,monospace;font-size:1.1em">${esc(dReset.clave)}</b>. Díctasela al equipo; deberá cambiarla al ingresar. Las contraseñas de los equipos se ven en la tabla.</div>`:''}
     <div class="row" style="margin-bottom:8px"><span class="small">Registro de equipos: <b>${T.clase&&T.clase.registro?'abierto':'cerrado'}</b></span>${demoOn?'':`<button class="ghost" id="regTog">${T.clase&&T.clase.registro?'Cerrar registro':'Abrir registro'}</button>`}</div>
-    ${eqs.length?`<div class="tablewrap w"><table><thead><tr><th>Equipo</th><th>Producto</th><th>Alias</th><th></th></tr></thead><tbody>${teamsRows}</tbody></table></div>`:'<p class="muted">Todavía no se registró ningún equipo.</p>'}</div>`;
+    ${eqs.length?`<div class="tablewrap w"><table><thead><tr><th>Equipo</th><th>Producto</th><th>Alias</th><th>Contraseña</th><th></th></tr></thead><tbody>${teamsRows}</tbody></table></div>`:'<p class="muted">Todavía no se registró ningún equipo.</p>'}</div>`;
   el.innerHTML=`${demoOn?'<div class="note">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
   ${CONFIG.PRICES_PROVISIONAL?'<div class="note">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
   <div class="card"><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3>

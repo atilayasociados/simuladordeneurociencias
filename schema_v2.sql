@@ -605,6 +605,225 @@ grant execute on function
   public.sn_docente_equipo(text,text,uuid,text), public.sn_docente_config(text,uuid,boolean)
   to anon, authenticated;
 
+-- ====== Ajustes v3: sin bloqueo, claves de equipo visibles al docente, cuenta del docente ======
+
+alter table public.sn_equipos add column if not exists clave_texto text not null default '';
+
+
+
+-- Sin bloqueo por intentos fallidos (se mantiene una pausa de 0,4 s por intento fallido)
+
+create or replace function public.sn_bloqueado(p_clave text) returns boolean
+
+language sql stable security definer set search_path = public, extensions as $$ select false $$;
+
+
+
+create or replace function public.sn_login(p_usuario text, p_clave text, p_codigo text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare u text; d record; v uuid; e record; k text; tok text;
+begin
+  u := trim(coalesce(p_usuario,''));
+  if u = '' or coalesce(p_clave,'') = '' then return jsonb_build_object('ok', false, 'error', 'vacio'); end if;
+  if position('@' in u) > 0 then
+    k := 'doc|' || lower(u);
+    if sn_bloqueado(k) then return jsonb_build_object('ok', false, 'error', 'bloqueado'); end if;
+    select * into d from sn_docentes where lower(email) = lower(u) and activo;
+    if not found or d.clave_hash <> crypt(p_clave, d.clave_hash) then
+      perform sn_intento(k, false); perform pg_sleep(0.4);
+      return jsonb_build_object('ok', false, 'error', 'datos');
+    end if;
+    perform sn_intento(k, true);
+    tok := sn_nueva_sesion('docente', null, null, null, d.id, d.clave_temporal);
+    return jsonb_build_object('ok', true, 'token', tok, 'tipo', 'docente', 'nombre', d.nombre, 'cambiar_clave', d.clave_temporal);
+  end if;
+  v := sn_clase_por_codigo(p_codigo);
+  if v is null then return jsonb_build_object('ok', false, 'error', 'codigo'); end if;
+  k := 'eq|' || v::text || '|' || lower(regexp_replace(u, '\s+', ' ', 'g'));
+  if sn_bloqueado(k) then return jsonb_build_object('ok', false, 'error', 'bloqueado'); end if;
+  select * into e from sn_equipos where clase_id = v and lower(nombre) = lower(regexp_replace(u, '\s+', ' ', 'g'));
+  if not found or e.clave_hash <> crypt(p_clave, e.clave_hash) then
+    perform sn_intento(k, false); perform pg_sleep(0.4);
+    return jsonb_build_object('ok', false, 'error', 'datos');
+  end if;
+  perform sn_intento(k, true);
+  tok := sn_nueva_sesion('equipo', v, e.id, null, null, e.clave_temporal);
+  return jsonb_build_object('ok', true, 'token', tok, 'tipo', 'equipo', 'equipo', sn_equipo_json(e.id),
+                            'integrantes', sn_integrantes_json(e.id), 'cambiar_clave', e.clave_temporal);
+end $$;
+
+create or replace function public.sn_doc_recuperar(p_email text, p_respuesta text, p_nueva text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare d record; k text; r text;
+begin
+  k := 'rec|' || lower(trim(coalesce(p_email,'')));
+  if sn_bloqueado(k) then return jsonb_build_object('ok', false, 'error', 'bloqueado'); end if;
+  if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+  r := lower(regexp_replace(trim(coalesce(p_respuesta,'')), '\s+', ' ', 'g'));
+  select * into d from sn_docentes where lower(email) = lower(trim(coalesce(p_email,''))) and activo and resp_hash <> '';
+  if not found or d.resp_hash <> crypt(r, d.resp_hash) then
+    perform sn_intento(k, false); perform pg_sleep(0.4);
+    return jsonb_build_object('ok', false, 'error', 'datos');
+  end if;
+  perform sn_intento(k, true);
+  update sn_docentes set clave_hash = crypt(p_nueva, gen_salt('bf')), clave_temporal = false where id = d.id;
+  delete from sn_sesiones where docente_id = d.id;
+  return jsonb_build_object('ok', true);
+end $$;
+
+create or replace function public.sn_registrar_equipo(
+  p_codigo text, p_nombre text, p_producto int, p_clave text, p_integrantes jsonb)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v uuid; ab boolean; nom text; eq uuid; a text; al text[] := '{}'; i int := 0; tok text;
+begin
+  v := sn_clase_por_codigo(p_codigo);
+  if v is null then return jsonb_build_object('ok', false, 'error', 'codigo'); end if;
+  select registro_abierto into ab from sn_clases where id = v;
+  if not ab then return jsonb_build_object('ok', false, 'error', 'cerrado'); end if;
+  nom := regexp_replace(trim(coalesce(p_nombre,'')), '\s+', ' ', 'g');
+  if char_length(nom) < 3 or char_length(nom) > 40 then return jsonb_build_object('ok', false, 'error', 'nombre'); end if;
+  if p_producto is null or p_producto not between 1 and 3 then return jsonb_build_object('ok', false, 'error', 'producto'); end if;
+  if char_length(coalesce(p_clave,'')) < 4 or char_length(p_clave) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+  if jsonb_typeof(coalesce(p_integrantes,'null'::jsonb)) <> 'array' then return jsonb_build_object('ok', false, 'error', 'integrantes'); end if;
+  for a in select jsonb_array_elements_text(p_integrantes) loop
+    al := al || regexp_replace(trim(a), '\s+', ' ', 'g');
+  end loop;
+  if coalesce(array_length(al,1),0) < 1 or array_length(al,1) > 12 then return jsonb_build_object('ok', false, 'error', 'integrantes'); end if;
+  foreach a in array al loop
+    if char_length(a) < 2 or char_length(a) > 24 then return jsonb_build_object('ok', false, 'error', 'alias'); end if;
+  end loop;
+  if (select count(distinct lower(x)) from unnest(al) x) <> array_length(al,1) then
+    return jsonb_build_object('ok', false, 'error', 'alias_repetido');
+  end if;
+  if (select count(*) from sn_equipos where clase_id = v) >= 30 then return jsonb_build_object('ok', false, 'error', 'limite'); end if;
+  if exists (select 1 from sn_equipos where clase_id = v and lower(nombre) = lower(nom)) then
+    return jsonb_build_object('ok', false, 'error', 'repetido');
+  end if;
+  insert into sn_equipos(clase_id, nombre, producto, clave_hash, clave_texto)
+  values (v, nom, p_producto, crypt(p_clave, gen_salt('bf')), p_clave) returning id into eq;
+  foreach a in array al loop insert into sn_integrantes(equipo_id, alias) values (eq, a); end loop;
+  tok := sn_nueva_sesion('equipo', v, eq, null, null, false);
+  return jsonb_build_object('ok', true, 'token', tok, 'tipo', 'equipo', 'equipo', sn_equipo_json(eq),
+                            'integrantes', sn_integrantes_json(eq), 'cambiar_clave', false);
+end $$;
+
+create or replace function public.sn_cambiar_clave(p_token text, p_actual text, p_nueva text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; e record; d record;
+begin
+  s := sn_ses(p_token, 'equipo');
+  if s.token_hash is not null then
+    if char_length(coalesce(p_nueva,'')) < 4 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+    select * into e from sn_equipos where id = s.equipo_id;
+    if e.clave_hash <> crypt(coalesce(p_actual,''), e.clave_hash) then return jsonb_build_object('ok', false, 'error', 'actual'); end if;
+    if p_actual = p_nueva then return jsonb_build_object('ok', false, 'error', 'igual'); end if;
+    update sn_equipos set clave_hash = crypt(p_nueva, gen_salt('bf')), clave_texto = p_nueva, clave_temporal = false where id = e.id;
+    update sn_sesiones set tmp = false where token_hash = s.token_hash;
+    return jsonb_build_object('ok', true, 'integrantes', sn_integrantes_json(e.id));
+  end if;
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is not null then
+    if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+    select * into d from sn_docentes where id = s.docente_id;
+    if d.clave_hash <> crypt(coalesce(p_actual,''), d.clave_hash) then return jsonb_build_object('ok', false, 'error', 'actual'); end if;
+    if p_actual = p_nueva then return jsonb_build_object('ok', false, 'error', 'igual'); end if;
+    update sn_docentes set clave_hash = crypt(p_nueva, gen_salt('bf')), clave_temporal = false where id = d.id;
+    update sn_sesiones set tmp = false where token_hash = s.token_hash;
+    return jsonb_build_object('ok', true);
+  end if;
+  return jsonb_build_object('ok', false, 'error', 'sesion');
+end $$;
+
+create or replace function public.sn_docente(p_token text, p_clase uuid default null) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; v uuid; c record; o jsonb; si jsonb; n jsonb; eqs jsonb; cls jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', id, 'nombre', nombre) order by creada desc), '[]'::jsonb) into cls from sn_clases;
+  v := coalesce(p_clase, (select id from sn_clases where activa order by creada desc limit 1));
+  select * into c from sn_clases where id = v;
+  if not found then return jsonb_build_object('ok', true, 'clases', cls, 'clase', null); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', e.id, 'nombre', e.nombre, 'producto', e.producto, 'temporal', e.clave_temporal, 'clave', e.clave_texto,
+           'integrantes', sn_integrantes_json(e.id)) order by e.creado), '[]'::jsonb) into eqs from sn_equipos e where e.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('id', b.id, 'inv', b.investigador, 'eq', e.nombre, 'prod', b.producto, 'pe', b.part_producto,
+           'orden', b.orden, 'qd', b.q_d, 'gd', b.g_d, 'qr', b.q_r, 'gr', b.g_r, 'el', b.eleccion, 't', b.creada) order by b.id), '[]'::jsonb)
+    into o from sn_obs b join sn_equipos e on e.id = b.equipo_id where b.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('inv', m.investigador, 'eq', e.nombre, 'prod', m.producto, 'datos', m.datos, 't', m.creada) order by m.id), '[]'::jsonb)
+    into si from sn_sims m join sn_equipos e on e.id = m.equipo_id where m.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('inv', t.investigador, 'eq', e.nombre, 'nota', t.nota, 't', t.actualizada) order by t.investigador), '[]'::jsonb)
+    into n from sn_notas t join sn_equipos e on e.id = t.equipo_id where t.clase_id = v;
+  return jsonb_build_object('ok', true, 'clases', cls, 'clase', jsonb_build_object('id', c.id, 'nombre', c.nombre, 'registro', c.registro_abierto),
+                            'equipos', eqs, 'obs', o, 'sims', si, 'notas', n);
+end $$;
+
+create or replace function public.sn_docente_equipo(p_token text, p_accion text, p_equipo uuid, p_valor text default null) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  if p_accion = 'reiniciar' then
+    if char_length(coalesce(p_valor,'')) < 4 or char_length(p_valor) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+    update sn_equipos set clave_hash = crypt(p_valor, gen_salt('bf')), clave_texto = p_valor, clave_temporal = true where id = p_equipo;
+    delete from sn_sesiones where equipo_id = p_equipo;
+    delete from sn_intentos where clave = (select 'eq|' || clase_id::text || '|' || lower(nombre) from sn_equipos where id = p_equipo);
+  elsif p_accion = 'borrar' then
+    delete from sn_equipos where id = p_equipo;
+  else
+    return jsonb_build_object('ok', false, 'error', 'accion');
+  end if;
+  return jsonb_build_object('ok', true);
+end $$;
+
+
+-- Cuenta del docente: ver y cambiar la pregunta de seguridad
+create or replace function public.sn_doc_cuenta_info(p_token text) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; d record;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  select nombre, email, pregunta into d from sn_docentes where id = s.docente_id;
+  return jsonb_build_object('ok', true, 'nombre', d.nombre, 'email', d.email, 'pregunta', d.pregunta);
+end $$;
+
+create or replace function public.sn_doc_cuenta(p_token text, p_clave text, p_pregunta text, p_respuesta text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; d record;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  select * into d from sn_docentes where id = s.docente_id;
+  if d.clave_hash <> crypt(coalesce(p_clave,''), d.clave_hash) then perform pg_sleep(0.4); return jsonb_build_object('ok', false, 'error', 'actual'); end if;
+  if char_length(trim(coalesce(p_pregunta,''))) < 8 or char_length(trim(coalesce(p_respuesta,''))) < 2 then
+    return jsonb_build_object('ok', false, 'error', 'pregunta');
+  end if;
+  update sn_docentes set pregunta = trim(p_pregunta),
+    resp_hash = crypt(lower(regexp_replace(trim(p_respuesta), '\s+', ' ', 'g')), gen_salt('bf')) where id = d.id;
+  return jsonb_build_object('ok', true);
+end $$;
+
+-- Cambiar el código de clase
+create or replace function public.sn_docente_codigo(p_token text, p_clase uuid, p_codigo text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  if char_length(trim(coalesce(p_codigo,''))) < 8 or char_length(p_codigo) > 64 then return jsonb_build_object('ok', false, 'error', 'codigo_corto'); end if;
+  update sn_clases set cod_hash = crypt(upper(trim(p_codigo)), gen_salt('bf')) where id = p_clase;
+  return jsonb_build_object('ok', true);
+end $$;
+
+revoke all on function public.sn_doc_cuenta_info(text), public.sn_doc_cuenta(text,text,text,text), public.sn_docente_codigo(text,uuid,text) from public;
+grant execute on function public.sn_doc_cuenta_info(text), public.sn_doc_cuenta(text,text,text,text), public.sn_docente_codigo(text,uuid,text) to anon, authenticated;
+
+
 -- ---------- Preparar el curso (edita los valores y ejecuta estas dos líneas) ----------
 -- 1) La clase: el código que darás a los estudiantes (mín. 8 caracteres)
 -- select public.sn_crear_clase('UAB Mercadeo Estratégico 2026', 'CODIGO-DE-CLASE');
