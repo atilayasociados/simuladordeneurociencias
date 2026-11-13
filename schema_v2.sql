@@ -824,6 +824,55 @@ revoke all on function public.sn_doc_cuenta_info(text), public.sn_doc_cuenta(tex
 grant execute on function public.sn_doc_cuenta_info(text), public.sn_doc_cuenta(text,text,text,text), public.sn_docente_codigo(text,uuid,text) to anon, authenticated;
 
 
+-- ---------- v4: el panel docente muestra el código de clase y la fecha de creación ----------
+alter table public.sn_clases add column if not exists cod_texto text;
+
+create or replace function public.sn_crear_clase(p_nombre text, p_codigo text) returns uuid
+language plpgsql security definer set search_path = public, extensions as $$
+declare v uuid;
+begin
+  if char_length(coalesce(p_codigo,'')) < 8 then raise exception 'El código debe tener al menos 8 caracteres'; end if;
+  insert into sn_clases(nombre, cod_hash, cod_texto) values (p_nombre, crypt(upper(trim(p_codigo)), gen_salt('bf')), upper(trim(p_codigo))) returning id into v;
+  return v;
+end $$;
+
+create or replace function public.sn_docente_codigo(p_token text, p_clase uuid, p_codigo text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  if char_length(trim(coalesce(p_codigo,''))) < 8 or char_length(p_codigo) > 64 then return jsonb_build_object('ok', false, 'error', 'codigo_corto'); end if;
+  update sn_clases set cod_hash = crypt(upper(trim(p_codigo)), gen_salt('bf')), cod_texto = upper(trim(p_codigo)) where id = p_clase;
+  return jsonb_build_object('ok', true);
+end $$;
+
+create or replace function public.sn_docente(p_token text, p_clase uuid default null) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; v uuid; c record; o jsonb; si jsonb; n jsonb; eqs jsonb; cls jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', id, 'nombre', nombre) order by creada desc), '[]'::jsonb) into cls from sn_clases;
+  v := coalesce(p_clase, (select id from sn_clases where activa order by creada desc limit 1));
+  select * into c from sn_clases where id = v;
+  if not found then return jsonb_build_object('ok', true, 'clases', cls, 'clase', null); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', e.id, 'nombre', e.nombre, 'producto', e.producto, 'temporal', e.clave_temporal, 'clave', e.clave_texto,
+           'integrantes', sn_integrantes_json(e.id)) order by e.creado), '[]'::jsonb) into eqs from sn_equipos e where e.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('id', b.id, 'inv', b.investigador, 'eq', e.nombre, 'prod', b.producto, 'pe', b.part_producto,
+           'orden', b.orden, 'qd', b.q_d, 'gd', b.g_d, 'qr', b.q_r, 'gr', b.g_r, 'el', b.eleccion, 't', b.creada) order by b.id), '[]'::jsonb)
+    into o from sn_obs b join sn_equipos e on e.id = b.equipo_id where b.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('inv', m.investigador, 'eq', e.nombre, 'prod', m.producto, 'datos', m.datos, 't', m.creada) order by m.id), '[]'::jsonb)
+    into si from sn_sims m join sn_equipos e on e.id = m.equipo_id where m.clase_id = v;
+  select coalesce(jsonb_agg(jsonb_build_object('inv', t.investigador, 'eq', e.nombre, 'nota', t.nota, 't', t.actualizada) order by t.investigador), '[]'::jsonb)
+    into n from sn_notas t join sn_equipos e on e.id = t.equipo_id where t.clase_id = v;
+  return jsonb_build_object('ok', true, 'clases', cls, 'clase', jsonb_build_object('id', c.id, 'nombre', c.nombre, 'registro', c.registro_abierto, 'codigo', c.cod_texto, 'creada', c.creada),
+                            'equipos', eqs, 'obs', o, 'sims', si, 'notas', n);
+end $$;
+
+
 -- ---------- Preparar el curso (edita los valores y ejecuta estas dos líneas) ----------
 -- 1) La clase: el código que darás a los estudiantes (mín. 8 caracteres)
 -- select public.sn_crear_clase('UAB Mercadeo Estratégico 2026', 'CODIGO-DE-CLASE');

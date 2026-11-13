@@ -156,6 +156,82 @@ body.ax-on>*:not(#ax):not(script){display:none!important}
 #ax textarea.ax-in{min-height:70px}
 .ax-fila{grid-template-columns:1fr!important}
 
+
+/* ============ Panel docente (/docente) · estilo panel de administración ============ */
+#adm{display:none}
+body.adm{--bg:#0B1830;--surface:#14284A;--surface2:#1B3359;--fg:#E6EDF7;--muted:#9DB0CB;--line:#2B4772;--azul:#FFFFFF;--azul2:#8CC2FF;--accent:#1673D1;--accent-soft:#1B3359;--sim:#A993FF;--sim-soft:#2B2756;--real:#6ACC18;--real-soft:#1C3B2A;--warn:#F2B705;--warn-soft:#3A3219;--bad:#FF7A7A;
+  --font:Sora,system-ui,sans-serif;--head:Sora,system-ui,sans-serif;--mono:'Space Mono',ui-monospace,monospace;color-scheme:dark;background:var(--bg);padding-bottom:0}
+body.adm>header,body.adm>nav,body.adm>#status,body.adm>.wrap{display:none!important}
+body.adm #adm{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+body.adm.ax-on #adm{display:none!important}
+.adm-side{background:#0E1D38;border-right:3px solid #1B3359;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.adm-brand{display:flex;gap:12px;align-items:center;padding:24px 20px 20px max(20px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+.adm-brand img{width:48px;height:48px;border-radius:10px;background:#fff;padding:4px;flex:none;object-fit:contain}
+.adm-brand b{display:block;font:700 13.5px/1.35 var(--mono);letter-spacing:1.5px;color:#fff}
+.adm-brand span{font-size:12px;color:var(--muted)}
+.adm-menu{padding:14px 12px;flex:1}
+.adm-grp{font:600 11px var(--head);letter-spacing:2px;text-transform:uppercase;color:#7F93B3;padding:18px 12px 8px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.adm-grp:first-child{padding-top:4px}
+.adm-it,body.adm .adm-it{display:flex;gap:10px;align-items:center;width:100%;min-height:44px;padding:10px 14px;border:0;border-radius:10px;background:transparent;color:#DCE6F5;font:500 15px var(--head);text-align:left;cursor:pointer;margin:2px 0}
+.adm-it:hover,body.adm .adm-it:hover{background:#17305A}
+.adm-it.on,body.adm .adm-it.on{background:var(--accent);color:#fff;font-weight:700}
+.adm-it i{font-style:normal;width:22px;text-align:center}
+.adm-foot{padding:14px 20px 20px max(20px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.adm-foot b{display:block;color:#fff;font-size:13.5px;margin-bottom:8px}
+.adm-main{min-width:0;display:flex;flex-direction:column}
+.adm-top{padding:20px max(32px,env(safe-area-inset-right,0px)) 18px 32px;border-bottom:2px solid var(--accent);font:400 13px var(--mono);letter-spacing:3px;text-transform:uppercase;color:#A9BEDC;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.adm-top select{width:auto;min-height:36px;padding:4px 10px;background:var(--surface);color:var(--fg);border-color:var(--line);font:13px var(--head);letter-spacing:0;text-transform:none}
+.adm-body{padding:28px max(32px,env(safe-area-inset-right,0px)) 40px 32px;max-width:1180px;width:100%}
+.adm-h{font:700 30px/1.2 var(--head);color:#4FA3FF;margin:0 0 8px;display:flex;gap:12px;align-items:center}
+.adm-sub{color:#C9D6EA;font-size:15.5px;margin:0 0 22px}
+.adm-tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px}
+.adm-btn{min-height:46px;padding:10px 22px;border-radius:10px;font:600 15px var(--head);cursor:pointer;border:1.5px solid #4C6A99;background:transparent;color:#fff}
+.adm-btn:hover{border-color:#8CC2FF}
+.adm-btn.go{background:var(--real);border-color:var(--real);color:#0B1830}
+.adm-btn.go:hover{background:#7ADB2A}
+body.adm .card{background:var(--surface);border:1px solid #2E4C7A;border-radius:16px;padding:20px 24px;margin-bottom:18px}
+body.adm .card h3{font:700 19px var(--head);color:#fff;margin:0 0 12px}
+body.adm button{background:transparent;color:#fff;border:1.5px solid #4C6A99;border-radius:8px;font:600 14px var(--head)}
+body.adm button.danger{color:var(--bad);border-color:#7A3A44}
+body.adm .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+body.adm input[type=text],body.adm input[type=password],body.adm input[type=email],body.adm select,body.adm textarea{background:#0F2140;color:var(--fg);border-color:var(--line)}
+body.adm th{color:#A9BEDC;font:600 11.5px var(--head);letter-spacing:1.5px;text-transform:uppercase}
+body.adm details summary{color:#fff}
+body.adm .note{color:var(--fg)}
+.cl-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding-bottom:16px}
+.cl-head h3{margin:0 0 6px!important;font-size:22px!important}
+.cl-who{color:var(--real);font-size:15px}
+.cl-st{display:flex;gap:10px;flex-wrap:wrap}
+.cl-st span{font:400 13.5px var(--mono);letter-spacing:1px;padding:4px 10px;border-radius:6px;background:#11301F;color:var(--real)}
+.cl-st span.off{background:#3A1B22;color:var(--bad)}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid #2E4C7A;border-bottom:1px solid #2E4C7A;margin:0 -24px}
+.cl-grid>div{padding:16px 24px;border-right:1px solid #2E4C7A;min-width:0}
+.cl-grid>div:last-child{border-right:0}
+.cl-grid small{display:block;font:500 12px var(--head);letter-spacing:2px;text-transform:uppercase;color:#A9BEDC;margin-bottom:8px}
+.cl-grid b{font:700 22px var(--mono);color:#fff;overflow-wrap:anywhere}
+.cl-grid b.code{color:var(--warn);letter-spacing:2px;font-size:19px;overflow-wrap:normal;white-space:nowrap}
+.cl-grid>div.cd{grid-column:span 2}
+@media (max-width:820px){.cl-grid>div.cd{grid-column:1/-1}}
+.cl-grid b.date{font:500 17px var(--head)}
+.cl-act{display:flex;gap:12px;flex-wrap:wrap;padding-top:16px}
+.cl-act button{min-height:40px;padding:6px 16px;font-size:14px}
+.cl-act button.go{background:var(--real);border-color:var(--real);color:#0B1830}
+.cl-act button.warn{color:var(--warn);border-color:#8A6A12}
+@media (max-width:820px){
+  body.adm #adm{grid-template-columns:1fr}
+  .adm-side{position:static;height:auto;border-right:0;border-bottom:3px solid #1B3359}
+  .adm-brand{padding:16px max(16px,env(safe-area-inset-left,0px)) 12px}
+  .adm-menu{display:flex;gap:6px;overflow-x:auto;padding:10px max(16px,env(safe-area-inset-left,0px))}
+  .adm-grp{display:none}
+  .adm-it{white-space:nowrap;width:auto;font-size:14px}
+  .adm-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
+  .adm-foot b{margin:0}
+  .adm-top{padding:14px 16px}
+  .adm-body{padding:20px max(16px,env(safe-area-inset-right,0px)) 32px max(16px,env(safe-area-inset-left,0px))}
+  .adm-h{font-size:24px}
+  body.adm .card{padding:16px}
+  .cl-grid{margin:0 -16px}.cl-grid>div{padding:12px 16px}
+}
 </style>
 </head><body>
 <header class="nopm">
@@ -1007,12 +1083,53 @@ function demoData(){
 function rowsOfT(t){return t.obs.map(o=>[o.prod,o.orden,o.qd,o.gd,o.qr,o.gr,o.el]);}
 let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
+
+/* ---------- panel docente con barra lateral (solo /docente) ---------- */
+const ADM=[['Clase',[['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
+  ['Resultados',[['efecto','📈','Efecto por producto','Diferencia pareada (normal − descuento) en calidad esperada y gusto, con IC 95 %.'],['calidad','📊','Calidad esperada','Distribución de la calidad esperada en cada oferta.'],['notas','💬','Conclusiones','Conclusiones escritas por los estudiantes.']]],
+  ['Datos',[['datos','💾','Exportar y depurar','Descarga en CSV y borrado de observaciones cargadas por error.']]],
+  ['Docencia',[['guia','📘','Guía de clase','Plan de las dos sesiones de 100 minutos.']]],
+  ['Cuenta',[['cuenta','⚙️','Mi cuenta','Tu contraseña, tu pregunta secreta y el código de clase.']]]];
+const ADMALL=ADM.flatMap(g=>g[1]);
+let SEC='clase';
+function admFind(id){return ADMALL.find(x=>x[0]===id)||ADMALL[0];}
+function admBuild(){
+  document.body.classList.add('adm');
+  const a=document.createElement('div');a.id='adm';
+  a.innerHTML=`<aside class="adm-side" aria-label="Menú del panel docente"><div class="adm-brand"><img src="${BASE}img/logo3.png" alt="" onerror="this.style.display='none'"><div><b>Simulador de Neurociencias</b><span>Panel docente</span></div></div>
+    <div class="adm-menu" id="admMenu" role="navigation" aria-label="Secciones del panel"></div><div class="adm-foot"><b id="admWho"></b><button class="adm-btn" id="admOut" style="min-height:38px;padding:6px 16px;font-size:13.5px">Salir</button></div></aside>
+    <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span id="admSel"></span></div>
+    <div class="adm-body"><h1 class="adm-h" id="admH"></h1><p class="adm-sub" id="admSub"></p><div class="adm-tools"><button class="adm-btn" id="admRef">↺ Actualizar</button><button class="adm-btn go" id="admDemo" hidden>Ver clase de ejemplo</button></div><div id="admSlot"></div></div></div>`;
+  document.body.appendChild(a);
+  $('admSlot').appendChild($('t-docente'));$('admSel').appendChild($('dClase'));
+  $('admMenu').addEventListener('click',e=>{const b=e.target.closest('[data-sec]');if(b)admGo(b.dataset.sec);});
+  $('admOut').onclick=()=>{if(demoOn&&!DTOK){demoOn=false;T=null;showD();renderDoc();AX_mostrar('ingresar');}else docLogout();};
+  $('admRef').onclick=()=>{if(DTOK&&!demoOn)loadTeacher();};
+  $('admDemo').onclick=()=>AX_mostrar('ingresar');
+  const h=(location.hash||'').slice(1);if(ADMALL.some(x=>x[0]===h))SEC=h;
+  window.addEventListener('hashchange',()=>{const k=(location.hash||'').slice(1);if(ADMALL.some(x=>x[0]===k)){SEC=k;admApply();}});
+}
+function admGo(id){SEC=admFind(id)[0];try{history.replaceState(null,'','#'+SEC);}catch(e){}admApply();window.scrollTo(0,0);}
+function admApply(){
+  if(!DOCMODE||!$('admMenu'))return;
+  const it=admFind(SEC);
+  $('admMenu').innerHTML=ADM.map(([g,xs])=>`<div class="adm-grp">${esc(g)}</div>`+xs.map(([id,ic,n])=>`<button class="adm-it${id===SEC?' on':''}" data-sec="${id}"${id===SEC?' aria-current="page"':''}><i aria-hidden="true">${ic}</i>${esc(n)}</button>`).join('')).join('');
+  $('admLbl').textContent=it[2];$('admH').innerHTML=`<span aria-hidden="true">${it[1]}</span>${esc(it[2])}`;$('admSub').textContent=it[3];
+  $('admWho').textContent=demoOn&&!DTOK?'Clase de ejemplo':(DNAME||'Docente');
+  $('admOut').textContent=demoOn&&!DTOK?'Ingresar':'Salir';
+  $('admRef').hidden=!(DTOK&&!demoOn);
+  $('dBar').hidden=true;
+  $('dNo').hidden=!!DTOK||demoOn;
+  [...$('docOut').children].forEach(c=>{const k=c.dataset.sec;c.hidden=!!k&&k!=='*'&&k!==SEC;if(c.tagName==='DETAILS'&&k===SEC)c.open=true;});
+  const ac=$('acOut');ac.hidden=SEC!=='cuenta';const d=ac.querySelector('details');if(d&&SEC==='cuenta')d.open=true;
+}
 function showD(){
   $('dNo').hidden=!!DTOK;
   $('dBar').hidden=!DTOK;
   $('docOut').hidden=!(T&&(DTOK||demoOn));
   $('tDemo').textContent=demoOn?'Ocultar ejemplo':'Ver clase de ejemplo';
   if(DNAME)$('dWho').textContent=DNAME;
+  admApply();
 }
 function docLogout(){
   const t=DTOK;if(BACKEND&&t)rpc('sn_salir',{p_token:t}).catch(()=>{});
@@ -1050,6 +1167,7 @@ function renderAcc(){
     <input type="text" id="acK" maxlength="64" autocomplete="off" placeholder="Código nuevo" style="max-width:280px"><button id="acCod" style="margin-left:8px">Cambiar código</button>
     <p class="small" id="acMsg" style="margin:10px 0 0" role="alert"></p></details>`;
   if(open)el.querySelector('details').open=true;
+  admApply();
 }
 function tempPw(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint32Array(6);crypto.getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('');}
 
@@ -1064,7 +1182,7 @@ async function acClick(b){
         else if(b.id==='acQ'){const c=$('acC').value,q=$('acQp').value.trim(),an=$('acR').value.trim();if(!c){m.textContent='Escribe tu contraseña actual.';return;}if(q.length<8||an.length<2){m.textContent=ERR.pregunta;return;}
           r=await rpc('sn_doc_cuenta',{p_token:DTOK,p_clave:c,p_pregunta:q,p_respuesta:an});if(r&&r.ok){DACC=Object.assign({},DACC,{pregunta:q});$('acC').value=$('acR').value='';}}
         else{const c=$('acK').value.trim();if(c.length<8){m.textContent=ERR.codigo_corto;return;}
-          r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:T.clase.id,p_codigo:c});if(r&&r.ok)$('acK').value='';}
+          r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:T.clase.id,p_codigo:c});if(r&&r.ok){$('acK').value='';loadTeacher();}}
         if(docSesion(r))return;
         if(r&&r.ok){if(b.id==='acQ')renderAcc();const m2=$('acMsg');m2.style.color='var(--real)';m2.textContent='Cambio guardado.';}else m.textContent=em(r);
       }catch(err){m.textContent='Sin conexión con el servidor.';}
@@ -1078,6 +1196,8 @@ function bindDoc(){
   $('dClase').onchange=e=>{DCLASE=e.target.value;loadTeacher();};
   $('docOut').addEventListener('click',async e=>{
     const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.go){admGo(b.dataset.go);return;}
+    if(b.id==='cpCod'){const c=T.clase.codigo;try{await navigator.clipboard.writeText(c);b.textContent='✓ Copiado';}catch(err){b.textContent=c;}return;}
     if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
     else if(b.id==='exObs')download('observaciones_reales.csv',csvObs(T));
     else if(b.id==='exSim')download('rondas_simuladas.csv',csvSims(T));
@@ -1128,36 +1248,42 @@ function renderDoc(){
   const chips=[['all','Todos'],...CONFIG.PRODUCTS.map(p=>[String(p.id),p.short])].map(([v,l])=>`<button class="chip" data-chip="${v}" aria-pressed="${(docProd===0&&v==='all')||String(docProd)===v}">${esc(l)}</button>`).join('');
   const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Alias</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${esc(i.eq)}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
   const last=T.obs.slice(-25).reverse();
-  const del=!demoOn?`<details class="card"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
+  const del=!demoOn?`<details class="card" data-sec="datos"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
   const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div>${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
   const eqs=T.equipos||[];
   const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td><span style="font-family:ui-monospace,monospace">${esc(q.clave||'–')}</span></td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
-  const teamsCard=`<div class="card"><h3>Equipos registrados (${eqs.length})</h3>
+  const teamsCard=`<div class="card" data-sec="equipos"><h3>Equipos registrados (${eqs.length})</h3>
     ${dReset?`<div class="note">Contraseña temporal de <b>${esc(dReset.nombre)}</b>: <b style="font-family:ui-monospace,monospace;font-size:1.1em">${esc(dReset.clave)}</b>. Díctasela al equipo; deberá cambiarla al ingresar. Las contraseñas de los equipos se ven en la tabla.</div>`:''}
-    <div class="row" style="margin-bottom:8px"><span class="small">Registro de equipos: <b>${T.clase&&T.clase.registro?'abierto':'cerrado'}</b></span>${demoOn?'':`<button class="ghost" id="regTog">${T.clase&&T.clase.registro?'Cerrar registro':'Abrir registro'}</button>`}</div>
+    <p class="small muted">Registro de equipos: <b>${T.clase&&T.clase.registro?'abierto':'cerrado'}</b> (se cambia en «Resumen de la clase»).</p>
     ${eqs.length?`<div class="tablewrap w"><table><thead><tr><th>Equipo</th><th>Producto</th><th>Alias</th><th>Contraseña</th><th></th></tr></thead><tbody>${teamsRows}</tbody></table></div>`:'<p class="muted">Todavía no se registró ningún equipo.</p>'}</div>`;
-  el.innerHTML=`${demoOn?'<div class="note">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
-  ${CONFIG.PRICES_PROVISIONAL?'<div class="note">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
-  <div class="card"><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3>
-    <div class="stat"><div><b>${list.length}</b><span>investigadores activos</span></div><div><b>${T.obs.length}</b><span>participantes medidos</span></div><div><b>${T.sims.length}</b><span>rondas simuladas</span></div><div><b>${T.notas.length}</b><span>conclusiones</span></div></div>
-    <div class="row" style="margin-top:8px"><button id="exObs">CSV de participantes</button><button id="exSim">CSV de rondas simuladas</button></div>
+  el.innerHTML=`${demoOn?'<div class="note" data-sec="*">Datos de demostración generados en tu navegador. No son de estudiantes reales.</div>':''}
+  ${CONFIG.PRICES_PROVISIONAL?'<div class="note" data-sec="*">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
+  <div class="card" data-sec="clase"><div class="cl-head"><div><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3><div class="cl-who">👤 ${esc(demoOn?'Clase de ejemplo':(DNAME||'Docente'))}</div></div>
+    <div class="cl-st"><span>☑ Activa</span><span class="${T.clase&&T.clase.registro?'':'off'}">● Registro ${T.clase&&T.clase.registro?'abierto':'cerrado'}</span></div></div>
+    <div class="cl-grid"><div><small>Equipos</small><b>${eqs.length}</b></div><div><small>Investigadores</small><b>${list.length}</b></div><div><small>Participantes medidos</small><b>${T.obs.length}</b></div><div><small>Rondas simuladas</small><b>${T.sims.length}</b></div>
+      <div class="cd"><small>Código de acceso</small><b class="code">${T.clase&&T.clase.codigo?esc(T.clase.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${T.clase&&T.clase.creada?new Date(T.clase.creada).toLocaleDateString('es'):'—'}</b></div></div>
+    <div class="cl-act">${T.clase&&T.clase.codigo?'<button class="go" id="cpCod">📋 Copiar código</button>':''}${demoOn?'':`<button class="warn" id="regTog">${T.clase&&T.clase.registro?'⏸ Cerrar registro de equipos':'▶ Abrir registro de equipos'}</button>`}<button data-go="equipos">👥 Ver equipos</button><button data-go="efecto">📈 Ver resultados</button></div>
+    ${T.clase&&!T.clase.codigo&&!demoOn?'<p class="small muted" style="margin:12px 0 0">El código se guarda cifrado. Para verlo aquí, vuelve a definirlo en «Mi cuenta → Cambiar el código de clase».</p>':''}</div>
+  <div class="card" data-sec="datos"><h3>Exportar datos</h3><p class="small muted">Archivos CSV para analizar en Excel, SPSS o R.</p>
+    <div class="row"><button id="exObs">⬇ CSV de participantes</button><button id="exSim">⬇ CSV de rondas simuladas</button></div>
     <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
   ${teamsCard}
-  <div class="card"><h3>Efecto por producto (normal − descuento)</h3>
+  <div class="card" data-sec="efecto"><h3>Efecto por producto (normal − descuento)</h3>
     ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}
     <div class="tablewrap w" style="margin-top:8px"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Invest.</th><th class="num">n</th><th class="num">Δ cal.</th><th class="num">p</th><th class="num">Δ gusto</th><th class="num">Elige normal</th></tr></thead><tbody>${perProd}</tbody></table></div>
     <p class="small muted" style="margin:8px 0 0">Con pocos participantes por producto la mayoría de los efectos moderados no saldrá significativa: discútelo como parte de la lección.</p></div>
-  <div class="card"><h3>Calidad esperada por oferta</h3><div class="chips" style="margin-bottom:8px">${chips}</div>${hist}
+  <div class="card" data-sec="calidad"><h3>Calidad esperada por oferta</h3><div class="chips" style="margin-bottom:8px">${chips}</div>${hist}
     <div class="legend"><span><i style="background:var(--sim)"></i>Descuento</span><span><i style="background:var(--accent)"></i>Normal</span></div></div>
-  <div class="card"><h3>Avance por investigador</h3>${body}</div>
+  <div class="card" data-sec="avance"><h3>Avance por investigador</h3>${body}</div>
   ${del}
-  <div class="card"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
-  <details class="card"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
+  <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
+  <details class="card" data-sec="guia"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
     <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código, simula 2 o 3 rondas (incluye una A = B) y lee el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
     <ol class="steps"><li><b>0–30 min.</b> Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li><b>30–70 min.</b> Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li><b>70–100 min.</b> Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
     <p class="small muted" style="margin:4px 0 0">Tiempos estimados, sin cronometrar con estudiantes reales.</p></details>`;
+  admApply();
 }
 
 /* ---------- arranque ---------- */
@@ -1208,7 +1334,7 @@ function init(){
   $('nota').value=S.nota||'';
   let nt=null;
   $('nota').addEventListener('input',e=>{S.nota=e.target.value;S.notaDirty=true;lsSave();clearTimeout(nt);nt=setTimeout(()=>{touch(false);},1500);});
-  if(DOCMODE){S.joined=false;document.title='Panel docente · '+document.title;showTab();showD();return;}
+  if(DOCMODE){admBuild();S.joined=false;document.title='Panel docente · '+document.title;showTab();showD();return;}
   showTab();renderAll();
   restaurar();
 }
