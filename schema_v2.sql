@@ -844,6 +844,7 @@ begin
   if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
   if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
   if char_length(trim(coalesce(p_codigo,''))) < 8 or char_length(p_codigo) > 64 then return jsonb_build_object('ok', false, 'error', 'codigo_corto'); end if;
+  if exists (select 1 from sn_clases where id <> p_clase and cod_hash = crypt(upper(trim(p_codigo)), cod_hash)) then return jsonb_build_object('ok', false, 'error', 'codigo_usado'); end if;
   update sn_clases set cod_hash = crypt(upper(trim(p_codigo)), gen_salt('bf')), cod_texto = upper(trim(p_codigo)) where id = p_clase;
   return jsonb_build_object('ok', true);
 end $$;

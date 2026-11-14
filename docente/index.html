@@ -358,6 +358,10 @@ body.adm .note{color:var(--fg)}
   </div>
   <div id="acOut"></div>
   <div id="docOut"></div>
+  <div class="card" id="codOut" hidden><h3>🔑 Código de acceso al simulador</h3>
+    <p class="small muted">Los estudiantes usan este código para ingresar a esta simulación. Cámbialo cuando lo necesites: los equipos ya registrados no se afectan; los nuevos ingresos usarán el código nuevo.</p>
+    <div class="row"><input type="text" id="codNew" maxlength="64" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" style="flex:1;min-width:200px;font-family:'Space Mono',monospace;letter-spacing:2px" aria-label="Código nuevo"><button class="go" id="codSave" style="background:var(--accent);border-color:var(--accent)">🔄 Cambiar</button></div>
+    <p class="small" style="margin:12px 0 0">Código actual: <b id="codCur" style="color:var(--warn);font-family:'Space Mono',monospace;letter-spacing:2px">—</b> <span class="muted">(mínimo 8 caracteres)</span></p><p class="small" id="codMsg" style="margin:6px 0 0"></p></div>
 </main>
 
 <footer class="nopm"><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
@@ -1134,6 +1138,7 @@ function admApply(){
   $('dBar').hidden=true;
   $('dNo').hidden=!!DTOK||demoOn;
   [...$('docOut').children].forEach(c=>{const k=c.dataset.sec;c.hidden=!!k&&k!=='*'&&k!==SEC;if(c.tagName==='DETAILS'&&k===SEC)c.open=true;});
+  const co=$('codOut');co.hidden=SEC!=='clase'||!DTOK||demoOn||!(T&&T.clase);
   const so=$('simsOut');so.hidden=SEC!=='simulaciones'||(demoOn&&!DTOK)||!DTOK;
   const ac=$('acOut');ac.hidden=SEC!=='cuenta';const d=ac.querySelector('details');if(d&&SEC==='cuenta')d.open=true;
 }
@@ -1170,6 +1175,14 @@ function renderSims(){
 }
 function bindSims(){
   if(!$('simsOut'))return;
+  $('codNew').addEventListener('input',()=>{$('codNew').dataset.dirty='1';});
+  $('codSave').onclick=async()=>{const c=$('codNew').value.trim(),m=$('codMsg');m.textContent='';
+    if(!T||!T.clase)return;if(c.length<8){m.textContent='El código debe tener al menos 8 caracteres.';return;}
+    if(c===(T.clase.codigo||'')){m.textContent='Ese ya es el código actual.';return;}
+    $('codSave').disabled=true;try{const r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:T.clase.id,p_codigo:c});
+      if(r&&r.ok){delete $('codNew').dataset.dirty;m.textContent='✓ Código cambiado. Avisa a los estudiantes el código nuevo.';await loadTeacher();}
+      else{if(docSesion(r))return;m.textContent=r&&r.error==='codigo_usado'?'Ese código ya lo usa otra simulación. Elige otro.':em(r);}}
+    catch(e){m.textContent='Sin conexión con el servidor.';}$('codSave').disabled=false;};
   $('simNew').onclick=()=>{$('simForm').hidden=false;$('simMsg').textContent='';$('simNom').focus();};
   $('simCancel').onclick=()=>{$('simForm').hidden=true;};
   $('simCrear').onclick=async()=>{const n=$('simNom').value.trim(),c=$('simCod').value.trim(),m=$('simMsg');
@@ -1191,6 +1204,7 @@ async function loadTeacher(){
   try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
     if(!r||!r.ok){if(docSesion(r))return;$('tMsg').textContent=em(r);return;}
     $('tMsg').textContent='';if(!r.clase){r.obs=[];r.sims=[];r.notas=[];r.equipos=[];}T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    if(r.clase){$('codCur').textContent=r.clase.codigo||'—';if(document.activeElement!==$('codNew')&&!$('codNew').dataset.dirty)$('codNew').value=r.clase.codigo||'';}
     try{const q=await rpc('sn_docente_clases',{p_token:DTOK});if(q&&q.ok){TC=q.clases;renderSims();}}catch(e){}
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
