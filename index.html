@@ -333,41 +333,7 @@ body.adm .note{color:var(--fg)}
 
 <!-- APRENDER · Manual -->
 <main id="t-manual" class="hidden-tab">
-  <div class="card">
-    <h2>Manual del simulador</h2>
-    <h3>¿Qué se estudia?</h3>
-    <p>Si el <b>precio de marketing</b> (etiqueta de descuento frente a precio normal) cambia lo que una persona espera de la calidad de un producto y cuánto le gusta. Parte de Plassmann et al. (2008), que midió con resonancia magnética funcional cómo el precio modula la actividad de la corteza orbitofrontal medial (mOFC), una región asociada al valor. Kurz, Efendic y Goukens (2023) matizan: el precio mueve las expectativas, pero no siempre la calidad percibida ni el agrado tras probar el producto.</p>
-    <h3>Cómo está organizado</h3>
-    <ol class="steps">
-      <li><b>Situación.</b> El caso, tu producto y tu equipo.</li>
-      <li><b>Decidir.</b> Simular ofertas A y B con consumidores virtuales y medir a compañeros reales de otros equipos.</li>
-      <li><b>Resultados.</b> El informe de la simulación, el laboratorio de resonancia (simulado) y la comparación entre lo simulado y lo real.</li>
-      <li><b>Aprender.</b> Interpretar, escribir tu conclusión y consultar este manual.</li>
-    </ol>
-    <h3>Diseño intrasujeto</h3>
-    <p>Cada participante ve las dos ofertas (descuento y precio normal) y califica <b>calidad esperada</b> y <b>gusto</b> de 1 a 10; después elige una. El orden se alterna para repartir el sesgo de orden. Al comparar a cada persona consigo misma, desaparecen las diferencias de gusto entre personas.</p>
-    <h3>Cómo leer los resultados</h3>
-    <ul style="padding-left:20px;margin:0 0 10px">
-      <li><b>Diferencia:</b> promedio de (precio normal − descuento) en puntos de la escala 1–10.</li>
-      <li><b>p (t pareada):</b> probabilidad de ver una diferencia así si en realidad no existiera. Menos de 0,05 se considera significativo, pero no mide la importancia práctica.</li>
-      <li><b>d<sub>z</sub> de Cohen:</b> tamaño del efecto (≈ 0,2 pequeño, 0,5 moderado, 0,8 grande; Cohen, 1988).</li>
-      <li><b>IC 95 %:</b> rango plausible de la diferencia real. Si incluye 0, no se puede descartar que no haya efecto.</li>
-      <li><b>Elección final:</b> prueba binomial exacta contra 50 %.</li>
-    </ul>
-    <h3>Límites</h3>
-    <ul style="padding-left:20px;margin:0 0 10px">
-      <li>Los datos simulados salen de parámetros didácticos: no son evidencia empírica.</li>
-      <li>Con imágenes se mide solo la expectativa. Los precios son de referencia de tiendas de El Salvador (noviembre de 2026).</li>
-      <li>El índice mOFC es una ilustración: medirlo de verdad exige un resonador, personal especializado y aprobación ética.</li>
-      <li>Con pocos participantes los intervalos son anchos y casi cualquier efecto moderado puede no salir significativo.</li>
-    </ul>
-    <h3>Privacidad</h3>
-    <p>Usa un alias, no tu nombre. Solo se guardan alias, equipo y respuestas, protegidos por el código de clase.</p>
-    <h3>Referencias</h3>
-    <p class="small">Cohen, J. (1988). <i>Statistical power analysis for the behavioral sciences</i> (2.ª ed.). Erlbaum.</p>
-    <p class="small">Kurz, J., Efendic, E., &amp; Goukens, C. (2023). Pricey therefore good? Price affects expectations, but not quality perceptions and liking. <i>Psychology &amp; Marketing, 40</i>(6), 1115–1129. https://doi.org/10.1002/mar.21799</p>
-    <p class="small" style="margin:0">Plassmann, H., O'Doherty, J., Shiv, B., &amp; Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>PNAS, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105</p>
-  </div>
+  <div id="manualOut"></div>
 </main>
 
 <!-- DOCENTE -->
@@ -1334,6 +1300,96 @@ function renderDoc(){
 }
 
 /* ---------- arranque ---------- */
+
+/* ---------- manual del estudiante adaptado al producto ---------- */
+let MANPROD=1;
+const MANX={1:{obj:'la lata',mismo:'la misma lata de VOLTA',ver:'ver la lata',uso:'tomar la bebida',img:'una imagen de la lata'},
+            2:{obj:'los audífonos',mismo:'los mismos audífonos AURA',ver:'ver los audífonos',uso:'escuchar música con ellos',img:'una imagen de los audífonos'},
+            3:{obj:'las zapatillas',mismo:'las mismas zapatillas PASO',ver:'ver las zapatillas',uso:'correr con ellas',img:'una imagen de las zapatillas'}};
+function renderManual(){
+  const el=$('manualOut');if(!el)return;
+  const pid=S.joined?S.equipo:MANPROD,pr=prod(pid),P=pr.prices,x=MANX[pid]||MANX[1];
+  const lo=esc(money(P.low)),mid=esc(money(P.mid)),hi=esc(money(P.high)),nm=esc(pr.name),br=esc(pr.brand);
+  const sel=S.joined?`<div class="okbox">Este manual está adaptado a tu producto: <b>${nm} ${br}</b>.</div>`:
+    `<p class="small muted">Elige el producto de tu equipo para ver el manual con tus ejemplos:</p><div class="chips" id="manChips" style="margin-bottom:12px">${CONFIG.PRODUCTS.map(q=>`<button class="chip" data-mp="${q.id}" aria-pressed="${q.id===pid}">${esc(q.name)} ${esc(q.brand)}</button>`).join('')}</div>`;
+  const row=(a,b,c)=>`<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`;
+  el.innerHTML=`<div class="card"><h2>Manual del estudiante · ${nm} ${br}</h2>${sel}
+    <p>Tu equipo responde una sola pregunta: <b>¿un precio con descuento hace que la gente espere menos calidad de ${x.mismo}?</b> Lo averiguas en ocho pasos: primero con datos simulados y después midiendo a personas reales.</p>
+    <div class="stat"><div><b>${lo}</b><span>con descuento</span></div><div><b>${mid}</b><span>precio normal</span></div><div><b>${hi}</b><span>precio alto</span></div></div>
+    <p class="small muted">Precios de referencia de tiendas de El Salvador (noviembre de 2026). ${esc(pr.detail)}.</p></div>
+
+  <div class="card"><h2>Qué dice la ciencia</h2>
+    <div class="tablewrap w"><table><thead><tr><th>Estudio</th><th>Qué encontraron, en palabras simples</th><th>Qué significa para ti</th></tr></thead><tbody>
+    ${row('Rao y Monroe (1989)','Cuando no sabemos si un producto es bueno, usamos el precio como pista: «lo caro debe ser mejor». Pasa a menudo, pero no es un efecto enorme.',`El precio puede cambiar la opinión sobre ${x.obj} aunque sean idénticos.`)}
+    ${row('Shiv, Carmon y Ariely (2005)','A unos estudiantes les dieron una bebida energética a precio normal y a otros con descuento. Los del descuento resolvieron menos acertijos: esperaban menos de ella. Es el <b>efecto placebo del marketing</b>.','Lo que esperamos de un producto puede cambiar incluso lo que logramos con él.')}
+    ${row('Plassmann et al. (2008)','20 personas probaron vino dentro de una máquina de resonancia magnética. Cuando creían que era caro, les gustaba más y se activaba más una zona del cerebro ligada al placer (corteza orbitofrontal medial).','El precio parecería cambiar también lo que sentimos. El simulador imita este estudio.')}
+    ${row('Kurz, Efendic y Goukens (2023)','El precio cambia lo que la gente <b>espera</b>, pero casi no cambia cuánto le gusta el producto una vez que lo prueba.',`Tu experimento muestra ${x.img}, sin usarlos: mide la expectativa. No puedes concluir que lo caro «se disfruta más».`)}
+    </tbody></table></div></div>
+
+  <div class="card"><h2>Las tres hipótesis</h2>
+    <p><b>H1.</b> La oferta a precio normal recibe mayor calidad esperada que la de descuento.<br><span class="muted"><i>En palabras simples:</i> ${x.mismo} a ${mid} te parecerán «más buenos» que a ${lo}, aunque sean idénticos.</span></p>
+    <p><b>H2.</b> La oferta a precio normal recibe mayor gusto.<br><span class="muted"><i>En palabras simples:</i> además de parecer mejor, la oferta de ${mid} te va a atraer más que la de ${lo}.</span></p>
+    <p style="margin:0"><b>H3.</b> Más de la mitad de los participantes elige la oferta a precio normal.<br><span class="muted"><i>En palabras simples:</i> al escoger, la mayoría elegirá ${x.obj} de ${mid} aunque podría ahorrar con el descuento. Si de 10 personas al menos 6 eligen la normal, va bien encaminada.</span></p></div>
+
+  <div class="card"><h2>Cómo lo haremos</h2>
+    <p style="margin:0">Cada persona ve ${x.mismo} dos veces: una a ${mid} y otra a ${lo}, en orden sorteado. Como cada uno se compara consigo mismo, bastan pocos participantes para notar una diferencia: es el <b>diseño intrasujeto</b>.</p></div>
+
+  <div class="card"><h2>Palabras clave</h2>
+    <div class="tablewrap w"><table><thead><tr><th>Palabra</th><th>Qué quiere decir</th><th>Ejemplo con tu producto</th></tr></thead><tbody>
+    ${row('Hipótesis','Lo que crees que va a pasar, dicho antes de mirar los datos.',`«${x.mismo.charAt(0).toUpperCase()+x.mismo.slice(1)} a ${mid} parecerán de mejor calidad.»`)}
+    ${row('Variable independiente','Lo que el investigador cambia a propósito.',`El precio: ${mid} o ${lo}.`)}
+    ${row('Variable dependiente','Lo que se mide para ver si cambió.','Calidad esperada, gusto y elección.')}
+    ${row('Expectativa','Lo que crees de un producto antes de usarlo.',`${x.ver.charAt(0).toUpperCase()+x.ver.slice(1)} y pensar «parece bueno».`)}
+    ${row('Experiencia','Lo que sientes al usarlo.',`${x.uso.charAt(0).toUpperCase()+x.uso.slice(1)} y que te guste o no.`)}
+    ${row('Muestra (n)','Las personas que participan.','Los consumidores simulados o tus compañeros medidos.')}
+    ${row('Media (M)','El promedio.','La nota promedio de calidad de cada oferta.')}
+    ${row('Desviación estándar (DE)','Qué tan distintas fueron las respuestas.','DE chica: todos opinaron parecido.')}
+    ${row('p','La probabilidad de que la diferencia sea casualidad.','p menor que 0,05: no parece casualidad.')}
+    ${row('Significativo','Que probablemente no es casualidad. No quiere decir «importante».','«La diferencia es significativa.»')}
+    ${row('Tamaño del efecto (d_z)','Qué tan grande es la diferencia.','0,2 pequeña · 0,5 mediana · 0,8 grande.')}
+    ${row('IC 95 %','El margen de error de la diferencia.','La línea horizontal del gráfico.')}
+    ${row('Simulado / Real','Datos inventados por la computadora / datos de personas.','Las rondas del profesor / tu Experimento.')}
+    </tbody></table></div></div>
+
+  <div class="card"><h2>Los ocho pasos</h2>
+    <ol class="steps">
+      <li><b>Lee el caso</b> (Situación → El caso): ${nm} ${br}, sus precios y el encargo del directorio.</li>
+      <li><b>Escribe tu hipótesis</b> (Decidir → Simular): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos.</li>
+      <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
+      <li><b>Lee el resultado</b> (Resultados → Simulación): aparece cuando el profesor ejecuta la ronda.</li>
+      <li><b>Mira el laboratorio de resonancia (simulado)</b>: cómo sería el estudio real y qué exigiría.</li>
+      <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el celular; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
+      <li><b>Compara</b> (Resultados → Real vs. simulado): lo simulado, lo tuyo y lo de la clase.</li>
+      <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
+    </ol></div>
+
+  <div class="card"><h2>Cómo leer el resultado de una ronda</h2>
+    <div class="tablewrap w"><table><thead><tr><th>Dato</th><th>Qué significa</th><th>Regla práctica</th></tr></thead><tbody>
+    ${row('Calidad esperada M (DE)','Promedio de la nota de 1 a 10 que se da a la calidad, y cuánto varían las notas.','Más alta = parece mejor.')}
+    ${row('Índice mOFC ilustrativo','Imita la actividad de la zona del cerebro ligada al placer; 100 es lo normal. Lo inventa el programa.','Más de 100 = «se enciende» más.')}
+    ${row('B − A','Diferencia de puntos entre las ofertas.','Positiva: ganó B. Negativa: ganó A.')}
+    ${row('p','¿Podría ser casualidad?','Menor que 0,05 = significativa.')}
+    ${row('d_z','Tamaño de la diferencia.','0,2 pequeña · 0,5 mediana · 0,8 grande.')}
+    ${row('«X de N prefieren B»','Cuántos dieron más nota a B, con su p.','Mayoría clara si p es menor que 0,05.')}
+    ${row('Gráfico B − A','Punto = diferencia; línea = margen de error (IC 95 %).','Si la línea no toca el 0, hay diferencia.')}
+    </tbody></table></div></div>
+
+  <div class="card"><h2>Límites y privacidad</h2>
+    <ul style="padding-left:20px;margin:0 0 10px">
+      <li>Los datos simulados salen de parámetros didácticos: no son evidencia empírica.</li>
+      <li>Con ${x.img} se mide solo la expectativa, no la experiencia de ${x.uso}.</li>
+      <li>El índice mOFC es una ilustración: medirlo de verdad exige un resonador, especialistas y aprobación ética.</li>
+      <li>Con pocos participantes los márgenes de error son anchos.</li>
+    </ul>
+    <p style="margin:0">Usa un alias, nunca tu nombre real. Solo se guardan alias, equipo y respuestas.</p></div>
+
+  <div class="card"><h2>Referencias</h2>
+    <p class="small">Kurz, J., Efendic, E., y Goukens, C. (2023). Pricey therefore good? Price affects expectations, but not quality perceptions and liking. <i>Psychology &amp; Marketing, 40</i>(6), 1115–1129. https://doi.org/10.1002/mar.21799</p>
+    <p class="small">Plassmann, H., O'Doherty, J., Shiv, B., y Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>PNAS, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105</p>
+    <p class="small">Rao, A. R., y Monroe, K. B. (1989). The effect of price, brand name, and store name on buyers' perceptions of product quality: An integrative review. <i>Journal of Marketing Research, 26</i>(3), 351–357. https://doi.org/10.2307/3172907</p>
+    <p class="small" style="margin:0">Shiv, B., Carmon, Z., y Ariely, D. (2005). Placebo effects of marketing actions: Consumers may get what they pay for. <i>Journal of Marketing Research, 42</i>(4), 383–393. https://doi.org/10.1509/jmkr.2005.42.4.383</p></div>`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('#manChips [data-mp]');if(!b)return;MANPROD=+b.dataset.mp;renderManual();});
 function renderCaso(){
   const pr=prod(S.equipo),P=pr.prices,prov=CONFIG.PRICES_PROVISIONAL;
   const rows=CONFIG.PRODUCTS.map(p=>`<tr${p.id===S.equipo?' style="font-weight:bold"':''}><td>${p.id}</td><td>${esc(p.name)} ${esc(p.brand)}</td><td class="num">${esc(money(p.prices.low))}</td><td class="num">${esc(money(p.prices.mid))}</td><td class="num">${esc(money(p.prices.high))}</td></tr>`).join('');
@@ -1369,10 +1425,11 @@ function renderEquipo(){
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
 function renderAll(){
+  renderManual();
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderStatus();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderManual();renderStatus();
 }
 function init(){
   const ban=$('banner');

@@ -9,7 +9,7 @@
 --  * Docente: correo + contraseña (contraseña temporal que se cambia al entrar),
 --    con pregunta de seguridad para recuperarla.
 --  * Contraseñas con bcrypt; bloqueo de 15 min tras 5 intentos fallidos;
---    sesiones de 6 horas con token aleatorio (solo se guarda su hash).
+--    sesiones con token aleatorio (solo se guarda su hash).
 --  * No se guardan nombres reales: solo alias.
 --
 -- Seguridad de datos: tablas con RLS activado y SIN políticas; el navegador
@@ -181,7 +181,7 @@ begin
   t := encode(gen_random_bytes(24), 'hex');
   delete from sn_sesiones where vence < now();
   insert into sn_sesiones(token_hash, rol, clase_id, equipo_id, integrante_id, docente_id, tmp, vence)
-  values (sn_th(t), p_rol, p_clase, p_equipo, p_integrante, p_docente, p_tmp, now() + interval '6 hours');
+  values (sn_th(t), p_rol, p_clase, p_equipo, p_integrante, p_docente, p_tmp, now() + interval '3 hours');
   return t;
 end $$;
 
