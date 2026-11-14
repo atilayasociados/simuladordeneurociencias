@@ -1026,3 +1026,19 @@ begin
     execute d;
   end loop;
 end $mig$;
+
+-- v10: código de la simulación con mínimo 4 caracteres (crear, cambiar e ingresar)
+do $mig$
+declare r record; d text;
+begin
+  for r in select p.oid from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+           where n.nspname='public' and p.proname in ('sn_clase_por_codigo','sn_docente_codigo','sn_docente_crear_clase','sn_crear_clase') loop
+    d := pg_get_functiondef(r.oid);
+    d := replace(d, $q$char_length(trim(p_codigo)) < 6$q$, $q$char_length(trim(p_codigo)) < 4$q$);
+    d := replace(d, $q$char_length(trim(coalesce(p_codigo,''))) < 8$q$, $q$char_length(trim(coalesce(p_codigo,''))) < 4$q$);
+    d := replace(d, $q$char_length(c) < 8$q$, $q$char_length(c) < 4$q$);
+    d := replace(d, $q$char_length(coalesce(p_codigo,'')) < 8$q$, $q$char_length(coalesce(p_codigo,'')) < 4$q$);
+    d := replace(d, 'al menos 8 caracteres', 'al menos 4 caracteres');
+    execute d;
+  end loop;
+end $mig$;
