@@ -461,6 +461,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const f=(x,d=2)=>(x==null||isNaN(x))?'–':Number(x).toFixed(d).replace('.',',').replace('-','−');
 const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
+const pEq=p=>p!=null&&p<0.001?'p < 0,001':'p = '+fp(p);
 const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
@@ -856,8 +857,8 @@ function forest(rows,xlabel){
 function verdict(w,labelHi,labelLo){
   if(!w)return 'Faltan datos (se necesitan al menos 2 participantes).';
   const mag=Math.abs(w.d)<0.2?'trivial':Math.abs(w.d)<0.5?'pequeño':Math.abs(w.d)<0.8?'moderado':'grande';
-  if(w.p>=0.05)return `No hay diferencia estadísticamente significativa (p = ${fp(w.p)}). Con estos datos no puedes descartar que sea azar. Tamaño del efecto: d_z = ${f(w.d)} (${mag}).`;
-  return `${w.diff>0?labelHi:labelLo} recibe mayor valoración (p = ${fp(w.p)}; d_z = ${f(Math.abs(w.d))}, efecto ${mag}).`;
+  if(w.p>=0.05)return `No hay diferencia estadísticamente significativa (${pEq(w.p)}). Con estos datos no puedes descartar que sea azar. Tamaño del efecto: d_z = ${f(w.d)} (${mag}).`;
+  return `${w.diff>0?labelHi:labelLo} recibe mayor valoración (${pEq(w.p)}; d_z = ${f(Math.abs(w.d))}, efecto ${mag}).`;
 }
 
 /* ---------- 1. simular ---------- */
@@ -977,7 +978,7 @@ function renderSim(){
       <div><b>${f(r.w.diff)}</b><span>B − A (puntos)</span></div>
       <div><b>${fp(r.w.p)}</b><span>p (t pareada)</span></div>
       <div><b>${f(r.w.d)}</b><span>d_z de Cohen</span></div>
-      <div><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · p = '+fp(pbin):''}</span></div>
+      <div><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · '+pEq(pbin):''}</span></div>
     </div>
     ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}
     <p style="margin-top:8px">${esc(verdict(r.w,'B','A'))}</p>
@@ -1083,7 +1084,7 @@ function renderCmp(){
     const same=Math.sign(cp.wq.diff)===Math.sign(wSim.diff);
     reading=`<p><b>${esc(pr.name)} · calidad esperada.</b> ${esc(verdict(cp.wq,'La oferta a precio normal','La oferta con descuento'))}</p>
     <p><b>Gusto.</b> ${esc(verdict(cp.wg,'La oferta a precio normal','La oferta con descuento'))}</p>
-    <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (p exacta = '+fp(cp.pbin)+')':''}.</p>
+    <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (prueba binomial exacta, '+pEq(cp.pbin)+')':''}.</p>
     <p>${same?'La dirección de la calidad esperada coincide con la réplica simulada.':'La dirección de la calidad esperada <b>no</b> coincide con la réplica simulada.'} Simulado: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor simulado cae dentro del IC 95 % de la medición real.':'El valor simulado queda fuera del IC 95 % de la medición real.'}</p>`;
   }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
   $('cmpOut').innerHTML=`<div class="card">
