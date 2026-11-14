@@ -432,6 +432,7 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
       <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span>Mayor en B</button>
       <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span>Sin diferencia</button>
     </div>
+    <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿qué oferta imaginará la gente de mejor calidad? «Mayor en A» o «Mayor en B» significa que crees que esa oferta ganará; «Sin diferencia», que crees que el precio no cambia nada. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">2</span><span>Diseña las ofertas de <span id="scProd"></span></span></h3>
@@ -448,6 +449,8 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
         <select id="bPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
       </div>
     </div>
+    <div class="ubox"><b>💡 Precio en la etiqueta, en palabras sencillas</b><p>Es el número que verá el consumidor en la oferta. Hay tres niveles: <b>descuento</b> (un tercio menos que el normal), <b>normal</b> (el precio de góndola) y <b>alto</b> (50 % más). Para saber si el precio cambia lo que la gente espera, pon un precio distinto en A y en B y deja todo lo demás igual: si aparece una diferencia, sabrás que la causó el precio.</p></div>
+    <div class="ubox"><b>💡 Presentación, en palabras sencillas</b><p>Es cómo se ve el empaque: <b>estándar</b> o <b>premium</b>. Si cambias a la vez el precio y la presentación, no podrás saber cuál de los dos causó la diferencia. Por eso conviene cambiar una sola cosa por ronda.</p></div>
     <p class="small muted" style="margin:10px 0 0">💡 Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
   </div>
   <div class="card">
@@ -455,7 +458,9 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
     <label for="nSim">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
     <input type="range" id="nSim" min="10" max="80" step="5" value="30">
     <div class="row small muted" style="justify-content:space-between"><span>10 · más rápido, más azar</span><span>80 · más preciso</span></div>
+    <div class="ubox"><b>💡 Consumidores simulados, en palabras sencillas</b><p>Es cuántas personas virtuales opinan sobre tus dos ofertas; cada una ve A y B. Con pocas personas, el resultado puede cambiar mucho solo por suerte. Con más personas, el resultado es más estable y el margen de error se achica, como pasa al preguntar a 80 compañeros en vez de a 10.</p></div>
     <button class="primary big" id="runSim">Ejecutar ronda de simulación</button>
+    <div class="ubox"><b>💡 El botón, en palabras sencillas</b><p>Al pulsarlo guardas tus elecciones de esta ronda (hipótesis, ofertas A y B, y número de consumidores). En clase <b>no ves el resultado de inmediato</b>: el profesor ejecuta la ronda para todos los equipos a la vez. Hasta entonces puedes cambiar lo que quieras y volver a guardar. En modo práctica, el resultado aparece al instante.</p></div>
     <div id="rondaBox"></div>
     <p class="small muted" style="margin:10px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
   </div>
@@ -1223,6 +1228,7 @@ function renderExp(){
     <p>Tu producto es <b>${esc(pr.name)}</b>. Mides a compañeros de otros equipos.</p>
     <label>¿De qué equipo es el participante?</label>
     <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${esc(p.name)}</button>`).join('')}</div>
+    <div class="ubox"><b>💡 Por qué solo compañeros de otros equipos, en palabras sencillas</b><p>Ellos no conocen tu producto ni tu hipótesis, así que responden sin saber qué «debería» salir. Si midieras a alguien de tu propio equipo, sus respuestas podrían inclinarse hacia lo que ustedes esperan. Elegir su equipo sirve para saber de qué grupo viene cada respuesta.</p></div>
     <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el celular al participante</button>`;
   } else if(d.step===1||d.step===2){
     const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
