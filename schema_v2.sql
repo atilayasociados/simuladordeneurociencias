@@ -873,6 +873,81 @@ begin
 end $$;
 
 
+-- ---------- v5: el docente ejecuta las rondas de simulación ----------
+alter table public.sn_clases add column if not exists ronda int not null default 0;
+
+create table if not exists public.sn_decisiones (
+  clase_id      uuid not null references public.sn_clases(id) on delete cascade,
+  equipo_id     uuid not null references public.sn_equipos(id) on delete cascade,
+  integrante_id uuid not null references public.sn_integrantes(id) on delete cascade,
+  investigador  text not null,
+  ronda         int  not null,
+  datos         jsonb not null,
+  actualizada   timestamptz not null default now(),
+  primary key (integrante_id, ronda)
+);
+alter table public.sn_decisiones enable row level security;
+revoke all on public.sn_decisiones from anon, authenticated;
+
+-- Estado de rondas para el estudiante: ronda ejecutada y sus decisiones
+create or replace function public.sn_estado(p_token text) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; r int; d jsonb;
+begin
+  s := sn_ses(p_token, 'equipo');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  select ronda into r from sn_clases where id = s.clase_id;
+  select coalesce(jsonb_agg(jsonb_build_object('ronda', x.ronda, 'datos', x.datos) order by x.ronda), '[]'::jsonb) into d
+    from sn_decisiones x where x.integrante_id = s.integrante_id;
+  return jsonb_build_object('ok', true, 'ronda', coalesce(r,0), 'decisiones', d);
+end $$;
+
+-- El estudiante guarda (o cambia) su decisión para la próxima ronda
+create or replace function public.sn_guardar_decision(p_token text, p_datos jsonb) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; r int; alias text;
+begin
+  s := sn_ses(p_token, 'equipo');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp or s.integrante_id is null then return jsonb_build_object('ok', false, 'error', 'integrante'); end if;
+  if p_datos is null or length(p_datos::text) > 2000 then return jsonb_build_object('ok', false, 'error', 'datos'); end if;
+  select ronda into r from sn_clases where id = s.clase_id;
+  select i.alias into alias from sn_integrantes i where i.id = s.integrante_id;
+  insert into sn_decisiones(clase_id, equipo_id, integrante_id, investigador, ronda, datos)
+  values (s.clase_id, s.equipo_id, s.integrante_id, alias, coalesce(r,0) + 1, p_datos)
+  on conflict (integrante_id, ronda) do update set datos = excluded.datos, actualizada = now();
+  return jsonb_build_object('ok', true, 'ronda', coalesce(r,0) + 1);
+end $$;
+
+-- El docente ejecuta la ronda (avanza el contador de la clase)
+create or replace function public.sn_docente_ronda(p_token text, p_clase uuid) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; r int;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  update sn_clases set ronda = ronda + 1 where id = p_clase returning ronda into r;
+  return jsonb_build_object('ok', true, 'ronda', r);
+end $$;
+
+-- Panel: cuántas decisiones hay para la próxima ronda
+create or replace function public.sn_docente_rondas(p_token text, p_clase uuid) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; r int; d jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  select ronda into r from sn_clases where id = p_clase;
+  select coalesce(jsonb_agg(jsonb_build_object('inv', x.investigador, 'eq', e.nombre, 'ronda', x.ronda, 't', x.actualizada) order by e.nombre, x.investigador), '[]'::jsonb) into d
+    from sn_decisiones x join sn_equipos e on e.id = x.equipo_id where x.clase_id = p_clase and x.ronda = coalesce(r,0) + 1;
+  return jsonb_build_object('ok', true, 'ronda', coalesce(r,0), 'pendientes', d);
+end $$;
+
+revoke all on function public.sn_estado(text), public.sn_guardar_decision(text,jsonb), public.sn_docente_ronda(text,uuid), public.sn_docente_rondas(text,uuid) from public;
+grant execute on function public.sn_estado(text), public.sn_guardar_decision(text,jsonb), public.sn_docente_ronda(text,uuid), public.sn_docente_rondas(text,uuid) to anon, authenticated;
+
+
 -- ---------- Preparar el curso (edita los valores y ejecuta estas dos líneas) ----------
 -- 1) La clase: el código que darás a los estudiantes (mín. 8 caracteres)
 -- select public.sn_crear_clase('UAB Mercadeo Estratégico 2026', 'CODIGO-DE-CLASE');

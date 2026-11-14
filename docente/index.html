@@ -285,6 +285,7 @@ body.adm .note{color:var(--fg)}
     <input type="range" id="nSim" min="10" max="80" step="5" value="30">
     <p class="small muted">Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
     <button class="primary" id="runSim">Ejecutar ronda de simulación</button>
+    <div id="rondaBox"></div>
     <p class="small muted" style="margin:8px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
   </div>
 </main>
@@ -755,7 +756,7 @@ function applyEquipo(r){
 function entrarComo(iid,alias){
   stash();unstash(iid);S.alias=alias;conn='ok';
   fillSimSelects();bindSimValues();$('nota').value=S.nota||'';
-  setStage('listo');sync();loadResumen();
+  setStage('listo');sync();loadResumen();CR=null;MYDEC={};DECMSG='';loadEstado();
 }
 async function salir(){
   const tok=S.token;
@@ -875,7 +876,43 @@ function bindSim(){
   $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;touch(true);});
   $('runSim').addEventListener('click',runSim);
 }
-function runSim(){
+/* ---------- rondas controladas por el docente ---------- */
+let CR=null,MYDEC={},DECMSG='';
+function rondasOn(){return BACKEND&&S.joined&&!!S.token;}
+async function loadEstado(){
+  if(!rondasOn())return;
+  try{const r=await rpc('sn_estado',{p_token:S.token});if(!r||!r.ok){if(sesionPerdida(r))return;return;}
+    CR=r.ronda;MYDEC={};(r.decisiones||[]).forEach(d=>MYDEC[d.ronda]=d.datos);
+    let nuevo=false;
+    Object.keys(MYDEC).map(Number).sort((a,b)=>a-b).forEach(k=>{if(k<=CR&&!S.sims.some(x=>x.r===k&&x.prod===S.equipo)){computeRound(MYDEC[k],k);nuevo=true;}});
+    if(nuevo){DECMSG='';touch(true);}else{renderRonda();$('barRound').textContent=CR;}
+  }catch(e){}
+}
+setInterval(()=>{if(rondasOn()&&!document.hidden)loadEstado();},15000);
+function renderRonda(){
+  const el=$('rondaBox'),bt=$('runSim');if(!el||!bt)return;
+  if(!rondasOn()){bt.textContent='Ejecutar ronda de simulación';el.innerHTML='';return;}
+  const nx=(CR||0)+1,d=MYDEC[nx];
+  bt.textContent=d?'Actualizar mi decisión para la ronda '+nx:'Guardar mi decisión para la ronda '+nx;
+  el.innerHTML=CR===null?'':`<div class="${d?'okbox':'note'}" style="margin-top:10px">${d?`✓ Tu decisión para la <b>ronda ${nx}</b> está guardada. El resultado aparecerá cuando el profesor ejecute la ronda; puedes cambiarla hasta entonces.`:`La clase va en la ronda ${CR}. Elige tu hipótesis, arma las ofertas y guarda tu decisión: <b>el profesor ejecuta la ronda ${nx}</b> para todos a la vez.`}${DECMSG?'<br>'+DECMSG:''}</div>`;
+}
+function computeRound(dd,round){
+  const n=dd.n,ca=dd.a,cb=dd.b,pr=prod(S.equipo);
+  const R=simulatePaired(ca,cb,n,`${S.equipoId||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
+  const w=pairedT(R.a.y,R.b.y);
+  let pb=0,pa=0;for(let i=0;i<n;i++){if(R.b.y[i]>R.a.y[i])pb++;else if(R.a.y[i]>R.b.y[i])pa++;}
+  S.sims.push({cid:uid(),r:round,prod:S.equipo,a:[ca.tier,ca.pres,n,mean(R.a.y),sd(R.a.y),mean(R.a.ofc),sd(R.a.ofc)],b:[cb.tier,cb.pres,n,mean(R.b.y),sd(R.b.y),mean(R.b.ofc),sd(R.b.ofc)],pred:dd.pred||null,w:{diff:w.diff,p:w.p,d:w.d,lo:w.lo,hi:w.hi},pref:[pb,pa],sent:false});
+  S.sims.sort((x,y)=>x.r-y.r);
+}
+async function runSim(){
+  if(rondasOn()){
+    const bt=$('runSim');bt.disabled=true;
+    const dd={a:{tier:S.cfg.a.tier,pres:S.cfg.a.pres},b:{tier:S.cfg.b.tier,pres:S.cfg.b.pres},n:S.cfg.n,pred:S.pred||null};
+    try{const r=await rpc('sn_guardar_decision',{p_token:S.token,p_datos:dd});
+      if(r&&r.ok){MYDEC[r.ronda]=dd;CR=r.ronda-1;DECMSG='';}else{if(sesionPerdida(r)){bt.disabled=false;return;}DECMSG=em(r);}
+    }catch(e){DECMSG='No hay conexión con el servidor; intenta de nuevo.';}
+    bt.disabled=false;renderRonda();return;
+  }
   const round=S.sims.filter(s=>s.prod===S.equipo).length+1,n=S.cfg.n,ca=S.cfg.a,cb=S.cfg.b,pr=prod(S.equipo);
   const R=simulatePaired(ca,cb,n,`${S.equipoId||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
   const w=pairedT(R.a.y,R.b.y);
@@ -920,7 +957,7 @@ function renderSim(){
   document.querySelectorAll('#predChips button').forEach(b=>b.setAttribute('aria-pressed',String(S.pred===b.dataset.p)));
   const out=$('simOut');
   const mine=S.sims.filter(s=>s.prod===S.equipo);
-  if(!mine.length){out.innerHTML='<div class="card soft muted">Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.</div>';return;}
+  if(!mine.length){out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
   const r=mine[mine.length-1];
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
   let fb='';
@@ -1086,7 +1123,7 @@ let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
 
 /* ---------- panel docente con barra lateral (solo /docente) ---------- */
-const ADM=[['Clase',[['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
+const ADM=[['Clase',[['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
   ['Resultados',[['efecto','📈','Efecto por producto','Diferencia pareada (normal − descuento) en calidad esperada y gusto, con IC 95 %.'],['calidad','📊','Calidad esperada','Distribución de la calidad esperada en cada oferta.'],['notas','💬','Conclusiones','Conclusiones escritas por los estudiantes.']]],
   ['Datos',[['datos','💾','Exportar y depurar','Descarga en CSV y borrado de observaciones cargadas por error.']]],
   ['Docencia',[['guia','📘','Guía de clase','Plan de las dos sesiones de 100 minutos.']]],
@@ -1144,6 +1181,7 @@ function docSesion(r){
   if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
   return false;
 }
+let TR=null;
 async function loadTeacher(){
   if(!BACKEND||!DTOK)return;
   try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
@@ -1151,6 +1189,7 @@ async function loadTeacher(){
     $('tMsg').textContent='';T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
+    try{const q=await rpc('sn_docente_rondas',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TR=q;}catch(e){}
     showD();renderDoc();
     if(DACC===null){try{const a=await rpc('sn_doc_cuenta_info',{p_token:DTOK});if(a&&a.ok){DACC=a;renderAcc();}}catch(e){}}}
   catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
@@ -1198,6 +1237,7 @@ function bindDoc(){
   $('docOut').addEventListener('click',async e=>{
     const b=e.target.closest('button');if(!b)return;
     if(b.dataset.go){admGo(b.dataset.go);return;}
+    if(b.id==='rndGo'){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro? Toca de nuevo para ejecutar';return;}b.disabled=true;try{const r=await rpc('sn_docente_ronda',{p_token:DTOK,p_clase:T.clase.id});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}return;}
     if(b.id==='cpCod'){const c=T.clase.codigo;try{await navigator.clipboard.writeText(c);b.textContent='✓ Copiado';}catch(err){b.textContent=c;}return;}
     if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
     else if(b.id==='exObs')download('observaciones_reales.csv',csvObs(T));
@@ -1261,13 +1301,18 @@ function renderDoc(){
   ${CONFIG.PRICES_PROVISIONAL?'<div class="note" data-sec="*">Los precios de los tres productos son <b>provisionales</b>. Valídalos con tu estudio de mercado y edítalos en CONFIG antes de usar la página con estudiantes.</div>':''}
   <div class="card" data-sec="clase"><div class="cl-head"><div><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3><div class="cl-who">👤 ${esc(demoOn?'Clase de ejemplo':(DNAME||'Docente'))}</div></div>
     <div class="cl-st"><span>☑ Activa</span><span class="${T.clase&&T.clase.registro?'':'off'}">● Registro ${T.clase&&T.clase.registro?'abierto':'cerrado'}</span></div></div>
-    <div class="cl-grid"><div><small>Equipos</small><b>${eqs.length}</b></div><div><small>Investigadores</small><b>${list.length}</b></div><div><small>Participantes medidos</small><b>${T.obs.length}</b></div><div><small>Rondas simuladas</small><b>${T.sims.length}</b></div>
+    <div class="cl-grid"><div><small>Equipos</small><b>${eqs.length}</b></div><div><small>Investigadores</small><b>${list.length}</b></div><div><small>Participantes medidos</small><b>${T.obs.length}</b></div><div><small>Ronda actual</small><b>${demoOn?'—':(TR?TR.ronda:0)}</b></div><div><small>Rondas simuladas</small><b>${T.sims.length}</b></div>
       <div class="cd"><small>Código de acceso</small><b class="code">${T.clase&&T.clase.codigo?esc(T.clase.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${T.clase&&T.clase.creada?new Date(T.clase.creada).toLocaleDateString('es'):'—'}</b></div></div>
-    <div class="cl-act">${T.clase&&T.clase.codigo?'<button class="go" id="cpCod">📋 Copiar código</button>':''}${demoOn?'':`<button class="warn" id="regTog">${T.clase&&T.clase.registro?'⏸ Cerrar registro de equipos':'▶ Abrir registro de equipos'}</button>`}<button data-go="equipos">👥 Ver equipos</button><button data-go="efecto">📈 Ver resultados</button></div>
+    <div class="cl-act">${T.clase&&T.clase.codigo?'<button class="go" id="cpCod">📋 Copiar código</button>':''}${demoOn?'':`<button class="warn" id="regTog">${T.clase&&T.clase.registro?'⏸ Cerrar registro de equipos':'▶ Abrir registro de equipos'}</button>`}${demoOn?'':'<button data-go="rondas">🔁 Ejecutar ronda</button>'}<button data-go="equipos">👥 Ver equipos</button><button data-go="efecto">📈 Ver resultados</button></div>
     ${T.clase&&!T.clase.codigo&&!demoOn?'<p class="small muted" style="margin:12px 0 0">El código se guarda cifrado. Para verlo aquí, vuelve a definirlo en «Mi cuenta → Cambiar el código de clase».</p>':''}</div>
   <div class="card" data-sec="datos"><h3>Exportar datos</h3><p class="small muted">Archivos CSV para analizar en Excel, SPSS o R.</p>
     <div class="row"><button id="exObs">⬇ CSV de participantes</button><button id="exSim">⬇ CSV de rondas simuladas</button></div>
     <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
+  ${demoOn?'':`<div class="card" data-sec="rondas"><h3>Ronda ${TR?TR.ronda+1:1}</h3>
+    <p>La clase completó <b>${TR?TR.ronda:0}</b> ronda(s). Cada estudiante guarda en «Simular» su hipótesis y sus ofertas A y B; cuando ejecutas la ronda, todos ven su resultado a la vez.</p>
+    <div class="cl-act" style="padding-top:4px"><button class="go" id="rndGo">▶ Ejecutar ronda ${TR?TR.ronda+1:1}</button></div>
+    <h3 style="margin-top:18px;font-size:16px!important">Decisiones guardadas para esta ronda (${TR?TR.pendientes.length:0})</h3>
+    ${TR&&TR.pendientes.length?`<div class="tablewrap"><table><thead><tr><th>Equipo</th><th>Alias</th><th>Guardada</th></tr></thead><tbody>${TR.pendientes.map(x=>`<tr><td>${esc(x.eq)}</td><td>${esc(x.inv)}</td><td>${new Date(x.t).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table></div>`:'<p class="small muted">Todavía nadie guardó su decisión. Quien no la guarde no recibe resultado en esta ronda.</p>'}</div>`}
   ${teamsCard}
   <div class="card" data-sec="efecto"><h3>Efecto por producto (normal − descuento)</h3>
     ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}
@@ -1280,7 +1325,7 @@ function renderDoc(){
   <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
   <details class="card" data-sec="guia"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
-    <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código, simula 2 o 3 rondas (incluye una A = B) y lee el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código y guarda su decisión en «Simular»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
     <ol class="steps"><li><b>0–30 min.</b> Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li><b>30–70 min.</b> Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li><b>70–100 min.</b> Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
     <p class="small muted" style="margin:4px 0 0">Tiempos estimados, sin cronometrar con estudiantes reales.</p></details>`;
@@ -1325,8 +1370,8 @@ function renderEquipo(){
 function renderAll(){
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
-  $('barRound').textContent=S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderExp();renderCmp();renderStatus();
+  $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderStatus();
 }
 function init(){
   const ban=$('banner');
