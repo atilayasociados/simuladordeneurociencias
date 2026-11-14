@@ -465,6 +465,7 @@ const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
 const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
+if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
 const TIERL={low:'descuento',mid:'normal',high:'alto'};
 const prod=id=>CONFIG.PRODUCTS.find(p=>p.id===id)||CONFIG.PRODUCTS[0];
