@@ -399,6 +399,10 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
 .rgrid>div{background:var(--surface);border-radius:8px;padding:10px;font-size:.88rem}.rgrid span{font-size:22px;display:block}
 .mtools{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
 .mtools>div{background:var(--surface);border-radius:8px;padding:10px;font-size:.86rem}.mtools span{font-size:22px;display:block}
+.hyp .hl{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px}.hyp .hl b{font-size:.95rem}.hyp .hl small{font-weight:normal;font-size:.78rem;color:var(--muted)}
+.abpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.ab{border:1px solid var(--line);border-top:5px solid var(--oc);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;position:relative}
+.ab.a{--oc:var(--sim)}.ab.b{--oc:var(--azul)}.ab .abl{position:absolute;top:8px;left:8px}.ab small{font-weight:bold;text-align:center}.ab svg{max-width:100%}
 </style>
 </head><body>
 <header class="nopm">
@@ -425,14 +429,20 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
 <!-- DECIDIR · Simular -->
 <main id="t-simular" class="hidden-tab" data-student>
   <div class="card">
+    <h3 class="sh">🔤 Antes de empezar: ¿qué son A y B?</h3>
+    <p><b>A y B son dos ofertas del mismo producto</b> (<span id="abProd"></span>). El producto es idéntico; lo único que cambia es la <b>etiqueta</b> que tú le pones a cada una: el <b>precio</b> y la <b>presentación</b>. Tú las diseñas en el paso 2. Los consumidores simulados ven las dos y califican la calidad que esperan de cada una.</p>
+    <div class="abpair" id="abPair"></div>
+    <div class="ubox"><b>💡 A y B, en palabras sencillas</b><p>Imagina dos latas iguales en una tienda: a una le pegas la etiqueta <b>A</b> y a la otra la etiqueta <b>B</b>, con precios distintos. Si la gente cree que una es mejor, no puede ser por el producto, porque es el mismo: tiene que ser por la etiqueta. Eso es lo que mide esta simulación. Las imágenes de arriba cambian cuando cambias A o B en el paso 2.</p></div>
+  </div>
+  <div class="card">
     <h3 class="sh"><span class="usn">1</span> Tu hipótesis</h3>
     <p class="small muted">Antes de simular, predice qué oferta recibirá mayor calidad esperada.</p>
     <div class="chips hyp" id="predChips" role="group" aria-label="Predicción">
-      <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span>Mayor en A</button>
-      <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span>Mayor en B</button>
-      <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span>Sin diferencia</button>
+      <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span><span class="hl"><b>Mayor en A</b><small data-ab="a"></small></span></button>
+      <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span><span class="hl"><b>Mayor en B</b><small data-ab="b"></small></span></button>
+      <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span><span class="hl"><b>Sin diferencia</b><small>A y B, igual calidad</small></span></button>
     </div>
-    <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿qué oferta imaginará la gente de mejor calidad? «Mayor en A» o «Mayor en B» significa que crees que esa oferta ganará; «Sin diferencia», que crees que el precio no cambia nada. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
+    <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿de cuál de tus dos ofertas esperará la gente mejor calidad? «Mayor en A» significa que crees que la oferta A (la de la izquierda en el paso 2) recibirá una nota de calidad más alta que B. «Mayor en B», lo contrario. «Sin diferencia», que crees que las dos recibirán casi la misma nota. Debajo de cada botón ves qué tiene hoy cada oferta. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">2</span><span>Diseña las ofertas de <span id="scProd"></span></span></h3>
@@ -478,6 +488,7 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
       <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
       <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</p></div>
     </div>
+    <div class="ubox"><b>💡 ¿Y mis ofertas A y B?, en palabras sencillas</b><p>En el experimento real <b>no</b> se usan las ofertas A y B de tu simulación. Todos los equipos comparan siempre las mismas dos: tu producto con su <b>precio normal</b> y con <b>descuento</b>. Así los datos de toda la clase se pueden juntar. En la pantalla del participante verás «oferta 1 de 2» y «oferta 2 de 2»: es solo el orden en que las ve, y ese orden se sortea.</p></div>
     <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
   </div>
   <div class="card" id="runCard">
@@ -962,8 +973,8 @@ async function restaurar(){
 }
 
 /* ---------- arte de los productos ---------- */
-function productSVG(pid,ver,w){
-  const p=prod(pid),D=ver==='D',price=priceOf(pid,D?'low':'mid');
+function productSVG(pid,ver,w,o){
+  const p=prod(pid),D=o?o.tier==='low':ver==='D',price=o?priceOf(pid,o.tier):priceOf(pid,D?'low':'mid');
   const ink='#1b2a41',gold='#f2b705';
   const txt=(x,y,s,st)=>`<text x="${x}" y="${y}" text-anchor="middle" style="${st}">${s}</text>`;
   let art='';
@@ -986,8 +997,10 @@ function productSVG(pid,ver,w){
   const tag=`<g transform="translate(160,232)"><circle r="36" fill="${D?'#d62839':'#ffffff'}" stroke="${ink}" stroke-width="2.5"/>
     ${txt(0,-12,CONFIG.CURRENCY,`fill:${D?'#fff':ink};font:600 11px Arial,sans-serif`)}
     ${txt(0,12,(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price),`fill:${D?'#fff':ink};font:700 ${price>=100?18:22}px Arial,sans-serif`)}</g>`;
-  const cap=D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
-  return `<svg viewBox="0 0 220 300" width="${w||190}" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price))}">${art}${tag}<text x="110" y="290" text-anchor="middle" style="font:500 12px Arial,sans-serif">${esc(cap)}</text></svg>`;
+  const cap=o?o.cap:D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
+  const prem=o&&o.pres==='premium'?`<g><rect x="62" y="2" width="96" height="18" rx="9" fill="${gold}"/><text x="110" y="15" text-anchor="middle" style="fill:${ink};font:700 10px Arial,sans-serif;letter-spacing:.12em">PREMIUM</text></g>`:'';
+  const al=o?o.cap+', '+money(price)+(o.pres==='premium'?', presentación premium':', presentación estándar'):(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price));
+  return `<svg viewBox="0 0 220 300" width="${w||190}" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(al)}">${art}${tag}${prem}<text x="110" y="290" text-anchor="middle" style="font:500 12px Arial,sans-serif">${esc(cap)}</text></svg>`;
 }
 
 /* ---------- gráfico de bosque ---------- */
@@ -1097,7 +1110,14 @@ function phero(view,kick,title,meta){
   w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
 }
 const meter=(v,max,lab)=>`<div class="meter"><div class="mt"><i style="width:${Math.min(100,v/max*100)}%"></i></div><p><span>${lab}</span><b>${v} de ${max}</b></p></div>`;
-function offerPrev(){['a','b'].forEach(k=>{const e=$(k+'Prev');if(e&&S.cfg&&S.cfg[k])e.textContent=money(priceOf(S.equipo,S.cfg[k].tier))+' · '+(S.cfg[k].pres==='premium'?'Premium':'Estándar');});}
+function abTxt(k){const c=S.cfg[k];return money(priceOf(S.equipo,c.tier))+' ('+TIERL[c.tier]+') · '+(c.pres==='premium'?'Premium':'Estándar');}
+function offerPrev(){
+  if(!S.cfg||!S.cfg.a)return;const pr=prod(S.equipo);
+  ['a','b'].forEach(k=>{const e=$(k+'Prev');if(e)e.textContent=money(priceOf(S.equipo,S.cfg[k].tier))+' · '+(S.cfg[k].pres==='premium'?'Premium':'Estándar');
+    document.querySelectorAll('[data-ab="'+k+'"]').forEach(x=>x.textContent=k.toUpperCase()+' = '+abTxt(k));});
+  const ap=$('abProd');if(ap)ap.textContent=pr.name.toLowerCase()+' '+pr.brand;
+  const pp=$('abPair');if(pp)pp.innerHTML=['a','b'].map(k=>`<div class="ab ${k}"><span class="abl ${k}">${k.toUpperCase()}</span>${productSVG(S.equipo,'R',120,{tier:S.cfg[k].tier,pres:S.cfg[k].pres,cap:'Oferta '+k.toUpperCase()})}<small>${esc(abTxt(k))}</small></div>`).join('');
+}
 function heroDecidir(){
   const mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length;
   phero('simular','Simular','Diseña tu experimento virtual',rondasOn()&&CR!==null?(CR?`La clase va en la ronda ${CR} · ${mine} ronda(s) con resultado`:'La clase aún no ha ejecutado rondas · guarda tu decisión para la ronda 1'):`3 pasos · ${mine} ronda(s) realizadas`);
@@ -1154,11 +1174,13 @@ function renderSim(){
   const r=mine[mine.length-1];
   phero('resultados','Simulación',`Ronda ${r.r}: ¿qué encontró tu simulación?`,`${mine.length} ronda(s) · ${r.a[2]} consumidores simulados en la última`);
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
-  const lab=x=>x==='='?'sin diferencia':'mayor en '+x;
+  const abR=k=>k+', '+(k==='A'?tierText(r.prod,r.a[0]):tierText(r.prod,r.b[0]));
+  const lab=x=>x==='='?'sin diferencia entre A y B':'mayor calidad esperada en '+abR(x);
+  const res=outcome==='='?'sin diferencia significativa entre A y B':'mayor calidad esperada en '+abR(outcome);
   let fb;
   if(r.pred){const hit=r.pred===outcome;
-    fb=`<div class="vban ${hit?'ok':'ko'}"><span aria-hidden="true">${hit?'✅':'❌'}</span><div><b>${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'}</b><p>Predijiste «${lab(r.pred)}»; el resultado fue «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}».</p></div></div>`;}
-  else fb=`<div class="vban neu"><span aria-hidden="true">ℹ️</span><div><b>En esta ronda no registraste hipótesis.</b><p>Resultado: «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}». En la próxima ronda elige una predicción antes de decidir.</p></div></div>`;
+    fb=`<div class="vban ${hit?'ok':'ko'}"><span aria-hidden="true">${hit?'✅':'❌'}</span><div><b>${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'}</b><p>Predijiste «${lab(r.pred)}»; el resultado fue «${res}».</p></div></div>`;}
+  else fb=`<div class="vban neu"><span aria-hidden="true">ℹ️</span><div><b>En esta ronda no registraste hipótesis.</b><p>Resultado: «${res}». En la próxima ronda elige una predicción antes de decidir.</p></div></div>`;
   const a=r.a,b=r.b,pref=r.pref||[0,0],np=pref[0]+pref[1],pbin=np?binomTwo(pref[0],np):null;
   const pc=v=>Math.max(2,Math.min(100,(v-1)/9*100));
   const sig=r.w.p<0.05,dz=Math.abs(r.w.d),dpos=Math.min(100,dz/1.2*100);
@@ -1167,15 +1189,16 @@ function renderSim(){
     <p class="small muted" style="margin-top:6px">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
     ${fb}
     <h4 style="margin:4px 0 8px;color:var(--uc)">Calidad esperada promedio (escala 1 a 10)</h4>
+    <p class="small muted" style="margin:0 0 8px">A y B son las dos ofertas que diseñaste en Decidir → Simular para esta ronda: el mismo producto con distinta etiqueta.</p>
     <div class="abbar">
       <div class="abrow"><span class="abl a">A</span><div class="abtrack"><i style="width:${pc(a[3])}%;background:var(--sim)"></i></div><b>${f(a[3])}</b><small>${esc(tierText(r.prod,a[0]))} · ${presL(a[1])} · DE ${f(a[4])}</small></div>
       <div class="abrow"><span class="abl b">B</span><div class="abtrack"><i style="width:${pc(b[3])}%;background:var(--azul)"></i></div><b>${f(b[3])}</b><small>${esc(tierText(r.prod,b[0]))} · ${presL(b[1])} · DE ${f(b[4])}</small></div>
     </div>
     <div class="rtiles">
-      <div class="rtile"><small>Diferencia</small><b>${f(r.w.diff)}</b><span>B − A (puntos). Positivo = B se valora más.</span></div>
+      <div class="rtile"><small>Diferencia</small><b>${f(r.w.diff)}</b><span>B − A (puntos): la nota de B menos la nota de A. Positivo = ganó B; negativo = ganó A.</span></div>
       <div class="rtile"><small>¿Puede ser azar?</small><b>${fp(r.w.p)}</b><span>p (t pareada) · <span class="sem ${sig?'g':'y'}">${sig?'🟢 Poco probable que sea azar':'🟡 Puede ser azar'}</span></span></div>
       <div class="rtile"><small>Tamaño del efecto</small><b>${f(r.w.d)}</b><span>d_z de Cohen · efecto ${magOf(r.w.d)}</span><div class="dth" aria-hidden="true"><i style="left:${dpos}%"></i></div><div class="dthl" aria-hidden="true"><span style="left:16.7%">0,2</span><span style="left:41.7%">0,5</span><span style="left:66.7%">0,8</span></div></div>
-      <div class="rtile"><small>Elección</small><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · '+pEq(pbin):''}</span><div class="mini" aria-hidden="true"><i style="width:${np?pref[0]/np*100:0}%"></i></div></div>
+      <div class="rtile"><small>Elección</small><b>${pref[0]} de ${np}</b><span>prefieren B: dieron más nota a B que a A${pbin!=null?' · '+pEq(pbin):''}</span><div class="mini" aria-hidden="true"><i style="width:${np?pref[0]/np*100:0}%"></i></div></div>
     </div>
     <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su intervalo de confianza del 95 %. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}</div>
@@ -1296,7 +1319,8 @@ function renderCmp(){
   }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
   $('cmpOut').innerHTML=`<div class="card">
     <h3 class="sh">🆚 Simulado frente a real</h3>
-    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más. Réplica simulada pareada, n = ${nRef}.</p>
+    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más.</p>
+    <div class="ubox"><b>💡 ¿Qué es «Simulado» aquí?, en palabras sencillas</b><p>Para comparar en igualdad de condiciones, el simulador repite el mismo experimento de la clase: precio normal (${esc(money(priceOf(pid,'mid')))}) frente a descuento (${esc(money(priceOf(pid,'low')))}), con ${nRef} consumidores virtuales. No usa tus ofertas A y B de las rondas. «Real» son las respuestas de tus compañeros.</p></div>
     <div class="duel">
       <div class="ds"><small>Simulado · calidad esperada</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos (n = ${nRef})</small></div>
       <div class="dvs2">vs.</div>
@@ -1650,7 +1674,7 @@ function renderManual(){
   <div class="card"><h2>Los ocho pasos</h2>
     <ol class="steps">
       <li><b>Lee el caso</b> (Situación → El caso): ${nm} ${br}, sus precios y el encargo del directorio.</li>
-      <li><b>Escribe tu hipótesis</b> (Decidir → Simular): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos.</li>
+      <li><b>Escribe tu hipótesis</b> (Decidir → Simular): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos. A y B son dos ofertas del mismo producto que solo cambian de etiqueta (precio y presentación); debajo de cada botón se ve qué tiene cada una.</li>
       <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
       <li><b>Lee el resultado</b> (Resultados → Simulación): aparece cuando el profesor ejecuta la ronda.</li>
       <li><b>Mira el laboratorio de resonancia (simulado)</b>: cómo sería el estudio real y qué exigiría.</li>
