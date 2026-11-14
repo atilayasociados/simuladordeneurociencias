@@ -556,6 +556,27 @@ body:not(.adm) nav .sub a .ico{width:16px;height:16px;color:#44D62C}
 body:not(.adm) nav .sub a:hover{border-color:#44D62C;background:#404244}
 body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE37F;box-shadow:inset 0 0 0 1px #44D62C}
 .simcod{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.adm-topr{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.adm-man{background:#44D62C!important;color:#1F2022!important;border:0!important;border-radius:8px;padding:8px 14px;font:700 13px var(--head);letter-spacing:0;text-transform:none;cursor:pointer;min-height:36px}
+.adm-man:hover{background:#5BE045!important}
+#mdOut .card,#mdOut .mdstep{max-width:980px}
+.mdidx{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.mdidx>div{background:var(--surface2);border-radius:10px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mdidx b{width:100%;font-size:.86rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.mdidx a{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.84rem;color:var(--fg);text-decoration:none}
+.mdidx a:hover{border-color:#44D62C}
+.mdsec{font-size:20px;margin:26px 0 10px;padding-left:10px;border-left:5px solid #44D62C}
+.mdstep{background:var(--surface);border:1px solid var(--line);border-top:4px solid #44D62C;border-radius:10px;padding:16px 18px;margin-bottom:14px;scroll-margin-top:16px}
+.mdh{display:flex;align-items:center;gap:10px;margin-bottom:6px}.mdh h3{margin:0;font-size:17px!important}
+.mdh .usn{background:#44D62C;color:#1F2022;width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.mdh>span[aria-hidden]{color:#44D62C;font-size:20px}
+.mdwhere{margin:0 0 6px;font-size:.88rem;color:var(--muted)}
+.mdstep ol{margin:6px 0 0;padding-left:22px}.mdstep li{margin:5px 0;line-height:1.5}
+.mdstep .ubox{margin-top:10px}
+.mdgo{margin-top:10px;background:transparent;border:1px solid #44D62C;color:#8FE37F;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer}
+.mdgo:hover{background:rgba(68,214,44,.12)}
+.mdmsg{background:var(--surface2);border-left:4px solid #44D62C;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:.92rem;line-height:1.5}
+.mdfaq{display:grid;gap:10px}.mdfaq>div{background:var(--surface2);border-radius:8px;padding:10px 12px}.mdfaq p{margin:4px 0 0;font-size:.9rem;color:var(--muted)}
 </style>
 </head><body>
 <header class="nopm">
@@ -730,6 +751,7 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
     <div id="simsList"></div>
   </div>
   <div id="acOut"></div>
+  <div id="mdOut" hidden></div>
   <div id="docOut"></div>
   <div class="card" id="codOut" hidden><h3>🔑 Código de acceso al simulador</h3>
     <p class="small muted">Los estudiantes usan este código para ingresar a esta simulación. Cámbialo cuando lo necesites: los equipos ya registrados no se afectan; los nuevos ingresos usarán el código nuevo.</p>
@@ -931,7 +953,7 @@ function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
 let T=null,demoOn=false;   // datos del docente
 let conn='ok';             // ok | offline | sesion
-const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de clase incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 5 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de la simulación incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 5 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
 const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
 function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
 function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
@@ -1028,7 +1050,7 @@ function AX_mostrar(modo,msg){
   }else if(modo==='ingresar'){
     h='<h2>Ingresar</h2><label for="axU">Nombre del equipo</label><input class="ax-in" id="axU" autocomplete="username" maxlength="80" onkeydown="AX_enter(event,AX_ingresar)">'+
       '<label for="axP">Contraseña</label>'+AX_pw('axP','')+
-      '<div id="axCodBox"><label for="axC">Código de clase</label><input class="ax-in ax-code" id="axC" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="AX_enter(event,AX_ingresar)"></div>'+
+      '<div id="axCodBox"><label for="axC">Código de la simulación</label><input class="ax-in ax-code" id="axC" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" onkeydown="AX_enter(event,AX_ingresar)"></div>'+
       '<button class="ax-btn" id="axGo" onclick="AX_ingresar()">Ingresar →</button><div id="axErr" class="ax-err"></div>'+
       '<p class="ax-center"><button class="ax-link" onclick="AX_mostrar(\'recuperar\')">¿Olvidaste tu contraseña?</button></p>'+
       '<div class="ax-div">¿Primera vez?</div><button class="ax-ghost" onclick="AX_mostrar(\'registro\')">Registrar mi equipo</button>'+
@@ -1038,7 +1060,7 @@ function AX_mostrar(modo,msg){
     h='<h2>Registrar mi equipo</h2><label for="axRn">Nombre del equipo</label><input class="ax-in" id="axRn" maxlength="40" placeholder="Ejemplo: Los Jaguares">'+
       '<p class="ax-hint">📌 Es el nombre con el que ingresarán.</p>'+
       '<div class="ax-2col"><div><label for="axRp">Contraseña</label>'+AX_pw('axRp','Mínimo 4 caracteres','new-password')+'</div><div><label for="axRp2">Confirmar contraseña</label>'+AX_pw('axRp2','','new-password')+'</div></div>'+
-      '<label for="axRc">Código de clase</label><input class="ax-in ax-code" id="axRc" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase();AX_validarCod()"><div id="axRcm"></div>'+
+      '<label for="axRc">Código de la simulación</label><input class="ax-in ax-code" id="axRc" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase();AX_validarCod()"><div id="axRcm"></div>'+
       '<label for="axRpr">Producto que estudia el equipo</label><select class="ax-in" id="axRpr">'+prodOptions()+'</select>'+
       '<div class="ax-inth"><b>INTEGRANTES DE TU EQUIPO</b></div><p class="ax-hint" style="margin-top:0">📌 Escribe solo un alias por integrante (un apodo de 2 a 24 caracteres), nunca el nombre real. El equipo puede tener de 1 a 5 integrantes.</p><div id="axFilas"></div>'+
       '<button class="ax-ghost" id="axAdd" onclick="AX_fila()">+ ¿Deseas agregar otro integrante? <span id="axCnt"></span></button>'+
@@ -1115,7 +1137,7 @@ function AX_validarCod(){
   AXT=setTimeout(async()=>{try{const r=await rpc('sn_inicio',{p_codigo:c});
     if(AX_$('axRc')&&AX_$('axRc').value.trim()!==c)return;
     if(r&&r.ok){AXREG.ok=!!r.registro;m.innerHTML=r.registro?'<div class="ax-ok">✓ '+esc(r.clase)+'</div>':'<div class="ax-bad">El registro de equipos está cerrado.</div>';}
-    else m.innerHTML='<div class="ax-bad">Código de clase incorrecto.</div>';
+    else m.innerHTML='<div class="ax-bad">Código de la simulación incorrecto.</div>';
   }catch(e){}},450);
 }
 async function AX_registrar(){
@@ -1649,7 +1671,7 @@ try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
 const ADM=[['Clase',[['simulaciones','🎮','Simulaciones','Cada simulación es una clase independiente con sus propios equipos, rondas y resultados.'],['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
   ['Resultados',[['efecto','📈','Efecto por producto','Diferencia pareada (normal − descuento) en calidad esperada y gusto, con IC 95 %.'],['calidad','📊','Calidad esperada','Distribución de la calidad esperada en cada oferta.'],['notas','💬','Conclusiones','Conclusiones escritas por los estudiantes.']]],
   ['Datos',[['datos','💾','Exportar y depurar','Descarga en CSV y borrado de observaciones cargadas por error.']]],
-  ['Docencia',[['guia','📘','Guía de clase','Plan de las dos sesiones de 100 minutos.']]],
+  ['Docencia',[['manualdoc','📘','Manual del profesor','Paso a paso: qué hacer antes, durante y después de la clase.'],['guia','🗓','Guía de clase','Plan sugerido para las dos sesiones.']]],
   ['Cuenta',[['cuenta','⚙️','Mi cuenta','Tu contraseña, tu pregunta secreta y el código de clase.']]]];
 const ADMALL=ADM.flatMap(g=>g[1]);
 let SEC='simulaciones';
@@ -1659,7 +1681,7 @@ function admBuild(){
   const a=document.createElement('div');a.id='adm';
   a.innerHTML=`<aside class="adm-side" aria-label="Menú del panel docente"><div class="adm-brand"><img src="${BASE}img/logo3.png" alt="" onerror="this.style.display='none'"><div><b>Simulador de Neurociencias</b><span>Panel docente</span></div></div><div class="adm-logo"><img src="${LOGO_AI}" alt="Atila y Asociados · IEAC Business School"></div>
     <div class="adm-menu" id="admMenu" role="navigation" aria-label="Secciones del panel"></div><div class="adm-foot"><b id="admWho"></b><button class="adm-btn" id="admOut" style="min-height:38px;padding:6px 16px;font-size:13.5px">Salir</button></div></aside>
-    <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span id="admSel"></span></div>
+    <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span class="adm-topr"><button class="adm-man" id="admMan" type="button">📘 Manual del profesor</button><span id="admSel"></span></span></div>
     <div class="adm-body"><h1 class="adm-h" id="admH"></h1><p class="adm-sub" id="admSub"></p><div class="adm-tools"><button class="adm-btn" id="admRef">↺ Actualizar</button><button class="adm-btn go" id="admDemo" hidden>Ver clase de ejemplo</button></div><div id="admSlot"></div></div></div>`;
   document.body.appendChild(a);
   $('admSlot').appendChild($('t-docente'));bindSims();$('admSel').appendChild($('dClase'));
@@ -1684,6 +1706,7 @@ function admApply(){
   [...$('docOut').children].forEach(c=>{const k=c.dataset.sec;c.hidden=!!k&&k!=='*'&&k!==SEC;if(c.tagName==='DETAILS'&&k===SEC)c.open=true;});
   const co=$('codOut');co.hidden=SEC!=='clase'||!DTOK||demoOn||!(T&&T.clase);
   const so=$('simsOut');so.hidden=SEC!=='simulaciones'||(demoOn&&!DTOK)||!DTOK;
+  const md=$('mdOut');md.hidden=SEC!=='manualdoc';if(SEC==='manualdoc')renderManDoc();
   const ac=$('acOut');ac.hidden=SEC!=='cuenta';const d=ac.querySelector('details');if(d&&SEC==='cuenta')d.open=true;
 }
 function showD(){
@@ -1898,13 +1921,104 @@ function renderDoc(){
   <div class="card" data-sec="avance"><h3>Avance por investigador</h3>${body}</div>
   ${del}
   <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
-  <details class="card" data-sec="guia"><summary>Guía de clase: dos sesiones de 100 minutos</summary>
+  <details class="card" data-sec="guia"><summary>Guía de clase: plan sugerido para las dos sesiones</summary>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
-    <ol class="steps"><li><b>0–15 min.</b> Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li><b>15–45 min.</b> Cada estudiante entra con el código y guarda su decisión en «Simular»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li><b>45–85 min.</b> Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li><b>85–100 min.</b> Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <ol class="steps"><li>Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li>Cada estudiante entra con el código y guarda su decisión en «Simular»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li>Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li>Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
-    <ol class="steps"><li><b>0–30 min.</b> Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li><b>30–70 min.</b> Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li><b>70–100 min.</b> Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
-    <p class="small muted" style="margin:4px 0 0">Tiempos estimados, sin cronometrar con estudiantes reales.</p></details>`;
+    <ol class="steps"><li>Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li>Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li>Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
+    </details>`;
   admApply();
+}
+
+/* ---------- manual del profesor (dentro del panel docente) ---------- */
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('#admMan,[data-mdgo],[data-mdjump],#mdCopy');if(!t)return;
+  if(t.id==='admMan'){e.preventDefault();admGo('manualdoc');return;}
+  if(t.dataset.mdgo){admGo(t.dataset.mdgo);return;}
+  if(t.dataset.mdjump){e.preventDefault();const x=$('md-'+t.dataset.mdjump);if(x)x.scrollIntoView({behavior:'smooth',block:'start'});return;}
+  if(t.id==='mdCopy'){try{await navigator.clipboard.writeText($('mdMsg').textContent);t.textContent='✓ Mensaje copiado';}catch(err){const r=document.createRange();r.selectNodeContents($('mdMsg'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);t.textContent='Mensaje seleccionado: cópialo con Ctrl + C';}}
+});
+function renderManDoc(){
+  const el=$('mdOut');if(!el)return;
+  const URLE='https://atilayasociados.github.io/simuladordeneurociencias/',URLD=URLE+'docente/';
+  const cod=(T&&T.clase&&T.clase.codigo)||'TU-CÓDIGO',nom=(T&&T.clase&&T.clase.nombre)||'la simulación';
+  const msg=`Hola. Para la actividad de neurociencias del consumidor entren a ${URLE} . Un integrante pulsa «Registrar mi equipo», escribe el nombre del equipo, una contraseña (mínimo 4 caracteres), el código ${cod}, el producto del equipo y un alias para cada integrante (nunca el nombre real).`;
+  const go=(id,t)=>`<button class="mdgo" data-mdgo="${id}">Ir a «${t}» →</button>`;
+  const P=(n,ic,t,donde,pasos,extra)=>`<div class="mdstep" id="md-${n}"><div class="mdh"><span class="usn">${n}</span><span aria-hidden="true">${ic}</span><h3>${t}</h3></div>
+    ${donde?`<p class="mdwhere">📍 ${donde}</p>`:''}<ol>${pasos.map(x=>`<li>${x}</li>`).join('')}</ol>${extra||''}</div>`;
+  const B=(t,x)=>`<div class="ubox"><b>💡 ${t}</b><p>${x}</p></div>`;
+  const idx=[['antes','Antes de la clase',[1,2,3,4,5]],['durante','Durante la clase',[6,7,8]],['despues','Después de la clase',[9,10,11,12]]];
+  el.innerHTML=`<div class="card"><h3 class="sh">📘 Manual del profesor · paso a paso</h3>
+    <p>Este manual explica, en orden, todo lo que haces en el panel: preparar la simulación, acompañar a los equipos durante la clase y revisar los resultados al final. Cada paso dice <b>dónde</b> está la opción en el menú de la izquierda y tiene un botón para ir directamente.</p>
+    <div class="mdidx">${idx.map(([k,t,ns])=>`<div><b>${t}</b>${ns.map(n=>`<a href="#md-${n}" data-mdjump="${n}">Paso ${n}</a>`).join('')}</div>`).join('')}</div>
+    <p class="small muted" style="margin:10px 0 0">Enlace de los estudiantes: <b>${esc(URLE)}</b> · Enlace del panel: <b>${esc(URLD)}</b></p></div>
+
+  <h2 class="mdsec">Antes de la clase</h2>
+  ${P(1,'🔑','Entra al panel','Enlace del panel docente',[
+    `Abre <b>${esc(URLD)}</b> y escribe tu correo y tu contraseña.`,
+    `La <b>primera vez</b> entras con la contraseña temporal que te dieron. El panel te pide elegir una contraseña nueva (mínimo 4 caracteres) y una <b>pregunta de seguridad</b> con su respuesta.`,
+    `Si olvidas la contraseña, pulsa «¿Olvidaste tu contraseña?», escribe tu correo, pulsa «Ver mi pregunta de seguridad», respóndela y pon una contraseña nueva.`])}
+  ${P(2,'➕','Crea una simulación para tu grupo','Clase → Simulaciones',[
+    `Pulsa <b>«+ Nueva simulación»</b>.`,
+    `Escribe un <b>nombre</b> que identifique al grupo, por ejemplo «UAB Mercadeo Estratégico · grupo 2».`,
+    `Escribe el <b>código de la simulación</b> (mínimo 4 caracteres). Es la clave que los estudiantes escriben para entrar; se guarda en mayúsculas.`,
+    `Pulsa <b>«Crear simulación»</b>. Aparece una tarjeta nueva con el nombre, el número de equipos, la ronda actual y el código.`],
+    B('Una simulación por grupo','Cada simulación tiene sus propios equipos, rondas y resultados. Si das la actividad a dos grupos, crea dos simulaciones con códigos distintos: así los datos no se mezclan.')+go('simulaciones','Simulaciones'))}
+  ${P(3,'★','Elige con qué simulación vas a trabajar','Tarjeta de la simulación, o el selector de arriba a la derecha',[
+    `En la tarjeta, pulsa <b>«▶ Acceder a esta simulación»</b>. La tarjeta queda marcada con <b>«★ En uso»</b>.`,
+    `También puedes cambiarla con el selector que está arriba a la derecha del panel.`,
+    `Todas las demás secciones (Resumen, Rondas, Equipos, Investigadores, Resultados, Exportar) muestran <b>solo</b> la simulación «En uso».`])}
+  ${P(4,'🔑','Revisa, copia o cambia el código','Tarjeta de la simulación',[
+    `<b>«📋 Copiar código»</b> lo copia para pegarlo en un mensaje.`,
+    `<b>«🔑 Cambiar código»</b> abre un campo debajo de la tarjeta: escribe el código nuevo (mínimo 4 caracteres) y pulsa «Guardar código».`,
+    `El cambio afecta <b>solo a esa simulación</b>. Los equipos ya registrados siguen entrando con su nombre y contraseña; los nuevos registros usan el código nuevo.`],
+    B('Si el código salió con tu correo','Algunos navegadores rellenan solos los campos con tu correo. Revisa que el código de cada tarjeta sea el que tú elegiste y, si no, cámbialo con «Cambiar código».'))}
+  ${P(5,'📣','Envía el enlace y el código a los estudiantes','Fuera del panel (WhatsApp, correo o la pizarra)',[
+    `Comparte el enlace de los estudiantes y el código de la simulación.`,
+    `Puedes copiar este mensaje sugerido, que ya lleva el código de «${esc(nom)}»:`],
+    `<div class="mdmsg" id="mdMsg">${esc(msg)}</div><button class="mdgo" id="mdCopy">📋 Copiar mensaje</button>`)}
+
+  <h2 class="mdsec">Durante la clase</h2>
+  ${P(6,'👥','Acompaña el registro de los equipos','Clase → Equipos · Clase → Resumen de la clase',[
+    `Un integrante de cada equipo pulsa <b>«Registrar mi equipo»</b> y completa: nombre del equipo, contraseña (mínimo 4 caracteres), código de la simulación, <b>producto</b> que estudiará (VOLTA, AURA o PASO) y un <b>alias</b> por integrante (de 1 a 5; nunca el nombre real).`,
+    `Revisa en <b>«Equipos»</b> que aparezcan todos, con su producto y sus alias. Conviene que los tres productos queden repartidos entre los equipos.`,
+    `Cuando estén todos, ve a <b>«Resumen de la clase»</b> y pulsa <b>«⏸ Cerrar registro de equipos»</b>. Así nadie crea equipos de más; los equipos registrados siguen entrando normalmente.`,
+    `Si un equipo olvida su contraseña, en «Equipos» pulsa reiniciar contraseña: el panel muestra una contraseña temporal que dictas al equipo; al entrar, el equipo elige una nueva.`])+go('equipos','Equipos')}
+  ${P(7,'🔁','Conduce las rondas de simulación','Clase → Rondas',[
+    `Pide a los estudiantes que entren a <b>Decidir → Simular</b>, elijan su hipótesis, armen las ofertas A y B, elijan cuántos consumidores simulados quieren y pulsen <b>«Guardar mi decisión para la ronda 1»</b>.`,
+    `En <b>«Rondas»</b> verás la lista de decisiones guardadas para esa ronda (equipo, alias y hora).`,
+    `Cuando hayan guardado todos (o los que alcancen), pulsa <b>«▶ Ejecutar ronda 1»</b>. El botón pide confirmación: <b>tócalo dos veces</b>.`,
+    `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Simulación</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
+    B('Por qué rondas','Ejecutar la ronda para todos a la vez evita que unos vean resultados antes que otros y te permite discutir cada ronda en grupo. Mientras no ejecutes la ronda, cada estudiante puede cambiar su decisión.')+go('rondas','Rondas'))}
+  ${P(8,'🧑‍🔬','Acompaña el experimento con personas reales','Clase → Investigadores',[
+    `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su celular, a unos 6 compañeros de <b>otros equipos</b>. El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
+    `En <b>«Investigadores»</b> ves cuántos participantes midió cada alias, cuántas rondas simuló y su última actividad.`,
+    `Si alguien va retrasado, pídele que mida a más compañeros antes de pasar a Resultados.`])+go('avance','Investigadores')}
+
+  <h2 class="mdsec">Después de la clase</h2>
+  ${P(9,'📈','Revisa los resultados de toda la clase','Resultados → Efecto por producto · Resultados → Calidad esperada',[
+    `<b>«Efecto por producto»</b> muestra, para cada producto, cuántos puntos más (o menos) de calidad esperada y de gusto recibió el precio normal frente al descuento, con su margen de error (IC 95 %). Si la línea toca el 0, no se descarta el azar.`,
+    `<b>«Calidad esperada»</b> muestra cuántas veces se dio cada nota del 1 al 10 a cada oferta. Puedes filtrar por producto con los botones de arriba.`,
+    `Úsalos para la discusión final: ¿coinciden los tres productos? ¿Se parecen a lo simulado? ¿Qué pasa con pocos participantes?`])+go('efecto','Efecto por producto')}
+  ${P(10,'💬','Lee las conclusiones de los estudiantes','Resultados → Conclusiones',[
+    `En <b>Aprender → Interpretación</b> cada estudiante responde cuatro preguntas cortas: si lo real se parece a lo simulado, en qué se diferencia su muestra, qué haría falta para medir la experiencia y qué recomienda a la empresa.`,
+    `En <b>«Conclusiones»</b> ves las cuatro respuestas de cada alias, una por línea, con el nombre de su equipo.`])+go('notas','Conclusiones')}
+  ${P(11,'💾','Descarga los datos o corrige errores','Datos → Exportar y depurar',[
+    `<b>«⬇ CSV de participantes»</b> descarga las mediciones reales; <b>«⬇ CSV de rondas simuladas»</b>, las rondas. Se abren en Excel, SPSS o R.`,
+    `Si un estudiante cargó una medición por error, búscala en «Últimas observaciones» y bórrala.`])+go('datos','Exportar y depurar')}
+  ${P(12,'🗄','Cierra la simulación','Clase → Simulaciones',[
+    `<b>«🗄 Archivar»</b>: los estudiantes ya no pueden entrar, pero los datos se conservan. Con «↩ Reactivar» la vuelves a abrir.`,
+    `<b>«✕ Eliminar»</b> borra la simulación con sus equipos y datos. Pide confirmación (tócalo dos veces) y <b>no se puede deshacer</b>: descarga antes los CSV si los necesitas.`,
+    `En <b>Cuenta → Mi cuenta</b> puedes cambiar tu contraseña y tu pregunta de seguridad cuando quieras.`])}
+
+  <div class="card"><h3 class="sh">🤔 Problemas frecuentes</h3>
+    <div class="mdfaq">
+      <div><b>Un estudiante ve la versión anterior de la página.</b><p>Pídele que recargue con Ctrl + F5 (en el celular, cerrar y abrir la pestaña).</p></div>
+      <div><b>Un equipo no puede registrarse.</b><p>Si dice «Código de la simulación incorrecto», revisa que escriba el código de la simulación correcta, que la simulación no esté archivada y, si dice «El registro de equipos está cerrado», ábrelo en «Resumen de la clase».</p></div>
+      <div><b>Un equipo no ve su resultado.</b><p>Comprueba en «Rondas» que su decisión esté guardada y que hayas ejecutado la ronda. El resultado aparece en Resultados → Simulación.</p></div>
+      <div><b>Un equipo olvidó su contraseña.</b><p>En «Equipos», reinicia la contraseña y díctale la temporal que muestra el panel.</p></div>
+      <div><b>Olvidé mi contraseña de docente.</b><p>En la pantalla de ingreso, «¿Olvidaste tu contraseña?» y responde tu pregunta de seguridad.</p></div>
+    </div></div>`;
 }
 
 /* ---------- arranque ---------- */
