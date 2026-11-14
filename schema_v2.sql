@@ -948,6 +948,62 @@ revoke all on function public.sn_estado(text), public.sn_guardar_decision(text,j
 grant execute on function public.sn_estado(text), public.sn_guardar_decision(text,jsonb), public.sn_docente_ronda(text,uuid), public.sn_docente_rondas(text,uuid) to anon, authenticated;
 
 
+-- ---------- v7: el docente crea, archiva y elimina simulaciones (clases) ----------
+create or replace function public.sn_docente_clases(p_token text) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; d jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'nombre', c.nombre, 'codigo', c.cod_texto, 'creada', c.creada,
+           'activa', c.activa, 'registro', c.registro_abierto, 'ronda', c.ronda,
+           'equipos', (select count(*) from sn_equipos e where e.clase_id = c.id)) order by c.creada desc), '[]'::jsonb)
+    into d from sn_clases c;
+  return jsonb_build_object('ok', true, 'clases', d);
+end $$;
+
+create or replace function public.sn_docente_crear_clase(p_token text, p_nombre text, p_codigo text) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; v uuid; c text := upper(trim(coalesce(p_codigo,''))); n text := trim(coalesce(p_nombre,''));
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  if char_length(n) < 3 or char_length(n) > 80 then return jsonb_build_object('ok', false, 'error', 'nombre_clase'); end if;
+  if char_length(c) < 8 or char_length(c) > 64 then return jsonb_build_object('ok', false, 'error', 'codigo_corto'); end if;
+  if exists (select 1 from sn_clases where cod_hash = crypt(c, cod_hash)) then return jsonb_build_object('ok', false, 'error', 'codigo_usado'); end if;
+  insert into sn_clases(nombre, cod_hash, cod_texto) values (n, crypt(c, gen_salt('bf')), c) returning id into v;
+  return jsonb_build_object('ok', true, 'id', v);
+end $$;
+
+create or replace function public.sn_docente_clase_estado(p_token text, p_clase uuid, p_activa boolean) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  update sn_clases set activa = coalesce(p_activa, activa) where id = p_clase;
+  return jsonb_build_object('ok', true);
+end $$;
+
+create or replace function public.sn_docente_borrar_clase(p_token text, p_clase uuid) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  delete from sn_sesiones where clase_id = p_clase and rol = 'equipo';
+  delete from sn_clases where id = p_clase;
+  return jsonb_build_object('ok', true);
+end $$;
+
+revoke all on function public.sn_docente_clases(text), public.sn_docente_crear_clase(text,text,text), public.sn_docente_clase_estado(text,uuid,boolean), public.sn_docente_borrar_clase(text,uuid) from public;
+grant execute on function public.sn_docente_clases(text), public.sn_docente_crear_clase(text,text,text), public.sn_docente_clase_estado(text,uuid,boolean), public.sn_docente_borrar_clase(text,uuid) to anon, authenticated;
+
+
 -- ---------- Preparar el curso (edita los valores y ejecuta estas dos líneas) ----------
 -- 1) La clase: el código que darás a los estudiantes (mín. 8 caracteres)
 -- select public.sn_crear_clase('UAB Mercadeo Estratégico 2026', 'CODIGO-DE-CLASE');

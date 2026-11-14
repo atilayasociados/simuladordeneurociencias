@@ -348,6 +348,14 @@ body.adm .note{color:var(--fg)}
     <span class="row"><select id="dClase" hidden style="width:auto"></select><button class="ghost" id="dOut">Salir</button></span></div>
   </div>
   <p class="small" id="tMsg" style="margin:0 0 8px;color:var(--bad)" role="alert"></p>
+  <div id="simsOut" hidden>
+    <div class="adm-tools" style="margin-bottom:18px"><button class="adm-btn go" id="simNew">+ Nueva simulación</button></div>
+    <div class="card" id="simForm" hidden><h3>Nueva simulación</h3>
+      <div class="grid2 stack"><div><label for="simNom">Nombre</label><input type="text" id="simNom" maxlength="80" placeholder="Ej.: UAB Mercadeo Estratégico · grupo 2"></div>
+      <div><label for="simCod">Código de acceso para los estudiantes</label><input type="text" id="simCod" maxlength="64" placeholder="Mínimo 8 caracteres" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()"></div></div>
+      <div class="cl-act"><button class="go" id="simCrear">Crear simulación</button><button id="simCancel">Cancelar</button></div><p class="small" id="simMsg" style="margin:10px 0 0"></p></div>
+    <div id="simsList"></div>
+  </div>
   <div id="acOut"></div>
   <div id="docOut"></div>
 </main>
@@ -1090,13 +1098,13 @@ let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
 
 /* ---------- panel docente con barra lateral (solo /docente) ---------- */
-const ADM=[['Clase',[['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
+const ADM=[['Clase',[['simulaciones','🎮','Simulaciones','Cada simulación es una clase independiente con sus propios equipos, rondas y resultados.'],['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
   ['Resultados',[['efecto','📈','Efecto por producto','Diferencia pareada (normal − descuento) en calidad esperada y gusto, con IC 95 %.'],['calidad','📊','Calidad esperada','Distribución de la calidad esperada en cada oferta.'],['notas','💬','Conclusiones','Conclusiones escritas por los estudiantes.']]],
   ['Datos',[['datos','💾','Exportar y depurar','Descarga en CSV y borrado de observaciones cargadas por error.']]],
   ['Docencia',[['guia','📘','Guía de clase','Plan de las dos sesiones de 100 minutos.']]],
   ['Cuenta',[['cuenta','⚙️','Mi cuenta','Tu contraseña, tu pregunta secreta y el código de clase.']]]];
 const ADMALL=ADM.flatMap(g=>g[1]);
-let SEC='clase';
+let SEC='simulaciones';
 function admFind(id){return ADMALL.find(x=>x[0]===id)||ADMALL[0];}
 function admBuild(){
   document.body.classList.add('adm');
@@ -1106,7 +1114,7 @@ function admBuild(){
     <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span id="admSel"></span></div>
     <div class="adm-body"><h1 class="adm-h" id="admH"></h1><p class="adm-sub" id="admSub"></p><div class="adm-tools"><button class="adm-btn" id="admRef">↺ Actualizar</button><button class="adm-btn go" id="admDemo" hidden>Ver clase de ejemplo</button></div><div id="admSlot"></div></div></div>`;
   document.body.appendChild(a);
-  $('admSlot').appendChild($('t-docente'));$('admSel').appendChild($('dClase'));
+  $('admSlot').appendChild($('t-docente'));bindSims();$('admSel').appendChild($('dClase'));
   $('admMenu').addEventListener('click',e=>{const b=e.target.closest('[data-sec]');if(b)admGo(b.dataset.sec);});
   $('admOut').onclick=()=>{if(demoOn&&!DTOK){demoOn=false;T=null;showD();renderDoc();AX_mostrar('ingresar');}else docLogout();};
   $('admRef').onclick=()=>{if(DTOK&&!demoOn)loadTeacher();};
@@ -1126,6 +1134,7 @@ function admApply(){
   $('dBar').hidden=true;
   $('dNo').hidden=!!DTOK||demoOn;
   [...$('docOut').children].forEach(c=>{const k=c.dataset.sec;c.hidden=!!k&&k!=='*'&&k!==SEC;if(c.tagName==='DETAILS'&&k===SEC)c.open=true;});
+  const so=$('simsOut');so.hidden=SEC!=='simulaciones'||(demoOn&&!DTOK)||!DTOK;
   const ac=$('acOut');ac.hidden=SEC!=='cuenta';const d=ac.querySelector('details');if(d&&SEC==='cuenta')d.open=true;
 }
 function showD(){
@@ -1148,12 +1157,41 @@ function docSesion(r){
   if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
   return false;
 }
-let TR=null;
+let TR=null,TC=[];
+function renderSims(){
+  const el=$('simsList');if(!el)return;
+  const card=c=>`<div class="card"><div class="cl-head"><div><h3>${esc(c.nombre)}</h3><div class="cl-who">👤 ${esc(DNAME||'Docente')}</div></div>
+    <div class="cl-st"><span class="${c.activa?'':'off'}">${c.activa?'☑ Activa':'■ Archivada'}</span>${c.activa?`<span class="${c.registro?'':'off'}">● Registro ${c.registro?'abierto':'cerrado'}</span>`:''}${c.id===DCLASE?'<span>★ En uso</span>':''}</div></div>
+    <div class="cl-grid"><div><small>Equipos</small><b>${c.equipos}</b></div><div><small>Ronda actual</small><b>${c.ronda||0}</b></div><div class="cd"><small>Código de acceso</small><b class="code">${c.codigo?esc(c.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${new Date(c.creada).toLocaleDateString('es')}</b></div></div>
+    <div class="cl-act"><button class="go" data-simgo="${esc(c.id)}">▶ Acceder a esta simulación</button>${c.codigo?`<button data-simcp="${esc(c.codigo)}">📋 Copiar código</button>`:''}<button class="warn" data-simarch="${esc(c.id)}" data-act="${c.activa?0:1}">${c.activa?'🗄 Archivar':'↩ Reactivar'}</button><button class="danger" data-simdel="${esc(c.id)}">✕ Eliminar</button></div></div>`;
+  const act=TC.filter(c=>c.activa),arch=TC.filter(c=>!c.activa);
+  el.innerHTML=`<h2 style="font-size:22px;margin:4px 0 14px">Simulaciones activas (${act.length})</h2>${act.map(card).join('')||'<p class="muted">No hay simulaciones activas. Crea una con «+ Nueva simulación».</p>'}
+    ${arch.length?`<h2 style="font-size:22px;margin:24px 0 14px">Archivadas (${arch.length})</h2><p class="small muted">Los estudiantes no pueden ingresar a una simulación archivada.</p>${arch.map(card).join('')}`:''}`;
+}
+function bindSims(){
+  if(!$('simsOut'))return;
+  $('simNew').onclick=()=>{$('simForm').hidden=false;$('simMsg').textContent='';$('simNom').focus();};
+  $('simCancel').onclick=()=>{$('simForm').hidden=true;};
+  $('simCrear').onclick=async()=>{const n=$('simNom').value.trim(),c=$('simCod').value.trim(),m=$('simMsg');
+    if(n.length<3){m.textContent='Escribe un nombre de al menos 3 caracteres.';return;}if(c.length<8){m.textContent='El código debe tener al menos 8 caracteres.';return;}
+    $('simCrear').disabled=true;try{const r=await rpc('sn_docente_crear_clase',{p_token:DTOK,p_nombre:n,p_codigo:c});
+      if(r&&r.ok){$('simNom').value=$('simCod').value='';$('simForm').hidden=true;DCLASE=r.id;await loadTeacher();}
+      else{if(docSesion(r))return;m.textContent=r&&r.error==='codigo_usado'?'Ese código ya lo usa otra simulación. Elige otro.':r&&r.error==='nombre_clase'?'El nombre debe tener entre 3 y 80 caracteres.':em(r);}}
+    catch(e){m.textContent='Sin conexión con el servidor.';}$('simCrear').disabled=false;};
+  $('simsList').addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.simgo){DCLASE=b.dataset.simgo;await loadTeacher();admGo('clase');return;}
+    if(b.dataset.simcp){try{await navigator.clipboard.writeText(b.dataset.simcp);b.textContent='✓ Copiado';}catch(err){b.textContent=b.dataset.simcp;}return;}
+    if(b.dataset.simarch){b.disabled=true;try{const r=await rpc('sn_docente_clase_estado',{p_token:DTOK,p_clase:b.dataset.simarch,p_activa:b.dataset.act==='1'});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}return;}
+    if(b.dataset.simdel){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro? Se borran equipos y datos. Toca de nuevo';return;}
+      b.disabled=true;try{const id=b.dataset.simdel;const r=await rpc('sn_docente_borrar_clase',{p_token:DTOK,p_clase:id});if(docSesion(r))return;if(DCLASE===id)DCLASE=null;await loadTeacher();}catch(err){b.textContent='Error';}}
+  });
+}
 async function loadTeacher(){
   if(!BACKEND||!DTOK)return;
   try{const r=await rpc('sn_docente',{p_token:DTOK,p_clase:DCLASE});
     if(!r||!r.ok){if(docSesion(r))return;$('tMsg').textContent=em(r);return;}
-    $('tMsg').textContent='';T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    $('tMsg').textContent='';if(!r.clase){r.obs=[];r.sims=[];r.notas=[];r.equipos=[];}T=r;demoOn=false;DCLASE=r.clase&&r.clase.id;
+    try{const q=await rpc('sn_docente_clases',{p_token:DTOK});if(q&&q.ok){TC=q.clases;renderSims();}}catch(e){}
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
     try{const q=await rpc('sn_docente_rondas',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TR=q;}catch(e){}
