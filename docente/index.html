@@ -233,6 +233,12 @@ body.adm .note{color:var(--fg)}
   .cl-grid{margin:0 -16px}.cl-grid>div{padding:12px 16px}
 }
 
+
+.ubtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:6px}
+.ubtn{text-align:left;min-height:64px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--azul);font-weight:bold;line-height:1.3;display:flex;flex-direction:column;gap:2px}
+.ubtn span{font-size:.75rem;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ubtn.on{background:var(--azul);border-color:var(--azul);color:#fff}
+.ubtn.on span{color:#C9D3E3}
 a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--azul2);text-underline-offset:3px;cursor:help}
 .ubox{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:6px;padding:10px 12px;margin:10px 0 14px}
 .ubox p{margin:4px 0 0}
@@ -1595,13 +1601,14 @@ function linkify(root){
       const after=n.splitText(i);after.nodeValue=after.nodeValue.slice(m[2].length);n.parentNode.insertBefore(a,after);used.add(key);break;}
   });
 }
+let UCUR='u1';
 function renderUnidades(){
   const el=$('unidadesOut');if(!el)return;
   const pid=S.joined?S.equipo:MANPROD,U=unitsData(pid);
   const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="expectativa">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>
-    <ol class="steps">${U.map(u=>`<li><a href="#unidades" data-ugo="${u.id}"><b>${esc(u.t)}</b></a></li>`).join('')}</ol>
+    <div class="ubtns" role="tablist" aria-label="Unidades">${U.map((u,i)=>`<button role="tab" class="ubtn${UCUR===u.id?' on':''}" aria-selected="${UCUR===u.id}" data-ugo="${u.id}"><span>Unidad ${i+1}</span>${esc(u.t)}</button>`).join('')}<button role="tab" class="ubtn${UCUR==='az'?' on':''}" aria-selected="${UCUR==='az'}" data-ugo="az"><span>Glosario</span>Conceptos de la A a la Z</button></div>
     <p class="small muted" style="margin:0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2.</p></div>`;
-  const body=U.map((u,i)=>`<div class="card unit" id="${u.id}"><p class="small muted" style="margin:0 0 4px">Unidad ${i+1}</p><h2>${esc(u.t)}</h2>
+  const body=U.map((u,i)=>`<div class="card unit" id="${u.id}"${UCUR===u.id?'':' hidden'}><p class="small muted" style="margin:0 0 4px">Unidad ${i+1}</p><h2>${esc(u.t)}</h2>
     <p><b>Idea en una frase:</b> ${u.idea}</p>
     ${u.s.map(s=>`<div class="usec" id="c-${s.k}"><h3>${s.h}</h3>${s.b}<div class="ubox"><b>💡 En palabras sencillas</b><p>${s.box}</p></div></div>`).join('')}
     <p><b>Ejemplo con tu producto:</b> ${esc(u.ej)}</p><p><b>Dónde lo ves en el simulador:</b> ${esc(u.donde)}</p>
@@ -1609,15 +1616,16 @@ function renderUnidades(){
     ${u.q.map((q,j)=>`<div class="uq" data-u="${u.id}" data-q="${j}"><p><b>${j+1}.</b> ${q.p}</p><div class="uqo">${q.o.map((o,k)=>`<button class="ghost" data-uq="${u.id}|${j}|${k}">${o}</button>`).join('')}</div><p class="small uqf" hidden></p></div>`).join('')}
     <h3>Referencias</h3>${u.r.map(k=>`<p class="small uref">${UREF[k]}</p>`).join('')}</div>`).join('');
   const gl=UTERMS.slice().sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([t,k])=>`<a class="cl" href="#unidades" data-c="${k}">${esc(t)}</a>`).join(' · ');
-  el.innerHTML=ix+body+`<div class="card"><h2>Conceptos de la A a la Z</h2><p class="small" style="line-height:2">${gl}</p></div>`;
+  el.innerHTML=ix+body+`<div class="card unit" id="az"${UCUR==='az'?'':' hidden'}><h2>Conceptos de la A a la Z</h2><p class="small" style="line-height:2">${gl}</p></div>`;
 }
 function irConcepto(k,isUnit){
-  location.hash='unidades';showTab();
+  const U=unitsData(S.joined?S.equipo:MANPROD);UCUR=isUnit?k:((U.find(u=>u.s.some(x=>x.k===k))||{id:UCUR}).id);
+  location.hash='unidades';showTab();renderUnidades();
   setTimeout(()=>{const t=$(isUnit?k:'c-'+k);if(!t)return;t.scrollIntoView({behavior:'smooth',block:'start'});t.classList.add('uflash');setTimeout(()=>t.classList.remove('uflash'),1800);},60);
 }
 document.addEventListener('click',e=>{
   const a=e.target.closest('a.cl[data-c]');if(a){e.preventDefault();irConcepto(a.dataset.c,false);return;}
-  const g=e.target.closest('a[data-ugo]');if(g){e.preventDefault();irConcepto(g.dataset.ugo,true);return;}
+  const g=e.target.closest('[data-ugo]');if(g){e.preventDefault();irConcepto(g.dataset.ugo,true);return;}
   const b=e.target.closest('button[data-uq]');if(b){const [u,j,k]=b.dataset.uq.split('|');const U=unitsData(S.joined?S.equipo:MANPROD).find(x=>x.id===u),q=U.q[+j],box=b.closest('.uq');
     box.querySelectorAll('button').forEach((x,i)=>{x.classList.toggle('uok',i===q.c);x.classList.toggle('uko',i===+k&&+k!==q.c);});
     const f=box.querySelector('.uqf');f.hidden=false;f.innerHTML=(+k===q.c?'<b>✓ Correcto.</b> ':'<b>✗ No es correcto.</b> ')+q.e;}
