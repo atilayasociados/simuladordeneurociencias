@@ -555,6 +555,7 @@ body:not(.adm) nav .sub a{display:inline-flex;align-items:center;gap:7px;backgro
 body:not(.adm) nav .sub a .ico{width:16px;height:16px;color:#44D62C}
 body:not(.adm) nav .sub a:hover{border-color:#44D62C;background:#404244}
 body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE37F;box-shadow:inset 0 0 0 1px #44D62C}
+.simcod{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 </style>
 </head><body>
 <header class="nopm">
@@ -723,8 +724,8 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
   <div id="simsOut" hidden>
     <div class="adm-tools" style="margin-bottom:18px"><button class="adm-btn go" id="simNew">+ Nueva simulación</button></div>
     <div class="card" id="simForm" hidden><h3>Nueva simulación</h3>
-      <div class="grid2 stack"><div><label for="simNom">Nombre</label><input type="text" id="simNom" maxlength="80" placeholder="Ej.: UAB Mercadeo Estratégico · grupo 2"></div>
-      <div><label for="simCod">Código de acceso para los estudiantes</label><input type="text" id="simCod" maxlength="64" placeholder="Mínimo 8 caracteres" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()"></div></div>
+      <div class="grid2 stack"><div><label for="simNom">Nombre</label><input type="text" id="simNom" name="sn-nombre-sim" autocomplete="off" data-lpignore="true" data-1p-ignore maxlength="80" placeholder="Ej.: UAB Mercadeo Estratégico · grupo 2"></div>
+      <div><label for="simCod">Código de la simulación (los estudiantes lo usan para ingresar)</label><input type="text" id="simCod" name="sn-codigo-sim" maxlength="64" autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false" placeholder="Mínimo 8 caracteres" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()"></div></div>
       <div class="cl-act"><button class="go" id="simCrear">Crear simulación</button><button id="simCancel">Cancelar</button></div><p class="small" id="simMsg" style="margin:10px 0 0"></p></div>
     <div id="simsList"></div>
   </div>
@@ -1710,8 +1711,12 @@ function renderSims(){
   const el=$('simsList');if(!el)return;
   const card=c=>`<div class="card"><div class="cl-head"><div><h3>${esc(c.nombre)}</h3><div class="cl-who">👤 ${esc(DNAME||'Docente')}</div></div>
     <div class="cl-st"><span class="${c.activa?'':'off'}">${c.activa?'☑ Activa':'■ Archivada'}</span>${c.activa?`<span class="${c.registro?'':'off'}">● Registro ${c.registro?'abierto':'cerrado'}</span>`:''}${c.id===DCLASE?'<span>★ En uso</span>':''}</div></div>
-    <div class="cl-grid"><div><small>Equipos</small><b>${c.equipos}</b></div><div><small>Ronda actual</small><b>${c.ronda||0}</b></div><div class="cd"><small>Código de acceso</small><b class="code">${c.codigo?esc(c.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${new Date(c.creada).toLocaleDateString('es')}</b></div></div>
-    <div class="cl-act"><button class="go" data-simgo="${esc(c.id)}">▶ Acceder a esta simulación</button>${c.codigo?`<button data-simcp="${esc(c.codigo)}">📋 Copiar código</button>`:''}<button class="warn" data-simarch="${esc(c.id)}" data-act="${c.activa?0:1}">${c.activa?'🗄 Archivar':'↩ Reactivar'}</button><button class="danger" data-simdel="${esc(c.id)}">✕ Eliminar</button></div></div>`;
+    <div class="cl-grid"><div><small>Equipos</small><b>${c.equipos}</b></div><div><small>Ronda actual</small><b>${c.ronda||0}</b></div><div class="cd"><small>Código de la simulación (acceso)</small><b class="code">${c.codigo?esc(c.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${new Date(c.creada).toLocaleDateString('es')}</b></div></div>
+    <div class="cl-act"><button class="go" data-simgo="${esc(c.id)}">▶ Acceder a esta simulación</button>${c.codigo?`<button data-simcp="${esc(c.codigo)}">📋 Copiar código</button>`:''}<button data-simcod="${esc(c.id)}">🔑 Cambiar código</button><button class="warn" data-simarch="${esc(c.id)}" data-act="${c.activa?0:1}">${c.activa?'🗄 Archivar':'↩ Reactivar'}</button><button class="danger" data-simdel="${esc(c.id)}">✕ Eliminar</button></div>
+    <div class="simcod" data-for="${esc(c.id)}" hidden><label for="sc-${esc(c.id)}">Código nuevo de la simulación (mínimo 8 caracteres)</label>
+      <div class="row"><input type="text" id="sc-${esc(c.id)}" name="sn-codigo-sim" maxlength="64" autocomplete="off" data-lpignore="true" data-1p-ignore autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase()" style="flex:1;min-width:200px;font-family:'Space Mono',monospace;letter-spacing:2px" value="${c.codigo?esc(c.codigo):''}">
+      <button class="go" data-simcodsave="${esc(c.id)}">Guardar código</button><button data-simcodx="${esc(c.id)}">Cancelar</button></div>
+      <p class="small muted" style="margin:6px 0 0">Los equipos ya registrados no se afectan; los nuevos ingresos usarán el código nuevo.</p><p class="small" data-simcodmsg="${esc(c.id)}" style="margin:6px 0 0"></p></div></div>`;
   const act=TC.filter(c=>c.activa),arch=TC.filter(c=>!c.activa);
   el.innerHTML=`<h2 style="font-size:22px;margin:4px 0 14px">Simulaciones activas (${act.length})</h2>${act.map(card).join('')||'<p class="muted">No hay simulaciones activas. Crea una con «+ Nueva simulación».</p>'}
     ${arch.length?`<h2 style="font-size:22px;margin:24px 0 14px">Archivadas (${arch.length})</h2><p class="small muted">Los estudiantes no pueden ingresar a una simulación archivada.</p>${arch.map(card).join('')}`:''}`;
@@ -1736,6 +1741,14 @@ function bindSims(){
     catch(e){m.textContent='Sin conexión con el servidor.';}$('simCrear').disabled=false;};
   $('simsList').addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.simgo){DCLASE=b.dataset.simgo;await loadTeacher();admGo('clase');return;}
+    if(b.dataset.simcod){const f=document.querySelector('.simcod[data-for="'+b.dataset.simcod+'"]');f.hidden=!f.hidden;if(!f.hidden)f.querySelector('input').select();return;}
+    if(b.dataset.simcodx){document.querySelector('.simcod[data-for="'+b.dataset.simcodx+'"]').hidden=true;return;}
+    if(b.dataset.simcodsave){const id=b.dataset.simcodsave,f=document.querySelector('.simcod[data-for="'+id+'"]'),c=f.querySelector('input').value.trim(),m=f.querySelector('[data-simcodmsg]'),cl=TC.find(x=>x.id===id);m.style.color='var(--bad)';
+      if(c.length<8){m.textContent='El código debe tener al menos 8 caracteres.';return;}
+      if(cl&&c===(cl.codigo||'')){m.textContent='Ese ya es el código actual.';return;}
+      b.disabled=true;try{const r=await rpc('sn_docente_codigo',{p_token:DTOK,p_clase:id,p_codigo:c});
+        if(r&&r.ok){await loadTeacher();}else{if(docSesion(r))return;m.textContent=r&&r.error==='codigo_usado'?'Ese código ya lo usa otra simulación. Elige otro.':em(r);}}
+      catch(err){m.textContent='Sin conexión con el servidor.';}b.disabled=false;return;}
     if(b.dataset.simcp){try{await navigator.clipboard.writeText(b.dataset.simcp);b.textContent='✓ Copiado';}catch(err){b.textContent=b.dataset.simcp;}return;}
     if(b.dataset.simarch){b.disabled=true;try{const r=await rpc('sn_docente_clase_estado',{p_token:DTOK,p_clase:b.dataset.simarch,p_activa:b.dataset.act==='1'});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}return;}
     if(b.dataset.simdel){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro? Se borran equipos y datos. Toca de nuevo';return;}
@@ -1864,7 +1877,7 @@ function renderDoc(){
   <div class="card" data-sec="clase"><div class="cl-head"><div><h3>${esc((T.clase&&T.clase.nombre)||'Clase')}</h3><div class="cl-who">👤 ${esc(demoOn?'Clase de ejemplo':(DNAME||'Docente'))}</div></div>
     <div class="cl-st"><span>☑ Activa</span><span class="${T.clase&&T.clase.registro?'':'off'}">● Registro ${T.clase&&T.clase.registro?'abierto':'cerrado'}</span></div></div>
     <div class="cl-grid"><div><small>Equipos</small><b>${eqs.length}</b></div><div><small>Investigadores</small><b>${list.length}</b></div><div><small>Participantes medidos</small><b>${T.obs.length}</b></div><div><small>Ronda actual</small><b>${demoOn?'—':(TR?TR.ronda:0)}</b></div><div><small>Rondas simuladas</small><b>${T.sims.length}</b></div>
-      <div class="cd"><small>Código de acceso</small><b class="code">${T.clase&&T.clase.codigo?esc(T.clase.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${T.clase&&T.clase.creada?new Date(T.clase.creada).toLocaleDateString('es'):'—'}</b></div></div>
+      <div class="cd"><small>Código de la simulación (acceso)</small><b class="code">${T.clase&&T.clase.codigo?esc(T.clase.codigo):'—'}</b></div><div><small>Creada</small><b class="date">${T.clase&&T.clase.creada?new Date(T.clase.creada).toLocaleDateString('es'):'—'}</b></div></div>
     <div class="cl-act">${T.clase&&T.clase.codigo?'<button class="go" id="cpCod">📋 Copiar código</button>':''}${demoOn?'':`<button class="warn" id="regTog">${T.clase&&T.clase.registro?'⏸ Cerrar registro de equipos':'▶ Abrir registro de equipos'}</button>`}${demoOn?'':'<button data-go="rondas">🔁 Ejecutar ronda</button>'}<button data-go="equipos">👥 Ver equipos</button><button data-go="efecto">📈 Ver resultados</button></div>
     ${T.clase&&!T.clase.codigo&&!demoOn?'<p class="small muted" style="margin:12px 0 0">El código se guarda cifrado. Para verlo aquí, vuelve a definirlo en «Mi cuenta → Cambiar el código de clase».</p>':''}</div>
   <div class="card" data-sec="datos"><h3>Exportar datos</h3><p class="small muted">Archivos CSV para analizar en Excel, SPSS o R.</p>
