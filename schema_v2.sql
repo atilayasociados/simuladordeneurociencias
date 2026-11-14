@@ -230,7 +230,7 @@ create or replace function public.sn_crear_docente(p_nombre text, p_email text, 
 returns uuid language plpgsql security definer set search_path = public, extensions as $$
 declare v uuid;
 begin
-  if char_length(coalesce(p_clave_temporal,'')) < 8 then raise exception 'La contraseña temporal debe tener al menos 8 caracteres'; end if;
+  if char_length(coalesce(p_clave_temporal,'')) < 4 then raise exception 'La contraseña temporal debe tener al menos 4 caracteres'; end if;
   if char_length(coalesce(p_pregunta,'')) < 8 or char_length(coalesce(p_respuesta,'')) < 2 then
     raise exception 'Indica una pregunta de seguridad (mín. 8 caracteres) y su respuesta';
   end if;
@@ -390,7 +390,7 @@ begin
   end if;
   s := sn_ses(p_token, 'docente');
   if s.token_hash is not null then
-    if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+    if char_length(coalesce(p_nueva,'')) < 4 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
     select * into d from sn_docentes where id = s.docente_id;
     if d.clave_hash <> crypt(coalesce(p_actual,''), d.clave_hash) then return jsonb_build_object('ok', false, 'error', 'actual'); end if;
     if p_actual = p_nueva then return jsonb_build_object('ok', false, 'error', 'igual'); end if;
@@ -424,7 +424,7 @@ declare d record; k text; r text;
 begin
   k := 'rec|' || lower(trim(coalesce(p_email,'')));
   if sn_bloqueado(k) then return jsonb_build_object('ok', false, 'error', 'bloqueado'); end if;
-  if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+  if char_length(coalesce(p_nueva,'')) < 4 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
   r := lower(regexp_replace(trim(coalesce(p_respuesta,'')), '\s+', ' ', 'g'));
   select * into d from sn_docentes where lower(email) = lower(trim(coalesce(p_email,''))) and activo and resp_hash <> '';
   if not found or d.resp_hash <> crypt(r, d.resp_hash) then
@@ -658,7 +658,7 @@ declare d record; k text; r text;
 begin
   k := 'rec|' || lower(trim(coalesce(p_email,'')));
   if sn_bloqueado(k) then return jsonb_build_object('ok', false, 'error', 'bloqueado'); end if;
-  if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+  if char_length(coalesce(p_nueva,'')) < 4 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
   r := lower(regexp_replace(trim(coalesce(p_respuesta,'')), '\s+', ' ', 'g'));
   select * into d from sn_docentes where lower(email) = lower(trim(coalesce(p_email,''))) and activo and resp_hash <> '';
   if not found or d.resp_hash <> crypt(r, d.resp_hash) then
@@ -723,7 +723,7 @@ begin
   end if;
   s := sn_ses(p_token, 'docente');
   if s.token_hash is not null then
-    if char_length(coalesce(p_nueva,'')) < 8 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
+    if char_length(coalesce(p_nueva,'')) < 4 or char_length(p_nueva) > 64 then return jsonb_build_object('ok', false, 'error', 'clave'); end if;
     select * into d from sn_docentes where id = s.docente_id;
     if d.clave_hash <> crypt(coalesce(p_actual,''), d.clave_hash) then return jsonb_build_object('ok', false, 'error', 'actual'); end if;
     if p_actual = p_nueva then return jsonb_build_object('ok', false, 'error', 'igual'); end if;
@@ -1010,3 +1010,19 @@ grant execute on function public.sn_docente_clases(text), public.sn_docente_crea
 -- select public.sn_crear_clase('UAB Mercadeo Estratégico 2026', 'CODIGO-DE-CLASE');
 -- 2) Tu usuario de docente (contraseña temporal: la cambiarás al primer ingreso)
 -- select public.sn_crear_docente('Jhonny Atila', 'tu-correo@ejemplo.com', 'CLAVE-TEMPORAL-8+', 'Pregunta secreta que solo tú sepas', 'respuesta');
+
+-- v9: contraseña del docente con mínimo 4 caracteres (temporal, cambio y recuperación)
+do $mig$
+declare r record; d text;
+begin
+  for r in select p.oid from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+           where n.nspname='public' and p.proname in ('sn_cambiar_clave','sn_doc_recuperar','sn_crear_docente') loop
+    d := pg_get_functiondef(r.oid);
+    d := replace(d, $q$char_length(COALESCE(p_nueva, ''::text)) < 8$q$, $q$char_length(COALESCE(p_nueva, ''::text)) < 4$q$);
+    d := replace(d, $q$char_length(coalesce(p_nueva,'')) < 8$q$, $q$char_length(coalesce(p_nueva,'')) < 4$q$);
+    d := replace(d, $q$char_length(COALESCE(p_clave_temporal, ''::text)) < 8$q$, $q$char_length(COALESCE(p_clave_temporal, ''::text)) < 4$q$);
+    d := replace(d, $q$char_length(coalesce(p_clave_temporal,'')) < 8$q$, $q$char_length(coalesce(p_clave_temporal,'')) < 4$q$);
+    d := replace(d, 'al menos 8 caracteres', 'al menos 4 caracteres');
+    execute d;
+  end loop;
+end $mig$;
