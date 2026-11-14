@@ -550,6 +550,11 @@ body:not(.adm) .pjour a{color:#B5B8B7}body:not(.adm) .pjour a.cur{color:#fff}
 body:not(.adm) .pflow a,body:not(.adm) .pflow a b{color:#F2F3F3}body:not(.adm) .pflow a small{color:#B5B8B7}
 body:not(.adm) h2,body:not(.adm) h3,body:not(.adm) h4{color:#F2F3F3}
 body:not(.adm) .phero h2,body:not(.adm) .uhero h2{color:#fff}
+body:not(.adm) nav .sub{gap:8px;padding-top:10px;margin-top:8px}
+body:not(.adm) nav .sub a{display:inline-flex;align-items:center;gap:7px;background:#3A3C3E;border:1px solid #6E7072;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;color:#F2F3F3;transition:border-color .15s,background .15s}
+body:not(.adm) nav .sub a .ico{width:16px;height:16px;color:#44D62C}
+body:not(.adm) nav .sub a:hover{border-color:#44D62C;background:#404244}
+body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE37F;box-shadow:inset 0 0 0 1px #44D62C}
 </style>
 </head><body>
 <header class="nopm">
@@ -982,13 +987,14 @@ setInterval(()=>{if(BACKEND&&pending())sync();},15000);
 window.addEventListener('online',()=>sync());
 
 /* ---------- navegación ---------- */
+const SICO={caso:'clip',equipo:'users',simular:'flask',experimento:'hand',resultados:'trend',comparar:'cmp',interpretacion:'msg',unidades:'book',manual:'doc',docente:'school'};
 const GICO={'Situación':'compass','Decidir':'pen','Resultados':'chart','Aprender':'grad','Docente':'school'};
 function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
 function showTab(){
   if(DOCMODE){VIEWS.forEach(x=>$('t-'+x).classList.toggle('hidden-tab',x!=='docente'));$('nav').innerHTML='';$('bar').hidden=true;$('status').hidden=true;if(!DTOK&&!demoOn&&AXM===null)AX_mostrar('ingresar');return;}
   const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
   VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&x!=='unidades'&&!S.joined));});
-  $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}><span class="ico">${icoSvg(GICO[x.n]||'clip')}</span>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
+  $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}><span class="ico">${icoSvg(GICO[x.n]||'clip')}</span>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}"${id===t?' aria-current="page"':''}><span class="ico">${icoSvg(SICO[id]||'doc')}</span>${n}</a>`).join('')+'</div>':'');
   if(!S.joined&&t!=='docente'&&t!=='manual'&&t!=='unidades'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
   $('bar').hidden=!S.joined;
   document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
