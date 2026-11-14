@@ -232,6 +232,19 @@ body.adm .note{color:var(--fg)}
   body.adm .card{padding:16px}
   .cl-grid{margin:0 -16px}.cl-grid>div{padding:12px 16px}
 }
+
+a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--azul2);text-underline-offset:3px;cursor:help}
+.ubox{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:6px;padding:10px 12px;margin:10px 0 14px}
+.ubox p{margin:4px 0 0}
+.usec{scroll-margin-top:110px;border-radius:8px;transition:background .6s}
+.unit{scroll-margin-top:110px}
+.uflash{background:var(--accent-soft)}
+.uq{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.uqo{display:flex;flex-direction:column;gap:6px}
+.uqo button{text-align:left;min-height:40px}
+.uqo button.uok{background:var(--real-soft);border-color:var(--real);color:var(--fg);font-weight:bold}
+.uqo button.uko{background:#FBE9E7;border-color:var(--bad);color:var(--fg)}
+.uref{padding-left:24px;text-indent:-24px}
 </style>
 </head><body>
 <header class="nopm">
@@ -332,6 +345,9 @@ body.adm .note{color:var(--fg)}
 </main>
 
 <!-- APRENDER · Manual -->
+<main id="t-unidades" class="hidden-tab">
+  <div id="unidadesOut"></div>
+</main>
 <main id="t-manual" class="hidden-tab">
   <div id="manualOut"></div>
 </main>
@@ -442,8 +458,8 @@ const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
 const pEq=p=>p!=null&&p<0.001?'p < 0,001':'p = '+fp(p);
 const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
-const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','manual','docente'];
-const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
+const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','unidades','manual','docente'];
+const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
 if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
@@ -528,9 +544,9 @@ function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').sl
 function showTab(){
   if(DOCMODE){VIEWS.forEach(x=>$('t-'+x).classList.toggle('hidden-tab',x!=='docente'));$('nav').innerHTML='';$('bar').hidden=true;$('status').hidden=true;if(!DTOK&&!demoOn&&AXM===null)AX_mostrar('ingresar');return;}
   const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
-  VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&!S.joined));});
+  VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&x!=='unidades'&&!S.joined));});
   $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
-  if(!S.joined&&t!=='docente'&&t!=='manual'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
+  if(!S.joined&&t!=='docente'&&t!=='manual'&&t!=='unidades'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
   $('bar').hidden=!S.joined;
   document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
 }
@@ -1441,7 +1457,172 @@ function renderManual(){
     <p class="small">Rao, A. R., y Monroe, K. B. (1989). The effect of price, brand name, and store name on buyers' perceptions of product quality: An integrative review. <i>Journal of Marketing Research, 26</i>(3), 351–357. https://doi.org/10.2307/3172907</p>
     <p class="small" style="margin:0">Shiv, B., Carmon, Z., y Ariely, D. (2005). Placebo effects of marketing actions: Consumers may get what they pay for. <i>Journal of Marketing Research, 42</i>(4), 383–393. https://doi.org/10.1509/jmkr.2005.42.4.383</p></div>`;
 }
-document.addEventListener('click',e=>{const b=e.target.closest('#manChips [data-mp]');if(!b)return;MANPROD=+b.dataset.mp;renderManual();});
+document.addEventListener('click',e=>{const b=e.target.closest('#manChips [data-mp]');if(!b)return;MANPROD=+b.dataset.mp;renderManual();linkify($('manualOut'));renderUnidades();});
+/* ---------- unidades de aprendizaje (pestaña Aprender) ---------- */
+const UREF={
+ariely:'Ariely, D., y Berns, G. S. (2010). Neuromarketing: The hope and hype of neuroimaging in business. <i>Nature Reviews Neuroscience, 11</i>(4), 284–292. https://doi.org/10.1038/nrn2795',
+bell:'Bell, L., Vogt, J., Willemse, C., Routledge, T., Butler, L. T., y Sakaki, M. (2018). Beyond self-report: A review of physiological and neuroscientific methods to investigate consumer behavior. <i>Frontiers in Psychology, 9</i>, 1655. https://doi.org/10.3389/fpsyg.2018.01655',
+charness:'Charness, G., Gneezy, U., y Kuhn, M. A. (2012). Experimental methods: Between-subject and within-subject design. <i>Journal of Economic Behavior &amp; Organization, 81</i>(1), 1–8. https://doi.org/10.1016/j.jebo.2011.08.009',
+cohen:'Cohen, J. (1988). <i>Statistical power analysis for the behavioral sciences</i> (2.ª ed.). Lawrence Erlbaum Associates.',
+cumming:'Cumming, G. (2014). The new statistics: Why and how. <i>Psychological Science, 25</i>(1), 7–29. https://doi.org/10.1177/0956797613504966',
+gneezy:'Gneezy, A., Gneezy, U., y Lauga, D. O. (2014). A reference-dependent model of the price–quality heuristic. <i>Journal of Marketing Research, 51</i>(2), 153–164.',
+harris:'Harris, J. M., Ciorciari, J., y Gountas, J. (2018). Consumer neuroscience for marketing researchers. <i>Journal of Consumer Behaviour, 17</i>(3), 239–252. https://doi.org/10.1002/cb.1710',
+kahneman:'Kahneman, D. (2003). A perspective on judgment and choice: Mapping bounded rationality. <i>American Psychologist, 58</i>(9), 697–720. https://doi.org/10.1037/0003-066X.58.9.697',
+kurz:'Kurz, J., Efendic, E., y Goukens, C. (2023). Pricey therefore good? Price affects expectations, but not quality perceptions and liking. <i>Psychology &amp; Marketing, 40</i>(6), 1115–1129. https://doi.org/10.1002/mar.21799',
+lakens:'Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs. <i>Frontiers in Psychology, 4</i>, 863. https://doi.org/10.3389/fpsyg.2013.00863',
+lee:'Lee, N., Broderick, A. J., y Chamberlain, L. (2007). What is ‘neuromarketing’? A discussion and agenda for future research. <i>International Journal of Psychophysiology, 63</i>(2), 199–204. https://doi.org/10.1016/j.ijpsycho.2006.03.007',
+plass08:'Plassmann, H., O’Doherty, J., Shiv, B., y Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>Proceedings of the National Academy of Sciences, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105',
+plass12:'Plassmann, H., Ramsøy, T. Z., y Milosavljevic, M. (2012). Branding the brain: A critical review and outlook. <i>Journal of Consumer Psychology, 22</i>(1), 18–36. https://doi.org/10.1016/j.jcps.2011.11.010',
+poldrack:'Poldrack, R. A. (2006). Can cognitive processes be inferred from neuroimaging data? <i>Trends in Cognitive Sciences, 10</i>(2), 59–63. https://doi.org/10.1016/j.tics.2005.12.004',
+rao05:'Rao, A. R. (2005). The quality of price as a quality cue. <i>Journal of Marketing Research, 42</i>(4), 401–405.',
+rao89:'Rao, A. R., y Monroe, K. B. (1989). The effect of price, brand name, and store name on buyers’ perceptions of product quality: An integrative review. <i>Journal of Marketing Research, 26</i>(3), 351–357. https://doi.org/10.2307/3172907',
+shiv:'Shiv, B., Carmon, Z., y Ariely, D. (2005). Placebo effects of marketing actions: Consumers may get what they pay for. <i>Journal of Marketing Research, 42</i>(4), 383–393. https://doi.org/10.1509/jmkr.2005.42.4.383',
+wass:'Wasserstein, R. L., y Lazar, N. A. (2016). The ASA’s statement on p-values: Context, process, and purpose. <i>The American Statistician, 70</i>(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108',
+};
+function unitsData(pid){
+  const pr=prod(pid),x=MANX[pid]||MANX[1],lo=money(pr.prices.low),mid=money(pr.prices.mid),N=pr.name+' '+pr.brand;
+  return [
+  {id:'u1',t:'Neurociencia del consumidor: qué es y cómo decide el cerebro',idea:'La neurociencia del consumidor usa métodos que estudian el cerebro y el cuerpo para entender cómo las personas valoran y eligen productos.',
+   s:[
+    {k:'neuro',h:'Neurociencia del consumidor y neuromarketing',
+     b:`<p>Lee, Broderick y Chamberlain (2007) proponen entender el <b>neuromarketing</b> como un campo de estudio: la aplicación de métodos de la neurociencia para analizar y comprender el comportamiento humano relacionado con el marketing. Con esa definición lo alejan de la idea de que sea solo el uso comercial de imágenes del cerebro para vender productos.</p><p>Plassmann, Ramsøy y Milosavljevic (2012) distinguen la <b>neurociencia del consumidor</b>, que es la investigación académica en la intersección de la neurociencia y la psicología del consumidor, del neuromarketing que practican las empresas, cuyo número creció notablemente en la última década.</p>`,
+     box:'La neurociencia del consumidor es la ciencia que estudia qué pasa en tu cerebro y en tu cuerpo cuando miras, eliges o compras algo. Neuromarketing es la palabra que más usan las empresas para lo mismo.'},
+    {k:'sistemas',h:'Dos modos de pensar: Sistema 1 y Sistema 2',
+     b:`<p>Kahneman (2003) resume la distinción entre intuición y razonamiento. Las operaciones del <b>Sistema 1</b> son rápidas, automáticas, sin esfuerzo, asociativas y difíciles de controlar. Las del <b>Sistema 2</b> son más lentas, seriales, con esfuerzo y controladas deliberadamente.</p><p>Según Kahneman (2003), el Sistema 2 vigila al Sistema 1 de manera bastante laxa, por lo que muchos juicios intuitivos, incluso algunos erróneos, se expresan sin revisarse. Su investigación con Amos Tversky buscó mapear los <b>sesgos</b> sistemáticos que separan las creencias y elecciones reales de las que supondría un agente perfectamente racional, y propone un modelo de sustitución de atributos para explicar el juicio por <b>heurística</b>, es decir, por atajos mentales.</p>`,
+     box:'Tu cerebro tiene un “piloto automático” rápido (Sistema 1) y un “modo concentrado” lento (Sistema 2). Casi siempre decide el piloto automático usando atajos (heurísticas), y por eso a veces nos equivocamos de forma parecida (sesgos).'},
+    {k:'valor',h:'El valor en el cerebro',
+     b:`<p>Plassmann et al. (2012) organizan la formación de preferencias en las decisiones de marca en cuatro componentes básicos: representación y atención, <b>valor</b> predicho, valor experimentado, y valor recordado y aprendizaje. Es decir, el cerebro estima cuánto le gustará algo antes de tenerlo, lo vive al consumirlo y lo recuerda para la próxima decisión.</p><p>En su estudio con vino, Plassmann et al. (2008) se centraron en la <b>corteza orbitofrontal medial (mOFC)</b>, una zona que, según los autores, se considera ampliamente relacionada con el placer que se experimenta.</p>`,
+     box:'Dentro del cerebro hay zonas que se activan cuando algo “vale la pena” para ti. Una de ellas está detrás de la frente y se llama corteza orbitofrontal medial (mOFC).'}
+   ],
+   ej:`Cuando un participante ve ${x.mismo} con una etiqueta de ${lo}, su Sistema 1 puede asociar en segundos “más barato” con “peor”, antes de pensarlo con calma.`,
+   donde:'En El caso (la situación de tu producto) y en el laboratorio de resonancia simulado de Resultados.',
+   q:[{p:'Según Lee, Broderick y Chamberlain (2007), el neuromarketing es…',o:['Solo publicidad que usa imágenes del cerebro','Un campo de estudio que aplica métodos de la neurociencia para entender el comportamiento relacionado con el marketing','Una técnica para leer los pensamientos de los clientes','Una rama de la economía que no estudia el cerebro'],c:1,e:'Lee et al. (2007) lo definen como un campo de estudio, no solo como una herramienta comercial.'},
+      {p:'¿Cuál es una característica del Sistema 1 según Kahneman (2003)?',o:['Es lento y deliberado','Es rápido, automático y sin esfuerzo','Solo funciona cuando hacemos cálculos','Siempre corrige los errores del Sistema 2'],c:1,e:'El Sistema 1 es rápido, automático, sin esfuerzo y difícil de controlar.'},
+      {p:'En Plassmann et al. (2008), ¿qué zona se relaciona con el placer experimentado?',o:['El cerebelo','La corteza visual primaria','La corteza orbitofrontal medial (mOFC)','La médula espinal'],c:2,e:'Los autores midieron la mOFC, considerada relacionada con el placer experimentado.'}],
+   r:['kahneman','lee','plass08','plass12']},
+
+  {id:'u2',t:'Cómo se mide: herramientas, expectativa y experiencia',idea:'Para estudiar al consumidor se combinan lo que la persona dice con medidas del cerebro y del cuerpo, y es clave distinguir lo que espera de lo que siente al usar el producto.',
+   s:[
+    {k:'autorreporte',h:'Del autorreporte a las medidas del cuerpo',
+     b:`<p>En la investigación del consumidor se usan mucho el <b>autorreporte</b> (lo que la persona responde) y las medidas de conducta. Bell et al. (2018) revisan medidas fisiológicas y neurocientíficas que lo complementan: la secreción de sudor mediante la <b>conductancia de la piel</b>, la frecuencia cardíaca, la actividad de los músculos de la cara, los movimientos de los ojos mediante el <b>seguimiento ocular</b> y la actividad eléctrica del cerebro mediante el <b>EEG</b>. Los autores sostienen que estas medidas pueden aportar información sobre mecanismos del comportamiento del consumidor que a menudo son inconscientes.</p>`,
+     box:'Además de preguntarte qué piensas, los investigadores pueden medir tu cuerpo: cuánto sudas, cómo late tu corazón, hacia dónde miran tus ojos o la electricidad de tu cerebro.'},
+    {k:'fmri',h:'La resonancia magnética funcional (fMRI)',
+     b:`<p>Plassmann et al. (2008) usaron <b>resonancia magnética funcional (fMRI)</b> para registrar la señal dependiente del nivel de oxígeno en sangre (<b>BOLD</b>) mientras los participantes probaban vino. Harris, Ciorciari y Gountas (2018) señalan que la fMRI ha sido la técnica preferida por muchos investigadores de neuromarketing, pero que el EEG, el seguimiento ocular y las medidas implícitas se vuelven más populares por las mejoras tecnológicas y la reducción de costos.</p><p>Ariely y Berns (2010) concluyen que es poco probable que la neuroimagen sea más barata que otras herramientas en el futuro cercano, aunque hay evidencia creciente de que podría aportar información oculta sobre la experiencia del consumidor.</p>`,
+     box:'La resonancia magnética funcional es una máquina grande donde te acuestas; mide qué zonas del cerebro reciben más oxígeno, que es una pista de cuáles están trabajando más. Es muy cara, por eso en clase la simulamos.'},
+    {k:'expectativa',h:'Expectativa frente a experiencia',
+     b:`<p>La <b>expectativa</b> es lo que la persona cree de un producto antes de usarlo; la <b>experiencia</b>, lo que percibe al usarlo. Kurz, Efendic y Goukens (2023) realizaron seis estudios con 2842 participantes en total. En todos, los precios más altos llevaron a mayores expectativas de calidad y agrado, pero no encontraron un efecto consistente sobre la calidad percibida y el agrado una vez que las personas experimentaron el producto.</p><p>Gneezy, Gneezy y Lauga (2014) muestran que los precios altos aumentan las expectativas antes de probar un vino; cuando la calidad cumple esas expectativas, la evaluación subjetiva y la demanda aumentan, pero cuando no las cumple, el precio alto produce una evaluación y una demanda menores que un precio bajo.</p>`,
+     box:'Expectativa es lo que crees antes de probar algo (“esta lata parece buena”). Experiencia es lo que sientes cuando la pruebas. El precio cambia mucho lo primero, pero no siempre lo segundo.'}
+   ],
+   ej:`En el Experimento, tus compañeros ven una imagen de ${x.obj} con su precio, pero no pueden ${x.uso}: por eso tu estudio mide la expectativa, no la experiencia.`,
+   donde:'En el laboratorio de resonancia simulado (Resultados → Simulación) y en el aviso de límites de Decidir → Experimento.',
+   q:[{p:'¿Qué registra la resonancia magnética funcional en Plassmann et al. (2008)?',o:['La señal BOLD, relacionada con el oxígeno en sangre','Los movimientos de los ojos','El sudor de la piel','La frecuencia cardíaca'],c:0,e:'La fMRI registra la señal dependiente del nivel de oxígeno en sangre (BOLD).'},
+      {p:'¿Qué encontraron Kurz et al. (2023) en sus seis estudios?',o:['El precio no cambia nada','El precio sube las expectativas, pero no cambia de forma consistente la calidad percibida ni el agrado tras usar el producto','El precio solo cambia el agrado después de probar','Los productos baratos siempre gustan más'],c:1,e:'El efecto fue consistente en las expectativas, no en la experiencia.'},
+      {p:'Según Gneezy et al. (2014), si un producto caro no cumple las expectativas…',o:['Se evalúa mejor que uno barato','No pasa nada','Se evalúa peor y se vende menos que con un precio bajo','Sube la demanda'],c:2,e:'Cuando la calidad no cumple, el precio alto produce peor evaluación y menor demanda.'}],
+   r:['ariely','bell','gneezy','harris','kurz','plass08']},
+
+  {id:'u3',t:'El precio en la mente: pista de calidad, efecto placebo y el estudio del vino',idea:'El precio no solo dice cuánto cuesta un producto: también cambia lo que esperamos de él, y a veces lo que logramos con él.',
+   s:[
+    {k:'precio',h:'El precio como pista de calidad',
+     b:`<p>Rao y Monroe (1989) integraron experimentos previos sobre cómo el precio, la marca y el nombre de la tienda influyen en la calidad que perciben los compradores. Rao (2005) resume que la evidencia mostró un efecto precio-<b>calidad percibida</b> robusto, aunque moderado, y explica que muchos consumidores adoptan una <b>heurística precio-calidad</b> porque les ha funcionado razonablemente bien en el pasado. Según Rao y Monroe, las diferencias entre estudios se explican en parte por el tipo de diseño de investigación y los precios elegidos, y la investigación previa se había concentrado en bienes de bajo precio y compra frecuente.</p>`,
+     box:'Cuando no sabemos si algo es bueno, miramos el precio para adivinarlo: “si es más caro, debe ser mejor”. Pasa muchas veces, pero no con mucha fuerza ni con todos los productos.'},
+    {k:'placebo',h:'El efecto placebo del marketing',
+     b:`<p>Shiv, Carmon y Ariely (2005) mostraron, en tres experimentos, que quienes pagaron un precio con descuento por una bebida energética resolvieron menos acertijos que quienes consumieron la misma bebida a precio normal. Los estudios apoyan que las expectativas median este <b>efecto placebo del marketing</b>, un proceso que parece no ser consciente. Rao (2005) destaca que el precio podría influir de manera no consciente en las expectativas sobre la calidad del producto.</p>`,
+     box:'Si crees que algo es “de oferta”, esperas menos de él, y esa idea puede hacer que de verdad te funcione peor, sin que te des cuenta.'},
+    {k:'vino',h:'El estudio del vino: Plassmann et al. (2008)',
+     b:`<p>Veinte participantes probaron vino dentro de un resonador. Tres vinos se presentaron como cinco: el vino 1 apareció a US$ 5 y a US$ 45, el vino 2 a US$ 10 y a US$ 90, y un tercero a US$ 35. Al subir el precio aumentó el agrado declarado y aumentó la señal BOLD en la corteza orbitofrontal medial; los autores no hallaron efectos del precio en las áreas gustativas primarias.</p><p>Unas ocho semanas después, en una cata sin precios, no hubo diferencias declaradas entre los vinos. Los autores advierten también que algunos participantes podrían considerar inapropiado decirle al experimentador que un vino más barato sabía mejor (Plassmann et al., 2008).</p>`,
+     box:'Dieron el mismo vino diciendo que era barato o caro. Con el precio caro, a la gente le gustó más y se encendió más una zona del cerebro del placer, aunque la lengua recibía exactamente lo mismo. Sin precios, nadie notó diferencias.'}
+   ],
+   ej:`Tu equipo pregunta si ${x.mismo} a ${lo} hacen que la gente espere menos calidad que a ${mid}, aunque sean idénticos.`,
+   donde:'En El caso (las hipótesis) y en Decidir → Simular (ofertas A y B).',
+   q:[{p:'Según Rao (2005), el efecto del precio sobre la calidad percibida que mostró la revisión de Rao y Monroe (1989) es…',o:['Inexistente','Robusto, aunque moderado','Enorme en todos los productos','Negativo: lo caro parece peor'],c:1,e:'Rao (2005) lo describe como robusto, aunque moderado.'},
+      {p:'¿Qué ocurrió en Shiv et al. (2005)?',o:['Los del descuento resolvieron más acertijos','No hubo diferencias','Los que recibieron la bebida con descuento resolvieron menos acertijos','La bebida cara tenía otra fórmula'],c:2,e:'Con la misma bebida, el precio con descuento redujo el desempeño.'},
+      {p:'En Plassmann et al. (2008), ¿qué pasó en las áreas gustativas primarias al cambiar el precio?',o:['Se activaron mucho más','No se hallaron efectos del precio','Se apagaron por completo','Solo cambiaron con el vino barato'],c:1,e:'Los autores no encontraron efectos del precio en las áreas gustativas primarias.'}],
+   r:['plass08','rao05','rao89','shiv']},
+
+  {id:'u4',t:'Hacer un experimento y leer sus resultados',idea:'Un buen experimento cambia una sola cosa a propósito, mide con cuidado y lee los números sin exagerar lo que significan.',
+   s:[
+    {k:'diseno',h:'Diseñar el experimento',
+     b:`<p>Una <b>hipótesis</b> es una predicción que se formula antes de mirar los datos. La <b>variable independiente</b> es la que el investigador cambia a propósito (aquí, el precio) y la <b>variable dependiente</b> es la que mide (calidad esperada, gusto y elección).</p><p>En un diseño <b>intersujetos</b> cada persona ve una sola condición; en uno <b>intrasujeto</b>, cada persona ve más de una y se compara consigo misma. Charness, Gneezy y Kuhn (2012) explican que ambos tienen ventajas: los diseños intersujetos son más conservadores, pero tienen menos potencia estadística. En este simulador el orden de las ofertas se sortea para repartir su influencia (<b>contrabalanceo</b>). También importa el <b>efecto de demanda</b>: Plassmann et al. (2008) advierten que algunos participantes podrían no querer decir que el vino barato les gustó más.</p>`,
+     box:'Para que un experimento sea justo, cambias una sola cosa (el precio) y miras qué pasa con otra (la calidad que la gente espera). Si cada persona ve las dos ofertas, se compara consigo misma y bastan menos personas.'},
+    {k:'media',h:'Promedio y dispersión',
+     b:`<p>La <b>media (M)</b> es el promedio: la suma de las respuestas dividida entre el número de personas. La <b>desviación estándar (DE)</b> indica cuánto se alejan las respuestas de ese promedio: si es pequeña, las personas respondieron parecido; si es grande, las respuestas fueron muy distintas. En un diseño intrasujeto se analiza la <b>diferencia pareada</b>: para cada persona se resta su calificación de una oferta menos la de la otra.</p>`,
+     box:'La media es el promedio de las notas. La desviación estándar dice si todos pensaron parecido (número chico) o muy distinto (número grande).'},
+    {k:'p',h:'El valor p y la significación',
+     b:`<p>La Asociación Estadounidense de Estadística (ASA) define el <b>valor p</b> como la probabilidad, bajo un modelo estadístico especificado, de que un resumen de los datos sea igual o más extremo que el observado (Wasserstein y Lazar, 2016). Sus principios aclaran que el valor p indica cuán incompatibles son los datos con ese modelo, que no mide la probabilidad de que la hipótesis sea verdadera ni de que los datos se deban solo al azar, que un valor p o la significación estadística no miden el tamaño de un efecto ni la importancia de un resultado, y que por sí solo no es una buena medida de evidencia.</p><p>Por convención, una diferencia se llama <b>significativa</b> si p es menor que 0,05. La <b>t pareada</b> calcula ese valor p para la diferencia pareada; la <b>prueba binomial</b> lo calcula para saber si la proporción que elige una oferta se aleja del 50 %.</p>`,
+     box:'El valor p responde: “si en realidad no hubiera ninguna diferencia, ¿qué tan raro sería ver estos datos?”. Si es menor que 0,05, decimos que la diferencia es significativa. Pero eso no quiere decir que sea grande ni importante.'},
+    {k:'efecto',h:'Tamaño del efecto e intervalo de confianza',
+     b:`<p>El <b>tamaño del efecto</b> indica qué tan grande es una diferencia. Cohen (1988) propuso como convención 0,2, 0,5 y 0,8 para efectos pequeños, medianos y grandes de la d de Cohen, aunque advirtió que estas etiquetas son relativas y que el contexto de la investigación debe primar. Lakens (2013) explica que en los diseños intrasujeto el tamaño del efecto (como <b>d_z</b>) puede diferir del que se obtiene con un diseño intersujetos, por lo que hay que indicar cuál se informa.</p><p>Cumming (2014) recomienda la “nueva estadística”: informar tamaños del efecto, <b>intervalos de confianza</b> y metaanálisis. El intervalo de confianza del 95 % (<b>IC 95 %</b>) muestra el rango de valores plausibles para la diferencia real.</p>`,
+     box:'El tamaño del efecto es como un termómetro de la diferencia: 0,2 pequeña, 0,5 mediana, 0,8 grande. El intervalo de confianza es el margen de error: si esa rayita no toca el 0, hay una diferencia.'}
+   ],
+   ej:`Si 6 compañeros califican ${x.mismo} a ${mid} y a ${lo}, la diferencia pareada de cada uno se calcula restando su nota a ${lo} de su nota a ${mid}.`,
+   donde:'En Decidir → Simular, Decidir → Experimento, Resultados → Simulación y Resultados → Real vs. simulado.',
+   q:[{p:'Según la ASA (Wasserstein y Lazar, 2016), un valor p…',o:['Mide la probabilidad de que la hipótesis sea verdadera','Mide el tamaño del efecto','Indica cuán incompatibles son los datos con un modelo estadístico','Siempre prueba que el resultado es importante'],c:2,e:'El valor p indica incompatibilidad con un modelo; no mide verdad de la hipótesis ni tamaño del efecto.'},
+      {p:'Según las convenciones de Cohen (1988), una d de 0,5 es un efecto…',o:['Pequeño','Mediano','Grande','Nulo'],c:1,e:'0,2 pequeño, 0,5 mediano y 0,8 grande, aunque el contexto debe primar.'},
+      {p:'¿Qué es un diseño intrasujeto?',o:['Cada persona ve una sola condición','Cada persona ve más de una condición y se compara consigo misma','Solo participan expertos','No se usan números'],c:1,e:'En el diseño intrasujeto cada persona pasa por las dos ofertas.'}],
+   r:['charness','cohen','cumming','lakens','plass08','wass']},
+
+  {id:'u5',t:'Ética, límites y decisiones de marketing',idea:'Un gráfico del cerebro convence mucho, pero hay que preguntar qué mide, qué se puede concluir y cómo usarlo de forma responsable.',
+   s:[
+    {k:'inferencia',h:'La inferencia inversa',
+     b:`<p>Poldrack (2006) llama <b>inferencia inversa</b> a la práctica de deducir que ocurrió un proceso mental porque se activó una zona del cerebro. Su análisis muestra que la utilidad de esa inferencia está limitada por la selectividad de la activación: si una zona se activa en muchos procesos distintos, verla activa aporta poca evidencia de que ocurrió uno en particular.</p>`,
+     box:'Que una zona del cerebro “se encienda” no prueba qué sientes, porque esa misma zona puede encenderse por muchas razones distintas.'},
+    {k:'hype',h:'Esperanza y exageración (“hype”)',
+     b:`<p>Ariely y Berns (2010) proponen dos razones de la popularidad del neuromarketing: la esperanza de que la neuroimagen sea más barata y rápida que otros métodos, y la de que revele información que no se obtiene con métodos convencionales. Su artículo busca separar las esperanzas legítimas de la exageración publicitaria, o <b>hype</b>, y servir de guía para quienes compran o venden estos servicios; concluyen que la aplicación más prometedora podría darse antes de lanzar un producto, cuando todavía es una idea en desarrollo.</p>`,
+     box:'Algunas empresas venden el neuromarketing como si leyera la mente. Los científicos piden calma: es útil para algunas cosas, pero es caro y no hace magia.'},
+    {k:'decisiones',h:'Decisiones de marketing con evidencia',
+     b:`<p>La evidencia revisada sugiere prudencia con los precios. Un precio alto eleva las expectativas, pero si la calidad no las cumple, la evaluación y la demanda pueden caer por debajo de las de un precio bajo (Gneezy et al., 2014). Además, Kurz et al. (2023) concluyen que el efecto placebo del marketing puede ser menos robusto o generalizable de lo que se suponía, y que los profesionales deberían detenerse a pensar cuándo y si conviene apoyarse en él.</p><p>Ante un estudio de neuromarketing, conviene preguntar qué se midió (expectativa o experiencia), con cuántas personas y qué diseño se usó.</p>`,
+     box:'Poner un precio alto puede hacer que esperen más de tu producto, pero si no cumple, te sale peor. Antes de creer un estudio, pregunta qué midió y con cuántas personas.'}
+   ],
+   ej:`Si el directorio de ${pr.brand} decide no hacer descuentos “porque el cerebro valora más lo caro”, tu conclusión debe recordar qué mide tu estudio y sus límites.`,
+   donde:'En Aprender → Interpretación, al escribir tu conclusión.',
+   q:[{p:'¿Qué es la inferencia inversa según Poldrack (2006)?',o:['Medir el cerebro dos veces','Deducir que ocurrió un proceso mental porque se activó una zona del cerebro','Preguntar al participante qué sintió','Invertir el orden de las ofertas'],c:1,e:'Es deducir un proceso mental a partir de la activación de una zona; su valor depende de qué tan selectiva sea esa zona.'},
+      {p:'Según Ariely y Berns (2010), ¿dónde podría estar la aplicación más prometedora del neuromarketing?',o:['En leer la mente de los clientes','Antes de lanzar un producto, cuando todavía es una idea','En reemplazar todas las encuestas','En fijar precios automáticamente'],c:1,e:'Los autores señalan la etapa previa al lanzamiento como la más prometedora.'},
+      {p:'¿Qué recomiendan Kurz et al. (2023) sobre el efecto placebo del marketing?',o:['Usarlo siempre','Que puede ser menos robusto de lo supuesto y hay que pensar cuándo apoyarse en él','Que es imposible de medir','Que solo funciona con vino'],c:1,e:'Concluyen que el efecto puede ser menos robusto o generalizable de lo supuesto.'}],
+   r:['ariely','gneezy','kurz','poldrack']}
+  ];
+}
+const UTERMS=[['neurociencia del consumidor','neuro'],['neuromarketing','neuro'],['Sistema 1','sistemas'],['Sistema 2','sistemas'],['heurística precio-calidad','precio'],['heurística','sistemas'],['sesgos','sistemas'],['sesgo','sistemas'],['corteza orbitofrontal medial','valor'],['mOFC','valor'],['autorreporte','autorreporte'],['resonancia magnética funcional','fmri'],['resonancia magnética','fmri'],['fMRI','fmri'],['BOLD','fmri'],['EEG','autorreporte'],['seguimiento ocular','autorreporte'],['conductancia de la piel','autorreporte'],['calidad esperada','expectativa'],['expectativa','expectativa'],['calidad percibida','precio'],['efecto placebo del marketing','placebo'],['efecto placebo','placebo'],['Plassmann et al. (2008)','vino'],['diseño intrasujeto','diseno'],['intrasujeto','diseno'],['hipótesis','diseno'],['variable independiente','diseno'],['variable dependiente','diseno'],['efecto de demanda','diseno'],['contrabalanceo','diseno'],['desviación estándar','media'],['diferencia pareada','media'],['valor p','p'],['t pareada','p'],['prueba binomial','p'],['significativa','p'],['significativo','p'],['tamaño del efecto','efecto'],['d_z','efecto'],['intervalo de confianza','efecto'],['IC 95 %','efecto'],['inferencia inversa','inferencia'],['hype','hype']];
+const UTSORT=UTERMS.slice().sort((a,b)=>b[0].length-a[0].length);
+const ureEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function linkify(root){
+  if(!root)return;const used=new Set();
+  const skip=n=>{for(let e=n.parentNode;e&&e!==root;e=e.parentNode){const t=e.tagName;if(!t)continue;if(/^(A|BUTTON|SVG|TEXT|TEXTAREA|SELECT|OPTION|SCRIPT|STYLE|LABEL|H1|H2)$/i.test(t)||e.classList&&(e.classList.contains('tag')||e.classList.contains('chips')))return true;}return false;};
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  nodes.forEach(n=>{if(!n.nodeValue.trim()||skip(n))return;
+    for(const [term,key] of UTSORT){if(used.has(key))continue;
+      const re=new RegExp('(^|[^\\p{L}\\d_])('+ureEsc(term)+')(?![\\p{L}\\d_])','iu');const m=re.exec(n.nodeValue);if(!m)continue;
+      const i=m.index+m[1].length,a=document.createElement('a');a.className='cl';a.href='#unidades';a.dataset.c=key;a.title='Ver la unidad de aprendizaje';a.textContent=m[2];
+      const after=n.splitText(i);after.nodeValue=after.nodeValue.slice(m[2].length);n.parentNode.insertBefore(a,after);used.add(key);break;}
+  });
+}
+function renderUnidades(){
+  const el=$('unidadesOut');if(!el)return;
+  const pid=S.joined?S.equipo:MANPROD,U=unitsData(pid);
+  const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="expectativa">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>
+    <ol class="steps">${U.map(u=>`<li><a href="#unidades" data-ugo="${u.id}"><b>${esc(u.t)}</b></a></li>`).join('')}</ol>
+    <p class="small muted" style="margin:0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2.</p></div>`;
+  const body=U.map((u,i)=>`<div class="card unit" id="${u.id}"><p class="small muted" style="margin:0 0 4px">Unidad ${i+1}</p><h2>${esc(u.t)}</h2>
+    <p><b>Idea en una frase:</b> ${u.idea}</p>
+    ${u.s.map(s=>`<div class="usec" id="c-${s.k}"><h3>${s.h}</h3>${s.b}<div class="ubox"><b>💡 En palabras sencillas</b><p>${s.box}</p></div></div>`).join('')}
+    <p><b>Ejemplo con tu producto:</b> ${esc(u.ej)}</p><p><b>Dónde lo ves en el simulador:</b> ${esc(u.donde)}</p>
+    <h3>Autoevaluación</h3><p class="small muted">Tus respuestas no se guardan ni se califican: son solo para comprobar lo que entendiste.</p>
+    ${u.q.map((q,j)=>`<div class="uq" data-u="${u.id}" data-q="${j}"><p><b>${j+1}.</b> ${q.p}</p><div class="uqo">${q.o.map((o,k)=>`<button class="ghost" data-uq="${u.id}|${j}|${k}">${o}</button>`).join('')}</div><p class="small uqf" hidden></p></div>`).join('')}
+    <h3>Referencias</h3>${u.r.map(k=>`<p class="small uref">${UREF[k]}</p>`).join('')}</div>`).join('');
+  const gl=UTERMS.slice().sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([t,k])=>`<a class="cl" href="#unidades" data-c="${k}">${esc(t)}</a>`).join(' · ');
+  el.innerHTML=ix+body+`<div class="card"><h2>Conceptos de la A a la Z</h2><p class="small" style="line-height:2">${gl}</p></div>`;
+}
+function irConcepto(k,isUnit){
+  location.hash='unidades';showTab();
+  setTimeout(()=>{const t=$(isUnit?k:'c-'+k);if(!t)return;t.scrollIntoView({behavior:'smooth',block:'start'});t.classList.add('uflash');setTimeout(()=>t.classList.remove('uflash'),1800);},60);
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a.cl[data-c]');if(a){e.preventDefault();irConcepto(a.dataset.c,false);return;}
+  const g=e.target.closest('a[data-ugo]');if(g){e.preventDefault();irConcepto(g.dataset.ugo,true);return;}
+  const b=e.target.closest('button[data-uq]');if(b){const [u,j,k]=b.dataset.uq.split('|');const U=unitsData(S.joined?S.equipo:MANPROD).find(x=>x.id===u),q=U.q[+j],box=b.closest('.uq');
+    box.querySelectorAll('button').forEach((x,i)=>{x.classList.toggle('uok',i===q.c);x.classList.toggle('uko',i===+k&&+k!==q.c);});
+    const f=box.querySelector('.uqf');f.hidden=false;f.innerHTML=(+k===q.c?'<b>✓ Correcto.</b> ':'<b>✗ No es correcto.</b> ')+q.e;}
+});
+
 function renderCaso(){
   const pr=prod(S.equipo),P=pr.prices,prov=CONFIG.PRICES_PROVISIONAL;
   const rows=CONFIG.PRODUCTS.map(p=>`<tr${p.id===S.equipo?' style="font-weight:bold"':''}><td>${p.id}</td><td>${esc(p.name)} ${esc(p.brand)}</td><td class="num">${esc(money(p.prices.low))}</td><td class="num">${esc(money(p.prices.mid))}</td><td class="num">${esc(money(p.prices.high))}</td></tr>`).join('');
@@ -1477,11 +1658,12 @@ function renderEquipo(){
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
 function renderAll(){
-  renderManual();
+  renderManual();renderUnidades();linkify($('manualOut'));
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderManual();renderStatus();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderManual();renderUnidades();renderStatus();
+  ['casoOut','simOut','cmpOut','manualOut','t-simular','t-experimento','t-interpretacion'].forEach(id=>{const r=$(id);if(r&&!r.dataset.lk){linkify(r);if(/^t-/.test(id))r.dataset.lk='1';}});
 }
 function init(){
   const ban=$('banner');
