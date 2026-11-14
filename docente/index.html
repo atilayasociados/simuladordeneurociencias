@@ -239,6 +239,10 @@ body.adm .note{color:var(--fg)}
 .ubtn span{font-size:.75rem;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .ubtn.on{background:var(--azul);border-color:var(--azul);color:#fff}
 .ubtn.on span{color:#C9D3E3}
+
+.udef{background:var(--surface2);border-left:4px solid var(--azul2);border-radius:6px;padding:10px 12px;margin:8px 0 12px}
+.udef p{margin:6px 0 0;scroll-margin-top:170px;border-radius:4px;transition:background .6s}
+.gl{scroll-margin-top:120px}
 a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--azul2);text-underline-offset:3px;cursor:help}
 .ubox{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:6px;padding:10px 12px;margin:10px 0 14px}
 .ubox p{margin:4px 0 0}
@@ -1517,7 +1521,7 @@ function unitsData(pid){
      box:'La resonancia magnética funcional es una máquina grande donde te acuestas; mide qué zonas del cerebro reciben más oxígeno, que es una pista de cuáles están trabajando más. Es muy cara, por eso en clase la simulamos.'},
     {k:'expectativa',h:'Expectativa frente a experiencia',
      b:`<p>La <b>expectativa</b> es lo que la persona cree de un producto antes de usarlo; la <b>experiencia</b>, lo que percibe al usarlo. Kurz, Efendic y Goukens (2023) realizaron seis estudios con 2842 participantes en total. En todos, los precios más altos llevaron a mayores expectativas de calidad y agrado, pero no encontraron un efecto consistente sobre la calidad percibida y el agrado una vez que las personas experimentaron el producto.</p><p>Gneezy, Gneezy y Lauga (2014) muestran que los precios altos aumentan las expectativas antes de probar un vino; cuando la calidad cumple esas expectativas, la evaluación subjetiva y la demanda aumentan, pero cuando no las cumple, el precio alto produce una evaluación y una demanda menores que un precio bajo.</p>`,
-     box:'Expectativa es lo que crees antes de probar algo (“esta lata parece buena”). Experiencia es lo que sientes cuando la pruebas. El precio cambia mucho lo primero, pero no siempre lo segundo.'}
+     box:'Expectativa es lo que crees antes de probar algo (“parece bueno”). Experiencia es lo que sientes cuando lo pruebas. El precio cambia mucho lo primero, pero no siempre lo segundo.'}
    ],
    ej:`En el Experimento, tus compañeros ven una imagen de ${x.obj} con su precio, pero no pueden ${x.uso}: por eso tu estudio mide la expectativa, no la experiencia.`,
    donde:'En el laboratorio de resonancia simulado (Resultados → Simulación) y en el aviso de límites de Decidir → Experimento.',
@@ -1587,7 +1591,48 @@ function unitsData(pid){
    r:['ariely','gneezy','kurz','poldrack']}
   ];
 }
-const UTERMS=[['neurociencia del consumidor','neuro'],['neuromarketing','neuro'],['Sistema 1','sistemas'],['Sistema 2','sistemas'],['heurística precio-calidad','precio'],['heurística','sistemas'],['sesgos','sistemas'],['sesgo','sistemas'],['corteza orbitofrontal medial','valor'],['mOFC','valor'],['autorreporte','autorreporte'],['resonancia magnética funcional','fmri'],['resonancia magnética','fmri'],['fMRI','fmri'],['BOLD','fmri'],['EEG','autorreporte'],['seguimiento ocular','autorreporte'],['conductancia de la piel','autorreporte'],['calidad esperada','expectativa'],['expectativa','expectativa'],['calidad percibida','precio'],['efecto placebo del marketing','placebo'],['efecto placebo','placebo'],['Plassmann et al. (2008)','vino'],['diseño intrasujeto','diseno'],['intrasujeto','diseno'],['hipótesis','diseno'],['variable independiente','diseno'],['variable dependiente','diseno'],['efecto de demanda','diseno'],['contrabalanceo','diseno'],['desviación estándar','media'],['diferencia pareada','media'],['valor p','p'],['t pareada','p'],['prueba binomial','p'],['significativa','p'],['significativo','p'],['tamaño del efecto','efecto'],['d_z','efecto'],['intervalo de confianza','efecto'],['IC 95 %','efecto'],['inferencia inversa','inferencia'],['hype','hype']];
+const UDEF=[
+ {id:'neurociencia-del-consumidor',k:'neuro',t:'Neurociencia del consumidor',d:'Investigación académica, en la intersección de la neurociencia y la psicología del consumidor, que estudia cómo las personas perciben, valoran y eligen productos (Plassmann et al., 2012).',al:['neurociencia del consumidor']},
+ {id:'neuromarketing',k:'neuro',t:'Neuromarketing',d:'Aplicación de métodos de la neurociencia para analizar y entender el comportamiento relacionado con el marketing (Lee et al., 2007). En las empresas, el término se usa para sus servicios comerciales con estos métodos (Plassmann et al., 2012).',al:['neuromarketing']},
+ {id:'sistema-1',k:'sistemas',t:'Sistema 1',d:'Modo de pensar rápido, automático, sin esfuerzo, asociativo y difícil de controlar; corresponde a la intuición (Kahneman, 2003).',al:['Sistema 1']},
+ {id:'sistema-2',k:'sistemas',t:'Sistema 2',d:'Modo de pensar más lento, serial, con esfuerzo y controlado deliberadamente; corresponde al razonamiento (Kahneman, 2003).',al:['Sistema 2']},
+ {id:'heuristica',k:'sistemas',t:'Heurística',d:'Atajo mental que permite juzgar o decidir sin analizar toda la información; ahorra esfuerzo, pero puede producir errores (Kahneman, 2003).',al:['heurística']},
+ {id:'sesgo',k:'sistemas',t:'Sesgo (sesgos)',d:'Error sistemático, es decir, que se repite en la misma dirección, que separa lo que las personas creen o eligen de lo que supondría un agente perfectamente racional (Kahneman, 2003).',al:['sesgo','sesgos']},
+ {id:'valor-predicho',k:'valor',t:'Valor predicho, experimentado y recordado',d:'Componentes de la formación de preferencias según Plassmann et al. (2012): el valor predicho es cuánto se espera que algo guste antes de tenerlo; el experimentado, cuánto gusta al consumirlo; y el recordado, lo que queda en la memoria para decisiones futuras.',al:[]},
+ {id:'mofc',k:'valor',t:'Corteza orbitofrontal medial (mOFC)',d:'Zona de la parte frontal e inferior del cerebro que se considera ampliamente relacionada con el placer que se experimenta; en ella Plassmann et al. (2008) observaron más actividad cuando el precio del vino era mayor.',al:['corteza orbitofrontal medial','mOFC']},
+ {id:'autorreporte',k:'autorreporte',t:'Autorreporte',d:'Información que la persona da al responder preguntas, por ejemplo en una escala de 1 a 10; es la medida más usada en la investigación del consumidor (Bell et al., 2018).',al:['autorreporte']},
+ {id:'eeg',k:'autorreporte',t:'EEG (electroencefalografía)',d:'Técnica que registra la actividad eléctrica del cerebro mediante sensores colocados en el cuero cabelludo (Bell et al., 2018).',al:['EEG']},
+ {id:'seguimiento-ocular',k:'autorreporte',t:'Seguimiento ocular',d:'Técnica que registra los movimientos de los ojos de la persona mientras observa un estímulo (Bell et al., 2018).',al:['seguimiento ocular']},
+ {id:'conductancia',k:'autorreporte',t:'Conductancia de la piel',d:'Medida de la actividad eléctrica de la piel asociada a la secreción de sudor (Bell et al., 2018).',al:['conductancia de la piel']},
+ {id:'fmri',k:'fmri',t:'Resonancia magnética funcional (fMRI)',d:'Técnica de neuroimagen en la que la persona permanece acostada dentro de un escáner que registra la señal BOLD de las distintas zonas del cerebro mientras realiza una tarea (Plassmann et al., 2008).',al:['resonancia magnética funcional','resonancia magnética','fMRI']},
+ {id:'bold',k:'fmri',t:'Señal BOLD',d:'Señal dependiente del nivel de oxígeno en sangre que registra la fMRI; se usa como indicador de la actividad de una zona del cerebro (Plassmann et al., 2008).',al:['BOLD']},
+ {id:'calidad-esperada',k:'expectativa',t:'Calidad esperada',d:'La calidad que una persona cree que tendrá un producto antes de usarlo. En este simulador se mide con la pregunta «¿Qué calidad esperas de este producto?», en una escala de 1 (muy mala) a 10 (excelente). Es la variable principal del estudio de tu equipo.',al:['calidad esperada']},
+ {id:'expectativa',k:'expectativa',t:'Expectativa',d:'Lo que una persona cree de un producto antes de usarlo o probarlo (Kurz et al., 2023).',al:['expectativa']},
+ {id:'experiencia',k:'expectativa',t:'Experiencia',d:'Lo que una persona percibe cuando usa o prueba el producto, por ejemplo la calidad percibida y el agrado después de consumirlo (Kurz et al., 2023).',al:[]},
+ {id:'calidad-percibida',k:'precio',t:'Calidad percibida',d:'La calidad que el comprador juzga que tiene un producto; puede depender de señales como el precio, la marca o la tienda (Rao y Monroe, 1989).',al:['calidad percibida']},
+ {id:'heuristica-precio-calidad',k:'precio',t:'Heurística precio-calidad',d:'Atajo mental por el cual se usa el precio como pista de calidad: «si es más caro, debe ser mejor» (Rao, 2005).',al:['heurística precio-calidad']},
+ {id:'efecto-placebo',k:'placebo',t:'Efecto placebo del marketing',d:'Efecto por el cual una acción de marketing, como el precio, cambia el resultado real que la persona obtiene con un producto a través de sus expectativas (Shiv et al., 2005).',al:['efecto placebo del marketing','efecto placebo']},
+ {id:'plassmann',k:'vino',t:'Plassmann et al. (2008)',d:'Estudio con fMRI en el que el mismo vino, mostrado con precios distintos, recibió más agrado declarado y más actividad en la mOFC cuando su precio era mayor.',al:['Plassmann et al. (2008)']},
+ {id:'hipotesis',k:'diseno',t:'Hipótesis',d:'Predicción sobre lo que va a ocurrir, formulada antes de mirar los datos.',al:['hipótesis']},
+ {id:'variable-independiente',k:'diseno',t:'Variable independiente',d:'La variable que el investigador cambia a propósito; en este estudio, el precio (normal o con descuento).',al:['variable independiente']},
+ {id:'variable-dependiente',k:'diseno',t:'Variable dependiente',d:'La variable que se mide para ver si cambió; en este estudio, la calidad esperada, el gusto y la elección.',al:['variable dependiente']},
+ {id:'intrasujeto',k:'diseno',t:'Diseño intrasujeto',d:'Diseño en el que cada participante pasa por todas las condiciones y se compara consigo mismo; en el diseño intersujetos, cada persona ve una sola condición (Charness et al., 2012).',al:['diseño intrasujeto','intrasujeto']},
+ {id:'contrabalanceo',k:'diseno',t:'Contrabalanceo',d:'Variar el orden en que se presentan las condiciones entre participantes, para que el orden no explique el resultado; en el simulador el orden de las ofertas se sortea.',al:['contrabalanceo']},
+ {id:'efecto-demanda',k:'diseno',t:'Efecto de demanda',d:'Cuando los participantes responden según lo que creen que el investigador espera o considera apropiado, y no según lo que realmente piensan; Plassmann et al. (2008) lo advierten en su estudio.',al:['efecto de demanda']},
+ {id:'media',k:'media',t:'Media (M)',d:'El promedio: la suma de las respuestas dividida entre el número de personas.',al:[]},
+ {id:'desviacion',k:'media',t:'Desviación estándar (DE)',d:'Indica cuánto se alejan las respuestas de la media: pequeña si las personas respondieron parecido, grande si respondieron muy distinto.',al:['desviación estándar']},
+ {id:'diferencia-pareada',k:'media',t:'Diferencia pareada',d:'En un diseño intrasujeto, la resta, para cada persona, de su calificación en una condición menos su calificación en la otra.',al:['diferencia pareada']},
+ {id:'valor-p',k:'p',t:'Valor p',d:'La probabilidad, bajo un modelo estadístico especificado, de obtener un resumen de los datos igual o más extremo que el observado. No mide la probabilidad de que la hipótesis sea verdadera ni el tamaño del efecto (Wasserstein y Lazar, 2016).',al:['valor p']},
+ {id:'significativo',k:'p',t:'Significativo o significativa',d:'Por convención, una diferencia se llama estadísticamente significativa cuando su valor p es menor que 0,05. No quiere decir «grande» ni «importante» (Wasserstein y Lazar, 2016).',al:['significativa','significativo']},
+ {id:'t-pareada',k:'p',t:'Prueba t pareada',d:'Prueba estadística que calcula el valor p de la diferencia pareada media en un diseño intrasujeto.',al:['t pareada']},
+ {id:'binomial',k:'p',t:'Prueba binomial',d:'Prueba estadística que calcula el valor p para saber si la proporción de personas que elige una opción se aleja del 50 %.',al:['prueba binomial']},
+ {id:'tamano-efecto',k:'efecto',t:'Tamaño del efecto',d:'Medida de qué tan grande es una diferencia, independiente de si es significativa. Para la d de Cohen se usan como convención 0,2 (pequeño), 0,5 (mediano) y 0,8 (grande), aunque el contexto debe primar (Cohen, 1988).',al:['tamaño del efecto']},
+ {id:'dz',k:'efecto',t:'d_z',d:'Tamaño del efecto para diseños intrasujeto: la diferencia pareada media dividida entre la desviación estándar de las diferencias (Lakens, 2013).',al:['d_z']},
+ {id:'ic',k:'efecto',t:'Intervalo de confianza del 95 % (IC 95 %)',d:'Rango de valores plausibles para la diferencia real, calculado a partir de los datos; si no incluye el 0, la diferencia es significativa al 5 % (Cumming, 2014).',al:['intervalo de confianza','IC 95 %']},
+ {id:'inferencia-inversa',k:'inferencia',t:'Inferencia inversa',d:'Deducir que ocurrió un proceso mental porque se activó una zona del cerebro; su valor es limitado si esa zona se activa en muchos procesos distintos (Poldrack, 2006).',al:['inferencia inversa']},
+ {id:'hype',k:'hype',t:'Hype',d:'Exageración publicitaria sobre lo que una técnica puede hacer; Ariely y Berns (2010) buscan separarla de las esperanzas legítimas del neuromarketing.',al:['hype']}
+];
+const UTERMS=UDEF.flatMap(d=>d.al.map(a=>[a,d.id]));
 const UTSORT=UTERMS.slice().sort((a,b)=>b[0].length-a[0].length);
 const ureEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function linkify(root){
@@ -1605,23 +1650,23 @@ let UCUR='u1';
 function renderUnidades(){
   const el=$('unidadesOut');if(!el)return;
   const pid=S.joined?S.equipo:MANPROD,U=unitsData(pid);
-  const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="expectativa">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>
+  const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="calidad-esperada">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>
     <div class="ubtns" role="tablist" aria-label="Unidades">${U.map((u,i)=>`<button role="tab" class="ubtn${UCUR===u.id?' on':''}" aria-selected="${UCUR===u.id}" data-ugo="${u.id}"><span>Unidad ${i+1}</span>${esc(u.t)}</button>`).join('')}<button role="tab" class="ubtn${UCUR==='az'?' on':''}" aria-selected="${UCUR==='az'}" data-ugo="az"><span>Glosario</span>Conceptos de la A a la Z</button></div>
     <p class="small muted" style="margin:0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2.</p></div>`;
   const body=U.map((u,i)=>`<div class="card unit" id="${u.id}"${UCUR===u.id?'':' hidden'}><p class="small muted" style="margin:0 0 4px">Unidad ${i+1}</p><h2>${esc(u.t)}</h2>
     <p><b>Idea en una frase:</b> ${u.idea}</p>
-    ${u.s.map(s=>`<div class="usec" id="c-${s.k}"><h3>${s.h}</h3>${s.b}<div class="ubox"><b>💡 En palabras sencillas</b><p>${s.box}</p></div></div>`).join('')}
+    ${u.s.map(s=>`<div class="usec" id="c-${s.k}"><h3>${s.h}</h3><div class="udef"><b>📌 Conceptos de esta sección</b>${UDEF.filter(d=>d.k===s.k).map(d=>`<p id="d-${d.id}"><b>${esc(d.t)}:</b> ${d.d}</p>`).join('')}</div>${s.b}<div class="ubox"><b>💡 En palabras sencillas</b><p>${s.box}</p></div></div>`).join('')}
     <p><b>Ejemplo con tu producto:</b> ${esc(u.ej)}</p><p><b>Dónde lo ves en el simulador:</b> ${esc(u.donde)}</p>
     <h3>Autoevaluación</h3><p class="small muted">Tus respuestas no se guardan ni se califican: son solo para comprobar lo que entendiste.</p>
     ${u.q.map((q,j)=>`<div class="uq" data-u="${u.id}" data-q="${j}"><p><b>${j+1}.</b> ${q.p}</p><div class="uqo">${q.o.map((o,k)=>`<button class="ghost" data-uq="${u.id}|${j}|${k}">${o}</button>`).join('')}</div><p class="small uqf" hidden></p></div>`).join('')}
     <h3>Referencias</h3>${u.r.map(k=>`<p class="small uref">${UREF[k]}</p>`).join('')}</div>`).join('');
-  const gl=UTERMS.slice().sort((a,b)=>a[0].localeCompare(b[0],'es',{sensitivity:'base'})).map(([t,k])=>`<a class="cl" href="#unidades" data-c="${k}">${esc(t)}</a>`).join(' · ');
-  el.innerHTML=ix+body+`<div class="card unit" id="az"${UCUR==='az'?'':' hidden'}><h2>Conceptos de la A a la Z</h2><p class="small" style="line-height:2">${gl}</p></div>`;
+  const gl=UDEF.slice().sort((a,b)=>a.t.localeCompare(b.t,'es',{sensitivity:'base'})).map(d=>{const ui=U.findIndex(u=>u.s.some(x=>x.k===d.k));return `<p class="gl"><b>${esc(d.t)}:</b> ${d.d} <a class="cl" href="#unidades" data-c="${d.id}">Ver en la Unidad ${ui+1} →</a></p>`;}).join('');
+  el.innerHTML=ix+body+`<div class="card unit" id="az"${UCUR==='az'?'':' hidden'}><h2>Conceptos de la A a la Z</h2><p class="small muted">Cada concepto con su definición. El enlace te lleva a la unidad donde se explica.</p>${gl}</div>`;
 }
 function irConcepto(k,isUnit){
-  const U=unitsData(S.joined?S.equipo:MANPROD);UCUR=isUnit?k:((U.find(u=>u.s.some(x=>x.k===k))||{id:UCUR}).id);
+  const U=unitsData(S.joined?S.equipo:MANPROD),df=UDEF.find(d=>d.id===k);UCUR=isUnit?k:((U.find(u=>u.s.some(x=>x.k===(df?df.k:k)))||{id:UCUR}).id);
   location.hash='unidades';showTab();renderUnidades();
-  setTimeout(()=>{const t=$(isUnit?k:'c-'+k);if(!t)return;t.scrollIntoView({behavior:'smooth',block:'start'});t.classList.add('uflash');setTimeout(()=>t.classList.remove('uflash'),1800);},60);
+  setTimeout(()=>{const t=$(isUnit?k:(df?'d-'+k:'c-'+k));if(!t)return;t.scrollIntoView({behavior:'smooth',block:'start'});t.classList.add('uflash');setTimeout(()=>t.classList.remove('uflash'),1800);},60);
 }
 document.addEventListener('click',e=>{
   const a=e.target.closest('a.cl[data-c]');if(a){e.preventDefault();irConcepto(a.dataset.c,false);return;}
