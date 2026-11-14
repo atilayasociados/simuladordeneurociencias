@@ -408,10 +408,36 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
 #t-interpretacion{--uc:#C2570C}#t-interpretacion .card:not(.soft){border-top:4px solid var(--uc)}
 .ichk{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;margin-top:10px}
 .ichk div{background:var(--surface2);border-radius:8px;padding:6px 10px;font-size:.84rem;color:var(--muted)}.ichk div.ok{background:var(--real-soft);color:var(--real);font-weight:bold}
+/* ===== marca e iconos ===== */
+header{background:linear-gradient(90deg,#0E1E35,#1F3864 70%);border-bottom:3px solid #44D62C}
+.hbrand{display:flex;align-items:center;gap:14px;min-width:0}
+.hbrand img{height:38px;width:auto;flex:none}
+.hsep{width:1px;height:36px;background:rgba(255,255,255,.28);flex:none}
+@media (max-width:560px){.hbrand{flex-wrap:wrap;gap:8px 12px}.hbrand img{height:30px}.hsep{display:none}}
+nav .menu a{display:inline-flex;align-items:center;gap:7px}
+nav .menu a .ico{width:18px;height:18px;opacity:.9}
+nav .menu a.on{box-shadow:inset 0 -3px 0 #44D62C}
+.fbrand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#0E1E35;border-radius:10px;padding:12px 16px;margin-bottom:10px;border-left:4px solid #44D62C}
+.fbrand img{height:32px;width:auto}.fbrand p{margin:0;color:#C9D3E3;font-size:.85rem}
+.ax-brand{display:flex;justify-content:center;margin:0 0 14px}.ax-brand img{height:42px;max-width:100%}
+.adm-logo{padding:12px 20px 14px max(20px,env(safe-area-inset-left,0px));border-bottom:1px solid rgba(255,255,255,.08)}.adm-logo img{height:32px;max-width:100%}
+.ico{display:inline-flex;width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+.ico svg{width:100%;height:100%;display:block}
+.ic-ok{color:var(--real)}.ic-ko{color:var(--bad)}.ic-warn{color:var(--warn)}.ic-bulb{color:#B7791F}.ic-mute{color:var(--muted)}
+.phero .ico,.uhero .ico,.vban .ico{color:inherit}
+.vban.ok>span{color:var(--real)}.vban.ko>span{color:var(--bad)}.vban.neu>span{color:var(--azul2)}
+.ltr{display:inline-flex;align-items:center;justify-content:center;width:1.35em;height:1.35em;border-radius:6px;font-weight:bold;color:#fff;background:var(--sim);font-size:.8em;line-height:1}
+.ltr.b{background:var(--azul)}
+.phero .pic{width:60px;height:60px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.xsteps span,.pflow a span,.rgrid span,.mtools span,.utools span,.uflow span{color:var(--uc,var(--azul2))}
+.xsteps span .ico,.rgrid span .ico,.mtools span .ico{width:26px;height:26px}
+.stat em{color:var(--uc,var(--azul2))}
+.hcard .hk span{display:inline-flex;width:34px;height:34px;border-radius:10px;background:var(--surface2);align-items:center;justify-content:center;font-size:18px}
+.pjour a i .ico{width:16px;height:16px}
 </style>
 </head><body>
 <header class="nopm">
-  <div><h1>Neurociencias · UAB 2026</h1><div class="sub1">Precio y valor percibido · Clases Espejo</div></div>
+  <div class="hbrand"><img data-logo alt="Atila y Asociados · IEAC Business School"><span class="hsep" aria-hidden="true"></span><div><h1>Neurociencias · UAB 2026</h1><div class="sub1">Precio y valor percibido · Clases Espejo</div></div></div>
   <div class="meta" id="metaBar">
     <span id="bar" hidden><b id="barWho"></b> · <span id="barProd"></span> · Ronda <span id="barRound">0</span> <button class="pill" id="barSwitch">Cambiar alias</button> <button class="pill" id="barChange">Salir</button></span>
     <a class="pill" href="#manual">Manual</a>
@@ -589,11 +615,101 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
     <p class="small" style="margin:12px 0 0">Código actual: <b id="codCur" style="color:var(--warn);font-family:'Space Mono',monospace;letter-spacing:2px">—</b> <span class="muted">(mínimo 8 caracteres)</span></p><p class="small" id="codMsg" style="margin:6px 0 0"></p></div>
 </main>
 
-<footer class="nopm"><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
+<footer class="nopm"><div class="fbrand"><img data-logo alt="Atila y Asociados · IEAC Business School"><p>Material preparado por Atila y Asociados e IEAC Business School.</p></div><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
 </div>
 
 
 <script>
+/* ---------- iconos de línea (reemplazan emojis en toda la página) ---------- */
+const ICP={
+bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+pin:'<path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>',
+ok:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+ko:'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
+scale:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+wait:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/>',
+puzzle:'<path d="M15.39 4.39a1 1 0 0 0 1.68-.47 2.5 2.5 0 1 1 3.01 3.01 1 1 0 0 0-.47 1.68l1.68 1.68a2.4 2.4 0 0 1 0 3.42l-1.68 1.68a1 1 0 0 1-1.68-.47 2.5 2.5 0 1 0-3.01 3.01 1 1 0 0 1 .47 1.68l-1.68 1.68a2.4 2.4 0 0 1-3.42 0l-1.68-1.68a1 1 0 0 0-1.68.47 2.5 2.5 0 1 1-3.01-3.01 1 1 0 0 0 .47-1.68l-1.68-1.68a2.4 2.4 0 0 1 0-3.42l1.68-1.68a1 1 0 0 1 1.68.47 2.5 2.5 0 1 0 3.01-3.01 1 1 0 0 1-.47-1.68l1.68-1.68a2.4 2.4 0 0 1 3.42 0z"/>',
+target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+chart:'<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+trend:'<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
+tag:'<path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/>',
+clip:'<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+brain:'<path d="M12 5a3 3 0 1 0-6 .13 4 4 0 0 0-2.52 5.77 4 4 0 0 0 .55 6.59A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 6 .13 4 4 0 0 1 2.52 5.77 4 4 0 0 1-.55 6.59A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/>',
+repeat:'<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+magnet:'<path d="m6 15-4-4 6.75-6.77a7.79 7.79 0 0 1 11 11L13 22l-4-4 6.39-6.36a2.14 2.14 0 0 0-3-3L6 15"/><path d="m5 8 4 4"/><path d="m12 15 4 4"/>',
+image:'<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/>',
+bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+compass:'<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>',
+grad:'<path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/>',
+cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+micro:'<path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/>',
+flask:'<path d="M10 2v7.53a2 2 0 0 1-.21.9L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.07-10.13A2 2 0 0 1 14 9.53V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>',
+type:'<path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>',
+chair:'<path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H7v-2a2 2 0 0 0-4 0Z"/><path d="M5 18v2"/><path d="M19 18v2"/>',
+phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',
+hand:'<path d="M18 11V6a2 2 0 0 0-4 0"/><path d="M14 10V4a2 2 0 0 0-4 0v2"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+mega:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>',
+eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+warn:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+bed:'<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+radio:'<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>',
+hosp:'<path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/>',
+dollar:'<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+dot:'<circle cx="12" cy="12" r="6" fill="currentColor" stroke="none"/>',
+help:'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+game:'<path d="M6 12h4"/><path d="M8 10v4"/><path d="M15 13h.01"/><path d="M18 11h.01"/><rect width="20" height="12" x="2" y="6" rx="2"/>',
+school:'<rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/>',
+save:'<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>',
+archive:'<rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>',
+pause:'<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
+zap:'<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+drop:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+wine:'<path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/>',
+search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+timer:'<path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/>',
+mappin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+doc:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+lock:'<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+cmp:'<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/>',
+hash:'<path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/>',
+stop:'<path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+mask:'<path d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"/><path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z"/><path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z"/>'
+};
+const ICM={'💡':'bulb','📌':'pin','✅':'ok','❌':'ko','⚖️':'scale','⚖':'scale','👥':'users','🧑‍🤝‍🧑':'users','⏳':'wait','🧩':'puzzle','🎯':'target','📊':'chart','📈':'trend','🏷️':'tag','🏷':'tag','📋':'clip','🧠':'brain','🔁':'repeat','🔄':'refresh','📘':'book','📖':'book','📚':'book','🧲':'magnet','🖼️':'image','🖼':'image','🛍️':'bag','🛍':'bag','👤':'user','💬':'msg','🧭':'compass','🎓':'grad','📝':'pen','✍️':'pen','😊':'smile','🛒':'cart','⚙️':'gear','⚙':'gear','🔬':'micro','🧑‍🔬':'micro','👩‍🔬':'micro','🧪':'flask','🔤':'type','🪑':'chair','📱':'phone','👆':'hand','📣':'mega','🔑':'key','👁️':'eye','👁':'eye','⚠️':'warn','⚠':'warn','🛏️':'bed','🛏':'bed','📡':'radio','🏥':'hosp','💲':'dollar','ℹ️':'info','🟢':'dot','🟡':'dot','🤔':'help','❓':'help','🎮':'game','🏫':'school','💾':'save','🗄':'archive','🗄️':'archive','⏸':'pause','⏸️':'pause','⚡':'zap','💧':'drop','🍷':'wine','🔍':'search','⏱':'timer','⏱️':'timer','📍':'mappin','📜':'doc','🔒':'lock','🆚':'cmp','🔢':'hash','🚧':'stop','🎭':'mask'};
+const ICC={'✅':'ic-ok','❌':'ic-ko','⚠️':'ic-warn','⚠':'ic-warn','🟢':'ic-ok','🟡':'ic-warn','💡':'ic-bulb','⏳':'ic-mute'};
+const ICRE=new RegExp(Object.keys(ICM).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'|🅰️|🅱️','gu');
+function icoSvg(k){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICP[k]}</svg>`;}
+function iconize(root){
+  if(!root)return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ICRE.lastIndex=0;if(!ICRE.test(n.nodeValue))return NodeFilter.FILTER_REJECT;for(let e=n.parentNode;e&&e!==root.parentNode;e=e.parentNode){if(/^(TEXTAREA|SCRIPT|STYLE|OPTION|SELECT|svg|text|TITLE)$/i.test(e.tagName||''))return NodeFilter.FILTER_REJECT;}return NodeFilter.FILTER_ACCEPT;}});
+  const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    const frag=document.createDocumentFragment();let last=0;const t=n.nodeValue;ICRE.lastIndex=0;let m;
+    while((m=ICRE.exec(t))){
+      if(m.index>last)frag.appendChild(document.createTextNode(t.slice(last,m.index)));
+      const sp=document.createElement('span');
+      if(m[0]==='🅰️'||m[0]==='🅱️'){sp.className='ltr '+(m[0]==='🅰️'?'a':'b');sp.textContent=m[0]==='🅰️'?'A':'B';sp.setAttribute('aria-hidden','true');}
+      else{sp.className='ico '+(ICC[m[0]]||'');sp.innerHTML=icoSvg(ICM[m[0]]);}
+      frag.appendChild(sp);last=m.index+m[0].length;
+    }
+    if(last<t.length)frag.appendChild(document.createTextNode(t.slice(last)));
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+let ICQ=false;
+new MutationObserver(()=>{if(ICQ)return;ICQ=true;requestAnimationFrame(()=>{ICQ=false;iconize(document.body);});}).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
+document.addEventListener('DOMContentLoaded',()=>iconize(document.body));
+
 /* =====================================================================
    CONFIGURACIÓN (edita solo este bloque)
    ===================================================================== */
@@ -670,6 +786,7 @@ const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','unidades','manual','docente'];
 const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
+const LOGO_AI=BASE+'img/logo-atila-ieac.png';document.querySelectorAll('img[data-logo]').forEach(i=>i.src=LOGO_AI);
 if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
 const TIERL={low:'descuento',mid:'normal',high:'alto'};
@@ -749,12 +866,13 @@ setInterval(()=>{if(BACKEND&&pending())sync();},15000);
 window.addEventListener('online',()=>sync());
 
 /* ---------- navegación ---------- */
+const GICO={'Situación':'compass','Decidir':'pen','Resultados':'chart','Aprender':'grad','Docente':'school'};
 function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
 function showTab(){
   if(DOCMODE){VIEWS.forEach(x=>$('t-'+x).classList.toggle('hidden-tab',x!=='docente'));$('nav').innerHTML='';$('bar').hidden=true;$('status').hidden=true;if(!DTOK&&!demoOn&&AXM===null)AX_mostrar('ingresar');return;}
   const t=currentTab(),g=GROUPS.find(x=>x.v.some(y=>y[0]===t));
   VIEWS.forEach(x=>{$('t-'+x).classList.toggle('hidden-tab',x!==t||(x!=='docente'&&x!=='manual'&&x!=='unidades'&&!S.joined));});
-  $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
+  $('nav').innerHTML='<div class="menu">'+GROUPS.map(x=>`<a href="#${x.v[0][0]}" class="${x===g?'on':''}"${x===g?' aria-current="page"':''}><span class="ico">${icoSvg(GICO[x.n]||'clip')}</span>${x.n}</a>`).join('')+'</div>'+(g.v.length>1?'<div class="sub">'+g.v.map(([id,n])=>`<a href="#${id}" class="${id===t?'on':''}">${n}</a>`).join('')+'</div>':'');
   if(!S.joined&&t!=='docente'&&t!=='manual'&&t!=='unidades'&&AXM===null)AX_mostrar(BACKEND?'ingresar':'practica');
   $('bar').hidden=!S.joined;
   document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
@@ -774,7 +892,7 @@ function AX_busy(b,on){if(!b)return;if(on){b.dataset.t=b.textContent;b.textConte
 function AX_enter(ev,fn){if(ev.key==='Enter'){ev.preventDefault();fn();}}
 function AX_cerrar(){AXM=null;document.body.classList.remove('ax-on');const e=AX_$('ax');if(e)e.innerHTML='';}
 function AX_manual(){if(DOCMODE){location.href=BASE+'#manual';return;}AX_cerrar();location.hash='manual';showTab();}
-function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="'+BASE+'img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
+function AX_cab(){const lg=['UAGRM','Ciencias Económicas','Ingeniería Comercial'].map((a,i)=>'<div class="ax-logo"><img src="'+BASE+'img/logo'+(i+1)+'.png" alt="Logo '+a+'" onerror="this.parentNode.style.display=\'none\'"></div>').join('');return '<div class="ax-brand"><img src="'+LOGO_AI+'" alt="Atila y Asociados · IEAC Business School"></div><div class="ax-logos">'+lg+'</div><div class="ax-title">Simulador de Neurociencias</div><div class="ax-sub">Neurociencias aplicada al consumidor</div><div class="ax-sub2">Precio y valor percibido · Clases Espejo</div>';}
 function AX_mostrar(modo,msg){
   AXM=modo;document.body.classList.add('ax-on');let h='',w=false;
   if(modo==='ingresar'&&DOCMODE){
@@ -1131,7 +1249,7 @@ async function runSim(){
   location.hash='resultados';
 }
 /* ---------- encabezados visuales (Situación · Decidir · Resultados) ---------- */
-const JG=[{g:'Situación',c:'#2F5496',i:'📋',h:'caso'},{g:'Decidir',c:'#6B4FBB',i:'🎯',h:'simular'},{g:'Resultados',c:'#1E7B46',i:'📊',h:'resultados'},{g:'Aprender',c:'#C2570C',i:'🎓',h:'interpretacion'}];
+const JG=[{g:'Situación',c:'#2F5496',i:'🧭',h:'caso'},{g:'Decidir',c:'#6B4FBB',i:'📝',h:'simular'},{g:'Resultados',c:'#1E7B46',i:'📊',h:'resultados'},{g:'Aprender',c:'#C2570C',i:'🎓',h:'interpretacion'}];
 function jstate(){
   const mine=S.sims.filter(s=>s.prod===S.equipo).length,dec=Object.keys(MYDEC||{}).length>0||mine>0,n=S.obs.length;
   return [2,dec&&n?2:(dec||n)?1:0,mine?2:0,(S.nota||'').trim().length>=20?2:0];
@@ -1416,7 +1534,7 @@ function admFind(id){return ADMALL.find(x=>x[0]===id)||ADMALL[0];}
 function admBuild(){
   document.body.classList.add('adm');
   const a=document.createElement('div');a.id='adm';
-  a.innerHTML=`<aside class="adm-side" aria-label="Menú del panel docente"><div class="adm-brand"><img src="${BASE}img/logo3.png" alt="" onerror="this.style.display='none'"><div><b>Simulador de Neurociencias</b><span>Panel docente</span></div></div>
+  a.innerHTML=`<aside class="adm-side" aria-label="Menú del panel docente"><div class="adm-brand"><img src="${BASE}img/logo3.png" alt="" onerror="this.style.display='none'"><div><b>Simulador de Neurociencias</b><span>Panel docente</span></div></div><div class="adm-logo"><img src="${LOGO_AI}" alt="Atila y Asociados · IEAC Business School"></div>
     <div class="adm-menu" id="admMenu" role="navigation" aria-label="Secciones del panel"></div><div class="adm-foot"><b id="admWho"></b><button class="adm-btn" id="admOut" style="min-height:38px;padding:6px 16px;font-size:13.5px">Salir</button></div></aside>
     <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span id="admSel"></span></div>
     <div class="adm-body"><h1 class="adm-h" id="admH"></h1><p class="adm-sub" id="admSub"></p><div class="adm-tools"><button class="adm-btn" id="admRef">↺ Actualizar</button><button class="adm-btn go" id="admDemo" hidden>Ver clase de ejemplo</button></div><div id="admSlot"></div></div></div>`;
