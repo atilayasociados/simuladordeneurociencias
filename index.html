@@ -475,6 +475,81 @@ body.adm{--offA:#44D62C;--offB:#A6A8AA}
 h4[style*="var(--uc)"]{color:var(--fg)!important}
 .adm-it.on,body.adm .adm-it.on{background:#44D62C;color:#1F2022}
 .adm-top{border-bottom-color:#44D62C}
+/* ===== Panel del estudiante: fondo grafito (igual que el panel docente) ===== */
+body:not(.adm){--bg:#2E3032;--surface:#3A3C3E;--surface2:#46484A;--fg:#F2F3F3;--muted:#B5B8B7;--line:#5A5C5E;--azul:#E9EBEA;--azul2:#E9EBEA;
+  --accent:#A6A8AA;--accent-soft:#46484A;--sim:#C9CCCB;--sim-soft:#46484A;--real:#5BE045;--real-soft:#2C4A2A;--warn:#FFCE00;--warn-soft:#4A4320;--bad:#FF7A50;--offB:#A6A8AA;color-scheme:dark}
+body:not(.adm),html{background:#2E3032}
+body:not(.adm) a{color:#8FE37F}
+body:not(.adm) a.cl{color:inherit;text-decoration-color:#8FE37F}
+body:not(.adm)>header{background:#2A2C2E}
+body:not(.adm) .pill{background:#F2F3F3;color:#2A2C2E}
+body:not(.adm) nav{background:#333537;border-bottom-color:#4A4C4E}
+body:not(.adm) nav a{color:#E9EBEA}
+body:not(.adm) nav .menu a.on{background:#44D62C;color:#1F2022;border-color:#44D62C;box-shadow:none}
+body:not(.adm) nav .sub a.on{background:#46484A;border-color:#5A5C5E;color:#fff}
+body:not(.adm) .card{background:var(--surface);border-color:#4A4C4E}
+body:not(.adm) .card.soft{background:#333537}
+body:not(.adm) input[type=text],body:not(.adm) input[type=password],body:not(.adm) input[type=email],body:not(.adm) select,body:not(.adm) textarea{background:#2E3032;color:var(--fg);border-color:#5A5C5E}
+body:not(.adm) textarea::placeholder,body:not(.adm) input::placeholder{color:#8E9190}
+body:not(.adm) button{background:transparent;color:var(--fg);border-color:#6E7072}
+body:not(.adm) button.primary,body:not(.adm) button.primary.big{background:#44D62C;border-color:#44D62C;color:#1F2022;font-weight:bold}
+body:not(.adm) button.primary:hover{background:#5BE045}
+body:not(.adm) button.danger{color:#FF7A50;border-color:#FF7A50}
+body:not(.adm) .chip[aria-pressed="true"]{background:#2C4A2A;border-color:#44D62C;color:#fff}
+body:not(.adm) .hyp .chip[aria-pressed="true"]{background:#2C4A2A;color:#fff}
+body:not(.adm) .hyp .hl small{color:#B5B8B7}
+body:not(.adm) .rate button[aria-pressed="true"]{background:#44D62C;border-color:#44D62C;color:#1F2022}
+body:not(.adm) input[type=range]{accent-color:#44D62C}
+body:not(.adm) .pjour a i{background:#3A3C3E!important;border-color:#6E7072!important;color:#E9EBEA!important}
+body:not(.adm) .pjour a.done i{background:#44D62C!important;border-color:#44D62C!important;color:#1F2022!important}
+body:not(.adm) .pjour a.cur i{border-color:#44D62C!important;box-shadow:0 0 0 4px rgba(68,214,44,.25)}
+body:not(.adm) .pjour a.cur{color:#fff}
+body:not(.adm) .phero,body:not(.adm) .uhero{background-color:#555759}
+body:not(.adm) .rstep i{background:#2E3032}
+body:not(.adm) .mini{background:#2E3032}
+body:not(.adm) .tag.sim{background:#46484A;color:#E9EBEA;background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.08) 5px 7px)}
+body:not(.adm) .tag.real{background:#2C4A2A;color:#8FE37F}
+body:not(.adm) .duel .ds{background:#46484A}body:not(.adm) .duel .ds b{color:#F2F3F3}
+body:not(.adm) .duel .dr{background:#2C4A2A}body:not(.adm) .duel .dr b{color:#5BE045}
+body:not(.adm) .hcard.ko,body:not(.adm) .vban.ko{background:#4A2E22;border-color:#FF4C00}
+body:not(.adm) .ic-ko,body:not(.adm) .vban.ko>span{color:#FF7A50}
+body:not(.adm) .hcard.ok,body:not(.adm) .vban.ok{background:#2C4A2A;border-color:#44D62C}
+body:not(.adm) .hcard.neu{background:#4A4320;border-color:#FFCE00}
+body:not(.adm) .vban.neu{background:#333537}
+body:not(.adm) .sem.y{background:#4A4320;color:#FFCE00}
+body:not(.adm) .sem.g{background:#2C4A2A;color:#8FE37F}
+body:not(.adm) .ic-ok{color:#5BE045}body:not(.adm) .ic-warn{color:#FFCE00}body:not(.adm) .ic-bulb{color:#FFCE00}
+body:not(.adm) .ocard.a .ohead b{color:#5BE045}
+body:not(.adm) .abl.b,body:not(.adm) .ltr.b{background:#6E7072;color:#fff}
+body:not(.adm) .f-sim{stroke:#E9EBEA;fill:#E9EBEA}
+body:not(.adm) .f-class{stroke:#8E9190;fill:#8E9190}
+body:not(.adm) .usys.s1{background:#4A3A30}body:not(.adm) .usys.s2{background:#46484A}
+body:not(.adm) .usys span{background:rgba(0,0,0,.2)}
+body:not(.adm) .u-st{background:#2C4A2A}body:not(.adm) .u-st.alt{background:#46484A}
+body:not(.adm) .uqo button.uko{background:#4A2E22}
+body:not(.adm) .uqo button.uok{background:#2C4A2A}
+body:not(.adm) .fbrand{background:#2A2C2E;border-color:#4A4C4E}body:not(.adm) .fbrand p{color:#B5B8B7}
+body:not(.adm) .ucard.uflash{background:#4A4320}
+body:not(.adm) .uflash{background:#46484A}
+body:not(.adm) .ubtn{background:#3A3C3E;color:#F2F3F3}
+body:not(.adm) .ubtn span{color:#B5B8B7}
+body:not(.adm) .canbox,body:not(.adm) .pair>div,body:not(.adm) .dilema>div:not(.dvs){background:#E9EBEA}
+body:not(.adm) .canbox svg text,body:not(.adm) .pair svg text,body:not(.adm) .dilema svg text,body:not(.adm) .pcard svg text,body:not(.adm) .ab svg text{fill:#2B2C2E}
+body:not(.adm) .pcard svg,body:not(.adm) .ab svg{background:#E9EBEA;border-radius:8px}
+body:not(.adm) .dvs{color:#44D62C}
+body:not(.adm) .pcard.me{border-color:#44D62C;box-shadow:0 3px 14px rgba(68,214,44,.2)}
+body:not(.adm) .statusline{color:#B5B8B7}
+body:not(.adm) footer{color:#B5B8B7}
+body:not(.adm) .ubox,body:not(.adm) .note{color:var(--fg)}
+body:not(.adm) .xsteps i{color:#B5B8B7}
+body:not(.adm) .pflow a b{color:#F2F3F3}
+body:not(.adm) #t-caso,body:not(.adm) #t-equipo,body:not(.adm) #t-simular,body:not(.adm) #t-experimento,body:not(.adm) #t-resultados,body:not(.adm) #t-comparar,body:not(.adm) #t-interpretacion{--uc:#E9EBEA}
+body:not(.adm) .usec h3,body:not(.adm) .umore summary,body:not(.adm) .uvis h4,body:not(.adm) .sh,body:not(.adm) details summary{color:#F2F3F3}
+body:not(.adm) .uvis{border-color:#6E7072}
+body:not(.adm) .pjour a{color:#B5B8B7}body:not(.adm) .pjour a.cur{color:#fff}
+body:not(.adm) .pflow a,body:not(.adm) .pflow a b{color:#F2F3F3}body:not(.adm) .pflow a small{color:#B5B8B7}
+body:not(.adm) h2,body:not(.adm) h3,body:not(.adm) h4{color:#F2F3F3}
+body:not(.adm) .phero h2,body:not(.adm) .uhero h2{color:#fff}
 </style>
 </head><body>
 <header class="nopm">
@@ -656,7 +731,7 @@ h4[style*="var(--uc)"]{color:var(--fg)!important}
     <p class="small" style="margin:12px 0 0">Código actual: <b id="codCur" style="color:var(--warn);font-family:'Space Mono',monospace;letter-spacing:2px">—</b> <span class="muted">(mínimo 8 caracteres)</span></p><p class="small" id="codMsg" style="margin:6px 0 0"></p></div>
 </main>
 
-<footer class="nopm"><div class="fbrand"><img data-logo="w" alt="Atila y Asociados · IEAC Business School"><p>Material preparado por Atila y Asociados e IEAC Business School.</p></div><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
+<footer class="nopm"><div class="fbrand"><img data-logo alt="Atila y Asociados · IEAC Business School"><p>Material preparado por Atila y Asociados e IEAC Business School.</p></div><p>Prototipo del simulador SimNeuro. Los datos simulados no constituyen evidencia empírica. Referencias en Aprender → Manual y referencias.</p></footer>
 </div>
 
 
