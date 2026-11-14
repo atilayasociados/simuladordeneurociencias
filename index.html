@@ -301,6 +301,104 @@ a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-d
 .uqo button.uok{background:var(--real-soft);border-color:var(--real);color:var(--fg);font-weight:bold}
 .uqo button.uko{background:#FBE9E7;border-color:var(--bad);color:var(--fg)}
 .uref{padding-left:24px;text-indent:-24px}
+/* ===== Situación · Decidir · Resultados: diseño visual ===== */
+#t-caso,#t-equipo{--uc:#2F5496}
+#t-simular,#t-experimento{--uc:#6B4FBB}
+#t-resultados,#t-comparar{--uc:#1E7B46}
+#t-caso .card:not(.soft),#t-equipo .card:not(.soft),#t-simular .card:not(.soft),#t-experimento .card:not(.soft),#t-resultados .card:not(.soft),#t-comparar .card:not(.soft){border-top:4px solid var(--uc)}
+.phwrap{margin-bottom:14px}
+.pjour{display:flex;align-items:center;margin:0 0 10px;overflow-x:auto;padding:2px}
+.pjour a{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--muted);font-size:.84rem;font-weight:bold;white-space:nowrap;padding:3px 2px}
+.pjour a i{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--jc);color:var(--jc);font-style:normal;background:#fff;flex:none;font-size:14px}
+.pjour a.done i{background:var(--jc);color:#fff}
+.pjour a.half i{border-style:dashed}
+.pjour a.cur{color:var(--fg)}.pjour a.cur i{box-shadow:0 0 0 4px var(--accent-soft)}
+.pjour b{flex:1 1 16px;min-width:12px;height:2px;background:var(--line);margin:0 6px}
+@media (max-width:560px){.pjour a:not(.cur) span{display:none}}
+.phero{display:flex;gap:14px;align-items:center;background:var(--uc);background-image:linear-gradient(120deg,rgba(255,255,255,.16),rgba(255,255,255,0) 65%);color:#fff;border-radius:10px;padding:16px 18px}
+.phero .pic{font-size:40px;line-height:1;flex:none}
+.phero>div{min-width:0}.phero h2{color:#fff;font-size:20px;margin:2px 0 4px}
+.sh{display:flex;align-items:center;gap:8px;color:var(--uc,var(--azul));font-size:16px;margin:0 0 10px}
+.sh .usn{background:var(--uc)}
+.dilema{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.dilema>div:not(.dvs){background:var(--surface2);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;min-width:0}
+.dilema svg{max-width:100%}.dilema small{font-weight:bold;color:var(--muted)}
+.dvs{font:bold 30px Georgia,serif;color:var(--uc)}
+.hcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:10px 0}
+.hcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);display:flex;flex-direction:column;gap:4px}
+.hcard .hk{display:flex;gap:8px;align-items:center;font-weight:bold;color:var(--uc);font-size:1rem}
+.hcard .hk span{font-size:22px}.hcard p{margin:0;font-size:.9rem}.hcard small{color:var(--muted);font-size:.8rem}
+.hcard.ok{border-color:var(--real);background:var(--real-soft)}.hcard.ko{border-color:var(--bad);background:#FDECEA}
+.hcard.neu{border-color:var(--warn);background:var(--warn-soft)}.hcard.wait{background:var(--surface2)}
+.hst{font-weight:bold;font-size:.85rem}
+.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pcard{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.pcard.me{border:2px solid var(--uc);box-shadow:0 3px 12px rgba(47,84,150,.18)}
+.pprices{display:flex;gap:4px;width:100%;font-size:.74rem;color:var(--muted)}
+.pprices span{flex:1;min-width:0;background:var(--surface2);border-radius:6px;padding:4px 2px}.pprices b{display:block;color:var(--fg);font-size:.78rem;white-space:nowrap}
+.fbox svg,.rchart svg{display:block;max-width:560px;margin:0 auto}
+.pflow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.pflow a{display:flex;flex-direction:column;gap:3px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--jc);border-radius:8px;padding:10px;text-decoration:none;color:var(--fg)}
+.pflow a span{font-size:24px}.pflow a b{color:var(--jc)}.pflow a small{color:var(--muted);font-size:.84rem}
+.stat.ic div{display:flex;flex-direction:column}.stat em{font-style:normal;font-size:20px}
+.avs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.av{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border-radius:999px;padding:4px 12px 4px 4px;font-weight:bold;font-size:.88rem}
+.av i{width:30px;height:30px;border-radius:50%;background:var(--uc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:.78rem}
+.av.me i{background:var(--sim)}.av small{color:var(--muted);font-weight:normal}
+.meter{margin:8px 0}.meter .mt{height:12px;border-radius:6px;background:var(--surface2);overflow:hidden}
+.meter .mt i{display:block;height:100%;background:var(--uc);border-radius:6px}
+.meter p{display:flex;justify-content:space-between;font-size:.84rem;margin:4px 0 0;color:var(--muted)}
+.sem{display:inline-block;border-radius:999px;padding:2px 9px;font-size:.78rem;font-weight:bold}
+.sem.g{background:var(--real-soft);color:var(--real)}.sem.y{background:var(--warn-soft);color:var(--warn)}
+.hyp .chip{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;flex:1 1 140px;justify-content:center;font-weight:bold;min-height:52px}
+.hyp .chip span{font-size:20px}
+.hyp .chip[aria-pressed="true"]{background:var(--sim-soft);border-color:var(--sim);color:var(--sim);box-shadow:inset 0 0 0 1px var(--sim)}
+.ocard{border:1px solid var(--line);border-top:5px solid var(--oc);border-radius:10px;padding:12px;background:var(--surface);min-width:0}
+.ocard.a{--oc:var(--sim)}.ocard.b{--oc:var(--azul)}
+.ohead{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.ohead b{font-size:1.05rem;color:var(--oc)}
+.oprice{background:var(--surface2);border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:bold}
+button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-top:12px}
+.rstep{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.rstep div{flex:1 1 130px;display:flex;gap:8px;align-items:center;background:var(--surface2);border-radius:8px;padding:8px;font-size:.84rem;color:var(--muted)}
+.rstep i{width:24px;height:24px;border-radius:50%;flex:none;display:inline-flex;align-items:center;justify-content:center;font-style:normal;background:#fff;border:2px solid var(--line);font-weight:bold;font-size:.8rem}
+.rstep .done{color:var(--fg)}.rstep .done i{background:var(--real);border-color:var(--real);color:#fff}
+.rstep .cur{background:var(--sim-soft);color:var(--fg);font-weight:bold}.rstep .cur i{border-color:var(--sim);color:var(--sim)}
+.xsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:10px 0}
+.xsteps>div{background:var(--surface2);border-radius:8px;padding:10px;position:relative}
+.xsteps i{position:absolute;top:8px;right:10px;font-style:normal;font-weight:bold;color:var(--uc);font-size:.95rem}
+.xsteps span{font-size:24px;display:block}.xsteps p{margin:4px 0 0;font-size:.88rem}
+.vban{display:flex;gap:12px;align-items:center;border-radius:10px;padding:12px 14px;margin:8px 0 12px}
+.vban>span{font-size:30px;line-height:1}.vban p{margin:2px 0 0;font-size:.9rem}
+.vban.ok{background:var(--real-soft);border:1px solid var(--real)}.vban.ko{background:#FDECEA;border:1px solid var(--bad)}.vban.neu{background:var(--surface2);border:1px solid var(--line)}
+.abbar{display:grid;gap:10px;margin:6px 0 12px}
+.abrow{display:grid;grid-template-columns:30px 1fr 50px;gap:2px 8px;align-items:center}
+.abl{width:30px;height:30px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:bold}
+.abl.a{background:var(--sim)}.abl.b{background:var(--azul)}
+.abtrack{height:22px;background:var(--surface2);border-radius:6px;overflow:hidden}.abtrack i{display:block;height:100%;border-radius:6px}
+.abrow>b{text-align:right;font-variant-numeric:tabular-nums;font-size:1.1rem}
+.abrow>small{grid-column:2/4;font-size:.78rem;color:var(--muted)}
+.rtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:10px 0}
+.rtile{background:var(--surface2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.rtile>small{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;font-weight:bold}
+.rtile>b{font:bold 1.5rem var(--head);color:var(--azul);font-variant-numeric:tabular-nums}
+.rtile>span{font-size:.82rem}
+.mini{height:8px;border-radius:4px;background:#fff;overflow:hidden;margin-top:4px}.mini i{display:block;height:100%;background:var(--uc)}
+.dth{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#E3F4EA,#9FD3B0,#1E7B46);margin-top:8px}
+.dth i{position:absolute;top:-4px;width:4px;height:18px;background:var(--fg);border-radius:2px;transform:translateX(-2px)}
+.dthl{position:relative;height:16px}.dthl span{position:absolute;transform:translateX(-50%);font-size:.68rem;color:var(--muted);top:2px}
+.fbox{border:2px dashed var(--uc);border-radius:10px;padding:10px 12px;margin:10px 0}
+.fbox h4{margin:0 0 2px;color:var(--uc);font-size:14px}.fbox p{margin:0 0 4px;font-size:.84rem;color:var(--muted)}
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:8px 0}
+.duel>div:not(.dvs2){border-radius:10px;padding:12px;text-align:center;display:flex;flex-direction:column;gap:2px;min-width:0}
+.duel .ds{background:var(--sim-soft)}.duel .dr{background:var(--real-soft)}
+.duel b{font:bold 1.8rem var(--head);font-variant-numeric:tabular-nums}.duel .ds b{color:var(--sim)}.duel .dr b{color:var(--real)}
+.duel small{font-size:.8rem;color:var(--muted)}
+.dvs2{align-self:center;font:bold 18px Georgia,serif;color:var(--muted)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.rgrid>div{background:var(--surface);border-radius:8px;padding:10px;font-size:.88rem}.rgrid span{font-size:22px;display:block}
+.mtools{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.mtools>div{background:var(--surface);border-radius:8px;padding:10px;font-size:.86rem}.mtools span{font-size:22px;display:block}
 </style>
 </head><body>
 <header class="nopm">
@@ -327,57 +425,61 @@ a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-d
 <!-- DECIDIR · Simular -->
 <main id="t-simular" class="hidden-tab" data-student>
   <div class="card">
-    <h2>Paso 1. Tu hipótesis</h2>
+    <h3 class="sh"><span class="usn">1</span> Tu hipótesis</h3>
     <p class="small muted">Antes de simular, predice qué oferta recibirá mayor calidad esperada.</p>
-    <div class="chips" id="predChips" role="group" aria-label="Predicción">
-      <button class="chip" data-p="A" aria-pressed="false">Mayor en A</button>
-      <button class="chip" data-p="B" aria-pressed="false">Mayor en B</button>
-      <button class="chip" data-p="=" aria-pressed="false">Sin diferencia</button>
+    <div class="chips hyp" id="predChips" role="group" aria-label="Predicción">
+      <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span>Mayor en A</button>
+      <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span>Mayor en B</button>
+      <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span>Sin diferencia</button>
     </div>
   </div>
   <div class="card">
-    <h2>Paso 2. Diseña las ofertas de <span id="scProd"></span></h2>
+    <h3 class="sh"><span class="usn">2</span><span>Diseña las ofertas de <span id="scProd"></span></span></h3>
     <p class="small muted"><span class="tag sim">Simulado</span>&nbsp; Cada consumidor simulado ve A y B (diseño intrasujeto). Los parámetros son didácticos, no estimaciones empíricas.</p>
     <div class="grid2 stack">
-      <div class="cond a"><b>Oferta A</b>
-        <label for="aTier" style="margin-top:8px">Precio en la etiqueta</label><select id="aTier"></select>
+      <div class="ocard a"><div class="ohead"><b>Oferta A</b><span class="oprice" id="aPrev"></span></div>
+        <label for="aTier">Precio en la etiqueta</label><select id="aTier"></select>
         <label for="aPres" style="margin-top:8px">Presentación</label>
         <select id="aPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
       </div>
-      <div class="cond b"><b>Oferta B</b>
-        <label for="bTier" style="margin-top:8px">Precio en la etiqueta</label><select id="bTier"></select>
+      <div class="ocard b"><div class="ohead"><b>Oferta B</b><span class="oprice" id="bPrev"></span></div>
+        <label for="bTier">Precio en la etiqueta</label><select id="bTier"></select>
         <label for="bPres" style="margin-top:8px">Presentación</label>
         <select id="bPres"><option value="sencilla">Estándar</option><option value="premium">Premium</option></select>
       </div>
     </div>
-    <label for="nSim" style="margin-top:14px">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
+    <p class="small muted" style="margin:10px 0 0">💡 Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
+  </div>
+  <div class="card">
+    <h3 class="sh"><span class="usn">3</span> Muestra y decisión</h3>
+    <label for="nSim">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
     <input type="range" id="nSim" min="10" max="80" step="5" value="30">
-    <p class="small muted">Prueba también A = B (ofertas idénticas): verás cuánto varía el resultado solo por azar.</p>
-    <button class="primary" id="runSim">Ejecutar ronda de simulación</button>
+    <div class="row small muted" style="justify-content:space-between"><span>10 · más rápido, más azar</span><span>80 · más preciso</span></div>
+    <button class="primary big" id="runSim">Ejecutar ronda de simulación</button>
     <div id="rondaBox"></div>
-    <p class="small muted" style="margin:8px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
+    <p class="small muted" style="margin:10px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
   </div>
 </main>
 
 <!-- DECIDIR · Experimento -->
 <main id="t-experimento" class="hidden-tab" data-student>
   <div class="card nopm">
-    <h2>Experimento real con tus compañeros</h2>
+    <h3 class="sh">🧑‍🤝‍🧑 Experimento real con tus compañeros</h3>
     <p><span class="tag real">Real</span>&nbsp; Mides a compañeros de <b>otros equipos</b>: ellos no conocen tu producto ni tu hipótesis. Diseño <b>intrasujeto</b>: cada participante ve las dos ofertas y se compara consigo mismo.</p>
-    <ol class="steps">
-      <li>Busca a un compañero de otro equipo y siéntense separados del resto, para que nadie oiga precios ni respuestas.</li>
-      <li>Elige su equipo y pulsa «Entregar el celular». El orden de las ofertas se sortea de forma balanceada.</li>
-      <li>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</li>
-      <li>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</li>
-      <li>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</li>
-    </ol>
+    <div class="xsteps">
+      <div><i>1</i><span aria-hidden="true">🪑</span><p>Busca a un compañero de otro equipo y siéntense separados del resto, para que nadie oiga precios ni respuestas.</p></div>
+      <div><i>2</i><span aria-hidden="true">📱</span><p>Elige su equipo y pulsa «Entregar el celular». El orden de las ofertas se sortea de forma balanceada.</p></div>
+      <div><i>3</i><span aria-hidden="true">👆</span><p>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</p></div>
+      <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
+      <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</p></div>
+    </div>
     <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
   </div>
   <div class="card" id="runCard">
-    <h3 class="nopm">Participante <span class="muted small" id="pCode"></span></h3>
+    <h3 class="nopm sh">Participante <span class="muted small" id="pCode"></span></h3>
     <div id="expRun"></div>
   </div>
-  <div class="card nopm"><h3>Tus registros</h3><div id="obsList"></div></div>
+  <div class="card nopm"><h3 class="sh">📋 Tus registros</h3><div id="obsList"></div></div>
 </main>
 
 <!-- RESULTADOS · Simulación -->
@@ -918,11 +1020,11 @@ function fillSimSelects(){
   $('scProd').textContent='una marca de '+prod(p).name.toLowerCase();
 }
 function bindSimValues(){
-  const c=S.cfg;$('aTier').value=c.a.tier;$('aPres').value=c.a.pres;$('bTier').value=c.b.tier;$('bPres').value=c.b.pres;$('nSim').value=c.n;$('nSimV').textContent=c.n;
+  const c=S.cfg;$('aTier').value=c.a.tier;$('aPres').value=c.a.pres;$('bTier').value=c.b.tier;$('bPres').value=c.b.pres;$('nSim').value=c.n;$('nSimV').textContent=c.n;offerPrev();
 }
 function bindSim(){
   fillSimSelects();bindSimValues();
-  [['aTier','a','tier'],['aPres','a','pres'],['bTier','b','tier'],['bPres','b','pres']].forEach(([id,k,p])=>{$(id).addEventListener('change',e=>{S.cfg[k][p]=e.target.value;touch(false);});});
+  [['aTier','a','tier'],['aPres','a','pres'],['bTier','b','tier'],['bPres','b','pres']].forEach(([id,k,p])=>{$(id).addEventListener('change',e=>{S.cfg[k][p]=e.target.value;offerPrev();touch(false);});});
   $('nSim').addEventListener('input',e=>{S.cfg.n=+e.target.value;$('nSimV').textContent=S.cfg.n;touch(false);});
   $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;touch(true);});
   $('runSim').addEventListener('click',runSim);
@@ -943,9 +1045,12 @@ setInterval(()=>{if(rondasOn()&&!document.hidden)loadEstado();},15000);
 function renderRonda(){
   const el=$('rondaBox'),bt=$('runSim');if(!el||!bt)return;
   if(!rondasOn()){bt.textContent='Ejecutar ronda de simulación';el.innerHTML='';return;}
-  const nx=(CR||0)+1,d=MYDEC[nx];
+  const nx=(CR||0)+1,d=MYDEC[nx],st=d?2:1;
   bt.textContent=d?'Actualizar mi decisión para la ronda '+nx:'Guardar mi decisión para la ronda '+nx;
-  el.innerHTML=CR===null?'':`<div class="${d?'okbox':'note'}" style="margin-top:10px">${d?`✓ Tu decisión para la <b>ronda ${nx}</b> está guardada. El resultado aparecerá cuando el profesor ejecute la ronda; puedes cambiarla hasta entonces.`:`La clase va en la ronda ${CR}. Elige tu hipótesis, arma las ofertas y guarda tu decisión: <b>el profesor ejecuta la ronda ${nx}</b> para todos a la vez.`}${DECMSG?'<br>'+DECMSG:''}</div>`;
+  if(CR===null){el.innerHTML='';return;}
+  const pasos=['Guardas tu decisión','El profesor ejecuta la ronda '+nx,'Ves el resultado'];
+  el.innerHTML=`<div class="rstep" aria-label="Estado de la ronda">${pasos.map((t,i)=>`<div class="${i+1<st?'done':i+1===st?'cur':''}"><i>${i+1<st?'✓':i+1}</i><span>${t}</span></div>`).join('')}</div>
+  <div class="${d?'okbox':'note'}" style="margin-top:10px">${d?`✓ Tu decisión para la <b>ronda ${nx}</b> está guardada. El resultado aparecerá cuando el profesor ejecute la ronda; puedes cambiarla hasta entonces.`:`La clase va en la ronda ${CR}. Elige tu hipótesis, arma las ofertas y guarda tu decisión: <b>el profesor ejecuta la ronda ${nx}</b> para todos a la vez.`}${DECMSG?'<br>'+DECMSG:''}</div>`;
 }
 function computeRound(dd,round){
   const n=dd.n,ca=dd.a,cb=dd.b,pr=prod(S.equipo);
@@ -972,20 +1077,49 @@ async function runSim(){
   S.pred=null;touch(true);
   location.hash='resultados';
 }
+/* ---------- encabezados visuales (Situación · Decidir · Resultados) ---------- */
+const JG=[{g:'Situación',c:'#2F5496',i:'📋',h:'caso'},{g:'Decidir',c:'#6B4FBB',i:'🎯',h:'simular'},{g:'Resultados',c:'#1E7B46',i:'📊',h:'resultados'},{g:'Aprender',c:'#C2570C',i:'🎓',h:'interpretacion'}];
+function jstate(){
+  const mine=S.sims.filter(s=>s.prod===S.equipo).length,dec=Object.keys(MYDEC||{}).length>0||mine>0,n=S.obs.length;
+  return [2,dec&&n?2:(dec||n)?1:0,mine?2:0,(S.nota||'').trim().length>=20?2:0];
+}
+function phero(view,kick,title,meta){
+  const m=$('t-'+view);if(!m)return;
+  const gn=GROUPS.find(x=>x.v.some(y=>y[0]===view)).n,gi=JG.findIndex(j=>j.g===gn),G=JG[gi],st=jstate();
+  const j='<div class="pjour" role="navigation" aria-label="Tu recorrido">'+JG.map((x,i)=>`${i?'<b></b>':''}<a href="#${x.h}" class="${st[i]===2?'done':st[i]===1?'half':''}${i===gi?' cur':''}" style="--jc:${x.c}"${i===gi?' aria-current="step"':''}><i aria-hidden="true">${st[i]===2?'✓':x.i}</i><span>${x.g}</span></a>`).join('')+'</div>';
+  let w=m.querySelector(':scope>.phwrap');
+  if(!w){w=document.createElement('div');w.className='phwrap nopm nolk';m.prepend(w);}
+  w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
+}
+const meter=(v,max,lab)=>`<div class="meter"><div class="mt"><i style="width:${Math.min(100,v/max*100)}%"></i></div><p><span>${lab}</span><b>${v} de ${max}</b></p></div>`;
+function offerPrev(){['a','b'].forEach(k=>{const e=$(k+'Prev');if(e&&S.cfg&&S.cfg[k])e.textContent=money(priceOf(S.equipo,S.cfg[k].tier))+' · '+(S.cfg[k].pres==='premium'?'Premium':'Estándar');});}
+function heroDecidir(){
+  const mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length;
+  phero('simular','Simular','Diseña tu experimento virtual',rondasOn()&&CR!==null?(CR?`La clase va en la ronda ${CR} · ${mine} ronda(s) con resultado`:'La clase aún no ha ejecutado rondas · guarda tu decisión para la ronda 1'):`3 pasos · ${mine} ronda(s) realizadas`);
+  phero('experimento','Experimento','Mide a compañeros reales',`${n} participante(s) medidos · meta sugerida: 6`);
+}
+function magOf(d){d=Math.abs(d);return d<0.2?'trivial':d<0.5?'pequeño':d<0.8?'moderado':'grande';}
+function roundsChart(list){
+  const W=400,H=150,L=8,slot=(W-L*2)/list.length,bw=Math.min(40,slot-10),mx=Math.max(0.5,...list.map(x=>Math.abs(x.w.diff)));
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Diferencia B − A por ronda"><line class="zero" x1="${L}" x2="${W-L}" y1="70" y2="70"/>`;
+  list.forEach((x,i)=>{const cx=L+i*slot+(slot-bw)/2,h=Math.abs(x.w.diff)/mx*50,up=x.w.diff>=0,sig=x.w.p<0.05;
+    s+=`<rect x="${cx}" y="${up?70-h:70}" width="${bw}" height="${Math.max(1,h)}" rx="3" style="fill:${sig?'var(--real)':'#B8C2D1'}"/><text x="${cx+bw/2}" y="${up?70-h-4:70+h+12}" text-anchor="middle" style="font-size:10.5px">${f(x.w.diff)}</text><text class="lab" x="${cx+bw/2}" y="${H-6}" text-anchor="middle">R${x.r}</text>`;});
+  return s+'</svg>';
+}
 function mriCard(r){
   const p=r.prod,a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
   const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
   return `<div class="card">
-    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Laboratorio de resonancia magnética</h2><span class="tag sim">Simulado</span></div>
+    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">🧲 Laboratorio de resonancia magnética</h3><span class="tag sim">Simulado</span></div>
     <p class="small muted" style="margin-top:6px">Tus ofertas A y B pasan ahora a una etapa que, en una investigación real, exige un resonador. En esta clase no existe, así que el informe de abajo lo genera el simulador.</p>
-    <h3 style="margin-top:12px">Cómo sería el estudio real</h3>
-    <ol class="steps">
-      <li>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</li>
-      <li>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</li>
-      <li>El equipo registra la señal dependiente del nivel de oxígeno en sangre (BOLD) y, en paralelo, el participante califica la calidad que espera.</li>
-      <li>Un especialista procesa las imágenes y compara la activación en la <b>corteza orbitofrontal medial (mOFC)</b>, región asociada al valor, entre ofertas.</li>
-    </ol>
-    <h3>Informe del laboratorio (simulado)</h3>
+    <h4 style="margin:12px 0 0;color:var(--uc)">Cómo sería el estudio real</h4>
+    <div class="xsteps">
+      <div><i>1</i><span aria-hidden="true">🛏️</span><p>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</p></div>
+      <div><i>2</i><span aria-hidden="true">🖼️</span><p>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</p></div>
+      <div><i>3</i><span aria-hidden="true">📡</span><p>El equipo registra la señal dependiente del nivel de oxígeno en sangre (BOLD) y, en paralelo, el participante califica la calidad que espera.</p></div>
+      <div><i>4</i><span aria-hidden="true">🧠</span><p>Un especialista procesa las imágenes y compara la activación en la <b>corteza orbitofrontal medial (mOFC)</b>, región asociada al valor, entre ofertas.</p></div>
+    </div>
+    <h4 style="margin:12px 0 6px;color:var(--uc)">Informe del laboratorio (simulado)</h4>
     <div class="tablewrap w"><table><thead><tr><th></th><th class="num">Oferta A</th><th class="num">Oferta B</th></tr></thead><tbody>
       <tr><th>Estímulo</th><td class="num">${esc(tierText(p,a[0]))}</td><td class="num">${esc(tierText(p,b[0]))}</td></tr>
       <tr><th>Calidad esperada (reportada)</th><td class="num">${f(a[3])}</td><td class="num">${f(b[3])}</td></tr>
@@ -995,47 +1129,60 @@ function mriCard(r){
     <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--sim')}</div><div><span class="small">B</span>${bar(dB,'--accent')}</div></div>
     <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
   </div>
-  <div class="card soft"><h3>Qué requeriría hacerlo de verdad</h3>
-    <ul style="margin:0;padding-left:20px">
-      <li><b>Equipo:</b> un resonador magnético de uso hospitalario o de investigación, con sistema para proyectar estímulos.</li>
-      <li><b>Personal:</b> técnico de resonancia y especialista en análisis de neuroimagen.</li>
-      <li><b>Permisos:</b> aprobación de un comité de ética, consentimiento y revisión de seguridad de cada participante.</li>
-      <li><b>Costo y tiempo por sesión:</b> por verificar; no hay cifra confiable en esta versión.</li>
-    </ul>
+  <div class="card soft"><h3 class="sh">🏥 Qué requeriría hacerlo de verdad</h3>
+    <div class="mtools">
+      <div><span aria-hidden="true">🧲</span><b>Equipo:</b> un resonador magnético de uso hospitalario o de investigación, con sistema para proyectar estímulos.</div>
+      <div><span aria-hidden="true">👩‍🔬</span><b>Personal:</b> técnico de resonancia y especialista en análisis de neuroimagen.</div>
+      <div><span aria-hidden="true">📝</span><b>Permisos:</b> aprobación de un comité de ética, consentimiento y revisión de seguridad de cada participante.</div>
+      <div><span aria-hidden="true">💲</span><b>Costo y tiempo por sesión:</b> por verificar; no hay cifra confiable en esta versión.</div>
+    </div>
     <p class="small muted" style="margin:8px 0 0">Por eso estos estudios se hacen en centros de investigación y rara vez en una empresa corriente.</p></div>`;
 }
 function renderSim(){
   document.querySelectorAll('#predChips button').forEach(b=>b.setAttribute('aria-pressed',String(S.pred===b.dataset.p)));
+  offerPrev();
   const out=$('simOut');
   const mine=S.sims.filter(s=>s.prod===S.equipo);
-  if(!mine.length){out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
+  if(!mine.length){
+    phero('resultados','Simulación','¿Qué encontró tu simulación?','Aún no hay rondas con resultado');
+    out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
   const r=mine[mine.length-1];
+  phero('resultados','Simulación',`Ronda ${r.r}: ¿qué encontró tu simulación?`,`${mine.length} ronda(s) · ${r.a[2]} consumidores simulados en la última`);
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
-  let fb='';
-  if(r.pred){const hit=r.pred===outcome;fb=`<div class="${hit?'okbox':'note'}">${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'} Predijiste «${r.pred==='='?'sin diferencia':'mayor en '+r.pred}»; el resultado fue «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}».</div>`;}
+  const lab=x=>x==='='?'sin diferencia':'mayor en '+x;
+  let fb;
+  if(r.pred){const hit=r.pred===outcome;
+    fb=`<div class="vban ${hit?'ok':'ko'}"><span aria-hidden="true">${hit?'✅':'❌'}</span><div><b>${hit?'Tu hipótesis coincidió con el resultado.':'Tu hipótesis no coincidió.'}</b><p>Predijiste «${lab(r.pred)}»; el resultado fue «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}».</p></div></div>`;}
+  else fb=`<div class="vban neu"><span aria-hidden="true">ℹ️</span><div><b>En esta ronda no registraste hipótesis.</b><p>Resultado: «${outcome==='='?'sin diferencia significativa':'mayor en '+outcome}». En la próxima ronda elige una predicción antes de decidir.</p></div></div>`;
   const a=r.a,b=r.b,pref=r.pref||[0,0],np=pref[0]+pref[1],pbin=np?binomTwo(pref[0],np):null;
+  const pc=v=>Math.max(2,Math.min(100,(v-1)/9*100));
+  const sig=r.w.p<0.05,dz=Math.abs(r.w.d),dpos=Math.min(100,dz/1.2*100);
   out.innerHTML=`<div class="card">
-    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Ronda ${r.r}</h2><span class="tag sim">Simulado</span></div>
-    <p class="small muted">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
+    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📈 Resultado de la ronda ${r.r}</h3><span class="tag sim">Simulado</span></div>
+    <p class="small muted" style="margin-top:6px">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
     ${fb}
-    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">A</th><th class="num">B</th></tr></thead><tbody>
-      <tr><th>Precio / presentación</th><td class="num">${esc(tierText(r.prod,a[0]))} · ${presL(a[1])}</td><td class="num">${esc(tierText(r.prod,b[0]))} · ${presL(b[1])}</td></tr>
-      <tr><th>Consumidores</th><td class="num" colspan="2">${a[2]} (cada uno ve A y B)</td></tr>
-      <tr><th>Calidad esperada M (DE)</th><td class="num">${f(a[3])} (${f(a[4])})</td><td class="num">${f(b[3])} (${f(b[4])})</td></tr>
-      <tr><th>Índice mOFC ilustrativo M (DE)</th><td class="num">${f(a[5],1)} (${f(a[6],1)})</td><td class="num">${f(b[5],1)} (${f(b[6],1)})</td></tr>
-    </tbody></table></div>
-    <div class="stat">
-      <div><b>${f(r.w.diff)}</b><span>B − A (puntos)</span></div>
-      <div><b>${fp(r.w.p)}</b><span>p (t pareada)</span></div>
-      <div><b>${f(r.w.d)}</b><span>d_z de Cohen</span></div>
-      <div><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · '+pEq(pbin):''}</span></div>
+    <h4 style="margin:4px 0 8px;color:var(--uc)">Calidad esperada promedio (escala 1 a 10)</h4>
+    <div class="abbar">
+      <div class="abrow"><span class="abl a">A</span><div class="abtrack"><i style="width:${pc(a[3])}%;background:var(--sim)"></i></div><b>${f(a[3])}</b><small>${esc(tierText(r.prod,a[0]))} · ${presL(a[1])} · DE ${f(a[4])}</small></div>
+      <div class="abrow"><span class="abl b">B</span><div class="abtrack"><i style="width:${pc(b[3])}%;background:var(--azul)"></i></div><b>${f(b[3])}</b><small>${esc(tierText(r.prod,b[0]))} · ${presL(b[1])} · DE ${f(b[4])}</small></div>
     </div>
-    ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}
-    <p style="margin-top:8px">${esc(verdict(r.w,'B','A'))}</p>
-    <p class="small muted" style="margin:0">Cuidado: en datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI.</p>
+    <div class="rtiles">
+      <div class="rtile"><small>Diferencia</small><b>${f(r.w.diff)}</b><span>B − A (puntos). Positivo = B se valora más.</span></div>
+      <div class="rtile"><small>¿Puede ser azar?</small><b>${fp(r.w.p)}</b><span>p (t pareada) · <span class="sem ${sig?'g':'y'}">${sig?'🟢 Poco probable que sea azar':'🟡 Puede ser azar'}</span></span></div>
+      <div class="rtile"><small>Tamaño del efecto</small><b>${f(r.w.d)}</b><span>d_z de Cohen · efecto ${magOf(r.w.d)}</span><div class="dth" aria-hidden="true"><i style="left:${dpos}%"></i></div><div class="dthl" aria-hidden="true"><span style="left:16.7%">0,2</span><span style="left:41.7%">0,5</span><span style="left:66.7%">0,8</span></div></div>
+      <div class="rtile"><small>Elección</small><b>${pref[0]} de ${np}</b><span>prefieren B${pbin!=null?' · '+pEq(pbin):''}</span><div class="mini" aria-hidden="true"><i style="width:${np?pref[0]/np*100:0}%"></i></div></div>
+    </div>
+    <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su intervalo de confianza del 95 %. Si la línea toca el 0 punteado, no se descarta el azar.</p>
+    ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}</div>
+    <p style="margin-top:8px"><b>Conclusión:</b> ${esc(verdict(r.w,'B','A'))}</p>
+    <details class="umore"><summary>⚠️ Cuidado al interpretar · Leer más</summary>
+    <p class="small" style="margin:0">En datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI. Índice mOFC ilustrativo, M (DE): A ${f(a[5],1)} (${f(a[6],1)}) · B ${f(b[5],1)} (${f(b[6],1)}).</p></details>
   </div>
   ${mriCard(r)}
-  ${mine.length>1?`<div class="card"><h3>Rondas anteriores</h3><div class="tablewrap w"><table><thead><tr><th>#</th><th>A</th><th>B</th><th class="num">B − A</th><th class="num">p</th></tr></thead><tbody>${mine.slice(0,-1).reverse().map(x=>`<tr><td>${x.r}</td><td>${esc(tierText(x.prod,x.a[0]))}</td><td>${esc(tierText(x.prod,x.b[0]))}</td><td class="num">${f(x.w.diff)}</td><td class="num">${fp(x.w.p)}</td></tr>`).join('')}</tbody></table></div></div>`:''}`;
+  ${mine.length>1?`<div class="card"><h3 class="sh">🔁 Tus rondas</h3>
+    <p class="small muted" style="margin:0 0 4px">Diferencia B − A en cada ronda. Verde = estadísticamente significativa (p &lt; 0,05); gris = puede ser azar.</p>
+    <div class="rchart">${roundsChart(mine)}</div>
+    <details class="umore"><summary>Ver la tabla de rondas</summary><div class="tablewrap w"><table><thead><tr><th>#</th><th>A</th><th>B</th><th class="num">B − A</th><th class="num">p</th></tr></thead><tbody>${mine.slice().reverse().map(x=>`<tr><td>${x.r}</td><td>${esc(tierText(x.prod,x.a[0]))}</td><td>${esc(tierText(x.prod,x.b[0]))}</td><td class="num">${f(x.w.diff)}</td><td class="num">${fp(x.w.p)}</td></tr>`).join('')}</tbody></table></div></details></div>`:''}`;
 }
 
 /* ---------- 2. experimento (imagen, intrasujeto, el participante responde) ---------- */
@@ -1095,7 +1242,7 @@ function renderExp(){
   }
   $('expRun').innerHTML=h;
   const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
-  let t=`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  let t=meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
   if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
   else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
   $('obsList').innerHTML=t;
@@ -1125,28 +1272,47 @@ function renderCmp(){
   const nRef=Math.max(20,cp.n);
   const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
+  phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} participante(s) · ${BACKEND?'«real» agrupa a toda la clase':'modo práctica: solo tus mediciones'}`);
   const fr=[{label:'Simulado · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
   CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
     fr.push({label:p.short+' · calidad',est:c.wq&&c.wq.diff,lo:c.wq&&c.wq.lo,hi:c.wq&&c.wq.hi,cls:p.id===pid?'f-real':'f-class'});
     fr.push({label:p.short+' · gusto',est:c.wg&&c.wg.diff,lo:c.wg&&c.wg.lo,hi:c.wg&&c.wg.hi,cls:p.id===pid?'f-real':'f-class'});});
+  const hs=w=>!w?['wait','⏳','Faltan datos (mínimo 2 participantes)']:(w.p<0.05&&w.diff>0)?['ok','✅','Apoyada por los datos']:(w.p<0.05)?['ko','❌','Contraria: el descuento se valoró más']:['neu','⚖️','No demostrada: puede ser azar'];
+  const h3=!cp.n?['wait','⏳','Faltan datos']:(cp.pbin<0.05&&cp.rPref/cp.n>0.5)?['ok','✅','Apoyada por los datos']:(cp.pbin<0.05)?['ko','❌','Contraria: la mayoría eligió el descuento']:['neu','⚖️','No demostrada: puede ser azar'];
+  const H=[['H1','🏷️','Mayor <b>calidad esperada</b> con precio normal',hs(cp.wq),cp.wq?`Normal − descuento: ${f(cp.wq.diff)} puntos · ${pEq(cp.wq.p)}`:''],['H2','😊','Mayor <b>gusto</b> con precio normal',hs(cp.wg),cp.wg?`Normal − descuento: ${f(cp.wg.diff)} puntos · ${pEq(cp.wg.p)}`:''],['H3','🛒','Más de la mitad <b>elige</b> el precio normal',h3,cp.n?`${cp.rPref} de ${cp.n} eligió el precio normal`:'']];
+  const same=cp.wq&&wSim?Math.sign(cp.wq.diff)===Math.sign(wSim.diff):null;
   let reading='';
   if(cp.wq){
-    const same=Math.sign(cp.wq.diff)===Math.sign(wSim.diff);
     reading=`<p><b>${esc(pr.name)} · calidad esperada.</b> ${esc(verdict(cp.wq,'La oferta a precio normal','La oferta con descuento'))}</p>
     <p><b>Gusto.</b> ${esc(verdict(cp.wg,'La oferta a precio normal','La oferta con descuento'))}</p>
     <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (prueba binomial exacta, '+pEq(cp.pbin)+')':''}.</p>
     <p>${same?'La dirección de la calidad esperada coincide con la réplica simulada.':'La dirección de la calidad esperada <b>no</b> coincide con la réplica simulada.'} Simulado: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor simulado cae dentro del IC 95 % de la medición real.':'El valor simulado queda fuera del IC 95 % de la medición real.'}</p>`;
   }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
   $('cmpOut').innerHTML=`<div class="card">
-    <h2>Simulado frente a real</h2>
-    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más. ${BACKEND?'«Real» agrupa a toda la clase.':'Modo práctica: «real» solo incluye tus mediciones.'} Réplica simulada pareada, n = ${nRef}. Tú mediste ${m.n} participante(s).</p>
+    <h3 class="sh">🆚 Simulado frente a real</h3>
+    <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más. Réplica simulada pareada, n = ${nRef}.</p>
+    <div class="duel">
+      <div class="ds"><small>Simulado · calidad esperada</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos (n = ${nRef})</small></div>
+      <div class="dvs2">vs.</div>
+      <div class="dr"><small>Real · calidad esperada</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>${cp.n} participante(s)</small></div>
+    </div>
+    <p style="text-align:center;margin:4px 0 12px">${same===null?'<span class="sem y">⏳ Faltan datos reales</span>':same?'<span class="sem g">✓ Misma dirección</span>':'<span class="sem y">✗ Dirección distinta</span>'}</p>
+    <h4 style="margin:0 0 6px;color:var(--uc)">Tus hipótesis frente a los datos reales</h4>
+    <div class="hcards">${H.map(([k,i,t,s,d])=>`<div class="hcard ${s[0]}"><div class="hk"><span aria-hidden="true">${i}</span>${k}</div><p>${t}</p><div class="hst">${s[1]} ${s[2]}</div>${d?`<small>${d}</small>`:''}</div>`).join('')}</div>
+    <div class="fbox"><h4>🎯 Todos los resultados con su margen de error</h4><p>Normal − descuento. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
-    <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:var(--accent)"></i>Real, otros productos</span></div>
+    <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:var(--accent)"></i>Real, otros productos</span></div></div>
     <div style="margin-top:12px">${reading}</div>
-    ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">Actualizar datos de la clase</button>':''}
+    ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">🔄 Actualizar datos de la clase</button>':''}
   </div>
-  <div class="card soft"><h3>Por qué pueden diferir</h3>
-    <ul style="margin:0;padding-left:20px"><li><b>Solo expectativa:</b> con una imagen nadie usa el producto. Kurz et al. (2023) hallaron efectos de precio sobre las expectativas, pero no de forma consistente sobre calidad percibida y agrado tras la experiencia.</li><li><b>Efecto de demanda:</b> son compañeros de una clase sobre precios y ven dos precios seguidos; el orden alternado reparte ese sesgo, pero no lo elimina.</li><li><b>Muestra pequeña:</b> los IC son anchos con pocos participantes.</li><li><b>Parámetros:</b> el efecto simulado es didáctico; no es una estimación empírica.</li><li><b>Productos distintos:</b> el efecto del precio puede variar entre productos.</li></ul></div>`;
+  <div class="card soft"><h3 class="sh">🤔 Por qué pueden diferir</h3>
+    <div class="rgrid">
+      <div><span aria-hidden="true">🖼️</span><b>Solo expectativa:</b> con una imagen nadie usa el producto. Kurz et al. (2023) hallaron efectos de precio sobre las expectativas, pero no de forma consistente sobre calidad percibida y agrado tras la experiencia.</div>
+      <div><span aria-hidden="true">🎭</span><b>Efecto de demanda:</b> son compañeros de una clase sobre precios y ven dos precios seguidos; el orden alternado reparte ese sesgo, pero no lo elimina.</div>
+      <div><span aria-hidden="true">👥</span><b>Muestra pequeña:</b> los IC son anchos con pocos participantes.</div>
+      <div><span aria-hidden="true">⚙️</span><b>Parámetros:</b> el efecto simulado es didáctico; no es una estimación empírica.</div>
+      <div><span aria-hidden="true">🛍️</span><b>Productos distintos:</b> el efecto del precio puede variar entre productos.</div>
+    </div></div>`;
   const rb=$('cmpReload');if(rb)rb.onclick=loadResumen;
 }
 
@@ -1683,7 +1849,7 @@ const UTSORT=UTERMS.slice().sort((a,b)=>b[0].length-a[0].length);
 const ureEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function linkify(root){
   if(!root)return;const used=new Set();
-  const skip=n=>{for(let e=n.parentNode;e&&e!==root;e=e.parentNode){const t=e.tagName;if(!t)continue;if(/^(A|BUTTON|SVG|TEXT|TEXTAREA|SELECT|OPTION|SCRIPT|STYLE|LABEL|H1|H2)$/i.test(t)||e.classList&&(e.classList.contains('tag')||e.classList.contains('chips')))return true;}return false;};
+  const skip=n=>{for(let e=n.parentNode;e&&e!==root;e=e.parentNode){const t=e.tagName;if(!t)continue;if(/^(A|BUTTON|SVG|TEXT|TEXTAREA|SELECT|OPTION|SCRIPT|STYLE|LABEL|H1|H2)$/i.test(t)||e.classList&&(e.classList.contains('tag')||e.classList.contains('chips')||e.classList.contains('nolk')))return true;}return false;};
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
   nodes.forEach(n=>{if(!n.nodeValue.trim()||skip(n))return;
     for(const [term,key] of UTSORT){if(used.has(key))continue;
@@ -1781,35 +1947,42 @@ document.addEventListener('click',e=>{
 
 function renderCaso(){
   const pr=prod(S.equipo),P=pr.prices,prov=CONFIG.PRICES_PROVISIONAL;
-  const rows=CONFIG.PRODUCTS.map(p=>`<tr${p.id===S.equipo?' style="font-weight:bold"':''}><td>${p.id}</td><td>${esc(p.name)} ${esc(p.brand)}</td><td class="num">${esc(money(p.prices.low))}</td><td class="num">${esc(money(p.prices.mid))}</td><td class="num">${esc(money(p.prices.high))}</td></tr>`).join('');
-  $('casoOut').innerHTML=`<div class="card"><h2>${esc(pr.name)}: la situación en la que se encuentran</h2>
-    <p>Su equipo dirige el estudio de precio de <b>${esc(pr.name.toLowerCase())}</b> (marca ficticia <b>${esc(pr.brand)}</b>, ${esc(pr.detail.toLowerCase())}). La empresa debate si mostrar su producto con una <b>etiqueta de descuento</b> o con su <b>precio normal</b>, y quiere saber si esa etiqueta cambia lo que el consumidor espera de la calidad y cuánto le gusta.</p>
+  phero('caso','El caso',`${pr.name} ${pr.brand}: ¿descuento o precio normal?`,'Tu misión: reunir evidencia antes de que el directorio decida.');
+  const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${productSVG(p.id,'R',96)}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
+  const HC=[['H1','🏷️','La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.','Se mide: calidad esperada, de 1 a 10'],['H2','😊','La oferta a precio normal recibe mayor <b>gusto</b>.','Se mide: gusto, de 1 a 10'],['H3','🛒','Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.','Se mide: qué oferta elige']];
+  const FL=[['simular','#6B4FBB','🧪','1. Decidir → Simular','Formulas tu hipótesis y diseñas las ofertas A y B para cada ronda con consumidores virtuales.'],['experimento','#6B4FBB','🧑‍🤝‍🧑','2. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['resultados','#1E7B46','📊','3. Resultados','Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.'],['interpretacion','#C2570C','🎓','4. Aprender','Interpretas las diferencias y escribes tu conclusión.']];
+  $('casoOut').innerHTML=`<div class="card"><h3 class="sh">🧩 El dilema de la empresa</h3>
+    <div class="dilema"><div>${productSVG(S.equipo,'R',140)}</div><div class="dvs" aria-hidden="true">¿?</div><div>${productSVG(S.equipo,'D',140)}</div></div>
+    <p style="margin-top:12px">Su equipo dirige el estudio de precio de <b>${esc(pr.name.toLowerCase())}</b> (marca ficticia <b>${esc(pr.brand)}</b>, ${esc(pr.detail.toLowerCase())}). La empresa debate si mostrar su producto con una <b>etiqueta de descuento</b> o con su <b>precio normal</b>, y quiere saber si esa etiqueta cambia lo que el consumidor espera de la calidad y cuánto le gusta.</p>
     <p>Hoy se vende a <b>${esc(money(P.mid))}</b>; la oferta con descuento sería de <b>${esc(money(P.low))}</b>. Antes de decidir, el directorio pide evidencia: primero una simulación y después una medición real con compañeros de otros equipos.</p>
     ${prov?'<div class="note" style="margin-bottom:0">Los precios de esta clase son <b>provisionales</b>: se validarán con un estudio de precios de mercado.</div>':''}</div>
-  <div class="card"><h2>El encargo del directorio (su mandato)</h2>
-    <p><b>Problema:</b> ¿el precio de marketing modifica la calidad esperada y el agrado de un producto idéntico?</p>
-    <ul style="margin:0 0 10px;padding-left:20px"><li><b>H1.</b> La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.</li><li><b>H2.</b> La oferta a precio normal recibe mayor <b>gusto</b>.</li><li><b>H3.</b> Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.</li></ul>
+  <div class="card"><h3 class="sh">📜 El encargo del directorio (su mandato)</h3>
+    <p class="uidea"><b>Problema:</b> ¿el precio de marketing modifica la calidad esperada y el agrado de un producto idéntico?</p>
+    <div class="hcards">${HC.map(([k,i,t,s])=>`<div class="hcard"><div class="hk"><span aria-hidden="true">${i}</span>${k}</div><p>${t}</p><small>${s}</small></div>`).join('')}</div>
     <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
-  <div class="card"><h2>Los tres productos de la clase</h2>
-    <div class="tablewrap w"><table><thead><tr><th>Eq.</th><th>Producto</th><th class="num">Descuento</th><th class="num">Normal</th><th class="num">Alto</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <p class="small muted" style="margin:8px 0 0">Tu producto va en negrita. Cada equipo estudia uno y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
-  <div class="card soft"><h2>Cómo se trabaja</h2>
-    <ol class="steps" style="margin-bottom:0"><li><b>Decidir → Simular.</b> Formulas tu hipótesis, diseñas las ofertas A y B y ejecutas rondas con consumidores virtuales.</li><li><b>Decidir → Experimento.</b> Mides a unos 6 compañeros reales de otros equipos.</li><li><b>Resultados.</b> Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.</li><li><b>Aprender.</b> Interpretas las diferencias y escribes tu conclusión.</li></ol></div>`;
+  <div class="card"><h3 class="sh">🛍️ Los tres productos de la clase</h3>
+    <div class="pcards">${pc}</div>
+    <p class="small muted" style="margin:10px 0 0">Cada equipo estudia un producto y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
+  <div class="card soft"><h3 class="sh">🧭 Cómo se trabaja</h3>
+    <div class="pflow">${FL.map(([h,c,i,t,d])=>`<a href="#${h}" style="--jc:${c}"><span aria-hidden="true">${i}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div></div>`;
 }
 function renderEquipo(){
   const pr=prod(S.equipo),mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length,pend=pending();
-  const mem=(S.integrantes||[]).map(i=>`<span class="tag${i.id===S.iid?' sim':''}">${esc(i.alias)}</span>`).join(' ');
-  $('equipoOut').innerHTML=`<div class="card"><h2>${esc(S.equipoNombre||'Mi equipo')}</h2>
-    <div class="stat"><div><b>${esc(S.alias)}</b><span>tu alias</span></div><div><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><b>${mine}</b><span>rondas simuladas</span></div><div><b>${n}</b><span>participantes medidos</span></div></div>
-    <p class="small muted" style="margin:6px 0 0">${BACKEND?(pend?pend+' dato(s) pendientes de envío.':'Todos tus datos están enviados a tu docente.'):'Modo práctica: tus datos quedan solo en este dispositivo.'}</p></div>
-  ${BACKEND?`<div class="card"><h3>Integrantes</h3><p>${mem||'–'}</p>
+  phero('equipo','Mi equipo',S.equipoNombre||'Mi equipo',`${esc(S.alias)} · ${esc(pr.name)} ${esc(pr.brand)}`);
+  const ini=a=>esc(String(a||'?').trim().slice(0,2).toUpperCase());
+  const mem=(S.integrantes||[]).map(i=>`<span class="av${i.id===S.iid?' me':''}"><i aria-hidden="true">${ini(i.alias)}</i>${esc(i.alias)}${i.id===S.iid?' <small>(tú)</small>':''}</span>`).join('');
+  $('equipoOut').innerHTML=`<div class="card"><h3 class="sh">📊 Tu avance</h3>
+    <div class="stat ic"><div><em aria-hidden="true">👤</em><b>${esc(S.alias)}</b><span>tu alias</span></div><div><em aria-hidden="true">🏷️</em><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><em aria-hidden="true">🔁</em><b>${mine}</b><span>rondas simuladas</span></div><div><em aria-hidden="true">🧑‍🤝‍🧑</em><b>${n}</b><span>participantes medidos</span></div></div>
+    ${meter(n,6,'Meta del experimento: participantes medidos')}
+    <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este dispositivo.</span>'}</p></div>
+  ${BACKEND?`<div class="card"><h3 class="sh">👥 Integrantes</h3><div class="avs">${mem||'–'}</div>
     <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
     <p class="small" id="eqMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p></div>
-  <details class="card"><summary>Cambiar la contraseña del equipo</summary>
+  <details class="card"><summary>🔒 Cambiar la contraseña del equipo</summary>
     <label for="eqPwA" style="margin-top:10px">Contraseña actual</label><input type="password" id="eqPwA" autocomplete="current-password">
     <label for="eqPwN" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="eqPwN" autocomplete="new-password">
     <p class="small" id="eqPwMsg" style="margin:8px 0 0" role="alert"></p><button id="eqPw" style="margin-top:8px">Cambiar</button></details>`:''}
-  <div class="card"><h2>Tu producto en las dos ofertas</h2>
+  <div class="card"><h3 class="sh">🖼️ Tu producto en las dos ofertas</h3>
     <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
@@ -1818,7 +1991,7 @@ function renderAll(){
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();renderCmp();renderManual();renderUnidades();renderStatus();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();renderCmp();renderManual();renderUnidades();renderStatus();
   ['casoOut','simOut','cmpOut','manualOut','t-simular','t-experimento','t-interpretacion'].forEach(id=>{const r=$(id);if(r&&!r.dataset.lk){linkify(r);if(/^t-/.test(id))r.dataset.lk='1';}});
 }
 function init(){
