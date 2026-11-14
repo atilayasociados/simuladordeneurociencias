@@ -403,6 +403,11 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
 .abpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
 .ab{border:1px solid var(--line);border-top:5px solid var(--oc);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;position:relative}
 .ab.a{--oc:var(--sim)}.ab.b{--oc:var(--azul)}.ab .abl{position:absolute;top:8px;left:8px}.ab small{font-weight:bold;text-align:center}.ab svg{max-width:100%}
+.iq{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:var(--surface)}
+.iq .hk{display:block;font-weight:bold;color:var(--fg);line-height:1.5}.iq .usn{background:var(--uc);margin-right:6px;vertical-align:middle}
+#t-interpretacion{--uc:#C2570C}#t-interpretacion .card:not(.soft){border-top:4px solid var(--uc)}
+.ichk{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;margin-top:10px}
+.ichk div{background:var(--surface2);border-radius:8px;padding:6px 10px;font-size:.84rem;color:var(--muted)}.ichk div.ok{background:var(--real-soft);color:var(--real);font-weight:bold}
 </style>
 </head><body>
 <header class="nopm">
@@ -507,14 +512,35 @@ button.big{width:100%;min-height:52px;font-size:1.02rem;font-weight:bold;margin-
 <!-- APRENDER · Interpretación -->
 <main id="t-interpretacion" class="hidden-tab" data-student>
   <div class="card">
-    <h2>Tu interpretación</h2>
-    <ul style="margin:0 0 10px;padding-left:20px">
-      <li>¿El efecto real tiene la misma dirección y tamaño que el simulado? ¿Por qué sí o por qué no?</li>
-      <li>¿Qué diferencia a tu muestra (tamaño, selección, ambiente) del panel simulado?</li>
-      <li>¿Qué haría falta para afirmar que el precio cambia la <i>experiencia</i> y no solo lo que la persona dice?</li>
-    </ul>
-    <label for="nota">Escribe tu conclusión (la verá tu docente)</label>
-    <textarea id="nota" maxlength="1200"></textarea>
+    <h3 class="sh">🎯 Qué buscamos aquí</h3>
+    <p>Es el último paso. Ya tienes números: los de la simulación y los de tus compañeros. Aquí los conviertes en una <b>conclusión para el directorio de la empresa</b>, que pidió evidencia para decidir entre la etiqueta de <b>descuento</b> o el <b>precio normal</b>.</p>
+    <div class="xsteps">
+      <div><i>1</i><span aria-hidden="true">🔢</span><p><b>Qué encontraste</b>, con tu número: ¿ganó el precio normal o el descuento, y por cuántos puntos?</p></div>
+      <div><i>2</i><span aria-hidden="true">🆚</span><p><b>Si coincide con lo simulado</b>: ¿la realidad se parece al modelo?</p></div>
+      <div><i>3</i><span aria-hidden="true">🚧</span><p><b>Hasta dónde llega</b> tu evidencia: qué no pudiste medir.</p></div>
+      <div><i>4</i><span aria-hidden="true">📣</span><p><b>Qué le recomiendas</b> al directorio, y con qué cuidado.</p></div>
+    </div>
+  </div>
+  <div class="card"><h3 class="sh">📌 Tus datos para escribir</h3><div id="interpData"></div></div>
+  <div class="card">
+    <h3 class="sh">❓ Las tres preguntas, explicadas</h3>
+      <div class="iq"><div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span>¿El efecto real tiene la misma dirección y tamaño que el simulado? ¿Por qué sí o por qué no?</div>
+        <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Dirección</b> = quién ganó: ¿el precio normal o el descuento? <b>Tamaño</b> = por cuántos puntos ganó. Mira los dos números grandes de Resultados → Real vs. simulado (también aparecen arriba, en «Tus datos»). Si los dos son positivos, tienen la misma dirección; si uno es positivo y el otro negativo, no.</p></div>
+        <p class="small muted" style="margin:0"><b>Ejemplo de cómo responder</b> (inventado, no copies los números): «En lo real, el precio normal superó al descuento por 0,9 puntos (p = 0,04); en lo simulado, por 1,2. Misma dirección y tamaño parecido.»</p></div>
+      <div class="iq"><div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span>¿Qué diferencia a tu muestra (tamaño, selección, ambiente) del panel simulado?</div>
+        <div class="ubox"><b>💡 En palabras sencillas</b><p>La <b>muestra</b> son las personas que respondieron. Compara tres cosas: <b>tamaño</b> (cuántas personas: tus compañeros son pocos; los consumidores simulados pueden ser más), <b>selección</b> (quiénes: estudiantes de una clase sobre precios, no compradores comunes) y <b>ambiente</b> (dónde y cómo: en el aula, mirando una imagen en un celular). Los consumidores simulados son personas virtuales que siguen una regla programada.</p></div>
+        <p class="small muted" style="margin:0"><b>Ejemplo de cómo responder</b> (inventado, no copies los números): «Medimos a 6 compañeros que ya saben que la clase trata de precios; eso pudo influir en sus notas. El panel simulado no tiene ese sesgo.»</p></div>
+      <div class="iq"><div class="hk"><span class="usn">3</span><span aria-hidden="true">🧠</span>¿Qué haría falta para afirmar que el precio cambia la <i>experiencia</i> y no solo lo que la persona dice?</div>
+        <div class="ubox"><b>💡 En palabras sencillas</b><p>Calificar una imagen mide lo que la persona <b>espera</b>, no lo que <b>siente</b> al usar el producto. Para hablar de experiencia, las personas tendrían que <b>probar</b> el producto, como el vino en Plassmann et al. (2008). Para ir más allá de lo que dicen, habría que medir una señal del cuerpo o del cerebro, por ejemplo con resonancia magnética funcional (fMRI). Kurz et al. (2023) hallaron que el precio cambia sobre todo las expectativas.</p></div>
+        <p class="small muted" style="margin:0"><b>Ejemplo de cómo responder</b> (inventado, no copies los números): «Nuestro estudio solo mide expectativas. Para hablar de experiencia, los participantes tendrían que probar la bebida sin saber que es la misma.»</p></div>
+  </div>
+  <div class="card">
+    <h3 class="sh">✍️ Escribe tu conclusión</h3>
+    <div class="ubox"><b>💡 Cómo escribirla, en palabras sencillas</b><p>Basta con <b>cuatro frases</b>, una por cada punto de «Qué buscamos aquí». Usa tus números, no los del ejemplo. Puedes pulsar «Poner la guía» para que aparezcan los cuatro inicios de frase en el cuadro y completarlos.</p></div>
+    <label for="nota">Tu conclusión (la verá tu docente)</label>
+    <textarea id="nota" maxlength="1200" style="min-height:160px"></textarea>
+    <div class="row" style="justify-content:space-between;margin-top:6px"><button class="ghost" id="notaGuia" type="button">📝 Poner la guía</button><span class="small muted" id="notaCnt"></span></div>
+    <div class="ichk" id="notaChk"></div>
   </div>
 </main>
 
@@ -724,7 +750,7 @@ function showTab(){
   $('bar').hidden=!S.joined;
   document.body.classList.toggle('pm',!!(S.draft&&S.draft.pm&&S.joined));
 }
-window.addEventListener('hashchange',()=>{showTab();window.scrollTo(0,0);renderAll();if(currentTab()==='comparar')loadResumen();});
+window.addEventListener('hashchange',()=>{showTab();window.scrollTo(0,0);renderAll();if(currentTab()==='comparar'||currentTab()==='interpretacion')loadResumen();});
 
 /* ---------- entrada: pantalla de acceso (mismo esquema que el simulador de innovación) ---------- */
 let PW='',AXM=null,AXWHO='eq',AXREG={ok:false},AXT=null;
@@ -1286,7 +1312,7 @@ function cols(rows,pid){
 }
 async function loadResumen(){
   if(!BACKEND||!S.joined||!S.token)return;
-  try{const r=await rpc('sn_resumen',{p_token:S.token});if(r&&r.ok){CLASSROWS=r.obs||[];if(conn!=='sesion')conn='ok';renderCmp();}else if(sesionPerdida(r)){conn='sesion';renderStatus();}}
+  try{const r=await rpc('sn_resumen',{p_token:S.token});if(r&&r.ok){CLASSROWS=r.obs||[];if(conn!=='sesion')conn='ok';renderCmp();renderInterp();}else if(sesionPerdida(r)){conn='sesion';renderStatus();}}
   catch(e){conn='offline';renderStatus();}
 }
 setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},20000);
@@ -2016,12 +2042,40 @@ function renderEquipo(){
     <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
+const NOTA_GUIA='1. Encontré que...\n2. Comparado con lo simulado...\n3. El límite de mi estudio es...\n4. Le recomiendo al directorio...';
+function notaChk(){
+  const t=(S.nota||''),c=$('notaChk');if(!c)return;
+  const it=[[/\d/.test(t.replace(/^[1-4]\.\s/gm,'')),'🔢 Usa al menos un número'],[/simulad/i.test(t),'🆚 Compara con lo simulado'],[/l[íi]mite|solo mide|no mide|expectativ|muestra/i.test(t),'🚧 Menciona un límite'],[/recomiend|recomendaci|sugiero|conviene/i.test(t),'📣 Da una recomendación']];
+  c.innerHTML=it.map(([ok,l])=>`<div class="${ok?'ok':''}">${ok?'✓ ':''}${l}</div>`).join('');
+  $('notaCnt').textContent=t.length+' de 1200 caracteres';
+}
+function renderInterp(){
+  if(!$('interpData'))return;
+  const pid=S.equipo,pr=prod(pid),rows=BACKEND?CLASSROWS:rowsOfLocal(),cp=cols(rows,pid);
+  const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},Math.max(20,cp.n),`${S.equipoId||'local'}|ref|p${pid}`,pr.mu),wSim=pairedT(ref.a.y,ref.b.y);
+  const st=w=>!w?'⏳ faltan datos':(w.p<0.05&&w.diff>0)?'✅ apoyada':(w.p<0.05)?'❌ contraria':'⚖️ no demostrada';
+  const h3=!cp.n?'⏳ faltan datos':(cp.pbin<0.05&&cp.rPref/cp.n>0.5)?'✅ apoyada':(cp.pbin<0.05)?'❌ contraria':'⚖️ no demostrada';
+  phero('interpretacion','Interpretación','¿Qué significan tus resultados?','Cuatro frases con tus números para el directorio');
+  $('interpData').innerHTML=`<div class="duel">
+      <div class="ds"><small>Simulado · normal − descuento</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos de calidad esperada</small></div>
+      <div class="dvs2">vs.</div>
+      <div class="dr"><small>Real · normal − descuento</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>${cp.wq?pEq(cp.wq.p)+' · ':''}${cp.n} participante(s)</small></div></div>
+    <div class="rtiles">
+      <div class="rtile"><small>H1 · calidad esperada</small><span>${st(cp.wq)}</span></div>
+      <div class="rtile"><small>H2 · gusto</small><span>${st(cp.wg)}${cp.wg?' · '+f(cp.wg.diff)+' puntos':''}</span></div>
+      <div class="rtile"><small>H3 · elección</small><span>${h3}${cp.n?' · '+cp.rPref+' de '+cp.n+' eligió el precio normal':''}</span></div>
+    </div>
+    <p class="small muted" style="margin:0">Positivo = el precio normal se valoró más que el descuento. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Real vs. simulado</a>.</p>`;
+  const g=$('notaGuia');if(g&&!g.dataset.b){g.dataset.b='1';g.onclick=()=>{const n=$('nota');if(n.value.trim()){n.value=n.value.replace(/\s*$/,'')+'\n'+NOTA_GUIA;}else n.value=NOTA_GUIA;n.dispatchEvent(new Event('input'));n.focus();};}
+  const n=$('nota');if(n&&!n.dataset.c){n.dataset.c='1';n.addEventListener('input',notaChk);}
+  notaChk();
+}
 function renderAll(){
   renderManual();renderUnidades();linkify($('manualOut'));
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();renderCmp();renderManual();renderUnidades();renderStatus();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();renderCmp();renderInterp();renderManual();renderUnidades();renderStatus();
   ['casoOut','simOut','cmpOut','manualOut','t-simular','t-experimento','t-interpretacion'].forEach(id=>{const r=$(id);if(r&&!r.dataset.lk){linkify(r);if(/^t-/.test(id))r.dataset.lk='1';}});
 }
 function init(){
