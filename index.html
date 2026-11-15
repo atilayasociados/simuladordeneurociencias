@@ -582,6 +582,7 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .hyp .hl em{font-style:normal;font-size:.84rem;font-weight:normal;line-height:1.35;margin:2px 0}
 .hyp .hl em u{text-decoration:none;font-weight:700}
 .hyp .chip{align-items:flex-start;text-align:left}
+.psl{margin:6px 0 0;padding-left:20px}.psl li{margin:6px 0;line-height:1.5}
 </style>
 </head><body>
 <header class="nopm">
@@ -694,7 +695,7 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
   <div class="card"><h3 class="sh">📌 Tus números (para usarlos en tus respuestas)</h3><div id="interpData"></div></div>
   <div class="card iq">
     <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> ¿Lo que pasó con tus compañeros se parece a lo que pasó en la simulación?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el morado es la simulación y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el gris es la simulación y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En la simulación ganó el precio normal por 1,2 puntos y con mis compañeros también, por 0,9. Se parecen: ganó el mismo y por una cantidad parecida.»</p>
     <label for="nq1">Tu respuesta a la pregunta 1</label>
     <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En la simulación ganó ___ por ___ puntos. Con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque..."></textarea>
@@ -1455,6 +1456,7 @@ function mriCard(r){
     </tbody></table></div>
     <p class="small muted" style="margin:10px 0 4px">Cambio simulado de la señal mOFC respecto a la referencia (calidad media del producto)</p>
     <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--offA')}</div><div><span class="small">B</span>${bar(dB,'--offB')}</div></div>
+    <div class="ubox"><b>💡 El índice mOFC, en palabras sencillas</b><p>La <b>corteza orbitofrontal medial (mOFC)</b> es una zona del cerebro, detrás de la frente y sobre los ojos, que se activa más cuando algo nos parece valioso (Plassmann et al., 2008). Aquí, 100 es el punto de referencia: más de 100 significa más activación de lo normal y menos de 100, menos. La oferta A marcó <b>${f(a[5],1)}</b> y la B, <b>${f(b[5],1)}</b>. Estos números los genera el simulador; no se midió ningún cerebro.</p></div>
     <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
   </div>
   <div class="card soft"><h3 class="sh">🏥 Qué requeriría hacerlo de verdad</h3>
@@ -1487,24 +1489,37 @@ function renderSim(){
   const a=r.a,b=r.b,pref=r.pref||[0,0],np=pref[0]+pref[1],pbin=np?binomTwo(pref[0],np):null;
   const pc=v=>Math.max(2,Math.min(100,(v-1)/9*100));
   const sig=r.w.p<0.05,dz=Math.abs(r.w.d),dpos=Math.min(100,dz/1.2*100);
+  const PS=(t,x)=>`<div class="ubox"><b>💡 ${t}, en palabras sencillas</b>${x}</div>`;
+  const dabs=f(Math.abs(r.w.diff)),gan=r.w.diff>0?'B':'A',per=r.w.diff>0?'A':'B';
+  const qSig=outcome==='='?`<p>La diferencia entre A y B fue tan pequeña que <b>podría deberse a la casualidad</b>. Por eso no se puede decir que una oferta gane: con estos datos, la gente simulada esperó casi la misma calidad de las dos.</p>`
+    :`<p>La gente simulada esperó <b>más calidad de la oferta ${outcome}</b> (${esc(outcome==='A'?tierText(r.prod,a[0]):tierText(r.prod,b[0]))}), y la diferencia es lo bastante clara como para que <b>no parezca casualidad</b>. Recuerda: el producto es el mismo, así que la diferencia viene de la etiqueta.</p>`;
+  const qHip=r.pred?(r.pred===outcome?`<p>Tu predicción fue «${lab(r.pred)}» y eso fue lo que pasó: <b>acertaste</b>.</p>`:`<p>Tu predicción fue «${lab(r.pred)}», pero pasó otra cosa. No es un error tuyo: sirve para aprender qué hace realmente la etiqueta.</p>`):`<p>Como no elegiste una hipótesis antes de guardar, esta vez no puedes comprobar si acertabas. En la próxima ronda toca «Mayor en A», «Mayor en B» o «Sin diferencia» antes de guardar.</p>`;
   out.innerHTML=`<div class="card">
     <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📈 Resultado de la ronda ${r.r}</h3><span class="tag sim">Simulado</span></div>
     <p class="small muted" style="margin-top:6px">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
     ${fb}
-    <h4 style="margin:4px 0 8px;color:var(--uc)">Calidad esperada promedio (escala 1 a 10)</h4>
+    ${PS('¿Qué significa este resultado?',qSig+qHip)}
+    <h4 style="margin:14px 0 8px;color:var(--uc)">Calidad esperada promedio (escala 1 a 10)</h4>
     <p class="small muted" style="margin:0 0 8px">A y B son las dos ofertas que diseñaste en Decidir → Simular para esta ronda: el mismo producto con distinta etiqueta.</p>
     <div class="abbar">
       <div class="abrow"><span class="abl a">A</span><div class="abtrack"><i style="width:${pc(a[3])}%;background:var(--offA)"></i></div><b>${f(a[3])}</b><small>${esc(tierText(r.prod,a[0]))} · ${presL(a[1])} · DE ${f(a[4])}</small></div>
       <div class="abrow"><span class="abl b">B</span><div class="abtrack"><i style="width:${pc(b[3])}%;background:var(--offB)"></i></div><b>${f(b[3])}</b><small>${esc(tierText(r.prod,b[0]))} · ${presL(b[1])} · DE ${f(b[4])}</small></div>
     </div>
+    ${PS('Las barras',`<p>Cada uno de los ${a[2]} consumidores simulados puso una nota del 1 al 10 a cada oferta, según la calidad que imagina. La barra muestra el <b>promedio</b>: A obtuvo <b>${f(a[3])}</b> y B obtuvo <b>${f(b[3])}</b>. «DE» (desviación estándar) indica cuánto variaron las notas entre personas: un número grande quiere decir que unos pusieron notas muy altas y otros muy bajas.</p>`)}
     <div class="rtiles">
       <div class="rtile"><small>Diferencia</small><b>${f(r.w.diff)}</b><span>B − A (puntos): la nota de B menos la nota de A. Positivo = ganó B; negativo = ganó A.</span></div>
       <div class="rtile"><small>¿Puede ser azar?</small><b>${fp(r.w.p)}</b><span>p (t pareada) · <span class="sem ${sig?'g':'y'}">${sig?'🟢 Poco probable que sea azar':'🟡 Puede ser azar'}</span></span></div>
       <div class="rtile"><small>Tamaño del efecto</small><b>${f(r.w.d)}</b><span>d_z de Cohen · efecto ${magOf(r.w.d)}</span><div class="dth" aria-hidden="true"><i style="left:${dpos}%"></i></div><div class="dthl" aria-hidden="true"><span style="left:16.7%">0,2</span><span style="left:41.7%">0,5</span><span style="left:66.7%">0,8</span></div></div>
       <div class="rtile"><small>Elección</small><b>${pref[0]} de ${np}</b><span>prefieren B: dieron más nota a B que a A${pbin!=null?' · '+pEq(pbin):''}</span><div class="mini" aria-hidden="true"><i style="width:${np?pref[0]/np*100:0}%"></i></div></div>
     </div>
+    ${PS('Los cuatro números',`<ul class="psl">
+      <li><b>Diferencia (${f(r.w.diff)}):</b> ${r.w.diff===0?'A y B obtuvieron el mismo promedio.':`la oferta ${gan} obtuvo ${dabs} puntos más que la ${per}, en promedio.`}</li>
+      <li><b>¿Puede ser azar? (${pEq(r.w.p)}):</b> el valor p responde a esta pregunta: si en realidad A y B fueran iguales, ¿qué tan raro sería ver una diferencia así solo por casualidad? Si p es menor que 0,05 (5 %), decimos que es poco probable que sea casualidad. ${sig?'Aquí p es menor que 0,05: la diferencia no parece casualidad.':'Aquí p no es menor que 0,05: la diferencia podría ser casualidad.'}</li>
+      <li><b>Tamaño del efecto (${f(r.w.d)}):</b> dice si la diferencia es grande o pequeña comparada con cuánto varían las notas. Como guía: 0,2 es pequeño, 0,5 moderado y 0,8 o más, grande. Aquí el efecto es <b>${magOf(r.w.d)}</b>.</li>
+      <li><b>Elección (${pref[0]} de ${np}):</b> de ${np} consumidores simulados, ${pref[0]} dieron más nota a B que a A${np?` (${Math.round(pref[0]/np*100)} %)`:''}.</li></ul>`)}
     <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su intervalo de confianza del 95 %. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}</div>
+    ${PS('El margen de error',`<p>Como solo se preguntó a ${a[2]} consumidores, el resultado no es exacto. La línea muestra entre qué valores está probablemente la diferencia real: <b>de ${f(r.w.lo)} a ${f(r.w.hi)} puntos</b>. ${r.w.lo<=0&&r.w.hi>=0?'Como la línea <b>cruza el 0</b>, es posible que en realidad no haya diferencia entre A y B.':`Como la línea <b>no cruza el 0</b>, es probable que la diferencia sea real y favorezca a la oferta ${gan}.`} Con más consumidores, la línea se acorta y el resultado es más preciso.</p>`)}
     <p style="margin-top:8px"><b>Conclusión:</b> ${esc(verdict(r.w,'B','A'))}</p>
     <details class="umore"><summary>⚠️ Cuidado al interpretar · Leer más</summary>
     <p class="small" style="margin:0">En datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI. Índice mOFC ilustrativo, M (DE): A ${f(a[5],1)} (${f(a[6],1)}) · B ${f(b[5],1)} (${f(b[6],1)}).</p></details>
@@ -1513,6 +1528,7 @@ function renderSim(){
   ${mine.length>1?`<div class="card"><h3 class="sh">🔁 Tus rondas</h3>
     <p class="small muted" style="margin:0 0 4px">Diferencia B − A en cada ronda. Verde = estadísticamente significativa (p &lt; 0,05); gris = puede ser azar.</p>
     <div class="rchart">${roundsChart(mine)}</div>
+    ${PS('El gráfico de rondas',`<p>Cada barra es una de tus rondas. La altura muestra cuánto más calidad esperó la gente de B que de A: <b>hacia arriba ganó B</b>, <b>hacia abajo ganó A</b>. Verde quiere decir que no parece casualidad; gris, que puede ser casualidad. Si las barras van hacia el mismo lado en varias rondas, el resultado se repite.</p>`)}
     <details class="umore"><summary>Ver la tabla de rondas</summary><div class="tablewrap w"><table><thead><tr><th>#</th><th>A</th><th>B</th><th class="num">B − A</th><th class="num">p</th></tr></thead><tbody>${mine.slice().reverse().map(x=>`<tr><td>${x.r}</td><td>${esc(tierText(x.prod,x.a[0]))}</td><td>${esc(tierText(x.prod,x.b[0]))}</td><td class="num">${f(x.w.diff)}</td><td class="num">${fp(x.w.p)}</td></tr>`).join('')}</tbody></table></div></details></div>`:''}`;
 }
 
@@ -1630,11 +1646,13 @@ function renderCmp(){
       <div class="dr"><small>Real · calidad esperada</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>${cp.n} participante(s)</small></div>
     </div>
     <p style="text-align:center;margin:4px 0 12px">${same===null?'<span class="sem y">⏳ Faltan datos reales</span>':same?'<span class="sem g">✓ Misma dirección</span>':'<span class="sem y">✗ Dirección distinta</span>'}</p>
-    <h4 style="margin:0 0 6px;color:var(--uc)">Tus hipótesis frente a los datos reales</h4>
+    <div class="ubox"><b>💡 Los dos números grandes, en palabras sencillas</b><p>Los dos miden lo mismo: <b>cuántos puntos más de calidad</b> (en la escala del 1 al 10) se esperó de la oferta a precio normal que de la oferta con descuento. El gris sale de la simulación; el verde, de las respuestas de tus compañeros${cp.wq?`: ${f(cp.wq.diff)} puntos con ${cp.n} participante(s)`:''}. Positivo: ganó el precio normal; negativo: ganó el descuento; cerca de 0: casi igual. ${same===null?'Todavía faltan datos reales para compararlos (mínimo 2 participantes).':same?'Aquí los dos apuntan en la <b>misma dirección</b>: la realidad se parece al modelo.':'Aquí apuntan en <b>direcciones distintas</b>: la realidad no se comportó como el modelo.'}</p></div>
+    <h4 style="margin:14px 0 6px;color:var(--uc)">Tus hipótesis frente a los datos reales</h4>
     <div class="hcards">${H.map(([k,i,t,s,d])=>`<div class="hcard ${s[0]}"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><div class="hst">${s[1]} ${s[2]}</div>${d?`<small>${d}</small>`:''}</div>`).join('')}</div>
     <div class="fbox"><h4>🎯 Todos los resultados con su margen de error</h4><p>Normal − descuento. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
     <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:#A6A8AA"></i>Real, otros productos</span></div></div>
+    <div class="ubox"><b>💡 Las tarjetas y el gráfico, en palabras sencillas</b><p>Cada tarjeta de hipótesis dice qué encontraron los datos reales: <b>apoyada</b> (ganó el precio normal y no parece casualidad), <b>contraria</b> (ganó el descuento), <b>no demostrada</b> (la diferencia puede ser casualidad) o <b>faltan datos</b>. En el gráfico, cada fila es un resultado: el punto es la diferencia y la línea, su margen de error. Si la línea toca el 0 punteado, no se puede descartar que no haya diferencia. Las filas grises son los otros productos de la clase: sirven para ver si el efecto del precio se repite.</p></div>
     <div style="margin-top:12px">${reading}</div>
     ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">🔄 Actualizar datos de la clase</button>':''}
   </div>
