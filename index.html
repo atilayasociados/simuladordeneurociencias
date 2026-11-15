@@ -638,6 +638,9 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .ptag.bal{transform:rotate(-8deg)}.ptag.eti{transform:rotate(3deg)}
 body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{background:none!important;border-radius:0!important}
 .nxwrap .nxt{margin:16px 0 0}
+.req{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#FFCE00;color:#1F2022;border-radius:999px;padding:2px 8px;margin-left:6px}
+.predwarn{margin:10px 0 0;background:#4A2E22;border:1px solid #FF4C00;color:#F2F3F3;border-radius:8px;padding:10px 12px;font-weight:600}
+#predChips.need .chip{border-color:#FF4C00!important;box-shadow:0 0 0 2px rgba(255,76,0,.45)}
 </style>
 </head><body>
 <header class="nopm">
@@ -670,13 +673,14 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <div class="ubox"><b>💡 A y B, en palabras sencillas</b><p>Imagina dos latas iguales en una tienda: a una le pegas la etiqueta <b>A</b> y a la otra la etiqueta <b>B</b>, con precios distintos. Si la gente cree que una es mejor, no puede ser por el producto, porque es el mismo: tiene que ser por la etiqueta. Eso es lo que mide esta simulación. Las imágenes de arriba cambian cuando cambias A o B en el paso 2.</p></div>
   </div>
   <div class="card">
-    <h3 class="sh"><span class="usn">1</span> Tu hipótesis</h3>
+    <h3 class="sh"><span class="usn">1</span> Tu hipótesis <span class="req">obligatoria</span></h3>
     <p class="small muted">Antes de simular, elige uno de los tres botones: es tu predicción sobre cuál de las dos ofertas (A o B) recibirá mayor calidad esperada, es decir, de cuál la gente imaginará que es mejor producto.</p>
     <div class="chips hyp" id="predChips" role="group" aria-label="Predicción">
       <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span><span class="hl"><b>Mayor en A</b><em>Crees que la gente esperará <u>más calidad de la oferta A</u> que de la B.</em><small data-ab="a"></small></span></button>
       <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span><span class="hl"><b>Mayor en B</b><em>Crees que la gente esperará <u>más calidad de la oferta B</u> que de la A.</em><small data-ab="b"></small></span></button>
       <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span><span class="hl"><b>Sin diferencia</b><em>Crees que la gente esperará <u>casi la misma calidad</u> de A y de B: el precio no cambia nada.</em></span></button>
     </div>
+    <p class="predwarn" id="predWarn" role="alert" hidden>⚠️ Primero elige tu hipótesis: toca «Mayor en A», «Mayor en B» o «Sin diferencia». Es obligatoria para guardar tu decisión.</p>
     <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿de cuál de tus dos ofertas esperará la gente mejor calidad? «Mayor en A» significa que crees que la oferta A (la primera del paso 2) recibirá una nota de calidad más alta que B. «Mayor en B», lo contrario. «Sin diferencia», que crees que las dos recibirán casi la misma nota. Debajo de cada botón ves qué tiene hoy cada oferta. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
   </div>
   <div class="card">
@@ -1015,7 +1019,7 @@ function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
 let T=null,demoOn=false;   // datos del docente
 let conn='ok';             // ok | offline | sesion
-const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de la simulación incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 5 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',sin_hipotesis:'Primero elige tu hipótesis: Mayor en A, Mayor en B o Sin diferencia.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de la simulación incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 5 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
 const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
 function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
 function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
@@ -1416,7 +1420,7 @@ function bindSim(){
   fillSimSelects();bindSimValues();
   [['aTier','a','tier'],['aPres','a','pres'],['bTier','b','tier'],['bPres','b','pres']].forEach(([id,k,p])=>{$(id).addEventListener('change',e=>{S.cfg[k][p]=e.target.value;offerPrev();touch(false);});});
   $('nSim').addEventListener('input',e=>{S.cfg.n=+e.target.value;$('nSimV').textContent=S.cfg.n;touch(false);});
-  $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;touch(true);});
+  $('predChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.pred=b.dataset.p;const w=$('predWarn');if(w)w.hidden=true;touch(true);});
   $('runSim').addEventListener('click',runSim);
 }
 /* ---------- rondas controladas por el docente ---------- */
@@ -1451,6 +1455,7 @@ function computeRound(dd,round){
   S.sims.sort((x,y)=>x.r-y.r);
 }
 async function runSim(){
+  if(!S.pred){const w=$('predWarn');if(w){w.hidden=false;}const c=$('predChips');c.classList.add('need');c.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>c.classList.remove('need'),1600);return;}
   if(rondasOn()){
     const bt=$('runSim');bt.disabled=true;
     const dd={a:{tier:S.cfg.a.tier,pres:S.cfg.a.pres},b:{tier:S.cfg.b.tier,pres:S.cfg.b.pres},n:S.cfg.n,pred:S.pred||null};

@@ -1042,3 +1042,14 @@ begin
     execute d;
   end loop;
 end $mig$;
+
+-- v11: la hipótesis es obligatoria para guardar la decisión de una ronda
+do $mig$
+declare d text;
+begin
+  select pg_get_functiondef(p.oid) into d from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname='sn_guardar_decision';
+  d := replace(d, $q$then return jsonb_build_object('ok', false, 'error', 'datos'); end if;$q$,
+                  $q$then return jsonb_build_object('ok', false, 'error', 'datos'); end if;
+  if coalesce(p_datos->>'pred','') not in ('A','B','=') then return jsonb_build_object('ok', false, 'error', 'sin_hipotesis'); end if;$q$);
+  execute d;
+end $mig$;
