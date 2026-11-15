@@ -634,6 +634,9 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .ab .pimg{max-width:100%!important}
 .ab .abl{z-index:2}
 .ab .pcap{display:none}
+.ptag.bal,.ptag.eti{position:absolute;right:1%;bottom:1%;width:50%;height:auto;aspect-ratio:1;border:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.ptag.bal{transform:rotate(-8deg)}.ptag.eti{transform:rotate(3deg)}
+body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{background:none!important;border-radius:0!important}
 </style>
 </head><body>
 <header class="nopm">
@@ -1337,11 +1340,36 @@ function productSVG(pid,ver,w,o){
   const p=prod(pid),D=o?o.tier==='low':ver==='D',price=o?priceOf(pid,o.tier):priceOf(pid,D?'low':'mid');
   const prem=o&&o.pres==='premium';
   const num=(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price);
-  const cap=o?o.cap:D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
+  const cap=o?o.cap:D?'Oferta':'Precio normal';
   const al=o?o.cap+', '+money(price)+(prem?', presentación premium':', presentación estándar'):(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price));
   return `<div class="pimg" style="max-width:${w||220}px" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(al)}. ${esc(PALT[p.art])}${prem?', sobre una base negra con filo dorado':''}.">
-    <div class="pph"><img src="${pfoto(pid,prem?'premium':'estandar')}" alt="" loading="lazy" decoding="async"><span class="ptag${D?' d':''}${price>=100?' big':''}" aria-hidden="true"><small>${esc(CONFIG.CURRENCY)}</small><b>${num}</b></span></div>
+    <div class="pph"><img src="${pfoto(pid,prem?'premium':'estandar')}" alt="" loading="lazy" decoding="async">${D?balazo(pid,num):etiquetaPrecio(num)}</div>
     <div class="pcap" aria-hidden="true">${esc(cap)}</div></div>`;
+}
+/* balazo publicitario (oferta) y etiqueta de góndola (precio normal o alto): mismo lugar y tamaño en ambas ofertas */
+function fmtP(v){return (v<10||!Number.isInteger(v))?v.toFixed(2).replace('.',','):String(v);}
+function balazo(pid,num){
+  const P=prod(pid).prices,pct=Math.round((P.mid-P.low)/P.mid*100),pts=[];
+  for(let i=0;i<32;i++){const r=i%2?50:58,a=Math.PI*2*i/32-Math.PI/2;pts.push((60+r*Math.cos(a)).toFixed(1)+','+(60+r*Math.sin(a)).toFixed(1));}
+  const big=num.length>4;
+  return `<svg class="ptag bal" viewBox="0 0 120 120" aria-hidden="true"><polygon points="${pts.join(' ')}" fill="#D7191C" stroke="#9E1015" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>
+    <text x="62" y="37" text-anchor="middle" style="fill:#FFCE00;font:900 12px Arial,sans-serif;letter-spacing:.1em">OFERTA</text>
+    <text x="60" y="49" text-anchor="middle" style="fill:#fff;font:700 9px Arial,sans-serif">${esc(CONFIG.CURRENCY)}</text>
+    <text x="60" y="${big?73:76}" text-anchor="middle" style="fill:#fff;font:900 ${big?22:28}px Arial,sans-serif">${num}</text>
+    <text x="60" y="90" text-anchor="middle" style="fill:#fff;font:700 9px Arial,sans-serif">Antes ${esc(CONFIG.CURRENCY)} ${fmtP(P.mid)}</text>
+    <line x1="${big?33:35}" y1="87" x2="${big?87:85}" y2="87" stroke="#FFCE00" stroke-width="1.4"/>
+    <g transform="translate(14,15) rotate(-14)"><circle r="15" fill="#FFCE00" stroke="#1b2a41" stroke-width="1.5"/><text y="4.5" text-anchor="middle" style="fill:#1b2a41;font:900 11px Arial,sans-serif">-${pct}%</text></g></svg>`;
+}
+function etiquetaPrecio(num){
+  const big=num.length>4;
+  return `<svg class="ptag eti" viewBox="0 0 120 120" aria-hidden="true"><g transform="translate(0,22)">
+    <rect x="4" y="4" width="112" height="72" rx="8" fill="#fff" stroke="#1b2a41" stroke-width="2.5"/>
+    <path d="M4 12 a8 8 0 0 1 8 -8 h96 a8 8 0 0 1 8 8 v12 h-112 z" fill="#1b2a41"/>
+    <circle cx="16" cy="14" r="3.2" fill="#E3E6E5"/>
+    <text x="64" y="19" text-anchor="middle" style="fill:#FFCE00;font:900 10px Arial,sans-serif;letter-spacing:.18em">PRECIO</text>
+    <text x="22" y="${big?60:62}" text-anchor="start" style="fill:#1b2a41;font:700 10px Arial,sans-serif">${esc(CONFIG.CURRENCY)}</text>
+    <text x="${big?72:74}" y="${big?62:65}" text-anchor="middle" style="fill:#1b2a41;font:900 ${big?26:32}px Arial,sans-serif">${num}</text></g></svg>`;
 }
 function usoImg(pid,cls){const p=prod(pid);return `<figure class="puso${cls?' '+cls:''}"><img src="${pfoto(pid,'uso')}" alt="${esc(PUSO[p.art])}" loading="lazy" decoding="async"><figcaption>${esc(p.name)} ${esc(p.brand)} en uso · imagen de ejemplo</figcaption></figure>`;}
 
