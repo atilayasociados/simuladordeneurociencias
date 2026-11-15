@@ -583,6 +583,13 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .hyp .hl em u{text-decoration:none;font-weight:700}
 .hyp .chip{align-items:flex-start;text-align:left}
 .psl{margin:6px 0 0;padding-left:20px}.psl li{margin:6px 0;line-height:1.5}
+.gsteps{display:grid;gap:10px;margin:10px 0}
+.gstep{display:flex;gap:12px;background:var(--surface2);border-radius:10px;padding:12px;border-left:4px solid #FFCE00}
+.gstep.ok{border-left-color:#44D62C;opacity:.85}
+.gstep .gn{width:30px;height:30px;border-radius:50%;flex:none;display:inline-flex;align-items:center;justify-content:center;font-weight:700;background:#FFCE00;color:#1F2022}
+.gstep.ok .gn{background:#44D62C}
+.gstep p{margin:4px 0 0;font-size:.9rem}.gstep>div{min-width:0;flex:1}
+.gbtn{display:inline-block;margin-top:8px;background:#44D62C;color:#1F2022!important;font-weight:700;border-radius:8px;padding:7px 12px;text-decoration:none}
 </style>
 </head><body>
 <header class="nopm">
@@ -1611,12 +1618,30 @@ async function loadResumen(){
 setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},20000);
 
 /* ---------- 3. comparar ---------- */
+/* ---------- requisitos antes de ver la comparación real vs. simulado ---------- */
+const META_OBS=6;
+function faltaPara(){
+  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,it=[];
+  it.push({ok:sims>0,t:'Tener al menos una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(rondasOn()?'En Decidir → Simular elige tu hipótesis y tus ofertas A y B, y pulsa «Guardar mi decisión». El resultado llega cuando el profesor ejecuta la ronda.':'En Decidir → Simular elige tu hipótesis y tus ofertas A y B, y ejecuta una ronda.'),h:'simular',b:'Ir a Simular'});
+  it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el celular al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
+  return it;
+}
+function gateHTML(que){
+  const it=faltaPara();if(it.every(x=>x.ok))return '';
+  const k=it.filter(x=>!x.ok).length;
+  return `<div class="card gate"><h3 class="sh">🔒 Todavía no puedes ver ${que}</h3>
+    <p>Para comparar lo simulado con lo real primero necesitas tus propios datos. Te ${k===1?'falta 1 paso':'faltan '+k+' pasos'}:</p>
+    <div class="gsteps">${it.map((x,i)=>`<div class="gstep ${x.ok?'ok':''}"><span class="gn">${x.ok?'✓':i+1}</span><div><b>${x.t}</b><p>${x.d}</p>${x.m&&!x.ok?meter(x.m[0],x.m[1],'Compañeros medidos'):''}${x.ok?'':`<a class="gbtn" href="#${x.h}">${x.b} →</a>`}</div></div>`).join('')}</div>
+    <div class="ubox"><b>💡 Por qué está bloqueado, en palabras sencillas</b><p>Esta parte compara tu simulación con lo que respondieron personas reales. Si todavía no tienes resultado de simulación o no has medido a tus compañeros, no hay nada propio que comparar. Cuando completes los pasos, aquí aparecerán tus números.</p></div></div>`;
+}
 function renderCmp(){
   if(!S.joined){$('cmpOut').innerHTML='';return;}
   const pid=S.equipo,pr=prod(pid);
   const rows=BACKEND?CLASSROWS:rowsOfLocal();
   const m=cols(rowsOfLocal(),pid);        // mis mediciones
   const cp=cols(rows,pid);                // todo el curso, mi producto
+  const gt=gateHTML('la comparación');
+  if(gt){phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} de ${META_OBS} participante(s) · faltan pasos`);$('cmpOut').innerHTML=gt;return;}
   const nRef=Math.max(20,cp.n);
   const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
@@ -2466,7 +2491,9 @@ function renderInterp(){
   const st=w=>!w?'⏳ Faltan datos':(w.p<0.05&&w.diff>0)?'✅ Sí, y no parece casualidad':(w.p<0.05)?'❌ No: ganó el descuento':'⚖️ No está claro: puede ser casualidad';
   const h3=!cp.n?'⏳ Faltan datos':(cp.pbin<0.05&&cp.rPref/cp.n>0.5)?'✅ Sí, y no parece casualidad':(cp.pbin<0.05)?'❌ No: la mayoría eligió el descuento':'⚖️ No está claro: puede ser casualidad';
   phero('interpretacion','Interpretación','¿Qué significan tus resultados?','4 preguntas cortas · responde con tus palabras y tus números');
-  $('interpData').innerHTML=`<div class="duel">
+  const gt=gateHTML('tus números');
+  if(gt){$('interpData').innerHTML=gt.replace('<div class="card gate">','<div class="gate">').replace(/<h3 class="sh">[^]*?<\/h3>/,'<p><b>🔒 Tus números aparecerán cuando completes estos pasos.</b></p>');}
+  else $('interpData').innerHTML=`<div class="duel">
       <div class="ds"><small>Simulación</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos a favor del precio normal</small></div>
       <div class="dvs2">vs.</div>
       <div class="dr"><small>Tus compañeros (real)</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>puntos a favor del precio normal · ${cp.n} participante(s)${cp.wq?' · '+pEq(cp.wq.p):''}</small></div></div>
