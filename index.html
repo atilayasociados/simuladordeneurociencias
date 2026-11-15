@@ -603,6 +603,21 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .ucard .fig{margin:10px 0 0}
 .fig figcaption b{display:inline!important;font-size:inherit;margin:0}
 .figs2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start}.figs2 .fig{margin:0}
+/* áreas bloqueadas */
+.lkd>:not(.phwrap):not(.lkbox){display:none!important}
+.lkwrap{position:relative;border-radius:12px;overflow:hidden;min-height:440px}
+.skc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px;display:grid;gap:10px}
+.sk{display:block;background:#6A6C6E;border-radius:6px}
+.skg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.skt{background:var(--surface2);border-radius:8px;padding:10px;display:grid;gap:6px}
+.lkov{position:absolute;inset:0;background:rgba(18,19,20,.58);display:flex;align-items:flex-start;justify-content:center;padding:26px 12px}
+.lkcard{background:#2E3032;border:1px solid #6E7072;border-radius:12px;padding:16px;max-width:540px;width:100%;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.lkcard>b{display:block;font-size:1.05rem;margin-top:4px}.lkcard>p{margin:6px 0 0;color:var(--muted)}
+.lkic{font-size:30px;color:#FFCE00;line-height:1}
+#lkToast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,160%);z-index:60;display:flex;gap:12px;align-items:center;background:#2C4A2A;border:1px solid #44D62C;color:#F2F3F3;border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.45);width:min(92vw,460px);transition:transform .35s ease}
+#lkToast.on{transform:translate(-50%,0)}
+#lkToast>span{font-size:26px;color:#44D62C}#lkToast b{display:block}#lkToast a{color:#8FE37F;font-weight:700}
+#lkToast button{margin-left:auto;background:transparent;border:0;color:#F2F3F3;font-size:18px;min-height:auto;padding:4px 8px}
 </style>
 </head><body>
 <header class="nopm">
@@ -1512,12 +1527,11 @@ function renderSim(){
   offerPrev();
   const out=$('simOut');
   const mine=S.sims.filter(s=>s.prod===S.equipo);
+  if(!lkApply('resultados')){phero('resultados','Simulación','¿Qué encontró tu simulación?','Área bloqueada · completa los pasos para encenderla');out.innerHTML='';return;}
   if(!mine.length){
     phero('resultados','Simulación','¿Qué encontró tu simulación?','Aún no hay rondas con resultado');
     out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
   const r=mine[mine.length-1];
-  const gt=gateHTML('el resultado de tu simulación','Tu simulación ya tiene resultado, pero se muestra cuando completes también el experimento con tus compañeros.');
-  if(gt){phero('resultados','Simulación','¿Qué encontró tu simulación?',`${mine.length} ronda(s) con resultado · falta el experimento`);out.innerHTML=gt;return;}
   phero('resultados','Simulación',`Ronda ${r.r}: ¿qué encontró tu simulación?`,`${mine.length} ronda(s) · ${r.a[2]} consumidores simulados en la última`);
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
   const abR=k=>k+', '+(k==='A'?tierText(r.prod,r.a[0]):tierText(r.prod,r.b[0]));
@@ -1668,14 +1682,76 @@ function gateHTML(que,intro){
     <div class="gsteps">${it.map((x,i)=>`<div class="gstep ${x.ok?'ok':''}"><span class="gn">${x.ok?'✓':i+1}</span><div><b>${x.t}</b><p>${x.d}</p>${x.m&&!x.ok?meter(x.m[0],x.m[1],'Compañeros medidos'):''}${x.ok?'':`<a class="gbtn" href="#${x.h}">${x.b} →</a>`}</div></div>`).join('')}</div>
     <div class="ubox"><b>💡 Por qué está bloqueado, en palabras sencillas</b><p>El trabajo va en orden: primero <b>Decidir</b> (simular y medir a tus compañeros) y después <b>Resultados</b>. Así lees tus resultados con todos tus datos y no te influyen antes de hacer el experimento. Cuando completes los pasos, aquí aparecerán tus números.</p></div></div>`;
 }
+/* ---------- áreas bloqueadas que se van encendiendo (cadena completa) ---------- */
+const LKV=['experimento','resultados','comparar','interpretacion'];
+const LKN={experimento:'Decidir → Experimento',resultados:'Resultados → Simulación',comparar:'Resultados → Real vs. simulado',interpretacion:'Aprender → Interpretación'};
+function lkReq(v){
+  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1;
+  const dec=sims>0||(rondasOn()&&MYDEC&&Object.keys(MYDEC).length>0);
+  const vis=S.vis||{};
+  const R={
+    experimento:()=>[{ok:dec,t:'Guardar tu decisión en Decidir → Simular',d:'Elige tu hipótesis, arma las ofertas A y B y pulsa el botón verde «Guardar mi decisión».',h:'simular',b:'Ir a Simular'}],
+    resultados:()=>[{ok:sims>0,t:'Tener una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(dec?'Tu decisión está guardada: falta que el profesor ejecute la ronda.':'Guarda tu decisión en Decidir → Simular; el resultado llega cuando el profesor ejecuta la ronda.'),h:'simular',b:'Ir a Simular'},
+                {ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el celular a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
+    comparar:()=>[{ok:lkOpen0('resultados')&&!!vis.resultados,t:'Revisar el resultado de tu simulación',d:'Abre Resultados → Simulación y lee qué encontró tu simulación.',h:'resultados',b:'Ir a Simulación'}],
+    interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar Real vs. simulado',d:'Abre Resultados → Real vs. simulado y compara tu simulación con tus compañeros.',h:'comparar',b:'Ir a Real vs. simulado'}]
+  };
+  return R[v]?R[v]():[];
+}
+function lkOpen0(v){return lkReq(v).every(x=>x.ok);}
+function lkOpen(v){return !LKV.includes(v)||lkOpen0(v);}
+function lkSkel(v){
+  const bar=(w,h)=>`<i class="sk" style="width:${w};height:${h||'12px'}"></i>`;
+  const card=inner=>`<div class="skc">${bar('45%','16px')}${inner}</div>`;
+  const tiles=k=>`<div class="skg">${Array.from({length:k},()=>`<div class="skt">${bar('50%','10px')}${bar('70%','22px')}${bar('90%','10px')}</div>`).join('')}</div>`;
+  if(v==='experimento')return card(tiles(4))+card(bar('100%','40px')+bar('60%','40px'))+card(bar('100%','12px')+bar('80%','12px'));
+  if(v==='resultados')return card(bar('100%','46px')+bar('100%','20px')+bar('85%','20px')+tiles(4))+card(bar('100%','90px'))+card(tiles(4));
+  if(v==='comparar')return card(`<div class="skg">${[1,2].map(()=>`<div class="skt">${bar('60%','10px')}${bar('40%','30px')}</div>`).join('')}</div>`+tiles(3))+card(bar('100%','120px'));
+  return card(tiles(3))+[1,2,3,4].map(()=>card(bar('100%','12px')+bar('100%','70px'))).join('');
+}
+function lkHTML(v){
+  const it=lkReq(v),k=it.filter(x=>!x.ok).length;
+  return `<div class="lkwrap" aria-hidden="false"><div class="lkskel" aria-hidden="true">${lkSkel(v)}</div>
+   <div class="lkov"><div class="lkcard"><div class="lkic">🔒</div><b>${esc(LKN[v])} todavía está bloqueada</b>
+    <p>Se enciende cuando completes ${k===1?'este paso':'estos pasos'}:</p>
+    <div class="gsteps">${it.map((x,i)=>`<div class="gstep ${x.ok?'ok':''}"><span class="gn">${x.ok?'✓':i+1}</span><div><b>${x.t}</b><p>${x.d}</p>${x.m&&!x.ok?meter(x.m[0],x.m[1],'Compañeros medidos'):''}${x.ok?'':`<a class="gbtn" href="#${x.h}">${x.b} →</a>`}</div></div>`).join('')}</div>
+   </div></div></div>`;
+}
+/* aplica el bloqueo a una vista: oculta su contenido real y muestra siluetas bajo una capa oscura */
+function lkApply(v){
+  const m=$('t-'+v);if(!m)return true;
+  const open=lkOpen(v)||(v==='experimento'&&S.draft&&S.draft.pm);
+  m.classList.toggle('lkd',!open);
+  let box=m.querySelector(':scope>.lkbox');
+  if(open){if(box)box.remove();return true;}
+  if(!box){box=document.createElement('div');box.className='lkbox nolk';const w=m.querySelector(':scope>.phwrap');w?w.after(box):m.prepend(box);}
+  box.innerHTML=lkHTML(v);return false;
+}
+/* aviso «¡Desbloqueaste…!» cuando un área pasa de cerrada a abierta */
+function lkCheck(){
+  if(!S.joined)return;
+  S.unl=S.unl||{};const nuevos=[];
+  LKV.forEach(v=>{const o=lkOpen0(v);if(o&&S.unl[v]===false)nuevos.push(v);S.unl[v]=o;});
+  if(nuevos.length){lsSave();lkToast(nuevos[nuevos.length-1]);}
+}
+function lkToast(v){
+  let t=$('lkToast');if(!t){t=document.createElement('div');t.id='lkToast';t.setAttribute('role','status');document.body.appendChild(t);}
+  t.innerHTML=`<span aria-hidden="true">🔓</span><div><b>¡Desbloqueaste ${esc(LKN[v])}!</b><a href="#${v}" id="lkGo">Ir ahora →</a></div><button type="button" id="lkX" aria-label="Cerrar">✕</button>`;
+  t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',9000);
+  $('lkX').onclick=()=>t.className='';$('lkGo').onclick=()=>t.className='';
+}
+function lkVisit(){
+  const t=currentTab();if(!S.joined||!['resultados','comparar'].includes(t)||!lkOpen(t))return;
+  S.vis=S.vis||{};if(!S.vis[t]){S.vis[t]=true;lsSave();}
+}
+
 function renderCmp(){
   if(!S.joined){$('cmpOut').innerHTML='';return;}
   const pid=S.equipo,pr=prod(pid);
   const rows=BACKEND?CLASSROWS:rowsOfLocal();
   const m=cols(rowsOfLocal(),pid);        // mis mediciones
   const cp=cols(rows,pid);                // todo el curso, mi producto
-  const gt=gateHTML('la comparación');
-  if(gt){phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} de ${META_OBS} participante(s) · faltan pasos`);$('cmpOut').innerHTML=gt;return;}
+  if(!lkApply('comparar')){phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?','Área bloqueada · completa los pasos para encenderla');$('cmpOut').innerHTML='';return;}
   const nRef=Math.max(20,cp.n);
   const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
@@ -2530,9 +2606,8 @@ function renderInterp(){
   const st=w=>!w?'⏳ Faltan datos':(w.p<0.05&&w.diff>0)?'✅ Sí, y no parece casualidad':(w.p<0.05)?'❌ No: ganó el descuento':'⚖️ No está claro: puede ser casualidad';
   const h3=!cp.n?'⏳ Faltan datos':(cp.pbin<0.05&&cp.rPref/cp.n>0.5)?'✅ Sí, y no parece casualidad':(cp.pbin<0.05)?'❌ No: la mayoría eligió el descuento':'⚖️ No está claro: puede ser casualidad';
   phero('interpretacion','Interpretación','¿Qué significan tus resultados?','4 preguntas cortas · responde con tus palabras y tus números');
-  const gt=gateHTML('tus números');
-  if(gt){$('interpData').innerHTML=gt.replace('<div class="card gate">','<div class="gate">').replace(/<h3 class="sh">[^]*?<\/h3>/,'<p><b>🔒 Tus números aparecerán cuando completes estos pasos.</b></p>');}
-  else $('interpData').innerHTML=`<div class="duel">
+  if(!lkApply('interpretacion'))return;
+  $('interpData').innerHTML=`<div class="duel">
       <div class="ds"><small>Simulación</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos a favor del precio normal</small></div>
       <div class="dvs2">vs.</div>
       <div class="dr"><small>Tus compañeros (real)</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>puntos a favor del precio normal · ${cp.n} participante(s)${cp.wq?' · '+pEq(cp.wq.p):''}</small></div></div>
@@ -2552,7 +2627,9 @@ function renderAll(){
   if(!S.joined){renderStatus();return;}
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();renderCmp();renderInterp();renderManual();renderUnidades();renderStatus();
+  lkVisit();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();lkApply('experimento');renderCmp();renderInterp();renderManual();renderUnidades();renderStatus();
+  lkCheck();
   ['casoOut','simOut','cmpOut','manualOut','t-simular','t-experimento','t-interpretacion'].forEach(id=>{const r=$(id);if(r&&!r.dataset.lk){linkify(r);if(/^t-/.test(id))r.dataset.lk='1';}});
 }
 function init(){
