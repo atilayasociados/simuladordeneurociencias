@@ -618,6 +618,22 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 #lkToast.on{transform:translate(-50%,0)}
 #lkToast>span{font-size:26px;color:#44D62C}#lkToast b{display:block}#lkToast a{color:#8FE37F;font-weight:700}
 #lkToast button{margin-left:auto;background:transparent;border:0;color:#F2F3F3;font-size:18px;min-height:auto;padding:4px 8px}
+.pimg{width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pph{position:relative;width:100%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:#E3E6E5;container-type:inline-size}
+.pph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ptag{position:absolute;right:5%;bottom:4%;width:30%;aspect-ratio:1;border-radius:50%;background:#fff;color:#1b2a41;border:2px solid #1b2a41;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.ptag small{font:600 9px Arial,sans-serif;font-size:max(8px,5cqw)}.ptag b{font:700 18px Arial,sans-serif;font-size:max(11px,9cqw);margin-top:2px}
+.ptag.big b{font-size:max(10px,7.5cqw)}
+.ptag.d{background:#FF4C00;color:#fff}
+.pcap{font:500 12px Arial,sans-serif;text-align:center;color:inherit}
+.dilema .pcap,.pair .pcap,.canbox .pcap,.ab .pcap,.pcard .pcap{color:#2B2C2E}
+.puso{margin:0 0 12px;border-radius:10px;overflow:hidden;background:#1F2022;position:relative}
+.puso img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.puso figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 6px;font-size:.72rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.puso.sm{width:100%;margin:2px 0 4px}.puso.sm img{aspect-ratio:3/2}.puso.sm figcaption{display:none}
+.ab .pimg{max-width:100%!important}
+.ab .abl{z-index:2}
+.ab .pcap{display:none}
 </style>
 </head><body>
 <header class="nopm">
@@ -1312,35 +1328,22 @@ async function restaurar(){
 }
 
 /* ---------- arte de los productos ---------- */
+/* ---------- fotos oficiales de producto (Atila y Asociados) con etiqueta de precio superpuesta ---------- */
+const PFOTO={can:'volta',phones:'aura',shoe:'paso'};
+const PALT={can:'Lata azul marino con franja amarilla y la palabra VOLTA',phones:'Audífonos de diadema azul marino con almohadillas amarillas y la palabra AURA',shoe:'Zapatilla deportiva azul marino con una franja amarilla y la palabra PASO'};
+const PUSO={can:'Una persona sostiene una lata de VOLTA en una plaza de la ciudad.',phones:'Un estudiante lee en el campus con los audífonos AURA puestos.',shoe:'Una persona corre por la calle con las zapatillas PASO.'};
+function pfoto(pid,v){return `${BASE}img/productos/${PFOTO[prod(pid).art]}-${v}.jpg`;}
 function productSVG(pid,ver,w,o){
   const p=prod(pid),D=o?o.tier==='low':ver==='D',price=o?priceOf(pid,o.tier):priceOf(pid,D?'low':'mid');
-  const ink='#1b2a41',gold='#FFCE00';
-  const txt=(x,y,s,st)=>`<text x="${x}" y="${y}" text-anchor="middle" style="${st}">${s}</text>`;
-  let art='';
-  if(p.art==='can'){
-    art=`<rect x="62" y="24" width="96" height="190" rx="14" fill="${ink}"/><rect x="62" y="24" width="96" height="20" rx="9" fill="#a9b3bf"/><rect x="62" y="202" width="96" height="12" rx="6" fill="#a9b3bf"/>
-    <path d="M62 84 L158 64 L158 104 L62 124 Z" fill="${gold}"/>${txt(110,100,esc(p.brand),`fill:${ink};font:700 20px Arial,sans-serif`)}
-    ${txt(110,146,'BEBIDA',"fill:#fff;font:600 10px Arial,sans-serif;letter-spacing:.1em")}${txt(110,160,'ENERGÉTICA',"fill:#fff;font:600 10px Arial,sans-serif;letter-spacing:.1em")}${txt(110,180,'473 ml',"fill:#c9d1da;font:500 10px Arial,sans-serif")}`;
-  }else if(p.art==='phones'){
-    art=`<path d="M52 150 C52 60 168 60 168 150" fill="none" stroke="${ink}" stroke-width="12" stroke-linecap="round"/>
-    <rect x="34" y="132" width="40" height="78" rx="18" fill="${ink}"/><rect x="146" y="132" width="40" height="78" rx="18" fill="${ink}"/>
-    <rect x="46" y="146" width="22" height="50" rx="11" fill="${gold}"/><rect x="152" y="146" width="22" height="50" rx="11" fill="${gold}"/>
-    ${txt(110,118,esc(p.brand),`fill:${ink};font:700 18px Arial,sans-serif;letter-spacing:.12em`)}`;
-  }else{
-    art=`<path d="M28 168 L28 118 Q28 104 42 104 L84 104 Q102 132 130 138 L176 148 Q204 154 204 178 L204 192 L28 192 Z" fill="${ink}"/>
-    <rect x="22" y="188" width="188" height="16" rx="8" fill="#e8e8e8"/>
-    <path d="M60 160 Q110 136 170 168 L170 176 Q110 150 60 172 Z" fill="${gold}"/>
-    <path d="M92 112 L104 124 M104 108 L116 120 M116 108 L128 124" stroke="#c9d1da" stroke-width="3" stroke-linecap="round"/>
-    ${txt(118,186,esc(p.brand),"fill:#fff;font:700 11px Arial,sans-serif;letter-spacing:.14em")}`;
-  }
-  const tag=`<g transform="translate(160,232)"><circle r="36" fill="${D?'#FF4C00':'#ffffff'}" stroke="${ink}" stroke-width="2.5"/>
-    ${txt(0,-12,CONFIG.CURRENCY,`fill:${D?'#fff':ink};font:600 11px Arial,sans-serif`)}
-    ${txt(0,12,(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price),`fill:${D?'#fff':ink};font:700 ${price>=100?18:22}px Arial,sans-serif`)}</g>`;
+  const prem=o&&o.pres==='premium';
+  const num=(price<10||!Number.isInteger(price))?price.toFixed(2).replace('.',','):String(price);
   const cap=o?o.cap:D?'Oferta · precio normal '+money(priceOf(pid,'mid')):'Precio normal';
-  const prem=o&&o.pres==='premium'?`<g><rect x="62" y="2" width="96" height="18" rx="9" fill="${gold}"/><text x="110" y="15" text-anchor="middle" style="fill:${ink};font:700 10px Arial,sans-serif;letter-spacing:.12em">PREMIUM</text></g>`:'';
-  const al=o?o.cap+', '+money(price)+(o.pres==='premium'?', presentación premium':', presentación estándar'):(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price));
-  return `<svg viewBox="0 0 220 300" width="${w||190}" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(al)}">${art}${tag}${prem}<text x="110" y="290" text-anchor="middle" style="font:500 12px Arial,sans-serif">${esc(cap)}</text></svg>`;
+  const al=o?o.cap+', '+money(price)+(prem?', presentación premium':', presentación estándar'):(D?'oferta a '+money(price)+' (precio normal '+money(priceOf(pid,'mid'))+')':'precio normal '+money(price));
+  return `<div class="pimg" style="max-width:${w||220}px" role="img" aria-label="${esc(p.name)} ${esc(p.brand)}, ${esc(al)}. ${esc(PALT[p.art])}${prem?', sobre una base negra con filo dorado':''}.">
+    <div class="pph"><img src="${pfoto(pid,prem?'premium':'estandar')}" alt="" loading="lazy" decoding="async"><span class="ptag${D?' d':''}${price>=100?' big':''}" aria-hidden="true"><small>${esc(CONFIG.CURRENCY)}</small><b>${num}</b></span></div>
+    <div class="pcap" aria-hidden="true">${esc(cap)}</div></div>`;
 }
+function usoImg(pid,cls){const p=prod(pid);return `<figure class="puso${cls?' '+cls:''}"><img src="${pfoto(pid,'uso')}" alt="${esc(PUSO[p.art])}" loading="lazy" decoding="async"><figcaption>${esc(p.name)} ${esc(p.brand)} en uso · imagen de ejemplo</figcaption></figure>`;}
 
 /* ---------- gráfico de bosque ---------- */
 function forest(rows,xlabel){
@@ -2540,10 +2543,11 @@ document.addEventListener('click',e=>{
 function renderCaso(){
   const pr=prod(S.equipo),P=pr.prices,prov=CONFIG.PRICES_PROVISIONAL;
   phero('caso','El caso',`${pr.name} ${pr.brand}: ¿descuento o precio normal?`,'Tu misión: reunir evidencia antes de que el directorio decida.');
-  const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${productSVG(p.id,'R',96)}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
+  const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${usoImg(p.id,'sm')}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
   const HC=[['H1','🏷️','La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.','Se mide: calidad esperada, de 1 a 10'],['H2','😊','La oferta a precio normal recibe mayor <b>gusto</b>.','Se mide: gusto, de 1 a 10'],['H3','🛒','Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.','Se mide: qué oferta elige']];
   const FL=[['simular','#555759','🧪','1. Decidir → Simular','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta (precio y presentación). Consumidores virtuales califican las dos en cada ronda.'],['experimento','#555759','🧑‍🤝‍🧑','2. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['resultados','#555759','📊','3. Resultados','Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.'],['interpretacion','#555759','🎓','4. Aprender','Interpretas las diferencias y escribes tu conclusión.']];
   $('casoOut').innerHTML=`<div class="card"><h3 class="sh">🧩 El dilema de la empresa</h3>
+    ${usoImg(S.equipo,'hero')}
     <div class="dilema"><div>${productSVG(S.equipo,'R',140)}</div><div class="dvs" aria-hidden="true">¿?</div><div>${productSVG(S.equipo,'D',140)}</div></div>
     <p style="margin-top:12px">Su equipo dirige el estudio de precio de <b>${esc(pr.name.toLowerCase())}</b> (marca ficticia <b>${esc(pr.brand)}</b>, ${esc(pr.detail.toLowerCase())}). La empresa debate si mostrar su producto con una <b>etiqueta de descuento</b> o con su <b>precio normal</b>, y quiere saber si esa etiqueta cambia lo que el consumidor espera de la calidad y cuánto le gusta.</p>
     <p>Hoy se vende a <b>${esc(money(P.mid))}</b>; la oferta con descuento sería de <b>${esc(money(P.low))}</b>. Antes de decidir, el directorio pide evidencia: primero una simulación y después una medición real con compañeros de otros equipos.</p>
@@ -2579,6 +2583,7 @@ function renderEquipo(){
     <label for="eqPwN" style="margin-top:10px">Nueva contraseña (mín. 4)</label><input type="password" id="eqPwN" autocomplete="new-password">
     <p class="small" id="eqPwMsg" style="margin:8px 0 0" role="alert"></p><button id="eqPw" style="margin-top:8px">Cambiar</button></details>`:''}
   <div class="card"><h3 class="sh">🖼️ Tu producto en las dos ofertas</h3>
+    ${usoImg(S.equipo,'hero')}
     <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
