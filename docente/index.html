@@ -590,6 +590,11 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .gstep.ok .gn{background:#44D62C}
 .gstep p{margin:4px 0 0;font-size:.9rem}.gstep>div{min-width:0;flex:1}
 .gbtn{display:inline-block;margin-top:8px;background:#44D62C;color:#1F2022!important;font-weight:700;border-radius:8px;padding:7px 12px;text-decoration:none}
+.nxt{display:flex;gap:12px;align-items:flex-start;background:#2C4A2A;border:1px solid #44D62C;border-radius:10px;padding:12px 14px;margin:0 0 12px}
+.nxt.here{background:#333537;border-color:#6E7072}
+.nxt .nxi{color:#44D62C;font-size:24px;line-height:1;flex:none;margin-top:2px}
+.nxt small{display:block;color:#8FE37F;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.nxt b{display:block;font-size:1rem;margin-top:2px}.nxt p{margin:4px 0 0;font-size:.9rem}.nxt>div{min-width:0}
 </style>
 </head><body>
 <header class="nopm">
@@ -1379,7 +1384,7 @@ function renderRonda(){
   if(CR===null){el.innerHTML='';return;}
   const pasos=['Guardas tu decisión','El profesor ejecuta la ronda '+nx,'Ves el resultado'];
   el.innerHTML=`<div class="rstep" aria-label="Estado de la ronda">${pasos.map((t,i)=>`<div class="${i+1<st?'done':i+1===st?'cur':''}"><i>${i+1<st?'✓':i+1}</i><span>${t}</span></div>`).join('')}</div>
-  <div class="${d?'okbox':'note'}" style="margin-top:10px">${d?`✓ Tu decisión para la <b>ronda ${nx}</b> está guardada. El resultado aparecerá cuando el profesor ejecute la ronda; puedes cambiarla hasta entonces.`:`La clase va en la ronda ${CR}. Elige tu hipótesis, arma las ofertas y guarda tu decisión: <b>el profesor ejecuta la ronda ${nx}</b> para todos a la vez.`}${DECMSG?'<br>'+DECMSG:''}</div>`;
+  <div class="${d?'okbox':'note'}" style="margin-top:10px">${d?`✓ Tu decisión para la <b>ronda ${nx}</b> está guardada. El resultado aparecerá cuando el profesor ejecute la ronda; puedes cambiarla hasta entonces.`:`La clase va en la ronda ${CR}. Elige tu hipótesis, arma las ofertas y guarda tu decisión: <b>el profesor ejecuta la ronda ${nx}</b> para todos a la vez.`}${DECMSG?'<br>'+DECMSG:''}</div>${d?'<div style="margin-top:12px">'+nextHTML('simular')+'</div>':''}`;
 }
 function computeRound(dd,round){
   const n=dd.n,ca=dd.a,cb=dd.b,pr=prod(S.equipo);
@@ -1396,7 +1401,7 @@ async function runSim(){
     try{const r=await rpc('sn_guardar_decision',{p_token:S.token,p_datos:dd});
       if(r&&r.ok){MYDEC[r.ronda]=dd;CR=r.ronda-1;DECMSG='';}else{if(sesionPerdida(r)){bt.disabled=false;return;}DECMSG=em(r);}
     }catch(e){DECMSG='No hay conexión con el servidor; intenta de nuevo.';}
-    bt.disabled=false;renderRonda();return;
+    bt.disabled=false;renderAll();return;
   }
   const round=S.sims.filter(s=>s.prod===S.equipo).length+1,n=S.cfg.n,ca=S.cfg.a,cb=S.cfg.b,pr=prod(S.equipo);
   const R=simulatePaired(ca,cb,n,`${S.equipoId||'local'}|${S.alias}|p${S.equipo}|r${round}`,pr.mu);
@@ -1412,13 +1417,27 @@ function jstate(){
   const mine=S.sims.filter(s=>s.prod===S.equipo).length,dec=Object.keys(MYDEC||{}).length>0||mine>0,n=S.obs.length;
   return [2,dec&&n?2:(dec||n)?1:0,mine?2:0,(S.nota||'').trim().length>=20?2:0];
 }
+function nextStep(v){
+  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1,dec=rondasOn()&&MYDEC&&MYDEC[nx];
+  let qn=0;try{qn=nqParse(S.nota).filter(x=>x.trim().length>=20).length;}catch(e){}
+  if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Simular',t:'Guarda tu decisión de simulación',d:'En Decidir → Simular: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántos consumidores simulados y pulsa el botón verde «Guardar mi decisión».'};
+  if(!sims&&dec&&n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:'Decisión guardada. Ahora haz el experimento',d:`Tu decisión ya está guardada; el resultado llegará cuando el profesor ejecute la ronda. Mientras tanto, ve a Decidir → Experimento y mide a compañeros de otros equipos (llevas ${n} de ${META_OBS}): elige su equipo, pulsa «Entregar el celular al participante» y deja que él responda.`};
+  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el celular al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
+  if(!sims)return{h:'simular',b:'Ir a Decidir → Simular',t:'Espera el resultado de tu simulación',d:dec?'Ya mediste a tus compañeros y tu decisión está guardada. Falta que el profesor ejecute la ronda; cuando lo haga, tu resultado aparecerá en Resultados.':'Ya mediste a tus compañeros. Ahora guarda tu decisión en Decidir → Simular para recibir un resultado cuando el profesor ejecute la ronda.'};
+  if(qn<4)return{h:v==='resultados'?'comparar':(v==='comparar'?'interpretacion':'resultados'),b:v==='resultados'?'Ir a Real vs. simulado':(v==='comparar'?'Ir a Aprender → Interpretación':'Ir a Resultados'),t:v==='comparar'?'Ahora escribe tu interpretación':'Revisa tus resultados',d:v==='resultados'?'Lee qué encontró tu simulación y después abre Real vs. simulado para compararla con tus compañeros.':v==='comparar'?`Con estos números, ve a Aprender → Interpretación y responde las 4 preguntas (llevas ${qn} de 4).`:`Ya completaste Decidir. Abre Resultados → Simulación, luego Real vs. simulado, y al final responde las 4 preguntas de Aprender → Interpretación (llevas ${qn} de 4).`};
+  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste la simulación, el experimento y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
+}
+function nextHTML(view){
+  const x=nextStep(view),aqui=x.h===view;
+  return `<div class="nxt${aqui?' here':''}"><span class="nxi" aria-hidden="true">🧭</span><div><small>${aqui?'Estás en el paso que toca':'Tu siguiente paso'}</small><b>${x.t}</b><p>${x.d}</p>${aqui?'':`<a class="gbtn" href="#${x.h}">${x.b} →</a>`}</div></div>`;
+}
 function phero(view,kick,title,meta){
   const m=$('t-'+view);if(!m)return;
   const gn=GROUPS.find(x=>x.v.some(y=>y[0]===view)).n,gi=JG.findIndex(j=>j.g===gn),G=JG[gi],st=jstate();
   const j='<div class="pjour" role="navigation" aria-label="Tu recorrido">'+JG.map((x,i)=>`${i?'<b></b>':''}<a href="#${x.h}" class="${st[i]===2?'done':st[i]===1?'half':''}${i===gi?' cur':''}" style="--jc:${x.c}"${i===gi?' aria-current="step"':''}><i aria-hidden="true">${st[i]===2?'✓':x.i}</i><span>${x.g}</span></a>`).join('')+'</div>';
   let w=m.querySelector(':scope>.phwrap');
   if(!w){w=document.createElement('div');w.className='phwrap nopm nolk';m.prepend(w);}
-  w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
+  w.innerHTML=j+nextHTML(view)+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
 }
 const meter=(v,max,lab)=>`<div class="meter"><div class="mt"><i style="width:${Math.min(100,v/max*100)}%"></i></div><p><span>${lab}</span><b>${v} de ${max}</b></p></div>`;
 function abTxt(k){const c=S.cfg[k];return money(priceOf(S.equipo,c.tier))+' ('+TIERL[c.tier]+') · '+(c.pres==='premium'?'Premium':'Estándar');}
@@ -1484,6 +1503,8 @@ function renderSim(){
     phero('resultados','Simulación','¿Qué encontró tu simulación?','Aún no hay rondas con resultado');
     out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
   const r=mine[mine.length-1];
+  const gt=gateHTML('el resultado de tu simulación','Tu simulación ya tiene resultado, pero se muestra cuando completes también el experimento con tus compañeros.');
+  if(gt){phero('resultados','Simulación','¿Qué encontró tu simulación?',`${mine.length} ronda(s) con resultado · falta el experimento`);out.innerHTML=gt;return;}
   phero('resultados','Simulación',`Ronda ${r.r}: ¿qué encontró tu simulación?`,`${mine.length} ronda(s) · ${r.a[2]} consumidores simulados en la última`);
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
   const abR=k=>k+', '+(k==='A'?tierText(r.prod,r.a[0]):tierText(r.prod,r.b[0]));
@@ -1597,7 +1618,7 @@ function renderExp(){
   }
   $('expRun').innerHTML=h;
   const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
-  let t=meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  let t=(n>=META_OBS?nextHTML('experimento'):'')+meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
   if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
   else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
   $('obsList').innerHTML=t;
@@ -1626,13 +1647,13 @@ function faltaPara(){
   it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el celular al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
   return it;
 }
-function gateHTML(que){
+function gateHTML(que,intro){
   const it=faltaPara();if(it.every(x=>x.ok))return '';
   const k=it.filter(x=>!x.ok).length;
   return `<div class="card gate"><h3 class="sh">🔒 Todavía no puedes ver ${que}</h3>
-    <p>Para comparar lo simulado con lo real primero necesitas tus propios datos. Te ${k===1?'falta 1 paso':'faltan '+k+' pasos'}:</p>
+    <p>${intro||'Para comparar lo simulado con lo real primero necesitas tus propios datos.'} Te ${k===1?'falta 1 paso':'faltan '+k+' pasos'}:</p>
     <div class="gsteps">${it.map((x,i)=>`<div class="gstep ${x.ok?'ok':''}"><span class="gn">${x.ok?'✓':i+1}</span><div><b>${x.t}</b><p>${x.d}</p>${x.m&&!x.ok?meter(x.m[0],x.m[1],'Compañeros medidos'):''}${x.ok?'':`<a class="gbtn" href="#${x.h}">${x.b} →</a>`}</div></div>`).join('')}</div>
-    <div class="ubox"><b>💡 Por qué está bloqueado, en palabras sencillas</b><p>Esta parte compara tu simulación con lo que respondieron personas reales. Si todavía no tienes resultado de simulación o no has medido a tus compañeros, no hay nada propio que comparar. Cuando completes los pasos, aquí aparecerán tus números.</p></div></div>`;
+    <div class="ubox"><b>💡 Por qué está bloqueado, en palabras sencillas</b><p>El trabajo va en orden: primero <b>Decidir</b> (simular y medir a tus compañeros) y después <b>Resultados</b>. Así lees tus resultados con todos tus datos y no te influyen antes de hacer el experimento. Cuando completes los pasos, aquí aparecerán tus números.</p></div></div>`;
 }
 function renderCmp(){
   if(!S.joined){$('cmpOut').innerHTML='';return;}
