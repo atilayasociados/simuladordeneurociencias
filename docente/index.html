@@ -1368,8 +1368,8 @@ function etiquetaPrecio(num){
     <path d="M4 12 a8 8 0 0 1 8 -8 h96 a8 8 0 0 1 8 8 v12 h-112 z" fill="#1b2a41"/>
     <circle cx="16" cy="14" r="3.2" fill="#E3E6E5"/>
     <text x="64" y="19" text-anchor="middle" style="fill:#FFCE00;font:900 10px Arial,sans-serif;letter-spacing:.18em">PRECIO</text>
-    <text x="22" y="${big?60:62}" text-anchor="start" style="fill:#1b2a41;font:700 10px Arial,sans-serif">${esc(CONFIG.CURRENCY)}</text>
-    <text x="${big?72:74}" y="${big?62:65}" text-anchor="middle" style="fill:#1b2a41;font:900 ${big?26:32}px Arial,sans-serif">${num}</text></g></svg>`;
+    <text x="${big?10:20}" y="${big?58:60}" text-anchor="start" style="fill:#1b2a41;font:700 10px Arial,sans-serif">${esc(CONFIG.CURRENCY)}</text>
+    <text x="${big?77:74}" y="${big?62:65}" text-anchor="middle" style="fill:#1b2a41;font:900 ${big?24:32}px Arial,sans-serif">${num}</text></g></svg>`;
 }
 function usoImg(pid,cls){const p=prod(pid);return `<figure class="puso${cls?' '+cls:''}"><img src="${pfoto(pid,'uso')}" alt="${esc(PUSO[p.art])}" loading="lazy" decoding="async"><figcaption>${esc(p.name)} ${esc(p.brand)} en uso · imagen de ejemplo</figcaption></figure>`;}
 
