@@ -579,6 +579,9 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .mdfaq{display:grid;gap:10px}.mdfaq>div{background:var(--surface2);border-radius:8px;padding:10px 12px}.mdfaq p{margin:4px 0 0;font-size:.9rem;color:var(--muted)}
 .hcard .hk .hkt{display:inline;width:auto;height:auto;background:none;font-size:1rem;color:inherit;border-radius:0}
 .hcard .hk a.cl{color:inherit}
+.hyp .hl em{font-style:normal;font-size:.84rem;font-weight:normal;line-height:1.35;margin:2px 0}
+.hyp .hl em u{text-decoration:none;font-weight:700}
+.hyp .chip{align-items:flex-start;text-align:left}
 </style>
 </head><body>
 <header class="nopm">
@@ -612,13 +615,13 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">1</span> Tu hipótesis</h3>
-    <p class="small muted">Antes de simular, predice qué oferta recibirá mayor calidad esperada.</p>
+    <p class="small muted">Antes de simular, elige uno de los tres botones: es tu predicción sobre cuál de las dos ofertas (A o B) recibirá mayor calidad esperada, es decir, de cuál la gente imaginará que es mejor producto.</p>
     <div class="chips hyp" id="predChips" role="group" aria-label="Predicción">
-      <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span><span class="hl"><b>Mayor en A</b><small data-ab="a"></small></span></button>
-      <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span><span class="hl"><b>Mayor en B</b><small data-ab="b"></small></span></button>
-      <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span><span class="hl"><b>Sin diferencia</b><small>A y B, igual calidad</small></span></button>
+      <button class="chip" data-p="A" aria-pressed="false"><span aria-hidden="true">🅰️</span><span class="hl"><b>Mayor en A</b><em>Crees que la gente esperará <u>más calidad de la oferta A</u> que de la B.</em><small data-ab="a"></small></span></button>
+      <button class="chip" data-p="B" aria-pressed="false"><span aria-hidden="true">🅱️</span><span class="hl"><b>Mayor en B</b><em>Crees que la gente esperará <u>más calidad de la oferta B</u> que de la A.</em><small data-ab="b"></small></span></button>
+      <button class="chip" data-p="=" aria-pressed="false"><span aria-hidden="true">⚖️</span><span class="hl"><b>Sin diferencia</b><em>Crees que la gente esperará <u>casi la misma calidad</u> de A y de B: el precio no cambia nada.</em></span></button>
     </div>
-    <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿de cuál de tus dos ofertas esperará la gente mejor calidad? «Mayor en A» significa que crees que la oferta A (la de la izquierda en el paso 2) recibirá una nota de calidad más alta que B. «Mayor en B», lo contrario. «Sin diferencia», que crees que las dos recibirán casi la misma nota. Debajo de cada botón ves qué tiene hoy cada oferta. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
+    <div class="ubox"><b>💡 Tu hipótesis, en palabras sencillas</b><p>Es tu apuesta <b>antes</b> de ver los datos: ¿de cuál de tus dos ofertas esperará la gente mejor calidad? «Mayor en A» significa que crees que la oferta A (la primera del paso 2) recibirá una nota de calidad más alta que B. «Mayor en B», lo contrario. «Sin diferencia», que crees que las dos recibirán casi la misma nota. Debajo de cada botón ves qué tiene hoy cada oferta. Se elige antes para poder comprobar después si acertaste; elegir después de ver el resultado ya no sería una predicción.</p></div>
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">2</span><span>Diseña las ofertas de <span id="scProd"></span></span></h3>
