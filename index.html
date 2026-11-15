@@ -637,6 +637,7 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .ptag.bal,.ptag.eti{position:absolute;right:1%;bottom:1%;width:50%;height:auto;aspect-ratio:1;border:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
 .ptag.bal{transform:rotate(-8deg)}.ptag.eti{transform:rotate(3deg)}
 body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{background:none!important;border-radius:0!important}
+.nxwrap .nxt{margin:16px 0 0}
 </style>
 </head><body>
 <header class="nopm">
@@ -1491,7 +1492,10 @@ function phero(view,kick,title,meta){
   const j='<div class="pjour" role="navigation" aria-label="Tu recorrido">'+JG.map((x,i)=>`${i?'<b></b>':''}<a href="#${x.h}" class="${st[i]===2?'done':st[i]===1?'half':''}${i===gi?' cur':''}" style="--jc:${x.c}"${i===gi?' aria-current="step"':''}><i aria-hidden="true">${st[i]===2?'✓':x.i}</i><span>${x.g}</span></a>`).join('')+'</div>';
   let w=m.querySelector(':scope>.phwrap');
   if(!w){w=document.createElement('div');w.className='phwrap nopm nolk';m.prepend(w);}
-  w.innerHTML=j+nextHTML(view)+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
+  {let nw=m.querySelector(':scope>.nxwrap');if(!nw){nw=document.createElement('div');nw.className='nxwrap nolk';}m.appendChild(nw);
+   const dup=(view==='simular'&&!!document.querySelector('#rondaBox .nxt'))||(view==='experimento'&&S.obs.length>=META_OBS);
+   nw.innerHTML=dup?'':nextHTML(view);}
+  w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
 }
 const meter=(v,max,lab)=>`<div class="meter"><div class="mt"><i style="width:${Math.min(100,v/max*100)}%"></i></div><p><span>${lab}</span><b>${v} de ${max}</b></p></div>`;
 function abTxt(k){const c=S.cfg[k];return money(priceOf(S.equipo,c.tier))+' ('+TIERL[c.tier]+') · '+(c.pres==='premium'?'Premium':'Estándar');}
@@ -2592,7 +2596,7 @@ function renderCaso(){
     <p class="small muted" style="margin:10px 0 0">Cada equipo estudia un producto y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
   <div class="card soft"><h3 class="sh">🧭 Cómo se trabaja</h3>
     <div class="pflow">${FL.map(([h,c,i,t,d])=>`<a href="#${h}" style="--jc:${c}"><span aria-hidden="true">${i}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div>
-    <div class="ubox"><b>💡 ¿Qué son la oferta A y la oferta B?, en palabras sencillas</b><p>Son dos versiones del <b>mismo</b> ${esc(pr.name.toLowerCase())} ${esc(pr.brand)}, como dos unidades iguales en la góndola con distinta etiqueta. Por ejemplo, la oferta A con descuento (${esc(money(P.low))}) y la oferta B con precio normal (${esc(money(P.mid))}). Como el producto es el mismo, si la gente espera más calidad de una, la diferencia solo puede venir de la etiqueta. En Decidir → Simular tú eliges el precio y la presentación de cada una.</p></div></div>`;
+    <div class="ubox"><b>💡 ¿Qué son la oferta A y la oferta B?, en palabras sencillas</b><p>Son dos versiones del <b>mismo</b> producto (${esc(pr.name.toLowerCase())} ${esc(pr.brand)}), como dos unidades iguales en la góndola con distinta etiqueta. Por ejemplo, la oferta A con descuento (${esc(money(P.low))}) y la oferta B con precio normal (${esc(money(P.mid))}). Como el producto es el mismo, si la gente espera más calidad de una, la diferencia solo puede venir de la etiqueta. En Decidir → Simular tú eliges el precio y la presentación de cada una.</p></div></div>`;
 }
 function renderEquipo(){
   const pr=prod(S.equipo),mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length,pend=pending();
