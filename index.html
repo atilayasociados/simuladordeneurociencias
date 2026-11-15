@@ -597,11 +597,12 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .nxt b{display:block;font-size:1rem;margin-top:2px}.nxt p{margin:4px 0 0;font-size:.9rem}.nxt>div{min-width:0}
 .fig{margin:12px 0;background:#1F2022;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .fig img{display:block;width:100%;height:auto}
-.figr img{max-height:420px;object-fit:cover;object-position:center 60%}
+.figr img{max-height:460px;object-fit:contain;background:#1F2022}
 .fig figcaption{padding:10px 12px;font-size:.86rem;line-height:1.5;color:var(--fg)}
 .fig figcaption i{color:var(--muted)}
 .ucard .fig{margin:10px 0 0}
 .fig figcaption b{display:inline!important;font-size:inherit;margin:0}
+.figs2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start}.figs2 .fig{margin:0}
 </style>
 </head><body>
 <header class="nopm">
@@ -2475,6 +2476,9 @@ function renderCaso(){
     <p class="uidea"><b>Problema:</b> ¿el precio de marketing modifica la calidad esperada y el agrado de un producto idéntico?</p>
     <div class="hcards">${HC.map(([k,i,t,s])=>`<div class="hcard"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><small>${s}</small></div>`).join('')}</div>
     <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
+  <div class="card"><h3 class="sh">🧲 Cómo se mide el cerebro en un estudio real</h3>
+    <p>En el estudio de Plassmann et al. (2008) las personas estaban acostadas dentro de un <b>resonador magnético</b> mientras probaban el producto, y los investigadores observaban la actividad de la <b>corteza orbitofrontal medial (mOFC)</b>. En esta clase no hay resonador: el simulador imita ese laboratorio. Estas imágenes te muestran cómo sería.</p>
+    <div class="figs2">${figResonador()}${figMOFC()}</div></div>
   <div class="card"><h3 class="sh">🛍️ Los tres productos de la clase</h3>
     <div class="pcards">${pc}</div>
     <p class="small muted" style="margin:10px 0 0">Cada equipo estudia un producto y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
