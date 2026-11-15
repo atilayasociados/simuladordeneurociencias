@@ -577,6 +577,8 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .mdgo:hover{background:rgba(68,214,44,.12)}
 .mdmsg{background:var(--surface2);border-left:4px solid #44D62C;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:.92rem;line-height:1.5}
 .mdfaq{display:grid;gap:10px}.mdfaq>div{background:var(--surface2);border-radius:8px;padding:10px 12px}.mdfaq p{margin:4px 0 0;font-size:.9rem;color:var(--muted)}
+.hcard .hk .hkt{display:inline;width:auto;height:auto;background:none;font-size:1rem;color:inherit;border-radius:0}
+.hcard .hk a.cl{color:inherit}
 </style>
 </head><body>
 <header class="nopm">
@@ -1626,7 +1628,7 @@ function renderCmp(){
     </div>
     <p style="text-align:center;margin:4px 0 12px">${same===null?'<span class="sem y">⏳ Faltan datos reales</span>':same?'<span class="sem g">✓ Misma dirección</span>':'<span class="sem y">✗ Dirección distinta</span>'}</p>
     <h4 style="margin:0 0 6px;color:var(--uc)">Tus hipótesis frente a los datos reales</h4>
-    <div class="hcards">${H.map(([k,i,t,s,d])=>`<div class="hcard ${s[0]}"><div class="hk"><span aria-hidden="true">${i}</span>${k}</div><p>${t}</p><div class="hst">${s[1]} ${s[2]}</div>${d?`<small>${d}</small>`:''}</div>`).join('')}</div>
+    <div class="hcards">${H.map(([k,i,t,s,d])=>`<div class="hcard ${s[0]}"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><div class="hst">${s[1]} ${s[2]}</div>${d?`<small>${d}</small>`:''}</div>`).join('')}</div>
     <div class="fbox"><h4>🎯 Todos los resultados con su margen de error</h4><p>Normal − descuento. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
     <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:#A6A8AA"></i>Real, otros productos</span></div></div>
@@ -2257,7 +2259,7 @@ const UDEF=[
  {id:'heuristica-precio-calidad',k:'precio',t:'Heurística precio-calidad',d:'Atajo mental por el cual se usa el precio como pista de calidad: «si es más caro, debe ser mejor» (Rao, 2005).',al:['heurística precio-calidad']},
  {id:'efecto-placebo',k:'placebo',t:'Efecto placebo del marketing',d:'Efecto por el cual una acción de marketing, como el precio, cambia el resultado real que la persona obtiene con un producto a través de sus expectativas (Shiv et al., 2005).',al:['efecto placebo del marketing','efecto placebo']},
  {id:'plassmann',k:'vino',t:'Plassmann et al. (2008)',d:'Estudio con fMRI en el que el mismo vino, mostrado con precios distintos, recibió más agrado declarado y más actividad en la mOFC cuando su precio era mayor.',al:['Plassmann et al. (2008)']},
- {id:'hipotesis',k:'diseno',t:'Hipótesis',d:'Predicción sobre lo que va a ocurrir, formulada antes de mirar los datos.',al:['hipótesis']},
+ {id:'hipotesis',k:'diseno',t:'Hipótesis',d:'Predicción sobre lo que va a ocurrir, formulada antes de mirar los datos, para después comprobar si los datos la apoyan o no. En palabras sencillas: una hipótesis es tu apuesta por escrito. Ejemplo de esta clase (hipótesis 1): «la oferta a precio normal recibe mayor calidad esperada que la de descuento». Si los datos muestran esa diferencia y no parece casualidad, la hipótesis queda apoyada; si no, queda sin demostrar.',al:['hipótesis']},
  {id:'variable-independiente',k:'diseno',t:'Variable independiente',d:'La variable que el investigador cambia a propósito; en este estudio, el precio (normal o con descuento).',al:['variable independiente']},
  {id:'variable-dependiente',k:'diseno',t:'Variable dependiente',d:'La variable que se mide para ver si cambió; en este estudio, la calidad esperada, el gusto y la elección.',al:['variable dependiente']},
  {id:'intrasujeto',k:'diseno',t:'Diseño intrasujeto',d:'Diseño en el que cada participante pasa por todas las condiciones y se compara consigo mismo; en el diseño intersujetos, cada persona ve una sola condición (Charness et al., 2012).',al:['diseño intrasujeto','intrasujeto']},
@@ -2390,7 +2392,7 @@ function renderCaso(){
     ${prov?'<div class="note" style="margin-bottom:0">Los precios de esta clase son <b>provisionales</b>: se validarán con un estudio de precios de mercado.</div>':''}</div>
   <div class="card"><h3 class="sh">📜 El encargo del directorio (su mandato)</h3>
     <p class="uidea"><b>Problema:</b> ¿el precio de marketing modifica la calidad esperada y el agrado de un producto idéntico?</p>
-    <div class="hcards">${HC.map(([k,i,t,s])=>`<div class="hcard"><div class="hk"><span aria-hidden="true">${i}</span>${k}</div><p>${t}</p><small>${s}</small></div>`).join('')}</div>
+    <div class="hcards">${HC.map(([k,i,t,s])=>`<div class="hcard"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><small>${s}</small></div>`).join('')}</div>
     <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
   <div class="card"><h3 class="sh">🛍️ Los tres productos de la clase</h3>
     <div class="pcards">${pc}</div>
@@ -2447,9 +2449,9 @@ function renderInterp(){
       <div class="dvs2">vs.</div>
       <div class="dr"><small>Tus compañeros (real)</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>puntos a favor del precio normal · ${cp.n} participante(s)${cp.wq?' · '+pEq(cp.wq.p):''}</small></div></div>
     <div class="rtiles">
-      <div class="rtile"><small>H1 · ¿se espera más calidad con el precio normal?</small><span>${st(cp.wq)}</span></div>
-      <div class="rtile"><small>H2 · ¿gusta más con el precio normal?</small><span>${st(cp.wg)}${cp.wg?' · '+f(cp.wg.diff)+' puntos':''}</span></div>
-      <div class="rtile"><small>H3 · ¿la mayoría elige el precio normal?</small><span>${h3}${cp.n?' · '+cp.rPref+' de '+cp.n+' eligió el precio normal':''}</span></div>
+      <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 1 · ¿se espera más calidad con el precio normal?</small><span>${st(cp.wq)}</span></div>
+      <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 2 · ¿gusta más con el precio normal?</small><span>${st(cp.wg)}${cp.wg?' · '+f(cp.wg.diff)+' puntos':''}</span></div>
+      <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 3 · ¿la mayoría elige el precio normal?</small><span>${h3}${cp.n?' · '+cp.rPref+' de '+cp.n+' eligió el precio normal':''}</span></div>
     </div>
     <p class="small muted" style="margin:0">Número positivo = la gente esperó más calidad con el precio normal. Número negativo = esperó más con el descuento. Cerca de 0 = casi igual. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Real vs. simulado</a>.</p>`;
   const ae=document.activeElement,typing=ae&&ae.classList&&ae.classList.contains('nq');
