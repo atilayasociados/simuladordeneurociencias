@@ -737,6 +737,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
 <main id="t-resultados" class="hidden-tab" data-student><div id="simOut"></div></main>
 
 <!-- RESULTADOS · Real vs simulado -->
+<main id="t-expres" class="hidden-tab" data-student><div id="expresOut"></div></main>
 <main id="t-comparar" class="hidden-tab" data-student><div id="cmpOut"></div></main>
 
 <!-- APRENDER · Interpretación -->
@@ -988,8 +989,8 @@ const fp=p=>p==null?'–':(p<0.001?'< 0,001':f(p,3));
 const pEq=p=>p!=null&&p<0.001?'p < 0,001':'p = '+fp(p);
 const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
-const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','unidades','manual','docente'];
-const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Laboratorio virtual'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Laboratorio virtual'],['comparar','Real vs. virtual']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
+const VIEWS=['caso','equipo','simular','experimento','resultados','expres','comparar','interpretacion','unidades','manual','docente'];
+const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Laboratorio virtual'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Laboratorio virtual'],['expres','Experimento'],['comparar','Comparación']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
 const LOGO_AI=BASE+'img/logo-atila-ieac.png';document.querySelectorAll('img[data-logo]').forEach(i=>i.src=i.dataset.logo==='w'?BASE+'img/logo-atila-ieac-blanco.png':LOGO_AI);
 if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
@@ -1071,7 +1072,7 @@ setInterval(()=>{if(BACKEND&&pending())sync();},15000);
 window.addEventListener('online',()=>sync());
 
 /* ---------- navegación ---------- */
-const SICO={caso:'clip',equipo:'users',simular:'flask',experimento:'hand',resultados:'trend',comparar:'cmp',interpretacion:'msg',unidades:'book',manual:'doc',docente:'school'};
+const SICO={caso:'clip',equipo:'users',simular:'flask',experimento:'hand',resultados:'trend',expres:'users',comparar:'cmp',interpretacion:'msg',unidades:'book',manual:'doc',docente:'school'};
 const GICO={'Situación':'compass','Decidir':'pen','Resultados':'chart','Aprender':'grad','Docente':'school'};
 function currentTab(){if(DOCMODE)return 'docente';const h=(location.hash||'').slice(1);return VIEWS.includes(h)?h:'caso';}
 function showTab(){
@@ -1473,14 +1474,16 @@ function jstate(){
   return [2,dec&&n?2:(dec||n)?1:0,mine?2:0,(S.nota||'').trim().length>=20?2:0];
 }
 function nextStep(v){
-  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1,dec=rondasOn()&&MYDEC&&MYDEC[nx];
+  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1,dec=rondasOn()&&MYDEC&&MYDEC[nx],vis=S.vis||{};
   let qn=0;try{qn=nqParse(S.nota).filter(x=>x.trim().length>=20).length;}catch(e){}
-  if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántos personas virtuales y pulsa el botón verde «Guardar mi decisión».'};
-  if(!sims&&dec&&n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:'Decisión guardada. Ahora haz el experimento',d:`Tu decisión ya está guardada; el resultado llegará cuando el profesor ejecute la ronda. Mientras tanto, ve a Decidir → Experimento y mide a compañeros de otros equipos (llevas ${n} de ${META_OBS}): elige su equipo, pulsa «Entregar el celular al participante» y deja que él responda.`};
-  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el celular al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
-  if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Espera el resultado de tu laboratorio virtual',d:dec?'Ya mediste a tus compañeros y tu decisión está guardada. Falta que el profesor ejecute la ronda; cuando lo haga, tu resultado aparecerá en Resultados.':'Ya mediste a tus compañeros. Ahora guarda tu decisión en Decidir → Laboratorio virtual para recibir un resultado cuando el profesor ejecute la ronda.'};
-  if(qn<4)return{h:v==='resultados'?'comparar':(v==='comparar'?'interpretacion':'resultados'),b:v==='resultados'?'Ir a Real vs. virtual':(v==='comparar'?'Ir a Aprender → Interpretación':'Ir a Resultados'),t:v==='comparar'?'Ahora escribe tu interpretación':'Revisa tus resultados',d:v==='resultados'?'Lee qué encontró tu laboratorio virtual y después abre Real vs. virtual para compararla con tus compañeros.':v==='comparar'?`Con estos números, ve a Aprender → Interpretación y responde las 4 preguntas (llevas ${qn} de 4).`:`Ya completaste Decidir. Abre Resultados → Laboratorio virtual, luego Real vs. virtual, y al final responde las 4 preguntas de Aprender → Interpretación (llevas ${qn} de 4).`};
-  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste el laboratorio virtual, el experimento y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
+  if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 1 · Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántas personas virtuales entran al resonador y pulsa el botón verde «Guardar mi decisión».'};
+  if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 2 · Espera a que el profesor ejecute la ronda',d:'Tu decisión está guardada. Cuando el profesor ejecute la ronda, el resultado de tu laboratorio virtual aparecerá en Resultados → Laboratorio virtual. Hasta entonces puedes cambiar tu decisión.'};
+  if(!vis.resultados)return{h:'resultados',b:'Ir a Resultados → Laboratorio virtual',t:'Paso 2 · Lee el resultado de tu laboratorio virtual',d:'El profesor ya ejecutó la ronda. Mira lo que dijeron las personas virtuales y lo que mostró su cerebro.'};
+  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el celular al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
+  if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya mediste a tus compañeros. Mira qué calidad esperaron con el precio normal y con el descuento.'};
+  if(!vis.comparar)return{h:'comparar',b:'Ir a Resultados → Comparación',t:'Paso 5 · Compara el laboratorio virtual con el experimento',d:'¿Las personas reales respondieron parecido a las virtuales? Ábrelo en Resultados → Comparación.'};
+  if(qn<4)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 6 · Escribe tu interpretación',d:`Responde las 4 preguntas de Aprender → Interpretación con tus números (llevas ${qn} de 4).`};
+  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste el laboratorio virtual, el experimento, la comparación y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
 }
 function nextHTML(view){
   const x=nextStep(view),aqui=x.h===view;
@@ -1720,18 +1723,20 @@ function gateHTML(que,intro){
     <div class="ubox"><b>💡 Por qué está bloqueado, en palabras sencillas</b><p>El trabajo va en orden: primero <b>Decidir</b> (simular y medir a tus compañeros) y después <b>Resultados</b>. Así lees tus resultados con todos tus datos y no te influyen antes de hacer el experimento. Cuando completes los pasos, aquí aparecerán tus números.</p></div></div>`;
 }
 /* ---------- áreas bloqueadas que se van encendiendo (cadena completa) ---------- */
-const LKV=['experimento','resultados','comparar','interpretacion'];
-const LKN={experimento:'Decidir → Experimento',resultados:'Resultados → Laboratorio virtual',comparar:'Resultados → Real vs. virtual',interpretacion:'Aprender → Interpretación'};
+const LKV=['resultados','experimento','expres','comparar','interpretacion'];
+const LKN={resultados:'Resultados → Laboratorio virtual',experimento:'Decidir → Experimento',expres:'Resultados → Experimento',comparar:'Resultados → Comparación',interpretacion:'Aprender → Interpretación'};
 function lkReq(v){
-  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1;
+  const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length;
   const dec=sims>0||(rondasOn()&&MYDEC&&Object.keys(MYDEC).length>0);
   const vis=S.vis||{};
+  const pDec={ok:dec||sims>0,t:'Guardar tu decisión en Decidir → Laboratorio virtual',d:'Elige tu hipótesis, arma las ofertas A y B y pulsa el botón verde «Guardar mi decisión».',h:'simular',b:'Ir al laboratorio virtual'};
+  const pRonda={ok:sims>0,t:'Que el profesor ejecute la ronda',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(dec?'Tu decisión está guardada. El resultado aparece cuando el profesor ejecute la ronda.':'Primero guarda tu decisión; después el profesor ejecuta la ronda.'),h:'simular',b:'Ir al laboratorio virtual'};
   const R={
-    experimento:()=>[{ok:dec,t:'Guardar tu decisión en Decidir → Laboratorio virtual',d:'Elige tu hipótesis, arma las ofertas A y B y pulsa el botón verde «Guardar mi decisión».',h:'simular',b:'Ir al laboratorio virtual'}],
-    resultados:()=>[{ok:sims>0,t:'Tener una ronda del laboratorio virtual con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(dec?'Tu decisión está guardada: falta que el profesor ejecute la ronda.':'Guarda tu decisión en Decidir → Laboratorio virtual; el resultado llega cuando el profesor ejecuta la ronda.'),h:'simular',b:'Ir al laboratorio virtual'},
-                {ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el celular a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
-    comparar:()=>[{ok:lkOpen0('resultados')&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al laboratorio virtual'}],
-    interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar Real vs. virtual',d:'Abre Resultados → Real vs. virtual y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Real vs. virtual'}]
+    resultados:()=>[pDec,pRonda],
+    experimento:()=>[pRonda,{ok:sims>0&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al resultado del laboratorio'}],
+    expres:()=>[{ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el celular a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
+    comparar:()=>[{ok:lkOpen0('expres')&&!!vis.expres,t:'Revisar el resultado de tu experimento',d:'Abre Resultados → Experimento y mira qué respondieron tus compañeros.',h:'expres',b:'Ir al resultado del experimento'}],
+    interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar la Comparación',d:'Abre Resultados → Comparación y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Comparación'}]
   };
   return R[v]?R[v]():[];
 }
@@ -1742,7 +1747,7 @@ function lkSkel(v){
   const card=inner=>`<div class="skc">${bar('45%','16px')}${inner}</div>`;
   const tiles=k=>`<div class="skg">${Array.from({length:k},()=>`<div class="skt">${bar('50%','10px')}${bar('70%','22px')}${bar('90%','10px')}</div>`).join('')}</div>`;
   if(v==='experimento')return card(tiles(4))+card(bar('100%','40px')+bar('60%','40px'))+card(bar('100%','12px')+bar('80%','12px'));
-  if(v==='resultados')return card(bar('100%','46px')+bar('100%','20px')+bar('85%','20px')+tiles(4))+card(bar('100%','90px'))+card(tiles(4));
+  if(v==='resultados'||v==='expres')return card(bar('100%','46px')+bar('100%','20px')+bar('85%','20px')+tiles(4))+card(bar('100%','90px'))+card(tiles(4));
   if(v==='comparar')return card(`<div class="skg">${[1,2].map(()=>`<div class="skt">${bar('60%','10px')}${bar('40%','30px')}</div>`).join('')}</div>`+tiles(3))+card(bar('100%','120px'));
   return card(tiles(3))+[1,2,3,4].map(()=>card(bar('100%','12px')+bar('100%','70px'))).join('');
 }
@@ -1778,21 +1783,59 @@ function lkToast(v){
   $('lkX').onclick=()=>t.className='';$('lkGo').onclick=()=>t.className='';
 }
 function lkVisit(){
-  const t=currentTab();if(!S.joined||!['resultados','comparar'].includes(t)||!lkOpen(t))return;
+  const t=currentTab();if(!S.joined||!['resultados','expres','comparar'].includes(t)||!lkOpen(t))return;
   S.vis=S.vis||{};if(!S.vis[t]){S.vis[t]=true;lsSave();}
 }
 
+/* ---------- Resultados → Experimento: lo que respondieron los compañeros del estudiante ---------- */
+function renderExpRes(){
+  const out=$('expresOut');if(!out)return;
+  if(!S.joined){out.innerHTML='';return;}
+  const pid=S.equipo,pr=prod(pid),m=cols(rowsOfLocal(),pid),n=m.n;
+  if(!lkApply('expres')){phero('expres','Experimento','¿Qué respondieron tus compañeros?','Área bloqueada · completa los pasos para encenderla');out.innerHTML='';return;}
+  phero('expres','Experimento','¿Qué respondieron tus compañeros?',`${n} compañero(s) medidos · personas reales`);
+  if(!m.wq){out.innerHTML='<div class="card soft muted">Faltan datos: necesitas al menos 2 compañeros medidos.</div>';return;}
+  const PS=(t,x)=>`<div class="ubox"><b>💡 ${t}, en palabras sencillas</b>${x}</div>`;
+  const lo=money(priceOf(pid,'low')),mi=money(priceOf(pid,'mid'));
+  const qD=mean(m.q.D),qR=mean(m.q.R),gD=mean(m.g.D),gR=mean(m.g.R),w=m.wq,sig=w.p<0.05;
+  const pc=v=>Math.max(2,Math.min(100,(v-1)/9*100));
+  const gan=w.diff>0?'el precio normal':'el descuento';
+  const vb=sig?`<div class="vban ${w.diff>0?'ok':'ko'}"><span aria-hidden="true">${w.diff>0?'✅':'❌'}</span><div><b>Tus compañeros esperaron más calidad con ${gan}.</b><p>La diferencia fue de ${f(Math.abs(w.diff))} puntos y no parece casualidad (${pEq(w.p)}).</p></div></div>`
+    :`<div class="vban neu"><span aria-hidden="true">⚖️</span><div><b>Con el precio normal y con el descuento esperaron casi la misma calidad.</b><p>La diferencia (${f(w.diff)} puntos) puede ser casualidad (${pEq(w.p)}).</p></div></div>`;
+  out.innerHTML=`<div class="card">
+    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📊 Resultado de tu experimento</h3><span class="tag real">Real</span></div>
+    <p class="small muted" style="margin-top:6px">Respuestas de los ${n} compañeros que mediste. Cada uno vio el mismo producto (${esc(pr.name.toLowerCase())} ${esc(pr.brand)}) con precio normal (${esc(mi)}) y con descuento (${esc(lo)}).</p>
+    ${vb}
+    <h4 style="margin:14px 0 8px;color:var(--uc)">👆 Calidad esperada promedio (escala 1 a 10)</h4>
+    <div class="abbar">
+      <div class="abrow"><span class="abl a" style="background:#FF4C00;color:#fff">%</span><div class="abtrack"><i style="width:${pc(qD)}%;background:#FF4C00"></i></div><b>${f(qD)}</b><small>Con descuento (${esc(lo)}) · DE ${f(sd(m.q.D))}</small></div>
+      <div class="abrow"><span class="abl b">$</span><div class="abtrack"><i style="width:${pc(qR)}%;background:var(--offB)"></i></div><b>${f(qR)}</b><small>Con precio normal (${esc(mi)}) · DE ${f(sd(m.q.R))}</small></div>
+    </div>
+    ${PS('Las barras',`<p>Cada compañero puso una nota del 1 al 10 a la calidad que esperaba de cada oferta. La barra muestra el <b>promedio</b>: con descuento, <b>${f(qD)}</b>; con precio normal, <b>${f(qR)}</b>. Recuerda que vieron el mismo producto: si una nota es más alta, la diferencia viene de la etiqueta de precio.</p>`)}
+    <div class="rtiles">
+      <div class="rtile"><small>Diferencia de calidad</small><b>${f(w.diff)}</b><span>Normal − descuento (puntos). Positivo = ganó el precio normal.</span></div>
+      <div class="rtile"><small>¿Puede ser azar?</small><b>${fp(w.p)}</b><span>p (t pareada) · <span class="sem ${sig?'g':'y'}">${sig?'🟢 Poco probable que sea azar':'🟡 Puede ser azar'}</span></span></div>
+      <div class="rtile"><small>Tamaño del efecto</small><b>${f(w.d)}</b><span>d_z de Cohen · efecto ${magOf(w.d)}</span></div>
+      <div class="rtile"><small>Gusto</small><b>${f(gR-gD)}</b><span>Normal − descuento: ${f(gR)} frente a ${f(gD)}</span></div>
+      <div class="rtile"><small>Elección</small><b>${m.rPref} de ${n}</b><span>eligieron el precio normal${m.pbin!=null?' · '+pEq(m.pbin):''}</span><div class="mini" aria-hidden="true"><i style="width:${m.rPref/n*100}%"></i></div></div>
+    </div>
+    ${PS('Los números',`<ul class="psl"><li><b>Diferencia (${f(w.diff)}):</b> ${w.diff===0?'las dos ofertas obtuvieron la misma nota promedio.':`la oferta con ${gan} obtuvo ${f(Math.abs(w.diff))} puntos más de calidad esperada.`}</li><li><b>¿Puede ser azar? (${pEq(w.p)}):</b> si p es menor que 0,05, es poco probable que la diferencia sea casualidad. ${sig?'Aquí lo es: la diferencia no parece casualidad.':'Aquí no lo es: con tan pocos compañeros, la diferencia podría ser casualidad.'}</li><li><b>Gusto:</b> cuánto más les gustó la oferta a precio normal que la de descuento.</li><li><b>Elección:</b> ${m.rPref} de ${n} compañeros eligieron la oferta a precio normal.</li></ul>`)}
+    <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su margen de error (IC 95 %). Si la línea toca el 0 punteado, no se descarta el azar.</p>
+    ${forest([{label:'Normal − desc.',est:w.diff,lo:w.lo,hi:w.hi,cls:'f-real'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}</div>
+    ${PS('El margen de error',`<p>Con solo ${n} compañeros, el resultado no es exacto. La diferencia real probablemente está <b>entre ${f(w.lo)} y ${f(w.hi)} puntos</b>. ${w.lo<=0&&w.hi>=0?'Como la línea cruza el 0, es posible que el precio no cambie nada.':'Como la línea no cruza el 0, es probable que el precio sí cambie la calidad esperada.'} En la Comparación verás los datos de toda la clase, que son más.</p>`)}
+  </div>`;
+}
 function renderCmp(){
   if(!S.joined){$('cmpOut').innerHTML='';return;}
   const pid=S.equipo,pr=prod(pid);
   const rows=BACKEND?CLASSROWS:rowsOfLocal();
   const m=cols(rowsOfLocal(),pid);        // mis mediciones
   const cp=cols(rows,pid);                // todo el curso, mi producto
-  if(!lkApply('comparar')){phero('comparar','Real vs. virtual','¿Se parece la realidad al modelo?','Área bloqueada · completa los pasos para encenderla');$('cmpOut').innerHTML='';return;}
+  if(!lkApply('comparar')){phero('comparar','Comparación','¿Se parece la realidad al modelo?','Área bloqueada · completa los pasos para encenderla');$('cmpOut').innerHTML='';return;}
   const nRef=Math.max(20,cp.n);
   const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
-  phero('comparar','Real vs. virtual','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} participante(s) · ${BACKEND?'«real» agrupa a toda la clase':'modo práctica: solo tus mediciones'}`);
+  phero('comparar','Comparación','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} participante(s) · ${BACKEND?'«real» agrupa a toda la clase':'modo práctica: solo tus mediciones'}`);
   const fr=[{label:'Virtual · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
   CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
     fr.push({label:p.short+' · calidad',est:c.wq&&c.wq.diff,lo:c.wq&&c.wq.lo,hi:c.wq&&c.wq.hi,cls:p.id===pid?'f-real':'f-class'});
@@ -2268,7 +2311,7 @@ function renderManual(){
     ${row('Simulado / Real','Datos inventados por la computadora / datos de personas.','Las rondas del profesor / tu Experimento.')}
     </tbody></table></div></div>
 
-  <div class="card"><h2>Los ocho pasos</h2>
+  <div class="card"><h2>Los pasos</h2>
     <ol class="steps">
       <li><b>Lee el caso</b> (Situación → El caso): ${nm} ${br}, sus precios y el encargo del directorio.</li>
       <li><b>Escribe tu hipótesis</b> (Decidir → Laboratorio virtual): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos. A y B son dos ofertas del mismo producto que solo cambian de etiqueta (precio y presentación); debajo de cada botón se ve qué tiene cada una.</li>
@@ -2276,7 +2319,8 @@ function renderManual(){
       <li><b>Lee el resultado</b> (Resultados → Laboratorio virtual): aparece cuando el profesor ejecuta la ronda.</li>
       <li><b>Mira cómo funcionó tu laboratorio virtual</b>: las mismas personas virtuales pusieron nota a A y B mientras se medía su cerebro, y qué exigiría hacerlo de verdad.${figResonador()}${figMOFC()}</li>
       <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el celular; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
-      <li><b>Compara</b> (Resultados → Real vs. virtual): lo simulado, lo tuyo y lo de la clase.</li>
+      <li><b>Mira el resultado de tu experimento</b> (Resultados → Experimento): qué calidad esperaron tus compañeros con cada precio.</li>
+      <li><b>Compara</b> (Resultados → Comparación): el laboratorio virtual frente al experimento, con los datos de toda la clase.</li>
       <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
     </ol></div>
 
@@ -2404,7 +2448,7 @@ function unitsData(pid){
      box:'El tamaño del efecto es como un termómetro de la diferencia: 0,2 pequeña, 0,5 mediana, 0,8 grande. El intervalo de confianza es el margen de error: si esa rayita no toca el 0, hay una diferencia.'}
    ],
    ej:`Si 6 compañeros califican ${x.mismo} a ${mid} y a ${lo}, la diferencia pareada de cada uno se calcula restando su nota a ${lo} de su nota a ${mid}.`,
-   donde:'En Decidir → Laboratorio virtual, Decidir → Experimento, Resultados → Laboratorio virtual y Resultados → Real vs. virtual.',
+   donde:'En Decidir → Laboratorio virtual, Decidir → Experimento, Resultados → Laboratorio virtual y Resultados → Comparación.',
    q:[{p:'Según la ASA (Wasserstein y Lazar, 2016), un valor p…',o:['Mide la probabilidad de que la hipótesis sea verdadera','Mide el tamaño del efecto','Indica cuán incompatibles son los datos con un modelo estadístico','Siempre prueba que el resultado es importante'],c:2,e:'El valor p indica incompatibilidad con un modelo; no mide verdad de la hipótesis ni tamaño del efecto.'},
       {p:'Según las convenciones de Cohen (1988), una d de 0,5 es un efecto…',o:['Pequeño','Mediano','Grande','Nulo'],c:1,e:'0,2 pequeño, 0,5 mediano y 0,8 grande, aunque el contexto debe primar.'},
       {p:'¿Qué es un diseño intrasujeto?',o:['Cada persona ve una sola condición','Cada persona ve más de una condición y se compara consigo misma','Solo participan expertos','No se usan números'],c:1,e:'En el diseño intrasujeto cada persona pasa por las dos ofertas.'}],
@@ -2579,7 +2623,7 @@ function renderCaso(){
   phero('caso','El caso',`${pr.name} ${pr.brand}: ¿descuento o precio normal?`,'Tu misión: reunir evidencia antes de que el directorio decida.');
   const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${usoImg(p.id,'sm')}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
   const HC=[['H1','🏷️','La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.','Se mide: calidad esperada, de 1 a 10'],['H2','😊','La oferta a precio normal recibe mayor <b>gusto</b>.','Se mide: gusto, de 1 a 10'],['H3','🛒','Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.','Se mide: qué oferta elige']];
-  const FL=[['simular','#555759','🧪','1. Decidir → Laboratorio virtual','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta (precio y presentación). Personas virtuales dentro de un resonador califican las dos en cada ronda mientras se mide su cerebro.'],['experimento','#555759','🧑‍🤝‍🧑','2. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['resultados','#555759','📊','3. Resultados','Lees el resultado de tu laboratorio virtual (lo que dijeron y lo que mostró su cerebro) y lo comparas con lo real.'],['interpretacion','#555759','🎓','4. Aprender','Interpretas las diferencias y escribes tu conclusión.']];
+  const FL=[['simular','#555759','🧪','1. Decidir → Laboratorio virtual','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta. Guardas tu decisión.'],['resultados','#555759','🧲','2. Resultados → Laboratorio virtual','Cuando el profesor ejecuta la ronda, ves lo que dijeron las personas virtuales en el resonador y lo que mostró su cerebro.'],['experimento','#555759','🧑‍🤝‍🧑','3. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['expres','#555759','📊','4. Resultados → Experimento','Ves qué calidad esperaron tus compañeros con cada precio.'],['comparar','#555759','🆚','5. Resultados → Comparación','Comparas el laboratorio virtual con el experimento.'],['interpretacion','#555759','🎓','6. Aprender → Interpretación','Respondes 4 preguntas con tus números.']];
   $('casoOut').innerHTML=`<div class="card"><h3 class="sh">🧩 El dilema de la empresa</h3>
     ${usoImg(S.equipo,'hero')}
     <div class="dilema"><div>${productSVG(S.equipo,'R',140)}</div><div class="dvs" aria-hidden="true">¿?</div><div>${productSVG(S.equipo,'D',140)}</div></div>
@@ -2655,7 +2699,7 @@ function renderInterp(){
       <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 2 · ¿gusta más con el precio normal?</small><span>${st(cp.wg)}${cp.wg?' · '+f(cp.wg.diff)+' puntos':''}</span></div>
       <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 3 · ¿la mayoría elige el precio normal?</small><span>${h3}${cp.n?' · '+cp.rPref+' de '+cp.n+' eligió el precio normal':''}</span></div>
     </div>
-    <p class="small muted" style="margin:0">Número positivo = la gente esperó más calidad con el precio normal. Número negativo = esperó más con el descuento. Cerca de 0 = casi igual. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Real vs. virtual</a>.</p>`;
+    <p class="small muted" style="margin:0">Número positivo = la gente esperó más calidad con el precio normal. Número negativo = esperó más con el descuento. Cerca de 0 = casi igual. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Comparación</a>.</p>`;
   const ae=document.activeElement,typing=ae&&ae.classList&&ae.classList.contains('nq');
   if(!typing){const v=nqParse(S.nota);[1,2,3,4].forEach(k=>{const e=$('nq'+k);if(e)e.value=v[k-1];});}
   document.querySelectorAll('.nq').forEach(e=>{if(!e.dataset.b){e.dataset.b='1';e.addEventListener('input',nqSave);}});
@@ -2667,7 +2711,7 @@ function renderAll(){
   const pr=prod(S.equipo);$('barWho').textContent=S.alias;$('barProd').textContent=(S.equipoNombre&&S.equipoNombre!=='Práctica'?S.equipoNombre+' · ':'')+pr.short;
   $('barRound').textContent=rondasOn()&&CR!==null?CR:S.sims.filter(s=>s.prod===S.equipo).length;
   lkVisit();
-  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();lkApply('experimento');renderCmp();renderInterp();renderManual();renderUnidades();renderStatus();
+  renderCaso();renderEquipo();renderSim();renderRonda();renderExp();heroDecidir();lkApply('experimento');renderExpRes();renderCmp();renderInterp();renderManual();renderUnidades();renderStatus();
   lkCheck();
   ['casoOut','simOut','cmpOut','manualOut','t-simular','t-experimento','t-interpretacion'].forEach(id=>{const r=$(id);if(r&&!r.dataset.lk){linkify(r);if(/^t-/.test(id))r.dataset.lk='1';}});
 }
