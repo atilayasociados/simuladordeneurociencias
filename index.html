@@ -595,6 +595,13 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .nxt .nxi{color:#44D62C;font-size:24px;line-height:1;flex:none;margin-top:2px}
 .nxt small{display:block;color:#8FE37F;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
 .nxt b{display:block;font-size:1rem;margin-top:2px}.nxt p{margin:4px 0 0;font-size:.9rem}.nxt>div{min-width:0}
+.fig{margin:12px 0;background:#1F2022;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fig img{display:block;width:100%;height:auto}
+.figr img{max-height:420px;object-fit:cover;object-position:center 60%}
+.fig figcaption{padding:10px 12px;font-size:.86rem;line-height:1.5;color:var(--fg)}
+.fig figcaption i{color:var(--muted)}
+.ucard .fig{margin:10px 0 0}
+.fig figcaption b{display:inline!important;font-size:inherit;margin:0}
 </style>
 </head><body>
 <header class="nopm">
@@ -1461,6 +1468,9 @@ function roundsChart(list){
     s+=`<rect x="${cx}" y="${up?70-h:70}" width="${bw}" height="${Math.max(1,h)}" rx="3" style="fill:${sig?'var(--real)':'#C4C7C6'}"/><text x="${cx+bw/2}" y="${up?70-h-4:70+h+12}" text-anchor="middle" style="font-size:10.5px">${f(x.w.diff)}</text><text class="lab" x="${cx+bw/2}" y="${H-6}" text-anchor="middle">R${x.r}</text>`;});
   return s+'</svg>';
 }
+/* ---------- imágenes de ejemplo: resonador y ubicación de la mOFC ---------- */
+function figResonador(){return `<figure class="fig figr"><img src="${BASE}img/resonador.jpg" alt="Resonador magnético de uso clínico con su camilla frente al túnel del equipo" loading="lazy"><figcaption><b>Así es un resonador magnético.</b> La persona se acuesta en la camilla, que entra en el túnel del equipo; allí se toman las imágenes de su cerebro mientras mira las ofertas en una pantalla. <i>Imagen de ejemplo.</i></figcaption></figure>`;}
+function figMOFC(){return `<figure class="fig figm"><img src="${BASE}img/mri-cofm.jpg" alt="Tres cortes de resonancia magnética del cerebro con la corteza orbitofrontal medial marcada en amarillo" loading="lazy"><figcaption><b>Dónde está la corteza orbitofrontal medial (mOFC).</b> Marcada en amarillo en tres cortes de resonancia: <b>axial</b> (el cerebro visto desde arriba), <b>sagital</b> (de perfil, con la cara a la izquierda) y <b>coronal</b> (de frente). Está en la parte delantera e inferior del cerebro, justo encima de los ojos. En la imagen aparece con su sigla en español, <b>COFm</b>; en el simulador usamos la sigla en inglés, <b>mOFC</b>. El amarillo solo indica la ubicación: no es una medición. <i>Imagen de ejemplo.</i></figcaption></figure>`;}
 function mriCard(r){
   const p=r.prod,a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
   const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
@@ -1468,6 +1478,7 @@ function mriCard(r){
     <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">🧲 Laboratorio de resonancia magnética</h3><span class="tag sim">Simulado</span></div>
     <p class="small muted" style="margin-top:6px">Tus ofertas A y B pasan ahora a una etapa que, en una investigación real, exige un resonador. En esta clase no existe, así que el informe de abajo lo genera el simulador.</p>
     <h4 style="margin:12px 0 0;color:var(--uc)">Cómo sería el estudio real</h4>
+    ${figResonador()}
     <div class="xsteps">
       <div><i>1</i><span aria-hidden="true">🛏️</span><p>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</p></div>
       <div><i>2</i><span aria-hidden="true">🖼️</span><p>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</p></div>
@@ -1482,6 +1493,7 @@ function mriCard(r){
     </tbody></table></div>
     <p class="small muted" style="margin:10px 0 4px">Cambio simulado de la señal mOFC respecto a la referencia (calidad media del producto)</p>
     <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--offA')}</div><div><span class="small">B</span>${bar(dB,'--offB')}</div></div>
+    ${figMOFC()}
     <div class="ubox"><b>💡 El índice mOFC, en palabras sencillas</b><p>La <b>corteza orbitofrontal medial (mOFC)</b> es una zona del cerebro, detrás de la frente y sobre los ojos, que se activa más cuando algo nos parece valioso (Plassmann et al., 2008). Aquí, 100 es el punto de referencia: más de 100 significa más activación de lo normal y menos de 100, menos. La oferta A marcó <b>${f(a[5],1)}</b> y la B, <b>${f(b[5],1)}</b>. Estos números los genera el simulador; no se midió ningún cerebro.</p></div>
     <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
   </div>
@@ -2148,7 +2160,7 @@ function renderManual(){
       <li><b>Escribe tu hipótesis</b> (Decidir → Simular): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos. A y B son dos ofertas del mismo producto que solo cambian de etiqueta (precio y presentación); debajo de cada botón se ve qué tiene cada una.</li>
       <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
       <li><b>Lee el resultado</b> (Resultados → Simulación): aparece cuando el profesor ejecuta la ronda.</li>
-      <li><b>Mira el laboratorio de resonancia (simulado)</b>: cómo sería el estudio real y qué exigiría.</li>
+      <li><b>Mira el laboratorio de resonancia (simulado)</b>: cómo sería el estudio real y qué exigiría.${figResonador()}${figMOFC()}</li>
       <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el celular; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
       <li><b>Compara</b> (Resultados → Real vs. simulado): lo simulado, lo tuyo y lo de la clase.</li>
       <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
@@ -2431,6 +2443,8 @@ function renderUnidades(){
     ${i+1<U.length?`<button class="primary" data-ugo="${U[i+1].id}" style="margin-top:14px">Siguiente: Unidad ${i+2} →</button>`:''}</div>`;}).join('');
   const gl=UDEF.slice().sort((a,b)=>a.t.localeCompare(b.t,'es',{sensitivity:'base'})).map(d=>{const ui=U.findIndex(u=>u.s.some(x=>x.k===d.k));return `<div class="gl ucard" style="--uc:${UVIS[U[ui].id].c}"><b>📌 ${esc(d.t)}</b><p>${d.d}</p><a class="cl" href="#unidades" data-c="${d.id}">Ver en la Unidad ${ui+1} →</a></div>`;}).join('');
   el.innerHTML=ix+body+`<div class="card unit" id="az"${UCUR==='az'?'':' hidden'}><h2>📖 Conceptos de la A a la Z</h2><p class="small muted">Cada concepto con su definición. El enlace te lleva a la unidad donde se explica.</p><div class="ucards">${gl}</div></div>`;
+  el.querySelectorAll('.unit:not(#az) #d-mofc').forEach(c=>c.insertAdjacentHTML('beforeend',figMOFC()));
+  el.querySelectorAll('.unit:not(#az) #d-fmri').forEach(c=>c.insertAdjacentHTML('beforeend',figResonador()));
 }
 function irConcepto(k,isUnit){
   const U=unitsData(S.joined?S.equipo:MANPROD),df=UDEF.find(d=>d.id===k);UCUR=isUnit?k:((U.find(u=>u.s.some(x=>x.k===(df?df.k:k)))||{id:UCUR}).id);
