@@ -665,7 +665,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
 <main id="t-simular" class="hidden-tab" data-student>
   <div class="card">
     <h3 class="sh">🔤 Antes de empezar: ¿qué son A y B?</h3>
-    <p><b>A y B son dos ofertas del mismo producto</b> (<span id="abProd"></span>). El producto es idéntico; lo único que cambia es la <b>etiqueta</b> que tú le pones a cada una: el <b>precio</b> y la <b>presentación</b>. Tú las diseñas en el paso 2. Los consumidores simulados ven las dos y califican la calidad que esperan de cada una.</p>
+    <p><b>A y B son dos ofertas del mismo producto</b> (<span id="abProd"></span>). El producto es idéntico; lo único que cambia es la <b>etiqueta</b> que tú le pones a cada una: el <b>precio</b> y la <b>presentación</b>. Tú las diseñas en el paso 2. Los personas virtuales ven las dos y califican la calidad que esperan de cada una.</p>
     <div class="abpair" id="abPair"></div>
     <div class="ubox"><b>💡 A y B, en palabras sencillas</b><p>Imagina dos latas iguales en una tienda: a una le pegas la etiqueta <b>A</b> y a la otra la etiqueta <b>B</b>, con precios distintos. Si la gente cree que una es mejor, no puede ser por el producto, porque es el mismo: tiene que ser por la etiqueta. Eso es lo que mide esta simulación. Las imágenes de arriba cambian cuando cambias A o B en el paso 2.</p></div>
   </div>
@@ -681,7 +681,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">2</span><span>Diseña las ofertas de <span id="scProd"></span></span></h3>
-    <p class="small muted"><span class="tag sim">Simulado</span>&nbsp; Cada consumidor simulado ve A y B (diseño intrasujeto). Los parámetros son didácticos, no estimaciones empíricas.</p>
+    <p class="small muted"><span class="tag sim">Virtual</span>&nbsp; Cada persona virtual entra al resonador y ve A y B (diseño intrasujeto). Los parámetros son didácticos, no estimaciones empíricas.</p>
     <div class="grid2 stack">
       <div class="ocard a"><div class="ohead"><b>Oferta A</b><span class="oprice" id="aPrev"></span></div>
         <label for="aTier">Precio en la etiqueta</label><select id="aTier"></select>
@@ -700,14 +700,14 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   </div>
   <div class="card">
     <h3 class="sh"><span class="usn">3</span> Muestra y decisión</h3>
-    <label for="nSim">Consumidores simulados (cada uno ve A y B): <b id="nSimV">30</b></label>
+    <label for="nSim">Personas virtuales que entran al resonador (cada una ve A y B): <b id="nSimV">30</b></label>
     <input type="range" id="nSim" min="10" max="80" step="5" value="30">
     <div class="row small muted" style="justify-content:space-between"><span>10 · más rápido, más azar</span><span>80 · más preciso</span></div>
-    <div class="ubox"><b>💡 Consumidores simulados, en palabras sencillas</b><p>Es cuántas personas virtuales opinan sobre tus dos ofertas; cada una ve A y B. Con pocas personas, el resultado puede cambiar mucho solo por suerte. Con más personas, el resultado es más estable y el margen de error se achica, como pasa al preguntar a 80 compañeros en vez de a 10.</p></div>
+    <div class="ubox"><b>💡 Personas virtuales, en palabras sencillas</b><p>Es cuántas personas inventadas por la computadora entran al resonador virtual; cada una ve A y B, les pone nota y se mide su cerebro. Con pocas personas, el resultado puede cambiar mucho solo por suerte. Con más personas, el resultado es más estable y el margen de error se achica, como pasa al preguntar a 80 compañeros en vez de a 10.</p></div>
     <button class="primary big" id="runSim">Ejecutar ronda de simulación</button>
     <div class="ubox"><b>💡 El botón, en palabras sencillas</b><p>Al pulsarlo guardas tus elecciones de esta ronda (hipótesis, ofertas A y B, y número de consumidores). En clase <b>no ves el resultado de inmediato</b>: el profesor ejecuta la ronda para todos los equipos a la vez. Hasta entonces puedes cambiar lo que quieras y volver a guardar. En modo práctica, el resultado aparece al instante.</p></div>
     <div id="rondaBox"></div>
-    <p class="small muted" style="margin:10px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Simulación</a>.</p>
+    <p class="small muted" style="margin:10px 0 0">El resultado y el laboratorio de resonancia aparecen en <a href="#resultados">Resultados → Laboratorio virtual</a>.</p>
   </div>
 </main>
 
@@ -723,7 +723,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
       <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
       <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</p></div>
     </div>
-    <div class="ubox"><b>💡 ¿Y mis ofertas A y B?, en palabras sencillas</b><p>En el experimento real <b>no</b> se usan las ofertas A y B de tu simulación. Todos los equipos comparan siempre las mismas dos: tu producto con su <b>precio normal</b> y con <b>descuento</b>. Así los datos de toda la clase se pueden juntar. En la pantalla del participante verás «oferta 1 de 2» y «oferta 2 de 2»: es solo el orden en que las ve, y ese orden se sortea.</p></div>
+    <div class="ubox"><b>💡 ¿Y mis ofertas A y B?, en palabras sencillas</b><p>En el experimento real <b>no</b> se usan las ofertas A y B de tu laboratorio virtual. Todos los equipos comparan siempre las mismas dos: tu producto con su <b>precio normal</b> y con <b>descuento</b>. Así los datos de toda la clase se pueden juntar. En la pantalla del participante verás «oferta 1 de 2» y «oferta 2 de 2»: es solo el orden en que las ve, y ese orden se sortea.</p></div>
     <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
   </div>
   <div class="card" id="runCard">
@@ -749,19 +749,19 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   </div>
   <div class="card"><h3 class="sh">📌 Tus números (para usarlos en tus respuestas)</h3><div id="interpData"></div></div>
   <div class="card iq">
-    <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> ¿Lo que pasó con tus compañeros se parece a lo que pasó en la simulación?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el gris es la simulación y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En la simulación ganó el precio normal por 1,2 puntos y con mis compañeros también, por 0,9. Se parecen: ganó el mismo y por una cantidad parecida.»</p>
+    <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> ¿Lo que pasó con tus compañeros se parece a lo que pasó en el laboratorio virtual?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el gris es el laboratorio virtual y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En el laboratorio virtual ganó el precio normal por 1,2 puntos y con mis compañeros también, por 0,9. Se parecen: ganó el mismo y por una cantidad parecida.»</p>
     <label for="nq1">Tu respuesta a la pregunta 1</label>
-    <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En la simulación ganó ___ por ___ puntos. Con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque..."></textarea>
+    <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En el laboratorio virtual ganó ___ por ___ puntos. Con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque..."></textarea>
     <p class="small muted nqc" data-k="1" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card iq">
-    <div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span> ¿En qué se diferencian tus compañeros de los consumidores de la simulación?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un celular. Los consumidores de la simulación no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Medí a solo 6 compañeros y todos sabían que la clase trata de precios; eso pudo cambiar sus notas. Los consumidores simulados no saben nada de la clase.»</p>
+    <div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span> ¿En qué se diferencian tus compañeros de las personas del laboratorio virtual?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un celular. Las personas del laboratorio virtual no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Medí a solo 6 compañeros y todos sabían que la clase trata de precios; eso pudo cambiar sus notas. Los personas virtuales no saben nada de la clase.»</p>
     <label for="nq2">Tu respuesta a la pregunta 2</label>
-    <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Mis compañeros eran ___ personas. Se diferencian de los consumidores simulados en que..."></textarea>
+    <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Mis compañeros eran ___ personas. Se diferencian de los personas virtuales en que..."></textarea>
     <p class="small muted nqc" data-k="2" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card iq">
@@ -989,7 +989,7 @@ const pEq=p=>p!=null&&p<0.001?'p < 0,001':'p = '+fp(p);
 const LS='simneuro-b2';
 const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','comparar','interpretacion','unidades','manual','docente'];
-const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Simular'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Simulación'],['comparar','Real vs. simulado']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
+const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Laboratorio virtual'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Laboratorio virtual'],['comparar','Real vs. virtual']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
 const LOGO_AI=BASE+'img/logo-atila-ieac.png';document.querySelectorAll('img[data-logo]').forEach(i=>i.src=i.dataset.logo==='w'?BASE+'img/logo-atila-ieac-blanco.png':LOGO_AI);
 if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
@@ -1475,12 +1475,12 @@ function jstate(){
 function nextStep(v){
   const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1,dec=rondasOn()&&MYDEC&&MYDEC[nx];
   let qn=0;try{qn=nqParse(S.nota).filter(x=>x.trim().length>=20).length;}catch(e){}
-  if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Simular',t:'Guarda tu decisión de simulación',d:'En Decidir → Simular: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántos consumidores simulados y pulsa el botón verde «Guardar mi decisión».'};
+  if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántos personas virtuales y pulsa el botón verde «Guardar mi decisión».'};
   if(!sims&&dec&&n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:'Decisión guardada. Ahora haz el experimento',d:`Tu decisión ya está guardada; el resultado llegará cuando el profesor ejecute la ronda. Mientras tanto, ve a Decidir → Experimento y mide a compañeros de otros equipos (llevas ${n} de ${META_OBS}): elige su equipo, pulsa «Entregar el celular al participante» y deja que él responda.`};
   if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el celular al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
-  if(!sims)return{h:'simular',b:'Ir a Decidir → Simular',t:'Espera el resultado de tu simulación',d:dec?'Ya mediste a tus compañeros y tu decisión está guardada. Falta que el profesor ejecute la ronda; cuando lo haga, tu resultado aparecerá en Resultados.':'Ya mediste a tus compañeros. Ahora guarda tu decisión en Decidir → Simular para recibir un resultado cuando el profesor ejecute la ronda.'};
-  if(qn<4)return{h:v==='resultados'?'comparar':(v==='comparar'?'interpretacion':'resultados'),b:v==='resultados'?'Ir a Real vs. simulado':(v==='comparar'?'Ir a Aprender → Interpretación':'Ir a Resultados'),t:v==='comparar'?'Ahora escribe tu interpretación':'Revisa tus resultados',d:v==='resultados'?'Lee qué encontró tu simulación y después abre Real vs. simulado para compararla con tus compañeros.':v==='comparar'?`Con estos números, ve a Aprender → Interpretación y responde las 4 preguntas (llevas ${qn} de 4).`:`Ya completaste Decidir. Abre Resultados → Simulación, luego Real vs. simulado, y al final responde las 4 preguntas de Aprender → Interpretación (llevas ${qn} de 4).`};
-  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste la simulación, el experimento y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
+  if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Espera el resultado de tu laboratorio virtual',d:dec?'Ya mediste a tus compañeros y tu decisión está guardada. Falta que el profesor ejecute la ronda; cuando lo haga, tu resultado aparecerá en Resultados.':'Ya mediste a tus compañeros. Ahora guarda tu decisión en Decidir → Laboratorio virtual para recibir un resultado cuando el profesor ejecute la ronda.'};
+  if(qn<4)return{h:v==='resultados'?'comparar':(v==='comparar'?'interpretacion':'resultados'),b:v==='resultados'?'Ir a Real vs. virtual':(v==='comparar'?'Ir a Aprender → Interpretación':'Ir a Resultados'),t:v==='comparar'?'Ahora escribe tu interpretación':'Revisa tus resultados',d:v==='resultados'?'Lee qué encontró tu laboratorio virtual y después abre Real vs. virtual para compararla con tus compañeros.':v==='comparar'?`Con estos números, ve a Aprender → Interpretación y responde las 4 preguntas (llevas ${qn} de 4).`:`Ya completaste Decidir. Abre Resultados → Laboratorio virtual, luego Real vs. virtual, y al final responde las 4 preguntas de Aprender → Interpretación (llevas ${qn} de 4).`};
+  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste el laboratorio virtual, el experimento y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
 }
 function nextHTML(view){
   const x=nextStep(view),aqui=x.h===view;
@@ -1508,7 +1508,7 @@ function offerPrev(){
 }
 function heroDecidir(){
   const mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length;
-  phero('simular','Simular','Diseña tu experimento virtual',rondasOn()&&CR!==null?(CR?`La clase va en la ronda ${CR} · ${mine} ronda(s) con resultado`:'La clase aún no ha ejecutado rondas · guarda tu decisión para la ronda 1'):`3 pasos · ${mine} ronda(s) realizadas`);
+  phero('simular','Laboratorio virtual','Diseña tu estudio en el laboratorio virtual',rondasOn()&&CR!==null?(CR?`La clase va en la ronda ${CR} · ${mine} ronda(s) con resultado`:'La clase aún no ha ejecutado rondas · guarda tu decisión para la ronda 1'):`3 pasos · ${mine} ronda(s) realizadas`);
   phero('experimento','Experimento','Mide a compañeros reales',`${n} participante(s) medidos · meta sugerida: 6`);
 }
 function magOf(d){d=Math.abs(d);return d<0.2?'trivial':d<0.5?'pequeño':d<0.8?'moderado':'grande';}
@@ -1522,52 +1522,52 @@ function roundsChart(list){
 /* ---------- imágenes de ejemplo: resonador y ubicación de la mOFC ---------- */
 function figResonador(){return `<figure class="fig figr"><img src="${BASE}img/resonador.jpg" alt="Resonador magnético de uso clínico con su camilla frente al túnel del equipo" loading="lazy"><figcaption><b>Así es un resonador magnético.</b> La persona se acuesta en la camilla, que entra en el túnel del equipo; allí se toman las imágenes de su cerebro mientras mira las ofertas en una pantalla. <i>Imagen de ejemplo.</i></figcaption></figure>`;}
 function figMOFC(){return `<figure class="fig figm"><img src="${BASE}img/mri-cofm.jpg" alt="Tres cortes de resonancia magnética del cerebro con la corteza orbitofrontal medial marcada en amarillo" loading="lazy"><figcaption><b>Dónde está la corteza orbitofrontal medial (mOFC).</b> Marcada en amarillo en tres cortes de resonancia: <b>axial</b> (el cerebro visto desde arriba), <b>sagital</b> (de perfil, con la cara a la izquierda) y <b>coronal</b> (de frente). Está en la parte delantera e inferior del cerebro, justo encima de los ojos. En la imagen aparece con su sigla en español, <b>COFm</b>; en el simulador usamos la sigla en inglés, <b>mOFC</b>. El amarillo solo indica la ubicación: no es una medición. <i>Imagen de ejemplo.</i></figcaption></figure>`;}
-function mriCard(r){
-  const p=r.prod,a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
-  const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
+/* ---------- laboratorio virtual: personas virtuales en un resonador que califican A y B mientras se mide su cerebro ---------- */
+function labCard(r){
+  const n=r.a[2];
   return `<div class="card">
-    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">🧲 Laboratorio de resonancia magnética</h3><span class="tag sim">Simulado</span></div>
-    <p class="small muted" style="margin-top:6px">Tus ofertas A y B pasan ahora a una etapa que, en una investigación real, exige un resonador. En esta clase no existe, así que el informe de abajo lo genera el simulador.</p>
-    <h4 style="margin:12px 0 0;color:var(--uc)">Cómo sería el estudio real</h4>
+    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">🧲 Así funcionó tu laboratorio virtual</h3><span class="tag sim">Virtual</span></div>
+    <p style="margin-top:8px"><b>${n} personas virtuales</b>, creadas por la computadora, entraron una por una a un <b>resonador magnético virtual</b>. Dentro, cada una vio tus ofertas A y B en una pantalla, le puso nota a la calidad que esperaba de cada una y, <b>en ese mismo momento</b>, se registró la actividad de su cerebro. Así se hace en los estudios reales, como el de Plassmann et al. (2008).</p>
     ${figResonador()}
     <div class="xsteps">
-      <div><i>1</i><span aria-hidden="true">🛏️</span><p>El participante se acuesta dentro del escáner de <b>resonancia magnética funcional (fMRI)</b>, sin objetos metálicos y con consentimiento informado.</p></div>
-      <div><i>2</i><span aria-hidden="true">🖼️</span><p>En una pantalla ve cada oferta (A y B, en orden alternado) con su precio, como en Plassmann et al. (2008), donde además probaba el producto.</p></div>
-      <div><i>3</i><span aria-hidden="true">📡</span><p>El equipo registra la señal dependiente del nivel de oxígeno en sangre (BOLD) y, en paralelo, el participante califica la calidad que espera.</p></div>
-      <div><i>4</i><span aria-hidden="true">🧠</span><p>Un especialista procesa las imágenes y compara la activación en la <b>corteza orbitofrontal medial (mOFC)</b>, región asociada al valor, entre ofertas.</p></div>
+      <div><i>1</i><span aria-hidden="true">🛏️</span><p>La persona virtual se acuesta dentro del resonador.</p></div>
+      <div><i>2</i><span aria-hidden="true">🖼️</span><p>En una pantalla ve la oferta A y la oferta B, en orden alternado, cada una con su precio.</p></div>
+      <div><i>3</i><span aria-hidden="true">👆</span><p>Califica del 1 al 10 la calidad que espera de cada oferta: <b>lo que dice</b>.</p></div>
+      <div><i>4</i><span aria-hidden="true">🧠</span><p>Al mismo tiempo, el resonador registra su corteza orbitofrontal medial (mOFC): <b>lo que muestra su cerebro</b>.</p></div>
     </div>
-    <h4 style="margin:12px 0 6px;color:var(--uc)">Informe del laboratorio (simulado)</h4>
-    <div class="tablewrap w"><table><thead><tr><th></th><th class="num">Oferta A</th><th class="num">Oferta B</th></tr></thead><tbody>
-      <tr><th>Estímulo</th><td class="num">${esc(tierText(p,a[0]))}</td><td class="num">${esc(tierText(p,b[0]))}</td></tr>
-      <tr><th>Calidad esperada (reportada)</th><td class="num">${f(a[3])}</td><td class="num">${f(b[3])}</td></tr>
-      <tr><th>Índice mOFC (referencia = 100)</th><td class="num">${f(a[5],1)}</td><td class="num">${f(b[5],1)}</td></tr>
-    </tbody></table></div>
-    <p class="small muted" style="margin:10px 0 4px">Cambio simulado de la señal mOFC respecto a la referencia (calidad media del producto)</p>
-    <div style="display:grid;gap:6px"><div><span class="small">A</span>${bar(dA,'--offA')}</div><div><span class="small">B</span>${bar(dB,'--offB')}</div></div>
+    <div class="ubox"><b>💡 El laboratorio virtual, en palabras sencillas</b><p>Es un estudio de neuromarketing imaginario hecho por la computadora. Te da dos datos de las mismas personas y al mismo tiempo: la <b>nota</b> que ponen a cada oferta y la <b>actividad de su cerebro</b>. Las personas y sus respuestas son inventadas siguiendo reglas basadas en estudios reales; no se midió a nadie. Después, en el experimento con tus compañeros, comprobarás con personas reales si las notas se parecen.</p></div>
+  </div>`;
+}
+function mriBlock(r){
+  const a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
+  const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
+  return `<h4 style="margin:16px 0 4px;color:var(--uc)">🧠 Lo que mostró su cerebro: índice mOFC</h4>
+    <p class="small muted" style="margin:0 0 8px">Medido en las mismas personas y en el mismo momento en que pusieron las notas de arriba. Cambio respecto a la referencia (100).</p>
+    <div style="display:grid;gap:6px"><div class="abrow" style="grid-template-columns:30px 1fr"><span class="abl a">A</span>${bar(dA,'--offA')}</div><div class="abrow" style="grid-template-columns:30px 1fr"><span class="abl b">B</span>${bar(dB,'--offB')}</div></div>
     ${figMOFC()}
-    <div class="ubox"><b>💡 El índice mOFC, en palabras sencillas</b><p>La <b>corteza orbitofrontal medial (mOFC)</b> es una zona del cerebro, detrás de la frente y sobre los ojos, que se activa más cuando algo nos parece valioso (Plassmann et al., 2008). Aquí, 100 es el punto de referencia: más de 100 significa más activación de lo normal y menos de 100, menos. La oferta A marcó <b>${f(a[5],1)}</b> y la B, <b>${f(b[5],1)}</b>. Estos números los genera el simulador; no se midió ningún cerebro.</p></div>
-    <p class="small muted" style="margin:10px 0 0">Lectura: si la calidad reportada y la señal mOFC suben juntas, el precio estaría modulando el valor y no solo lo que la persona dice. Aquí ese vínculo está <b>programado en el modelo</b>; en un escáner real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p>
-  </div>
-  <div class="card soft"><h3 class="sh">🏥 Qué requeriría hacerlo de verdad</h3>
+    <div class="ubox"><b>💡 El índice mOFC, en palabras sencillas</b><p>La <b>corteza orbitofrontal medial (mOFC)</b> es una zona del cerebro, detrás de la frente y sobre los ojos, que se activa más cuando algo nos parece valioso (Plassmann et al., 2008). Aquí, 100 es el punto de referencia: más de 100 significa más activación de lo normal y menos de 100, menos. La oferta A marcó <b>${f(a[5],1)}</b> y la B, <b>${f(b[5],1)}</b>. ${(b[3]-a[3])*(b[5]-a[5])>0?'La oferta con mejor nota también activó más la mOFC: lo que dicen y lo que muestra su cerebro van en la misma dirección.':'Aquí la nota y la activación cerebral no van en la misma dirección.'} Recuerda que estos números los genera el laboratorio virtual; en un resonador real habría que demostrarlo, y Kurz et al. (2023) invitan a la cautela.</p></div>`;
+}
+function realCard(){
+  return `<div class="card soft"><h3 class="sh">🏥 Qué requeriría hacerlo de verdad</h3>
     <div class="mtools">
       <div><span aria-hidden="true">🧲</span><b>Equipo:</b> un resonador magnético de uso hospitalario o de investigación, con sistema para proyectar estímulos.</div>
       <div><span aria-hidden="true">👩‍🔬</span><b>Personal:</b> técnico de resonancia y especialista en análisis de neuroimagen.</div>
       <div><span aria-hidden="true">📝</span><b>Permisos:</b> aprobación de un comité de ética, consentimiento y revisión de seguridad de cada participante.</div>
       <div><span aria-hidden="true">💲</span><b>Costo y tiempo por sesión:</b> por verificar; no hay cifra confiable en esta versión.</div>
     </div>
-    <p class="small muted" style="margin:8px 0 0">Por eso estos estudios se hacen en centros de investigación y rara vez en una empresa corriente.</p></div>`;
+    <p class="small muted" style="margin:8px 0 0">Por eso estos estudios se hacen en centros de investigación y rara vez en una empresa corriente; por eso aquí lo hacemos en un laboratorio virtual.</p></div>`;
 }
 function renderSim(){
   document.querySelectorAll('#predChips button').forEach(b=>b.setAttribute('aria-pressed',String(S.pred===b.dataset.p)));
   offerPrev();
   const out=$('simOut');
   const mine=S.sims.filter(s=>s.prod===S.equipo);
-  if(!lkApply('resultados')){phero('resultados','Simulación','¿Qué encontró tu simulación?','Área bloqueada · completa los pasos para encenderla');out.innerHTML='';return;}
+  if(!lkApply('resultados')){phero('resultados','Laboratorio virtual','¿Qué encontró tu laboratorio virtual?','Área bloqueada · completa los pasos para encenderla');out.innerHTML='';return;}
   if(!mine.length){
-    phero('resultados','Simulación','¿Qué encontró tu simulación?','Aún no hay rondas con resultado');
-    out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Simular; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
+    phero('resultados','Laboratorio virtual','¿Qué encontró tu laboratorio virtual?','Aún no hay rondas con resultado');
+    out.innerHTML='<div class="card soft muted">'+(rondasOn()?'Aún no hay resultados. Guarda tu decisión en Decidir → Laboratorio virtual; el resultado aparece aquí cuando el profesor ejecuta la ronda.':'Aún no has ejecutado ninguna ronda. Elige una hipótesis, define A y B, y ejecuta.')+'</div>';return;}
   const r=mine[mine.length-1];
-  phero('resultados','Simulación',`Ronda ${r.r}: ¿qué encontró tu simulación?`,`${mine.length} ronda(s) · ${r.a[2]} consumidores simulados en la última`);
+  phero('resultados','Laboratorio virtual',`Ronda ${r.r}: ¿qué encontró tu laboratorio virtual?`,`${mine.length} ronda(s) · ${r.a[2]} personas virtuales en el resonador en la última`);
   const outcome=r.w.p<0.05?(r.w.diff>0?'B':'A'):'=';
   const abR=k=>k+', '+(k==='A'?tierText(r.prod,r.a[0]):tierText(r.prod,r.b[0]));
   const lab=x=>x==='='?'sin diferencia entre A y B':'mayor calidad esperada en '+abR(x);
@@ -1581,21 +1581,23 @@ function renderSim(){
   const sig=r.w.p<0.05,dz=Math.abs(r.w.d),dpos=Math.min(100,dz/1.2*100);
   const PS=(t,x)=>`<div class="ubox"><b>💡 ${t}, en palabras sencillas</b>${x}</div>`;
   const dabs=f(Math.abs(r.w.diff)),gan=r.w.diff>0?'B':'A',per=r.w.diff>0?'A':'B';
-  const qSig=outcome==='='?`<p>La diferencia entre A y B fue tan pequeña que <b>podría deberse a la casualidad</b>. Por eso no se puede decir que una oferta gane: con estos datos, la gente simulada esperó casi la misma calidad de las dos.</p>`
-    :`<p>La gente simulada esperó <b>más calidad de la oferta ${outcome}</b> (${esc(outcome==='A'?tierText(r.prod,a[0]):tierText(r.prod,b[0]))}), y la diferencia es lo bastante clara como para que <b>no parezca casualidad</b>. Recuerda: el producto es el mismo, así que la diferencia viene de la etiqueta.</p>`;
+  const qSig=outcome==='='?`<p>La diferencia entre A y B fue tan pequeña que <b>podría deberse a la casualidad</b>. Por eso no se puede decir que una oferta gane: con estos datos, la gente virtual esperó casi la misma calidad de las dos.</p>`
+    :`<p>La gente virtual esperó <b>más calidad de la oferta ${outcome}</b> (${esc(outcome==='A'?tierText(r.prod,a[0]):tierText(r.prod,b[0]))}), y la diferencia es lo bastante clara como para que <b>no parezca casualidad</b>. Recuerda: el producto es el mismo, así que la diferencia viene de la etiqueta.</p>`;
   const qHip=r.pred?(r.pred===outcome?`<p>Tu predicción fue «${lab(r.pred)}» y eso fue lo que pasó: <b>acertaste</b>.</p>`:`<p>Tu predicción fue «${lab(r.pred)}», pero pasó otra cosa. No es un error tuyo: sirve para aprender qué hace realmente la etiqueta.</p>`):`<p>Como no elegiste una hipótesis antes de guardar, esta vez no puedes comprobar si acertabas. En la próxima ronda toca «Mayor en A», «Mayor en B» o «Sin diferencia» antes de guardar.</p>`;
-  out.innerHTML=`<div class="card">
-    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📈 Resultado de la ronda ${r.r}</h3><span class="tag sim">Simulado</span></div>
+  out.innerHTML=labCard(r)+`<div class="card">
+    <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📈 Resultado de la ronda ${r.r}</h3><span class="tag sim">Virtual</span></div>
     <p class="small muted" style="margin-top:6px">Los datos dependen de tu alias, producto y ronda: se pueden reproducir exactamente.</p>
     ${fb}
     ${PS('¿Qué significa este resultado?',qSig+qHip)}
-    <h4 style="margin:14px 0 8px;color:var(--uc)">Calidad esperada promedio (escala 1 a 10)</h4>
-    <p class="small muted" style="margin:0 0 8px">A y B son las dos ofertas que diseñaste en Decidir → Simular para esta ronda: el mismo producto con distinta etiqueta.</p>
+    <h4 style="margin:14px 0 8px;color:var(--uc)">👆 Lo que dijeron: calidad esperada promedio (escala 1 a 10)</h4>
+    <p class="small muted" style="margin:0 0 8px">A y B son las dos ofertas que diseñaste en Decidir → Laboratorio virtual para esta ronda: el mismo producto con distinta etiqueta.</p>
     <div class="abbar">
       <div class="abrow"><span class="abl a">A</span><div class="abtrack"><i style="width:${pc(a[3])}%;background:var(--offA)"></i></div><b>${f(a[3])}</b><small>${esc(tierText(r.prod,a[0]))} · ${presL(a[1])} · DE ${f(a[4])}</small></div>
       <div class="abrow"><span class="abl b">B</span><div class="abtrack"><i style="width:${pc(b[3])}%;background:var(--offB)"></i></div><b>${f(b[3])}</b><small>${esc(tierText(r.prod,b[0]))} · ${presL(b[1])} · DE ${f(b[4])}</small></div>
     </div>
-    ${PS('Las barras',`<p>Cada uno de los ${a[2]} consumidores simulados puso una nota del 1 al 10 a cada oferta, según la calidad que imagina. La barra muestra el <b>promedio</b>: A obtuvo <b>${f(a[3])}</b> y B obtuvo <b>${f(b[3])}</b>. «DE» (desviación estándar) indica cuánto variaron las notas entre personas: un número grande quiere decir que unos pusieron notas muy altas y otros muy bajas.</p>`)}
+    ${PS('Las barras',`<p>Dentro del resonador, cada una de las ${a[2]} personas virtuales puso una nota del 1 al 10 a cada oferta, según la calidad que imagina. La barra muestra el <b>promedio</b>: A obtuvo <b>${f(a[3])}</b> y B obtuvo <b>${f(b[3])}</b>. «DE» (desviación estándar) indica cuánto variaron las notas entre personas: un número grande quiere decir que unos pusieron notas muy altas y otros muy bajas.</p>`)}
+    ${mriBlock(r)}
+    <h4 style="margin:16px 0 0;color:var(--uc)">📊 Los números de las notas</h4>
     <div class="rtiles">
       <div class="rtile"><small>Diferencia</small><b>${f(r.w.diff)}</b><span>B − A (puntos): la nota de B menos la nota de A. Positivo = ganó B; negativo = ganó A.</span></div>
       <div class="rtile"><small>¿Puede ser azar?</small><b>${fp(r.w.p)}</b><span>p (t pareada) · <span class="sem ${sig?'g':'y'}">${sig?'🟢 Poco probable que sea azar':'🟡 Puede ser azar'}</span></span></div>
@@ -1606,7 +1608,7 @@ function renderSim(){
       <li><b>Diferencia (${f(r.w.diff)}):</b> ${r.w.diff===0?'A y B obtuvieron el mismo promedio.':`la oferta ${gan} obtuvo ${dabs} puntos más que la ${per}, en promedio.`}</li>
       <li><b>¿Puede ser azar? (${pEq(r.w.p)}):</b> el valor p responde a esta pregunta: si en realidad A y B fueran iguales, ¿qué tan raro sería ver una diferencia así solo por casualidad? Si p es menor que 0,05 (5 %), decimos que es poco probable que sea casualidad. ${sig?'Aquí p es menor que 0,05: la diferencia no parece casualidad.':'Aquí p no es menor que 0,05: la diferencia podría ser casualidad.'}</li>
       <li><b>Tamaño del efecto (${f(r.w.d)}):</b> dice si la diferencia es grande o pequeña comparada con cuánto varían las notas. Como guía: 0,2 es pequeño, 0,5 moderado y 0,8 o más, grande. Aquí el efecto es <b>${magOf(r.w.d)}</b>.</li>
-      <li><b>Elección (${pref[0]} de ${np}):</b> de ${np} consumidores simulados, ${pref[0]} dieron más nota a B que a A${np?` (${Math.round(pref[0]/np*100)} %)`:''}.</li></ul>`)}
+      <li><b>Elección (${pref[0]} de ${np}):</b> de ${np} personas virtuales, ${pref[0]} dieron más nota a B que a A${np?` (${Math.round(pref[0]/np*100)} %)`:''}.</li></ul>`)}
     <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su intervalo de confianza del 95 %. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest([{label:'B − A',est:r.w.diff,lo:r.w.lo,hi:r.w.hi,cls:'f-sim'}],'Diferencia de calidad esperada, IC 95 % (puntos)')}</div>
     ${PS('El margen de error',`<p>Como solo se preguntó a ${a[2]} consumidores, el resultado no es exacto. La línea muestra entre qué valores está probablemente la diferencia real: <b>de ${f(r.w.lo)} a ${f(r.w.hi)} puntos</b>. ${r.w.lo<=0&&r.w.hi>=0?'Como la línea <b>cruza el 0</b>, es posible que en realidad no haya diferencia entre A y B.':`Como la línea <b>no cruza el 0</b>, es probable que la diferencia sea real y favorezca a la oferta ${gan}.`} Con más consumidores, la línea se acorta y el resultado es más preciso.</p>`)}
@@ -1614,7 +1616,7 @@ function renderSim(){
     <details class="umore"><summary>⚠️ Cuidado al interpretar · Leer más</summary>
     <p class="small" style="margin:0">En datos simulados el efecto sale del parámetro del modelo, no de la naturaleza. Kurz et al. (2023) sugieren que el precio mueve las expectativas con más fiabilidad que la experiencia real. El índice mOFC es una ilustración: medirlo exigiría fMRI. Índice mOFC ilustrativo, M (DE): A ${f(a[5],1)} (${f(a[6],1)}) · B ${f(b[5],1)} (${f(b[6],1)}).</p></details>
   </div>
-  ${mriCard(r)}
+  ${realCard()}
   ${mine.length>1?`<div class="card"><h3 class="sh">🔁 Tus rondas</h3>
     <p class="small muted" style="margin:0 0 4px">Diferencia B − A en cada ronda. Verde = estadísticamente significativa (p &lt; 0,05); gris = puede ser azar.</p>
     <div class="rchart">${roundsChart(mine)}</div>
@@ -1705,7 +1707,7 @@ setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},
 const META_OBS=6;
 function faltaPara(){
   const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,it=[];
-  it.push({ok:sims>0,t:'Tener al menos una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(rondasOn()?'En Decidir → Simular elige tu hipótesis y tus ofertas A y B, y pulsa «Guardar mi decisión». El resultado llega cuando el profesor ejecuta la ronda.':'En Decidir → Simular elige tu hipótesis y tus ofertas A y B, y ejecuta una ronda.'),h:'simular',b:'Ir a Simular'});
+  it.push({ok:sims>0,t:'Tener al menos una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(rondasOn()?'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y pulsa «Guardar mi decisión». El resultado llega cuando el profesor ejecuta la ronda.':'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y ejecuta una ronda.'),h:'simular',b:'Ir al laboratorio virtual'});
   it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el celular al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
   return it;
 }
@@ -1719,17 +1721,17 @@ function gateHTML(que,intro){
 }
 /* ---------- áreas bloqueadas que se van encendiendo (cadena completa) ---------- */
 const LKV=['experimento','resultados','comparar','interpretacion'];
-const LKN={experimento:'Decidir → Experimento',resultados:'Resultados → Simulación',comparar:'Resultados → Real vs. simulado',interpretacion:'Aprender → Interpretación'};
+const LKN={experimento:'Decidir → Experimento',resultados:'Resultados → Laboratorio virtual',comparar:'Resultados → Real vs. virtual',interpretacion:'Aprender → Interpretación'};
 function lkReq(v){
   const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,nx=(CR||0)+1;
   const dec=sims>0||(rondasOn()&&MYDEC&&Object.keys(MYDEC).length>0);
   const vis=S.vis||{};
   const R={
-    experimento:()=>[{ok:dec,t:'Guardar tu decisión en Decidir → Simular',d:'Elige tu hipótesis, arma las ofertas A y B y pulsa el botón verde «Guardar mi decisión».',h:'simular',b:'Ir a Simular'}],
-    resultados:()=>[{ok:sims>0,t:'Tener una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(dec?'Tu decisión está guardada: falta que el profesor ejecute la ronda.':'Guarda tu decisión en Decidir → Simular; el resultado llega cuando el profesor ejecuta la ronda.'),h:'simular',b:'Ir a Simular'},
+    experimento:()=>[{ok:dec,t:'Guardar tu decisión en Decidir → Laboratorio virtual',d:'Elige tu hipótesis, arma las ofertas A y B y pulsa el botón verde «Guardar mi decisión».',h:'simular',b:'Ir al laboratorio virtual'}],
+    resultados:()=>[{ok:sims>0,t:'Tener una ronda del laboratorio virtual con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(dec?'Tu decisión está guardada: falta que el profesor ejecute la ronda.':'Guarda tu decisión en Decidir → Laboratorio virtual; el resultado llega cuando el profesor ejecuta la ronda.'),h:'simular',b:'Ir al laboratorio virtual'},
                 {ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el celular a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
-    comparar:()=>[{ok:lkOpen0('resultados')&&!!vis.resultados,t:'Revisar el resultado de tu simulación',d:'Abre Resultados → Simulación y lee qué encontró tu simulación.',h:'resultados',b:'Ir a Simulación'}],
-    interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar Real vs. simulado',d:'Abre Resultados → Real vs. simulado y compara tu simulación con tus compañeros.',h:'comparar',b:'Ir a Real vs. simulado'}]
+    comparar:()=>[{ok:lkOpen0('resultados')&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al laboratorio virtual'}],
+    interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar Real vs. virtual',d:'Abre Resultados → Real vs. virtual y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Real vs. virtual'}]
   };
   return R[v]?R[v]():[];
 }
@@ -1786,12 +1788,12 @@ function renderCmp(){
   const rows=BACKEND?CLASSROWS:rowsOfLocal();
   const m=cols(rowsOfLocal(),pid);        // mis mediciones
   const cp=cols(rows,pid);                // todo el curso, mi producto
-  if(!lkApply('comparar')){phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?','Área bloqueada · completa los pasos para encenderla');$('cmpOut').innerHTML='';return;}
+  if(!lkApply('comparar')){phero('comparar','Real vs. virtual','¿Se parece la realidad al modelo?','Área bloqueada · completa los pasos para encenderla');$('cmpOut').innerHTML='';return;}
   const nRef=Math.max(20,cp.n);
   const ref=simulatePaired({tier:'low',pres:'sencilla'},{tier:'mid',pres:'sencilla'},nRef,`${S.equipoId||'local'}|ref|p${pid}`,pr.mu);
   const wSim=pairedT(ref.a.y,ref.b.y);
-  phero('comparar','Real vs. simulado','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} participante(s) · ${BACKEND?'«real» agrupa a toda la clase':'modo práctica: solo tus mediciones'}`);
-  const fr=[{label:'Simulado · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
+  phero('comparar','Real vs. virtual','¿Se parece la realidad al modelo?',`Tú mediste ${m.n} participante(s) · ${BACKEND?'«real» agrupa a toda la clase':'modo práctica: solo tus mediciones'}`);
+  const fr=[{label:'Virtual · calidad',est:wSim&&wSim.diff,lo:wSim&&wSim.lo,hi:wSim&&wSim.hi,cls:'f-sim'}];
   CONFIG.PRODUCTS.forEach(p=>{const c=cols(rows,p.id);
     fr.push({label:p.short+' · calidad',est:c.wq&&c.wq.diff,lo:c.wq&&c.wq.lo,hi:c.wq&&c.wq.hi,cls:p.id===pid?'f-real':'f-class'});
     fr.push({label:p.short+' · gusto',est:c.wg&&c.wg.diff,lo:c.wg&&c.wg.lo,hi:c.wg&&c.wg.hi,cls:p.id===pid?'f-real':'f-class'});});
@@ -1804,14 +1806,14 @@ function renderCmp(){
     reading=`<p><b>${esc(pr.name)} · calidad esperada.</b> ${esc(verdict(cp.wq,'La oferta a precio normal','La oferta con descuento'))}</p>
     <p><b>Gusto.</b> ${esc(verdict(cp.wg,'La oferta a precio normal','La oferta con descuento'))}</p>
     <p><b>Elección final.</b> ${cp.rPref} de ${cp.n} eligió el precio normal${cp.pbin!=null?' (prueba binomial exacta, '+pEq(cp.pbin)+')':''}.</p>
-    <p>${same?'La dirección de la calidad esperada coincide con la réplica simulada.':'La dirección de la calidad esperada <b>no</b> coincide con la réplica simulada.'} Simulado: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor simulado cae dentro del IC 95 % de la medición real.':'El valor simulado queda fuera del IC 95 % de la medición real.'}</p>`;
+    <p>${same?'La dirección de la calidad esperada coincide con el laboratorio virtual.':'La dirección de la calidad esperada <b>no</b> coincide con el laboratorio virtual.'} Laboratorio virtual: ${f(wSim.diff)} · real: ${f(cp.wq.diff)} puntos. ${cp.wq.lo<=wSim.diff&&wSim.diff<=cp.wq.hi?'El valor del laboratorio virtual cae dentro del IC 95 % de la medición real.':'El valor del laboratorio virtual queda fuera del IC 95 % de la medición real.'}</p>`;
   }else reading='<p class="muted">Aún no hay al menos 2 participantes de tu producto. Mide a compañeros en la pestaña «Experimento».</p>';
   $('cmpOut').innerHTML=`<div class="card">
-    <h3 class="sh">🆚 Simulado frente a real</h3>
+    <h3 class="sh">🆚 Laboratorio virtual frente a real</h3>
     <p class="small muted">Diferencia entre la oferta a precio normal (${esc(money(priceOf(pid,'mid')))}) y la de descuento (${esc(money(priceOf(pid,'low')))}) para ${esc(pr.name.toLowerCase())}: positiva = el precio normal se valora más.</p>
-    <div class="ubox"><b>💡 ¿Qué es «Simulado» aquí?, en palabras sencillas</b><p>Para comparar en igualdad de condiciones, el simulador repite el mismo experimento de la clase: precio normal (${esc(money(priceOf(pid,'mid')))}) frente a descuento (${esc(money(priceOf(pid,'low')))}), con ${nRef} consumidores virtuales. No usa tus ofertas A y B de las rondas. «Real» son las respuestas de tus compañeros.</p></div>
+    <div class="ubox"><b>💡 ¿Qué es «Laboratorio virtual» aquí?, en palabras sencillas</b><p>Para comparar en igualdad de condiciones, el simulador repite el mismo experimento de la clase: precio normal (${esc(money(priceOf(pid,'mid')))}) frente a descuento (${esc(money(priceOf(pid,'low')))}), con ${nRef} personas virtuales. No usa tus ofertas A y B de las rondas. «Real» son las respuestas de tus compañeros.</p></div>
     <div class="duel">
-      <div class="ds"><small>Simulado · calidad esperada</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos (n = ${nRef})</small></div>
+      <div class="ds"><small>Laboratorio virtual · calidad esperada</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos (n = ${nRef})</small></div>
       <div class="dvs2">vs.</div>
       <div class="dr"><small>Real · calidad esperada</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>${cp.n} participante(s)</small></div>
     </div>
@@ -1821,7 +1823,7 @@ function renderCmp(){
     <div class="hcards">${H.map(([k,i,t,s,d])=>`<div class="hcard ${s[0]}"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><div class="hst">${s[1]} ${s[2]}</div>${d?`<small>${d}</small>`:''}</div>`).join('')}</div>
     <div class="fbox"><h4>🎯 Todos los resultados con su margen de error</h4><p>Normal − descuento. Si la línea toca el 0 punteado, no se descarta el azar.</p>
     ${forest(fr,'Normal − descuento, IC 95 % (puntos 1–10)')}
-    <div class="legend"><span><i style="background:var(--sim)"></i>Simulado</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:#A6A8AA"></i>Real, otros productos</span></div></div>
+    <div class="legend"><span><i style="background:var(--sim)"></i>Laboratorio virtual</span><span><i style="background:var(--real)"></i>Real, tu producto</span><span><i style="background:#A6A8AA"></i>Real, otros productos</span></div></div>
     <div class="ubox"><b>💡 Las tarjetas y el gráfico, en palabras sencillas</b><p>Cada tarjeta de hipótesis dice qué encontraron los datos reales: <b>apoyada</b> (ganó el precio normal y no parece casualidad), <b>contraria</b> (ganó el descuento), <b>no demostrada</b> (la diferencia puede ser casualidad) o <b>faltan datos</b>. En el gráfico, cada fila es un resultado: el punto es la diferencia y la línea, su margen de error. Si la línea toca el 0 punteado, no se puede descartar que no haya diferencia. Las filas grises son los otros productos de la clase: sirven para ver si el efecto del precio se repite.</p></div>
     <div style="margin-top:12px">${reading}</div>
     ${BACKEND?'<button class="ghost" id="cmpReload" style="margin-top:6px">🔄 Actualizar datos de la clase</button>':''}
@@ -2100,7 +2102,7 @@ function renderDoc(){
     <div class="row"><button id="exObs">⬇ CSV de participantes</button><button id="exSim">⬇ CSV de rondas simuladas</button></div>
     <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
   ${demoOn?'':`<div class="card" data-sec="rondas"><h3>Ronda ${TR?TR.ronda+1:1}</h3>
-    <p>La clase completó <b>${TR?TR.ronda:0}</b> ronda(s). Cada estudiante guarda en «Simular» su hipótesis y sus ofertas A y B; cuando ejecutas la ronda, todos ven su resultado a la vez.</p>
+    <p>La clase completó <b>${TR?TR.ronda:0}</b> ronda(s). Cada estudiante guarda en «Laboratorio virtual» su hipótesis y sus ofertas A y B; cuando ejecutas la ronda, todos ven su resultado a la vez.</p>
     <div class="cl-act" style="padding-top:4px"><button class="go" id="rndGo">▶ Ejecutar ronda ${TR?TR.ronda+1:1}</button></div>
     <h3 style="margin-top:18px;font-size:16px!important">Decisiones guardadas para esta ronda (${TR?TR.pendientes.length:0})</h3>
     ${TR&&TR.pendientes.length?`<div class="tablewrap"><table><thead><tr><th>Equipo</th><th>Alias</th><th>Guardada</th></tr></thead><tbody>${TR.pendientes.map(x=>`<tr><td>${esc(x.eq)}</td><td>${esc(x.inv)}</td><td>${new Date(x.t).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table></div>`:'<p class="small muted">Todavía nadie guardó su decisión. Quien no la guarde no recibe resultado en esta ronda.</p>'}</div>`}
@@ -2116,7 +2118,7 @@ function renderDoc(){
   <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
   <details class="card" data-sec="guia"><summary>Guía de clase: plan sugerido para las dos sesiones</summary>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
-    <ol class="steps"><li>Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li>Cada estudiante entra con el código y guarda su decisión en «Simular»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li>Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li>Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <ol class="steps"><li>Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li>Cada estudiante entra con el código y guarda su decisión en «Laboratorio virtual»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li>Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li>Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
     <ol class="steps"><li>Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li>Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li>Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
     </details>`;
@@ -2178,10 +2180,10 @@ function renderManDoc(){
     `Cuando estén todos, ve a <b>«Resumen de la clase»</b> y pulsa <b>«⏸ Cerrar registro de equipos»</b>. Así nadie crea equipos de más; los equipos registrados siguen entrando normalmente.`,
     `Si un equipo olvida su contraseña, en «Equipos» pulsa reiniciar contraseña: el panel muestra una contraseña temporal que dictas al equipo; al entrar, el equipo elige una nueva.`])+go('equipos','Equipos')}
   ${P(7,'🔁','Conduce las rondas de simulación','Clase → Rondas',[
-    `Pide a los estudiantes que entren a <b>Decidir → Simular</b>, elijan su hipótesis, armen las ofertas A y B, elijan cuántos consumidores simulados quieren y pulsen <b>«Guardar mi decisión para la ronda 1»</b>.`,
+    `Pide a los estudiantes que entren a <b>Decidir → Laboratorio virtual</b>, elijan su hipótesis, armen las ofertas A y B, elijan cuántos personas virtuales quieren y pulsen <b>«Guardar mi decisión para la ronda 1»</b>.`,
     `En <b>«Rondas»</b> verás la lista de decisiones guardadas para esa ronda (equipo, alias y hora).`,
     `Cuando hayan guardado todos (o los que alcancen), pulsa <b>«▶ Ejecutar ronda 1»</b>. El botón pide confirmación: <b>tócalo dos veces</b>.`,
-    `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Simulación</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
+    `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Laboratorio virtual</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
     B('Por qué rondas','Ejecutar la ronda para todos a la vez evita que unos vean resultados antes que otros y te permite discutir cada ronda en grupo. Mientras no ejecutes la ronda, cada estudiante puede cambiar su decisión.')+go('rondas','Rondas'))}
   ${P(8,'🧑‍🔬','Acompaña el experimento con personas reales','Clase → Investigadores',[
     `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su celular, a unos 6 compañeros de <b>otros equipos</b>. El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
@@ -2208,7 +2210,7 @@ function renderManDoc(){
     <div class="mdfaq">
       <div><b>Un estudiante ve la versión anterior de la página.</b><p>Pídele que recargue con Ctrl + F5 (en el celular, cerrar y abrir la pestaña).</p></div>
       <div><b>Un equipo no puede registrarse.</b><p>Si dice «Código de la simulación incorrecto», revisa que escriba el código de la simulación correcta, que la simulación no esté archivada y, si dice «El registro de equipos está cerrado», ábrelo en «Resumen de la clase».</p></div>
-      <div><b>Un equipo no ve su resultado.</b><p>Comprueba en «Rondas» que su decisión esté guardada y que hayas ejecutado la ronda. El resultado aparece en Resultados → Simulación.</p></div>
+      <div><b>Un equipo no ve su resultado.</b><p>Comprueba en «Rondas» que su decisión esté guardada y que hayas ejecutado la ronda. El resultado aparece en Resultados → Laboratorio virtual.</p></div>
       <div><b>Un equipo olvidó su contraseña.</b><p>En «Equipos», reinicia la contraseña y díctale la temporal que muestra el panel.</p></div>
       <div><b>Olvidé mi contraseña de docente.</b><p>En la pantalla de ingreso, «¿Olvidaste tu contraseña?» y responde tu pregunta de seguridad.</p></div>
     </div></div>`;
@@ -2256,7 +2258,7 @@ function renderManual(){
     ${row('Variable dependiente','Lo que se mide para ver si cambió.','Calidad esperada, gusto y elección.')}
     ${row('Expectativa','Lo que crees de un producto antes de usarlo.',`${x.ver.charAt(0).toUpperCase()+x.ver.slice(1)} y pensar «parece bueno».`)}
     ${row('Experiencia','Lo que sientes al usarlo.',`${x.uso.charAt(0).toUpperCase()+x.uso.slice(1)} y que te guste o no.`)}
-    ${row('Muestra (n)','Las personas que participan.','Los consumidores simulados o tus compañeros medidos.')}
+    ${row('Muestra (n)','Las personas que participan.','Los personas virtuales o tus compañeros medidos.')}
     ${row('Media (M)','El promedio.','La nota promedio de calidad de cada oferta.')}
     ${row('Desviación estándar (DE)','Qué tan distintas fueron las respuestas.','DE chica: todos opinaron parecido.')}
     ${row('p','La probabilidad de que la diferencia sea casualidad.','p menor que 0,05: no parece casualidad.')}
@@ -2269,12 +2271,12 @@ function renderManual(){
   <div class="card"><h2>Los ocho pasos</h2>
     <ol class="steps">
       <li><b>Lee el caso</b> (Situación → El caso): ${nm} ${br}, sus precios y el encargo del directorio.</li>
-      <li><b>Escribe tu hipótesis</b> (Decidir → Simular): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos. A y B son dos ofertas del mismo producto que solo cambian de etiqueta (precio y presentación); debajo de cada botón se ve qué tiene cada una.</li>
+      <li><b>Escribe tu hipótesis</b> (Decidir → Laboratorio virtual): toca Mayor en A, Mayor en B o Sin diferencia, antes de ver datos. A y B son dos ofertas del mismo producto que solo cambian de etiqueta (precio y presentación); debajo de cada botón se ve qué tiene cada una.</li>
       <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
-      <li><b>Lee el resultado</b> (Resultados → Simulación): aparece cuando el profesor ejecuta la ronda.</li>
-      <li><b>Mira el laboratorio de resonancia (simulado)</b>: cómo sería el estudio real y qué exigiría.${figResonador()}${figMOFC()}</li>
+      <li><b>Lee el resultado</b> (Resultados → Laboratorio virtual): aparece cuando el profesor ejecuta la ronda.</li>
+      <li><b>Mira cómo funcionó tu laboratorio virtual</b>: las mismas personas virtuales pusieron nota a A y B mientras se medía su cerebro, y qué exigiría hacerlo de verdad.${figResonador()}${figMOFC()}</li>
       <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el celular; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
-      <li><b>Compara</b> (Resultados → Real vs. simulado): lo simulado, lo tuyo y lo de la clase.</li>
+      <li><b>Compara</b> (Resultados → Real vs. virtual): lo simulado, lo tuyo y lo de la clase.</li>
       <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
     </ol></div>
 
@@ -2342,7 +2344,7 @@ function unitsData(pid){
      box:'Dentro del cerebro hay zonas que se activan cuando algo “vale la pena” para ti. Una de ellas está detrás de la frente y se llama corteza orbitofrontal medial (mOFC).'}
    ],
    ej:`Cuando un participante ve ${x.mismo} con una etiqueta de ${lo}, su Sistema 1 puede asociar en segundos “más barato” con “peor”, antes de pensarlo con calma.`,
-   donde:'En El caso (la situación de tu producto) y en el laboratorio de resonancia simulado de Resultados.',
+   donde:'En El caso (la situación de tu producto) y en Resultados → Laboratorio virtual.',
    q:[{p:'Según Lee, Broderick y Chamberlain (2007), el neuromarketing es…',o:['Solo publicidad que usa imágenes del cerebro','Un campo de estudio que aplica métodos de la neurociencia para entender el comportamiento relacionado con el marketing','Una técnica para leer los pensamientos de los clientes','Una rama de la economía que no estudia el cerebro'],c:1,e:'Lee et al. (2007) lo definen como un campo de estudio, no solo como una herramienta comercial.'},
       {p:'¿Cuál es una característica del Sistema 1 según Kahneman (2003)?',o:['Es lento y deliberado','Es rápido, automático y sin esfuerzo','Solo funciona cuando hacemos cálculos','Siempre corrige los errores del Sistema 2'],c:1,e:'El Sistema 1 es rápido, automático, sin esfuerzo y difícil de controlar.'},
       {p:'En Plassmann et al. (2008), ¿qué zona se relaciona con el placer experimentado?',o:['El cerebelo','La corteza visual primaria','La corteza orbitofrontal medial (mOFC)','La médula espinal'],c:2,e:'Los autores midieron la mOFC, considerada relacionada con el placer experimentado.'}],
@@ -2361,7 +2363,7 @@ function unitsData(pid){
      box:'Expectativa es lo que crees antes de probar algo (“parece bueno”). Experiencia es lo que sientes cuando lo pruebas. El precio cambia mucho lo primero, pero no siempre lo segundo.'}
    ],
    ej:`En el Experimento, tus compañeros ven una imagen de ${x.obj} con su precio, pero no pueden ${x.uso}: por eso tu estudio mide la expectativa, no la experiencia.`,
-   donde:'En el laboratorio de resonancia simulado (Resultados → Simulación) y en el aviso de límites de Decidir → Experimento.',
+   donde:'En Resultados → Laboratorio virtual y en el aviso de límites de Decidir → Experimento.',
    q:[{p:'¿Qué registra la resonancia magnética funcional en Plassmann et al. (2008)?',o:['La señal BOLD, relacionada con el oxígeno en sangre','Los movimientos de los ojos','El sudor de la piel','La frecuencia cardíaca'],c:0,e:'La fMRI registra la señal dependiente del nivel de oxígeno en sangre (BOLD).'},
       {p:'¿Qué encontraron Kurz et al. (2023) en sus seis estudios?',o:['El precio no cambia nada','El precio sube las expectativas, pero no cambia de forma consistente la calidad percibida ni el agrado tras usar el producto','El precio solo cambia el agrado después de probar','Los productos baratos siempre gustan más'],c:1,e:'El efecto fue consistente en las expectativas, no en la experiencia.'},
       {p:'Según Gneezy et al. (2014), si un producto caro no cumple las expectativas…',o:['Se evalúa mejor que uno barato','No pasa nada','Se evalúa peor y se vende menos que con un precio bajo','Sube la demanda'],c:2,e:'Cuando la calidad no cumple, el precio alto produce peor evaluación y menor demanda.'}],
@@ -2380,7 +2382,7 @@ function unitsData(pid){
      box:'Dieron el mismo vino diciendo que era barato o caro. Con el precio caro, a la gente le gustó más y se encendió más una zona del cerebro del placer, aunque la lengua recibía exactamente lo mismo. Sin precios, nadie notó diferencias.'}
    ],
    ej:`Tu equipo pregunta si ${x.mismo} a ${lo} hacen que la gente espere menos calidad que a ${mid}, aunque sean idénticos.`,
-   donde:'En El caso (las hipótesis) y en Decidir → Simular (ofertas A y B).',
+   donde:'En El caso (las hipótesis) y en Decidir → Laboratorio virtual (ofertas A y B).',
    q:[{p:'Según Rao (2005), el efecto del precio sobre la calidad percibida que mostró la revisión de Rao y Monroe (1989) es…',o:['Inexistente','Robusto, aunque moderado','Enorme en todos los productos','Negativo: lo caro parece peor'],c:1,e:'Rao (2005) lo describe como robusto, aunque moderado.'},
       {p:'¿Qué ocurrió en Shiv et al. (2005)?',o:['Los del descuento resolvieron más acertijos','No hubo diferencias','Los que recibieron la bebida con descuento resolvieron menos acertijos','La bebida cara tenía otra fórmula'],c:2,e:'Con la misma bebida, el precio con descuento redujo el desempeño.'},
       {p:'En Plassmann et al. (2008), ¿qué pasó en las áreas gustativas primarias al cambiar el precio?',o:['Se activaron mucho más','No se hallaron efectos del precio','Se apagaron por completo','Solo cambiaron con el vino barato'],c:1,e:'Los autores no encontraron efectos del precio en las áreas gustativas primarias.'}],
@@ -2402,7 +2404,7 @@ function unitsData(pid){
      box:'El tamaño del efecto es como un termómetro de la diferencia: 0,2 pequeña, 0,5 mediana, 0,8 grande. El intervalo de confianza es el margen de error: si esa rayita no toca el 0, hay una diferencia.'}
    ],
    ej:`Si 6 compañeros califican ${x.mismo} a ${mid} y a ${lo}, la diferencia pareada de cada uno se calcula restando su nota a ${lo} de su nota a ${mid}.`,
-   donde:'En Decidir → Simular, Decidir → Experimento, Resultados → Simulación y Resultados → Real vs. simulado.',
+   donde:'En Decidir → Laboratorio virtual, Decidir → Experimento, Resultados → Laboratorio virtual y Resultados → Real vs. virtual.',
    q:[{p:'Según la ASA (Wasserstein y Lazar, 2016), un valor p…',o:['Mide la probabilidad de que la hipótesis sea verdadera','Mide el tamaño del efecto','Indica cuán incompatibles son los datos con un modelo estadístico','Siempre prueba que el resultado es importante'],c:2,e:'El valor p indica incompatibilidad con un modelo; no mide verdad de la hipótesis ni tamaño del efecto.'},
       {p:'Según las convenciones de Cohen (1988), una d de 0,5 es un efecto…',o:['Pequeño','Mediano','Grande','Nulo'],c:1,e:'0,2 pequeño, 0,5 mediano y 0,8 grande, aunque el contexto debe primar.'},
       {p:'¿Qué es un diseño intrasujeto?',o:['Cada persona ve una sola condición','Cada persona ve más de una condición y se compara consigo misma','Solo participan expertos','No se usan números'],c:1,e:'En el diseño intrasujeto cada persona pasa por las dos ofertas.'}],
@@ -2453,7 +2455,7 @@ const UDEF=[
  {id:'hipotesis',k:'diseno',t:'Hipótesis',d:'Predicción sobre lo que va a ocurrir, formulada antes de mirar los datos, para después comprobar si los datos la apoyan o no. En palabras sencillas: una hipótesis es tu apuesta por escrito. Ejemplo de esta clase (hipótesis 1): «la oferta a precio normal recibe mayor calidad esperada que la de descuento». Si los datos muestran esa diferencia y no parece casualidad, la hipótesis queda apoyada; si no, queda sin demostrar.',al:['hipótesis']},
  {id:'variable-independiente',k:'diseno',t:'Variable independiente',d:'La variable que el investigador cambia a propósito; en este estudio, el precio (normal o con descuento).',al:['variable independiente']},
  {id:'variable-dependiente',k:'diseno',t:'Variable dependiente',d:'La variable que se mide para ver si cambió; en este estudio, la calidad esperada, el gusto y la elección.',al:['variable dependiente']},
- {id:'ofertasab',k:'diseno',t:'Ofertas A y B',d:'Las ofertas A y B son las dos versiones del mismo producto que se comparan en el experimento. El producto es idéntico; solo cambia la etiqueta: el precio (descuento, normal o alto) y la presentación (estándar o premium). En Decidir → Simular tú eliges cómo es cada una; en el experimento con compañeros, A y B son siempre el precio normal y el precio con descuento.',al:['ofertas A y B']},{id:'intrasujeto',k:'diseno',t:'Diseño intrasujeto',d:'Diseño en el que cada participante pasa por todas las condiciones y se compara consigo mismo; en el diseño intersujetos, cada persona ve una sola condición (Charness et al., 2012).',al:['diseño intrasujeto','intrasujeto']},
+ {id:'ofertasab',k:'diseno',t:'Ofertas A y B',d:'Las ofertas A y B son las dos versiones del mismo producto que se comparan en el experimento. El producto es idéntico; solo cambia la etiqueta: el precio (descuento, normal o alto) y la presentación (estándar o premium). En Decidir → Laboratorio virtual tú eliges cómo es cada una; en el experimento con compañeros, A y B son siempre el precio normal y el precio con descuento.',al:['ofertas A y B']},{id:'intrasujeto',k:'diseno',t:'Diseño intrasujeto',d:'Diseño en el que cada participante pasa por todas las condiciones y se compara consigo mismo; en el diseño intersujetos, cada persona ve una sola condición (Charness et al., 2012).',al:['diseño intrasujeto','intrasujeto']},
  {id:'contrabalanceo',k:'diseno',t:'Contrabalanceo',d:'Variar el orden en que se presentan las condiciones entre participantes, para que el orden no explique el resultado; en el simulador el orden de las ofertas se sortea.',al:['contrabalanceo']},
  {id:'efecto-demanda',k:'diseno',t:'Efecto de demanda',d:'Cuando los participantes responden según lo que creen que el investigador espera o considera apropiado, y no según lo que realmente piensan; Plassmann et al. (2008) lo advierten en su estudio.',al:['efecto de demanda']},
  {id:'media',k:'media',t:'Media (M)',d:'El promedio: la suma de las respuestas dividida entre el número de personas.',al:[]},
@@ -2577,7 +2579,7 @@ function renderCaso(){
   phero('caso','El caso',`${pr.name} ${pr.brand}: ¿descuento o precio normal?`,'Tu misión: reunir evidencia antes de que el directorio decida.');
   const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${usoImg(p.id,'sm')}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
   const HC=[['H1','🏷️','La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.','Se mide: calidad esperada, de 1 a 10'],['H2','😊','La oferta a precio normal recibe mayor <b>gusto</b>.','Se mide: gusto, de 1 a 10'],['H3','🛒','Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.','Se mide: qué oferta elige']];
-  const FL=[['simular','#555759','🧪','1. Decidir → Simular','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta (precio y presentación). Consumidores virtuales califican las dos en cada ronda.'],['experimento','#555759','🧑‍🤝‍🧑','2. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['resultados','#555759','📊','3. Resultados','Lees el informe simulado, el laboratorio de resonancia y comparas lo simulado con lo real.'],['interpretacion','#555759','🎓','4. Aprender','Interpretas las diferencias y escribes tu conclusión.']];
+  const FL=[['simular','#555759','🧪','1. Decidir → Laboratorio virtual','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta (precio y presentación). Personas virtuales dentro de un resonador califican las dos en cada ronda mientras se mide su cerebro.'],['experimento','#555759','🧑‍🤝‍🧑','2. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['resultados','#555759','📊','3. Resultados','Lees el resultado de tu laboratorio virtual (lo que dijeron y lo que mostró su cerebro) y lo comparas con lo real.'],['interpretacion','#555759','🎓','4. Aprender','Interpretas las diferencias y escribes tu conclusión.']];
   $('casoOut').innerHTML=`<div class="card"><h3 class="sh">🧩 El dilema de la empresa</h3>
     ${usoImg(S.equipo,'hero')}
     <div class="dilema"><div>${productSVG(S.equipo,'R',140)}</div><div class="dvs" aria-hidden="true">¿?</div><div>${productSVG(S.equipo,'D',140)}</div></div>
@@ -2589,14 +2591,14 @@ function renderCaso(){
     <div class="hcards">${HC.map(([k,i,t,s])=>`<div class="hcard"><div class="hk"><span aria-hidden="true">${i}</span><span class="hkt"><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> ${k.slice(1)}</span></div><p>${t}</p><small>${s}</small></div>`).join('')}</div>
     <p class="small muted" style="margin:0">Parten de Plassmann et al. (2008), donde el precio modulaba el valor percibido y la actividad de la corteza orbitofrontal medial. Kurz, Efendic y Goukens (2023) advierten que el precio mueve las expectativas pero no siempre la experiencia: su mandato es averiguarlo.</p></div>
   <div class="card"><h3 class="sh">🧲 Cómo se mide el cerebro en un estudio real</h3>
-    <p>En el estudio de Plassmann et al. (2008) las personas estaban acostadas dentro de un <b>resonador magnético</b> mientras probaban el producto, y los investigadores observaban la actividad de la <b>corteza orbitofrontal medial (mOFC)</b>. En esta clase no hay resonador: el simulador imita ese laboratorio. Estas imágenes te muestran cómo sería.</p>
+    <p>En el estudio de Plassmann et al. (2008) las personas estaban acostadas dentro de un <b>resonador magnético</b> mientras probaban el producto, y los investigadores observaban la actividad de la <b>corteza orbitofrontal medial (mOFC)</b>. En esta clase no hay resonador: el simulador lo recrea en un <b>laboratorio virtual</b>, donde personas inventadas ven tus ofertas, les ponen nota y se mide su cerebro al mismo tiempo. Estas imágenes te muestran cómo sería.</p>
     <div class="figs2">${figResonador()}${figMOFC()}</div></div>
   <div class="card"><h3 class="sh">🛍️ Los tres productos de la clase</h3>
     <div class="pcards">${pc}</div>
     <p class="small muted" style="margin:10px 0 0">Cada equipo estudia un producto y mide a compañeros de los otros dos. Precios de referencia de tiendas de El Salvador (Walmart, Super Selectos, Sportline, Siman), noviembre de 2026: el nivel «normal» es el precio de góndola; «descuento» es un tercio menos y «alto», 50 % más.</p></div>
   <div class="card soft"><h3 class="sh">🧭 Cómo se trabaja</h3>
     <div class="pflow">${FL.map(([h,c,i,t,d])=>`<a href="#${h}" style="--jc:${c}"><span aria-hidden="true">${i}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div>
-    <div class="ubox"><b>💡 ¿Qué son la oferta A y la oferta B?, en palabras sencillas</b><p>Son dos versiones del <b>mismo</b> producto (${esc(pr.name.toLowerCase())} ${esc(pr.brand)}), como dos unidades iguales en la góndola con distinta etiqueta. Por ejemplo, la oferta A con descuento (${esc(money(P.low))}) y la oferta B con precio normal (${esc(money(P.mid))}). Como el producto es el mismo, si la gente espera más calidad de una, la diferencia solo puede venir de la etiqueta. En Decidir → Simular tú eliges el precio y la presentación de cada una.</p></div></div>`;
+    <div class="ubox"><b>💡 ¿Qué son la oferta A y la oferta B?, en palabras sencillas</b><p>Son dos versiones del <b>mismo</b> producto (${esc(pr.name.toLowerCase())} ${esc(pr.brand)}), como dos unidades iguales en la góndola con distinta etiqueta. Por ejemplo, la oferta A con descuento (${esc(money(P.low))}) y la oferta B con precio normal (${esc(money(P.mid))}). Como el producto es el mismo, si la gente espera más calidad de una, la diferencia solo puede venir de la etiqueta. En Decidir → Laboratorio virtual tú eliges el precio y la presentación de cada una.</p></div></div>`;
 }
 function renderEquipo(){
   const pr=prod(S.equipo),mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length,pend=pending();
@@ -2645,7 +2647,7 @@ function renderInterp(){
   phero('interpretacion','Interpretación','¿Qué significan tus resultados?','4 preguntas cortas · responde con tus palabras y tus números');
   if(!lkApply('interpretacion'))return;
   $('interpData').innerHTML=`<div class="duel">
-      <div class="ds"><small>Simulación</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos a favor del precio normal</small></div>
+      <div class="ds"><small>Laboratorio virtual</small><b>${wSim?f(wSim.diff):'–'}</b><small>puntos a favor del precio normal</small></div>
       <div class="dvs2">vs.</div>
       <div class="dr"><small>Tus compañeros (real)</small><b>${cp.wq?f(cp.wq.diff):'–'}</b><small>puntos a favor del precio normal · ${cp.n} participante(s)${cp.wq?' · '+pEq(cp.wq.p):''}</small></div></div>
     <div class="rtiles">
@@ -2653,7 +2655,7 @@ function renderInterp(){
       <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 2 · ¿gusta más con el precio normal?</small><span>${st(cp.wg)}${cp.wg?' · '+f(cp.wg.diff)+' puntos':''}</span></div>
       <div class="rtile"><small><a class="cl" href="#unidades" data-c="hipotesis">Hipótesis</a> 3 · ¿la mayoría elige el precio normal?</small><span>${h3}${cp.n?' · '+cp.rPref+' de '+cp.n+' eligió el precio normal':''}</span></div>
     </div>
-    <p class="small muted" style="margin:0">Número positivo = la gente esperó más calidad con el precio normal. Número negativo = esperó más con el descuento. Cerca de 0 = casi igual. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Real vs. simulado</a>.</p>`;
+    <p class="small muted" style="margin:0">Número positivo = la gente esperó más calidad con el precio normal. Número negativo = esperó más con el descuento. Cerca de 0 = casi igual. ${BACKEND?'«Real» incluye a toda la clase con tu producto.':'Modo práctica: «real» solo incluye tus mediciones.'} Más detalle en <a href="#comparar">Resultados → Real vs. virtual</a>.</p>`;
   const ae=document.activeElement,typing=ae&&ae.classList&&ae.classList.contains('nq');
   if(!typing){const v=nqParse(S.nota);[1,2,3,4].forEach(k=>{const e=$('nq'+k);if(e)e.value=v[k-1];});}
   document.querySelectorAll('.nq').forEach(e=>{if(!e.dataset.b){e.dataset.b='1';e.addEventListener('input',nqSave);}});
