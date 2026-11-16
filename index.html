@@ -92,7 +92,13 @@ footer{margin-top:24px;font-size:.8rem;color:var(--muted)}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .pair>div{background:var(--surface2);border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
 textarea.csv{font:12px/1.4 ui-monospace,monospace;min-height:120px}
-body.pm .nopm{display:none!important}
+body.pm .nopm,body.pm #lkToast{display:none!important}
+body:not(.adm) button.primary:disabled{background:#4A4C4E!important;border-color:#4A4C4E!important;color:#A9ABAD!important;opacity:1!important;cursor:not-allowed;box-shadow:none!important}
+.pmsteps{list-style:none;display:flex;gap:6px;padding:0;margin:0 0 10px}
+.pmsteps li{flex:1;text-align:center;font-size:13px;font-weight:700;padding:7px 4px;border-radius:999px;background:#3A3C3E;color:#B9BBBD;border:1px solid #555759}
+.pmsteps li.cur{background:#44D62C;color:#1F2022;border-color:#44D62C}
+.pmsteps li.done{color:#44D62C;border-color:#44D62C}
+.pmhead{margin:0 0 8px;font-weight:700;font-size:16px}
 [hidden]{display:none!important}
 /* ============ Acceso v2.3 · tema SMAA ============ */
 :root{--ax-bg:#555759;--ax-bg2:#4A4C4E;--ax-bg3:#555759;--ax-bg4:#5E6062;--ax-border:#6A6C6E;--ax-border2:#7A7C7E;--ax-text:#F2F3F3;--ax-text2:#D0D2D1;--ax-text3:#B9BCBB;--ax-accent:#44D62C;--ax-accent-h:#5BE045;--ax-accent2:#44D62C;--ax-accent2-h:#5BE045;--ax-accent3:#FFCE00;--ax-accent4:#FF4C00;--ax-gold:#FFCE00;--ax-r:14px;--ax-sans:'Sora',Arial,Helvetica,sans-serif;--ax-mono:'Space Mono',ui-monospace,Menlo,monospace}
@@ -1457,8 +1463,10 @@ async function loadEstado(){
 let RNT=0;
 setInterval(()=>{if(!rondasOn()||document.hidden)return;RNT++;const esp=CR!==null&&MYDEC[(CR||0)+1];if(esp||RNT%3===0)loadEstado();},5000);
 /* aviso: el profesor ejecutó la ronda → Aceptar lleva a leer los resultados */
+let RNPEND=null;
 function rnAviso(r,conRes){
-  if(r<=(S.avR||0))return;S.avR=r;lsSave();
+  if(r<=(S.avR||0))return;
+  if(S.draft&&S.draft.pm){RNPEND=[r,conRes];return;}  /* no interrumpir al participante */S.avR=r;lsSave();
   const t=$('lkToast');if(t)t.className='';
   let m=$('rnModal');if(!m){m=document.createElement('div');m.id='rnModal';document.body.appendChild(m);}
   m.innerHTML=`<div class="rnbox" role="alertdialog" aria-modal="true" aria-labelledby="rnT" aria-describedby="rnD">
@@ -1535,7 +1543,7 @@ function phero(view,kick,title,meta){
   const j='<div class="pjour" role="navigation" aria-label="Tu recorrido">'+JG.map((x,i)=>`${i?'<b></b>':''}<a href="#${x.h}" class="${st[i]===2?'done':st[i]===1?'half':''}${i===gi?' cur':''}" style="--jc:${x.c}"${i===gi?' aria-current="step"':''}><i aria-hidden="true">${st[i]===2?'✓':x.i}</i><span>${x.g}</span></a>`).join('')+'</div>';
   let w=m.querySelector(':scope>.phwrap');
   if(!w){w=document.createElement('div');w.className='phwrap nopm nolk';m.prepend(w);}
-  {let nw=m.querySelector(':scope>.nxwrap');if(!nw){nw=document.createElement('div');nw.className='nxwrap nolk';}m.appendChild(nw);
+  {let nw=m.querySelector(':scope>.nxwrap');if(!nw){nw=document.createElement('div');nw.className='nxwrap nopm nolk';}m.appendChild(nw);
    const dup=(view==='simular'&&!!document.querySelector('#rondaBox .nxt'))||(view==='experimento'&&obsOk());
    nw.innerHTML=dup?'':nextHTML(view);}
   w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
@@ -1669,6 +1677,7 @@ function renderSim(){
 
 /* ---------- 2. experimento (imagen, intrasujeto, el participante responde) ---------- */
 const rbtns=cur=>Array.from({length:10},(_,i)=>`<button data-r="${i+1}" aria-pressed="${cur===i+1}">${i+1}</button>`).join('');
+function pmTop(){const c=$('expRun');if(!c)return;const y=c.getBoundingClientRect().top+window.scrollY-12;window.scrollTo(0,Math.max(0,y));}
 function bindExp(){
   $('expRun').addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;let d=S.draft;
@@ -1677,17 +1686,17 @@ function bindExp(){
       if(!d.pe)return;
       const dr=S.obs.filter(o=>o.o==='DR').length,rd=S.obs.filter(o=>o.o==='RD').length;
       const order=dr<rd?'DR':rd<dr?'RD':(Math.random()<0.5?'DR':'RD');
-      S.draft={step:1,order,v:{},pe:d.pe,pm:true};
+      S.draft={step:1,order,v:{},pe:d.pe,pm:true};lsSave();showTab();renderExp();pmTop();return;
     }
     else if(b.dataset.r){const ver=d.order[d.step-1],k=b.closest('[data-k]').dataset.k;d.v[k+ver]=+b.dataset.r;}
-    else if(b.dataset.act==='next'){d.step++;}
+    else if(b.dataset.act==='next'){d.step++;lsSave();showTab();renderExp();pmTop();return;}
     else if(b.dataset.act==='cancel'){S.draft={step:0,order:null,v:{},pe:null,pm:false};}
     else if(b.dataset.pref){
       const v=d.v;
       S.obs.push({cid:uid(),o:d.order,qd:v.qD,gd:v.gD,qr:v.qR,gr:v.gR,el:b.dataset.pref.toLowerCase(),prod:S.equipo,pe:d.pe,sent:false,t:Date.now()});
       S.draft={step:4,order:null,v:{},pe:null,pm:true};touch(true);showTab();return;
     }
-    else if(b.dataset.act==='back'){S.draft={step:0,order:null,v:{},pe:null,pm:false,saved:true};lsSave();showTab();renderExp();return;}
+    else if(b.dataset.act==='back'){S.draft={step:0,order:null,v:{},pe:null,pm:false,saved:true};lsSave();showTab();renderExp();if(RNPEND){const x=RNPEND;RNPEND=null;rnAviso(x[0],x[1]);}return;}
     else return;
     lsSave();showTab();renderExp();
   });
@@ -1706,7 +1715,9 @@ function contHTML(n){
     <div class="ubox"><b>💡 Ten en cuenta</b><p>Con menos personas, el resultado es menos confiable: una sola respuesta puede cambiar mucho el promedio.${n<2?' Con 1 compañero solo verás su respuesta; para calcular si la diferencia puede ser azar hacen falta al menos 2.':''} En la Comparación también verás los datos de toda la clase para tu producto.</p></div>
     <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap"><button class="primary" type="button" id="contSi">Sí, continuar con ${n}</button><button class="ghost" type="button" id="contNo">No, sigo midiendo</button></div></div>`;
 }
+function pmSteps(k){return `<ol class="pmsteps" aria-label="Avance del participante">${['Oferta 1','Oferta 2','Elección'].map((t,i)=>`<li class="${i+1<k?'done':i+1===k?'cur':''}"${i+1===k?' aria-current="step"':''}>${i+1<k?'✓ ':''}${t}</li>`).join('')}</ol>`;}
 function renderExp(){
+  if(S.draft&&(S.draft.step===1||S.draft.step===2)&&!(S.draft.order&&S.draft.order.length===2))S.draft={step:0,order:null,v:{},pe:null,pm:false};
   const d=S.draft,n=S.obs.length,pad=x=>String(x).padStart(2,'0'),pr=prod(S.equipo);
   $('pCode').textContent='· #'+pad(n+(d.step===4?0:1));
   let h='';
@@ -1720,15 +1731,16 @@ function renderExp(){
     <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el teléfono móvil al participante</button>`;
   } else if(d.step===1||d.step===2){
     const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
-    h=`<p class="small muted" style="margin:0 0 8px">Para el participante · oferta ${d.step} de 2</p>
+    h=`${pmSteps(d.step)}<p class="pmhead">${d.step===1?'Primera oferta':'Segunda oferta: el mismo producto con otra etiqueta de precio'}</p>
     <div class="canbox">${productSVG(S.equipo,ver)}</div>
     <p class="small muted" style="margin:0 0 10px;text-align:center">${esc(pr.name)} ${esc(pr.brand)} · ${esc(pr.detail)}</p>
     <label>¿Qué calidad esperas de este producto? (1 = muy mala, 10 = excelente)</label><div class="rate" data-k="q">${rbtns(q)}</div>
     <label style="margin-top:12px">¿Cuánto te gusta esta oferta? (1 = nada, 10 = muchísimo)</label><div class="rate" data-k="g">${rbtns(g)}</div>
-    <button class="primary" data-act="next" style="margin-top:14px" ${q&&g?'':'disabled'}>${d.step===1?'Ver la segunda oferta':'Continuar'}</button>`;
+    <button class="primary" data-act="next" style="margin-top:14px" ${q&&g?'':'disabled'}>${d.step===1?'Ver la segunda oferta →':'Continuar a la elección final →'}</button>
+    ${q&&g?'':`<p class="small muted" style="margin:8px 0 0">Para continuar, toca una nota en ${!q&&!g?'las dos preguntas':!q?'la pregunta de calidad':'la pregunta de gusto'}.</p>`}`;
   } else if(d.step===3){
     const o=d.order;
-    h=`<p style="margin:0 0 6px"><b>Para terminar: ¿cuál de las dos ofertas elegirías?</b></p>
+    h=`${pmSteps(3)}<p style="margin:0 0 6px"><b>Para terminar: ¿cuál de las dos ofertas elegirías?</b></p>
     <div class="pair" style="margin-top:10px">${[0,1].map(i=>`<div>${productSVG(S.equipo,o[i],130)}<button class="primary" data-pref="${o[i]}" style="width:100%">Elijo la oferta ${i+1}</button></div>`).join('')}</div>`;
   } else if(d.step===4){
     h=`<div class="okbox" style="text-align:center"><b>¡Gracias por participar!</b><br>Devuelve el teléfono móvil al investigador.</div>
@@ -1831,6 +1843,7 @@ function lkCheck(){
 }
 function lkToast(v){
   if($('rnModal')&&$('rnModal').className==='on')return;
+  if(S.draft&&S.draft.pm)return;  /* el participante no debe ver avisos del investigador */
   let t=$('lkToast');if(!t){t=document.createElement('div');t.id='lkToast';t.setAttribute('role','status');document.body.appendChild(t);}
   t.innerHTML=`<span aria-hidden="true">🔓</span><div><b>¡Desbloqueaste ${esc(LKN[v])}!</b><a href="#${v}" id="lkGo">Ir ahora →</a></div><button type="button" id="lkX" aria-label="Cerrar">✕</button>`;
   t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',9000);
