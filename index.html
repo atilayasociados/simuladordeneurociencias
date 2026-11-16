@@ -1519,8 +1519,8 @@ function nextStep(v){
   if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 1 · Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántas personas virtuales entran al resonador y pulsa el botón verde «Guardar mi decisión».'};
   if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 2 · Espera a que el profesor ejecute la ronda',d:'Tu decisión está guardada. Cuando el profesor ejecute la ronda, el resultado de tu laboratorio virtual aparecerá en Resultados → Laboratorio virtual. Hasta entonces puedes cambiar tu decisión.'};
   if(!vis.resultados)return{h:'resultados',b:'Ir a Resultados → Laboratorio virtual',t:'Paso 2 · Lee el resultado de tu laboratorio virtual',d:'El profesor ya ejecutó la ronda. Mira lo que dijeron las personas virtuales y lo que mostró su cerebro.'};
-  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el teléfono móvil al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
-  if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya mediste a tus compañeros. Mira qué calidad esperaron con el precio normal y con el descuento.'};
+  if(!obsOk())return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el teléfono móvil al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'+(n>=1?' Si no puedes llegar a '+META_OBS+', más arriba puedes elegir «Continuar con '+n+'».':'')};
+  if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya terminaste de medir. Mira qué calidad esperaron con el precio normal y con el descuento.'};
   if(!vis.comparar)return{h:'comparar',b:'Ir a Resultados → Comparación',t:'Paso 5 · Compara el laboratorio virtual con el experimento',d:'¿Las personas reales respondieron parecido a las virtuales? Ábrelo en Resultados → Comparación.'};
   if(qn<4)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 6 · Escribe tu interpretación',d:`Responde las 4 preguntas de Aprender → Interpretación con tus números (llevas ${qn} de 4).`};
   return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste el laboratorio virtual, el experimento, la comparación y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
@@ -1536,7 +1536,7 @@ function phero(view,kick,title,meta){
   let w=m.querySelector(':scope>.phwrap');
   if(!w){w=document.createElement('div');w.className='phwrap nopm nolk';m.prepend(w);}
   {let nw=m.querySelector(':scope>.nxwrap');if(!nw){nw=document.createElement('div');nw.className='nxwrap nolk';}m.appendChild(nw);
-   const dup=(view==='simular'&&!!document.querySelector('#rondaBox .nxt'))||(view==='experimento'&&S.obs.length>=META_OBS);
+   const dup=(view==='simular'&&!!document.querySelector('#rondaBox .nxt'))||(view==='experimento'&&obsOk());
    nw.innerHTML=dup?'':nextHTML(view);}
   w.innerHTML=j+`<section class="phero" style="--uc:${G.c}"><div class="pic" aria-hidden="true">${G.i}</div><div><p class="uic">${esc(gn)} · ${esc(kick)}</p><h2>${esc(title)}</h2>${meta?`<p class="umeta">${meta}</p>`:''}</div></section>`;
 }
@@ -1691,9 +1691,20 @@ function bindExp(){
     else return;
     lsSave();showTab();renderExp();
   });
-  $('obsList').addEventListener('click',e=>{const b=e.target.closest('button[data-del]');if(!b)return;
+  $('obsList').addEventListener('click',e=>{
+    if(e.target.closest('#contSi')){S.contObs=true;touch(true);return;}
+    if(e.target.closest('#contNo')){const c=document.querySelector('#obsList .contobs');if(c)c.remove();return;}
+    const b=e.target.closest('button[data-del]');if(!b)return;
     if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
-    S.obs.splice(+b.dataset.del,1);touch(true);});
+    S.obs.splice(+b.dataset.del,1);if(!S.obs.length)S.contObs=false;touch(true);});
+}
+function contHTML(n){
+  if(n<1||n>=META_OBS)return '';
+  if(S.contObs)return `<div class="note" style="margin-bottom:12px">Elegiste continuar con <b>${n}</b> compañero(s). Si alguien más puede participar, sigue midiendo: tus resultados se actualizan solos.</div>`;
+  return `<div class="card contobs" style="margin-bottom:12px"><h3 class="sh" style="margin:0 0 6px">¿Deseas continuar con ${n} compañero${n>1?'s':''}?</h3>
+    <p style="margin:0 0 8px">La meta es medir a <b>${META_OBS}</b>. Si no hay más compañeros disponibles, puedes seguir al resultado de tu experimento con los que ya mediste.</p>
+    <div class="ubox"><b>💡 Ten en cuenta</b><p>Con menos personas, el resultado es menos confiable: una sola respuesta puede cambiar mucho el promedio.${n<2?' Con 1 compañero solo verás su respuesta; para calcular si la diferencia puede ser azar hacen falta al menos 2.':''} En la Comparación también verás los datos de toda la clase para tu producto.</p></div>
+    <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap"><button class="primary" type="button" id="contSi">Sí, continuar con ${n}</button><button class="ghost" type="button" id="contNo">No, sigo midiendo</button></div></div>`;
 }
 function renderExp(){
   const d=S.draft,n=S.obs.length,pad=x=>String(x).padStart(2,'0'),pr=prod(S.equipo);
@@ -1725,7 +1736,7 @@ function renderExp(){
   }
   $('expRun').innerHTML=h;
   const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
-  let t=(n>=META_OBS?nextHTML('experimento'):'')+meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  let t=(obsOk()?nextHTML('experimento'):'')+contHTML(n)+meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
   if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
   else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
   $('obsList').innerHTML=t;
@@ -1748,10 +1759,12 @@ setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},
 /* ---------- 3. comparar ---------- */
 /* ---------- requisitos antes de ver la comparación real vs. simulado ---------- */
 const META_OBS=6;
+/* el estudiante puede continuar con menos de la meta si lo confirma (mínimo 1 participante) */
+function obsOk(){const n=S.obs.length;return n>=META_OBS||(n>=1&&!!S.contObs);}
 function faltaPara(){
   const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,it=[];
   it.push({ok:sims>0,t:'Tener al menos una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(rondasOn()?'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y pulsa «Guardar mi decisión». El resultado llega cuando el profesor ejecuta la ronda.':'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y ejecuta una ronda.'),h:'simular',b:'Ir al laboratorio virtual'});
-  it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el teléfono móvil al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
+  it.push({ok:obsOk(),t:`Medir a ${META_OBS} compañeros de otros equipos`,d:obsOk()?`Mediste a ${n} compañero(s).`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el teléfono móvil al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
   return it;
 }
 function gateHTML(que,intro){
@@ -1774,7 +1787,7 @@ function lkReq(v){
   const R={
     resultados:()=>[pDec,pRonda],
     experimento:()=>[pRonda,{ok:sims>0&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al resultado del laboratorio'}],
-    expres:()=>[{ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el teléfono móvil a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
+    expres:()=>[{ok:obsOk(),t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el teléfono móvil a un compañero de otro equipo y deja que él responda.${n>=1?' Si no puedes llegar a '+META_OBS+', al final de Decidir → Experimento puedes elegir «Continuar con '+n+'».':''}`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
     comparar:()=>[{ok:lkOpen0('expres')&&!!vis.expres,t:'Revisar el resultado de tu experimento',d:'Abre Resultados → Experimento y mira qué respondieron tus compañeros.',h:'expres',b:'Ir al resultado del experimento'}],
     interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar la Comparación',d:'Abre Resultados → Comparación y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Comparación'}]
   };
@@ -1835,7 +1848,13 @@ function renderExpRes(){
   const pid=S.equipo,pr=prod(pid),m=cols(rowsOfLocal(),pid),n=m.n;
   if(!lkApply('expres')){phero('expres','Experimento','¿Qué respondieron tus compañeros?','Área bloqueada · completa los pasos para encenderla');out.innerHTML='';return;}
   phero('expres','Experimento','¿Qué respondieron tus compañeros?',`${n} compañero(s) medidos · personas reales`);
-  if(!m.wq){out.innerHTML='<div class="card soft muted">Faltan datos: necesitas al menos 2 compañeros medidos.</div>';return;}
+  if(!m.wq){const o=S.obs.find(x=>x.prod===pid)||S.obs[0];
+    out.innerHTML=o?`<div class="card"><div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📊 Resultado de tu experimento</h3><span class="tag real">Real</span></div>
+    <p class="small muted" style="margin-top:6px">Mediste a 1 compañero. Esto es lo que respondió:</p>
+    <div class="rtiles"><div class="rtile"><small>Calidad con descuento</small><b>${o.qd}</b><span>de 10</span></div><div class="rtile"><small>Calidad con precio normal</small><b>${o.qr}</b><span>de 10</span></div><div class="rtile"><small>Gusto</small><b>${o.gr-o.gd>0?'+':''}${o.gr-o.gd}</b><span>Normal − descuento</span></div><div class="rtile"><small>Eligió</small><b>${o.el==='d'?'Descuento':'Normal'}</b><span>la oferta con ${o.el==='d'?'descuento':'precio normal'}</span></div></div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p>Con una sola persona no se puede saber si la diferencia es casualidad: hacen falta al menos 2 para calcularlo. Úsalo como ejemplo y apóyate en los datos de toda la clase en Resultados → Comparación.</p></div></div>`:'<div class="card soft muted">Faltan datos: necesitas al menos 1 compañero medido.</div>';
+    return;}
+  const pocos=n<META_OBS?`<div class="note" style="margin:8px 0">Mediste a ${n} de ${META_OBS} compañeros: con pocas personas el resultado es menos confiable.</div>`:'';
   const PS=(t,x)=>`<div class="ubox"><b>💡 ${t}, en palabras sencillas</b>${x}</div>`;
   const lo=money(priceOf(pid,'low')),mi=money(priceOf(pid,'mid'));
   const qD=mean(m.q.D),qR=mean(m.q.R),gD=mean(m.g.D),gR=mean(m.g.R),w=m.wq,sig=w.p<0.05;
@@ -1846,7 +1865,7 @@ function renderExpRes(){
   out.innerHTML=`<div class="card">
     <div class="row" style="justify-content:space-between"><h3 class="sh" style="margin:0">📊 Resultado de tu experimento</h3><span class="tag real">Real</span></div>
     <p class="small muted" style="margin-top:6px">Respuestas de los ${n} compañeros que mediste. Cada uno vio el mismo producto (${esc(pr.name.toLowerCase())} ${esc(pr.brand)}) con precio normal (${esc(mi)}) y con descuento (${esc(lo)}).</p>
-    ${vb}
+    ${pocos}${vb}
     <h4 style="margin:14px 0 8px;color:var(--uc)">👆 Calidad esperada promedio (escala 1 a 10)</h4>
     <div class="abbar">
       <div class="abrow"><span class="abl a" style="background:#FF4C00;color:#fff">%</span><div class="abtrack"><i style="width:${pc(qD)}%;background:#FF4C00"></i></div><b>${f(qD)}</b><small>Con descuento (${esc(lo)}) · DE ${f(sd(m.q.D))}</small></div>
