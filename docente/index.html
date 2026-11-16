@@ -739,9 +739,9 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <p><span class="tag real">Real</span>&nbsp; Mides a compañeros de <b>otros equipos</b>: ellos no conocen tu producto ni tu hipótesis. Diseño <b>intrasujeto</b>: cada participante ve las dos ofertas y se compara consigo mismo.</p>
     <div class="xsteps">
       <div><i>1</i><span aria-hidden="true">🪑</span><p>Busca a un compañero de otro equipo y siéntense separados del resto, para que nadie oiga precios ni respuestas.</p></div>
-      <div><i>2</i><span aria-hidden="true">📱</span><p>Elige su equipo y pulsa «Entregar el celular». El orden de las ofertas se sortea de forma balanceada.</p></div>
+      <div><i>2</i><span aria-hidden="true">📱</span><p>Elige su equipo y pulsa «Entregar el teléfono móvil». El orden de las ofertas se sortea de forma balanceada.</p></div>
       <div><i>3</i><span aria-hidden="true">👆</span><p>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</p></div>
-      <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el celular, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
+      <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el teléfono móvil, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
       <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</p></div>
     </div>
     <div class="ubox"><b>💡 ¿Y mis ofertas A y B?, en palabras sencillas</b><p>En el experimento real <b>no</b> se usan las ofertas A y B de tu laboratorio virtual. Todos los equipos comparan siempre las mismas dos: tu producto con su <b>precio normal</b> y con <b>descuento</b>. Así los datos de toda la clase se pueden juntar. En la pantalla del participante verás «oferta 1 de 2» y «oferta 2 de 2»: es solo el orden en que las ve, y ese orden se sortea.</p></div>
@@ -780,7 +780,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   </div>
   <div class="card iq">
     <div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span> ¿En qué se diferencian tus compañeros de las personas del laboratorio virtual?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un celular. Las personas del laboratorio virtual no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un teléfono móvil. Las personas del laboratorio virtual no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Medí a solo 6 compañeros y todos sabían que la clase trata de precios; eso pudo cambiar sus notas. Los personas virtuales no saben nada de la clase.»</p>
     <label for="nq2">Tu respuesta a la pregunta 2</label>
     <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Mis compañeros eran ___ personas. Se diferencian de los personas virtuales en que..."></textarea>
@@ -1082,7 +1082,7 @@ async function sync(){
 function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
 function renderStatus(){
   const el=$('status');if(!el)return;
-  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este celular o computadora.';return;}
+  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este teléfono móvil o computadora.';return;}
   const n=pending();
   el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
     conn==='offline'?'Sin conexión. Tus datos están guardados aquí y se enviarán solos'+(n?' ('+n+' pendientes).':'.'):
@@ -1169,7 +1169,7 @@ function AX_mostrar(modo,msg){
       ((S.integrantes||[]).length>=5?'<p class="ax-hint">El equipo ya tiene el máximo de 5 integrantes.</p>':'<label for="axNa">¿Tu alias no está? Agrégalo (máximo 5 integrantes)</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>')+
       '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
   }else if(modo==='practica'){
-    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este celular o computadora.</p>'+
+    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este teléfono móvil o computadora.</p>'+
       '<label for="axPa">Alias</label><input class="ax-in" id="axPa" maxlength="24" autocomplete="off" onkeydown="AX_enter(event,AX_practica)">'+
       '<label for="axPp">Producto</label><select class="ax-in" id="axPp">'+prodOptions()+'</select>'+
       '<button class="ax-btn" id="axGo" onclick="AX_practica()">Entrar →</button><div id="axErr" class="ax-err"></div>'+
@@ -1519,7 +1519,7 @@ function nextStep(v){
   if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 1 · Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántas personas virtuales entran al resonador y pulsa el botón verde «Guardar mi decisión».'};
   if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 2 · Espera a que el profesor ejecute la ronda',d:'Tu decisión está guardada. Cuando el profesor ejecute la ronda, el resultado de tu laboratorio virtual aparecerá en Resultados → Laboratorio virtual. Hasta entonces puedes cambiar tu decisión.'};
   if(!vis.resultados)return{h:'resultados',b:'Ir a Resultados → Laboratorio virtual',t:'Paso 2 · Lee el resultado de tu laboratorio virtual',d:'El profesor ya ejecutó la ronda. Mira lo que dijeron las personas virtuales y lo que mostró su cerebro.'};
-  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el celular al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
+  if(n<META_OBS)return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el teléfono móvil al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'};
   if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya mediste a tus compañeros. Mira qué calidad esperaron con el precio normal y con el descuento.'};
   if(!vis.comparar)return{h:'comparar',b:'Ir a Resultados → Comparación',t:'Paso 5 · Compara el laboratorio virtual con el experimento',d:'¿Las personas reales respondieron parecido a las virtuales? Ábrelo en Resultados → Comparación.'};
   if(qn<4)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 6 · Escribe tu interpretación',d:`Responde las 4 preguntas de Aprender → Interpretación con tus números (llevas ${qn} de 4).`};
@@ -1706,7 +1706,7 @@ function renderExp(){
     <label>¿De qué equipo es el participante?</label>
     <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${esc(p.name)}</button>`).join('')}</div>
     <div class="ubox"><b>💡 Por qué solo compañeros de otros equipos, en palabras sencillas</b><p>Ellos no conocen tu producto ni tu hipótesis, así que responden sin saber qué «debería» salir. Si midieras a alguien de tu propio equipo, sus respuestas podrían inclinarse hacia lo que ustedes esperan. Elegir su equipo sirve para saber de qué grupo viene cada respuesta.</p></div>
-    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el celular al participante</button>`;
+    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el teléfono móvil al participante</button>`;
   } else if(d.step===1||d.step===2){
     const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
     h=`<p class="small muted" style="margin:0 0 8px">Para el participante · oferta ${d.step} de 2</p>
@@ -1720,7 +1720,7 @@ function renderExp(){
     h=`<p style="margin:0 0 6px"><b>Para terminar: ¿cuál de las dos ofertas elegirías?</b></p>
     <div class="pair" style="margin-top:10px">${[0,1].map(i=>`<div>${productSVG(S.equipo,o[i],130)}<button class="primary" data-pref="${o[i]}" style="width:100%">Elijo la oferta ${i+1}</button></div>`).join('')}</div>`;
   } else if(d.step===4){
-    h=`<div class="okbox" style="text-align:center"><b>¡Gracias por participar!</b><br>Devuelve el celular al investigador.</div>
+    h=`<div class="okbox" style="text-align:center"><b>¡Gracias por participar!</b><br>Devuelve el teléfono móvil al investigador.</div>
     <button class="primary" data-act="back" style="width:100%">Soy el investigador</button>`;
   }
   $('expRun').innerHTML=h;
@@ -1751,7 +1751,7 @@ const META_OBS=6;
 function faltaPara(){
   const sims=S.sims.filter(x=>x.prod===S.equipo).length,n=S.obs.length,it=[];
   it.push({ok:sims>0,t:'Tener al menos una ronda de simulación con resultado',d:sims>0?`Tienes ${sims} ronda(s) con resultado.`:(rondasOn()?'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y pulsa «Guardar mi decisión». El resultado llega cuando el profesor ejecuta la ronda.':'En Decidir → Laboratorio virtual elige tu hipótesis y tus ofertas A y B, y ejecuta una ronda.'),h:'simular',b:'Ir al laboratorio virtual'});
-  it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el celular al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
+  it.push({ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:n>=META_OBS?`Mediste a ${n} compañeros.`:`Llevas ${n} de ${META_OBS}. En Decidir → Experimento elige el equipo del compañero, pulsa «Entregar el teléfono móvil al participante» y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[n,META_OBS]});
   return it;
 }
 function gateHTML(que,intro){
@@ -1774,7 +1774,7 @@ function lkReq(v){
   const R={
     resultados:()=>[pDec,pRonda],
     experimento:()=>[pRonda,{ok:sims>0&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al resultado del laboratorio'}],
-    expres:()=>[{ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el celular a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
+    expres:()=>[{ok:n>=META_OBS,t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el teléfono móvil a un compañero de otro equipo y deja que él responda.`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
     comparar:()=>[{ok:lkOpen0('expres')&&!!vis.expres,t:'Revisar el resultado de tu experimento',d:'Abre Resultados → Experimento y mira qué respondieron tus compañeros.',h:'expres',b:'Ir al resultado del experimento'}],
     interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar la Comparación',d:'Abre Resultados → Comparación y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Comparación'}]
   };
@@ -2296,7 +2296,7 @@ function renderManDoc(){
     `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Laboratorio virtual</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
     B('Por qué rondas','Ejecutar la ronda para todos a la vez evita que unos vean resultados antes que otros y te permite discutir cada ronda en grupo. Mientras no ejecutes la ronda, cada estudiante puede cambiar su decisión.')+go('rondas','Rondas'))}
   ${P(8,'🧑‍🔬','Acompaña el experimento con personas reales','Clase → Investigadores',[
-    `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su celular, a unos 6 compañeros de <b>otros equipos</b>. El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
+    `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su teléfono móvil, a unos 6 compañeros de <b>otros equipos</b>. El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
     `En <b>«Investigadores»</b> ves cuántos participantes midió cada alias, cuántas rondas simuló y su última actividad.`,
     `Si alguien va retrasado, pídele que mida a más compañeros antes de pasar a Resultados.`])+go('avance','Investigadores')}
 
@@ -2318,7 +2318,7 @@ function renderManDoc(){
 
   <div class="card"><h3 class="sh">🤔 Problemas frecuentes</h3>
     <div class="mdfaq">
-      <div><b>Un estudiante ve la versión anterior de la página.</b><p>Pídele que recargue con Ctrl + F5 (en el celular, cerrar y abrir la pestaña).</p></div>
+      <div><b>Un estudiante ve la versión anterior de la página.</b><p>Pídele que recargue con Ctrl + F5 (en el teléfono móvil, cerrar y abrir la pestaña).</p></div>
       <div><b>Un equipo no puede registrarse.</b><p>Si dice «Código de la simulación incorrecto», revisa que escriba el código de la simulación correcta, que la simulación no esté archivada y, si dice «El registro de equipos está cerrado», ábrelo en «Resumen de la clase».</p></div>
       <div><b>Un equipo no ve su resultado.</b><p>Comprueba en «Rondas» que su decisión esté guardada y que hayas ejecutado la ronda. El resultado aparece en Resultados → Laboratorio virtual.</p></div>
       <div><b>Un equipo olvidó su contraseña.</b><p>En «Equipos», reinicia la contraseña y díctale la temporal que muestra el panel.</p></div>
@@ -2385,7 +2385,7 @@ function renderManual(){
       <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
       <li><b>Lee el resultado</b> (Resultados → Laboratorio virtual): aparece cuando el profesor ejecuta la ronda.</li>
       <li><b>Mira cómo funcionó tu laboratorio virtual</b>: las mismas personas virtuales pusieron nota a A y B mientras se medía su cerebro, y qué exigiría hacerlo de verdad.${figResonador()}${figMOFC()}</li>
-      <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el celular; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
+      <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el teléfono móvil; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
       <li><b>Mira el resultado de tu experimento</b> (Resultados → Experimento): qué calidad esperaron tus compañeros con cada precio.</li>
       <li><b>Compara</b> (Resultados → Comparación): el laboratorio virtual frente al experimento, con los datos de toda la clase.</li>
       <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
@@ -2650,7 +2650,7 @@ function renderUnidades(){
   const prog=`<div class="uprog" aria-label="Avance">${U.map((u,i)=>`<button class="upd${done.includes(u.id)?' done':''}${UCUR===u.id?' cur':''}" data-ugo="${u.id}" style="--uc:${UVIS[u.id].c}" title="Unidad ${i+1}${done.includes(u.id)?' (completada)':''}">${done.includes(u.id)?'✓':i+1}</button>`).join('<span class="upl"></span>')}<span class="small muted" style="margin-left:10px">${done.length} de ${U.length} completadas</span></div>`;
   const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="calidad-esperada">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>${prog}
     <div class="ubtns" role="tablist" aria-label="Unidades">${U.map((u,i)=>`<button role="tab" class="ubtn${UCUR===u.id?' on':''}" aria-selected="${UCUR===u.id}" data-ugo="${u.id}" style="--uc:${UVIS[u.id].c}"><span>${UVIS[u.id].ic} Unidad ${i+1}${done.includes(u.id)?' · ✓':''}</span>${esc(u.t)}</button>`).join('')}<button role="tab" class="ubtn${UCUR==='az'?' on':''}" aria-selected="${UCUR==='az'}" data-ugo="az" style="--uc:#3F4A5C"><span>📖 Glosario</span>Conceptos de la A a la Z</button></div>
-    <p class="small muted" style="margin:10px 0 0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2. El avance se recuerda solo en este celular o computadora.</p></div>`;
+    <p class="small muted" style="margin:10px 0 0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2. El avance se recuerda solo en este teléfono móvil o computadora.</p></div>`;
   const body=U.map((u,i)=>{const v=UVIS[u.id],nc=UDEF.filter(d=>u.s.some(x=>x.k===d.k)).length;
     return `<div class="card unit" id="${u.id}" style="--uc:${v.c}"${UCUR===u.id?'':' hidden'}>
     <div class="uhero"><div class="unum">${String(i+1).padStart(2,'0')}</div><div><p class="uic">${v.ic} Unidad ${i+1}</p><h2>${esc(u.t)}</h2><p class="umeta">⏱ ${uMin(u)} min · 📌 ${nc} conceptos · ✅ ${u.q.length} preguntas</p></div></div>
@@ -2719,7 +2719,7 @@ function renderEquipo(){
   $('equipoOut').innerHTML=`<div class="card"><h3 class="sh">📊 Tu avance</h3>
     <div class="stat ic"><div><em aria-hidden="true">👤</em><b>${esc(S.alias)}</b><span>tu alias</span></div><div><em aria-hidden="true">🏷️</em><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><em aria-hidden="true">🔁</em><b>${mine}</b><span>rondas simuladas</span></div><div><em aria-hidden="true">🧑‍🤝‍🧑</em><b>${n}</b><span>participantes medidos</span></div></div>
     ${meter(n,6,'Meta del experimento: participantes medidos')}
-    <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este celular o computadora.</span>'}</p></div>
+    <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este teléfono móvil o computadora.</span>'}</p></div>
   ${BACKEND?`<div class="card"><h3 class="sh">👥 Integrantes</h3><div class="avs">${mem||'–'}</div>
     <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
     <p class="small" id="eqMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p></div>
@@ -2784,7 +2784,7 @@ function renderAll(){
 }
 function init(){
   const ban=$('banner');
-  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este celular o computadora y el docente no los verá.';}
+  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este teléfono móvil o computadora y el docente no los verá.';}
   bindLogin();bindSim();bindExp();bindDoc();
   $('nota').value=S.nota||'';
   let nt=null;
