@@ -99,6 +99,9 @@ body:not(.adm) button.primary:disabled{background:#4A4C4E!important;border-color
 .pmsteps li.cur{background:#44D62C;color:#1F2022;border-color:#44D62C}
 .pmsteps li.done{color:#44D62C;border-color:#44D62C}
 .pmhead{margin:0 0 8px;font-weight:700;font-size:16px}
+.nqdone{display:flex;gap:12px;align-items:flex-start;background:rgba(68,214,44,.12);border:1px solid #44D62C;border-radius:12px;padding:12px 14px}
+.nqdone>span{font-size:26px;line-height:1}.nqdone b{font-size:17px}.nqdone p{margin:4px 0 0}.nqest{font-weight:700;color:#44D62C}
+.nq[readonly]{opacity:.75}
 [hidden]{display:none!important}
 /* ============ Acceso v2.3 · tema SMAA ============ */
 :root{--ax-bg:#555759;--ax-bg2:#4A4C4E;--ax-bg3:#555759;--ax-bg4:#5E6062;--ax-border:#6A6C6E;--ax-border2:#7A7C7E;--ax-text:#F2F3F3;--ax-text2:#D0D2D1;--ax-text3:#B9BCBB;--ax-accent:#44D62C;--ax-accent-h:#5BE045;--ax-accent2:#44D62C;--ax-accent2-h:#5BE045;--ax-accent3:#FFCE00;--ax-accent4:#FF4C00;--ax-gold:#FFCE00;--ax-r:14px;--ax-sans:'Sora',Arial,Helvetica,sans-serif;--ax-mono:'Space Mono',ui-monospace,Menlo,monospace}
@@ -808,6 +811,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <textarea class="nq" id="nq4" data-k="4" maxlength="270" placeholder="Le recomiendo ___ porque mis datos muestran que... Un cuidado es que..."></textarea>
     <p class="small muted nqc" data-k="4" style="margin:4px 0 0;text-align:right"></p>
   </div>
+  <div class="card" id="nqSend"></div>
   <textarea id="nota" maxlength="1200" hidden aria-hidden="true" tabindex="-1"></textarea>
 </main>
 
@@ -1088,6 +1092,7 @@ async function sync(){
 function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
 function renderStatus(){
   const el=$('status');if(!el)return;
+  if(S.joined&&S.fin&&$('nqSend'))nqSendUi(4);
   if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este teléfono móvil o computadora.';return;}
   const n=pending();
   el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
@@ -1531,7 +1536,8 @@ function nextStep(v){
   if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya terminaste de medir. Mira qué calidad esperaron con el precio normal y con el descuento.'};
   if(!vis.comparar)return{h:'comparar',b:'Ir a Resultados → Comparación',t:'Paso 5 · Compara el laboratorio virtual con el experimento',d:'¿Las personas reales respondieron parecido a las virtuales? Ábrelo en Resultados → Comparación.'};
   if(qn<4)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 6 · Escribe tu interpretación',d:`Responde las 4 preguntas de Aprender → Interpretación con tus números (llevas ${qn} de 4).`};
-  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Completaste el laboratorio virtual, el experimento, la comparación y tus 4 respuestas. Si quieres repasar, revisa las unidades de aprendizaje.'};
+  if(!S.fin)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 7 · Envía tus respuestas y termina la actividad',d:'Ya respondiste las 4 preguntas. Al final de Aprender → Interpretación toca el botón verde «Enviar mis respuestas y terminar la actividad».'};
+  return{h:'unidades',b:'Ir a Aprender → Unidades',t:'¡Terminaste la actividad!',d:'Tus respuestas ya fueron enviadas al profesor. Completaste el laboratorio virtual, el experimento, la comparación y la interpretación.'+(rondasOn()?` Si el profesor ejecuta otra ronda, puedes guardar una nueva decisión para la ronda ${nx} en Decidir → Laboratorio virtual.`:'')+' Si quieres repasar, revisa las unidades de aprendizaje.'};
 }
 function nextHTML(view){
   const x=nextStep(view),aqui=x.h===view;
@@ -2781,6 +2787,29 @@ function nqSave(){
 function nqUi(){
   let done=0;[1,2,3,4].forEach(k=>{const e=$('nq'+k),c=document.querySelector('.nqc[data-k="'+k+'"]');const L=(e.value||'').trim().length;if(L>=20)done++;if(c)c.textContent=e.value.length+' de 270 caracteres'+(L>=20?' · ✓ respondida':'');});
   const pg=$('iqProg');if(pg)pg.innerHTML=`<div class="mt"><i style="width:${done/4*100}%"></i></div><p><span>Preguntas respondidas</span><b>${done} de 4</b></p>`;
+  const nw=document.querySelector('#t-interpretacion>.nxwrap');if(nw)nw.innerHTML=nextHTML('interpretacion');
+  nqSendUi(done);
+}
+function nqSendUi(done){
+  const el=$('nqSend');if(!el)return;
+  const ro=!!S.fin;document.querySelectorAll('.nq').forEach(e=>{e.readOnly=ro;});
+  if(S.fin){
+    const t=new Date(S.fin),hh=t.toLocaleDateString('es',{day:'numeric',month:'long'})+', '+t.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+    const est=!BACKEND?'Modo práctica: tus respuestas quedaron guardadas en este teléfono móvil o computadora.':S.notaDirty?(conn==='offline'?'⏳ Sin conexión: tus respuestas están guardadas aquí y se enviarán solas apenas vuelva internet.':'⏳ Enviando tus respuestas…'):'✓ Tus respuestas llegaron al profesor.';
+    el.innerHTML=`<div class="nqdone"><span aria-hidden="true">✅</span><div><b>Actividad terminada</b><p>Enviaste tus respuestas el ${hh}.</p><p class="nqest">${est}</p></div></div>
+    <p class="small muted" style="margin:10px 0 6px">¿Quieres corregir algo? Puedes reabrir tus respuestas; después debes volver a enviarlas.</p>
+    <button class="ghost" type="button" id="nqEdit">Editar mis respuestas</button>`;
+  }else{
+    const falta=[1,2,3,4].filter(k=>(($('nq'+k)||{}).value||'').trim().length<20);
+    el.innerHTML=`<h3 class="sh" style="margin:0 0 6px">📨 Enviar y terminar</h3>
+    <p style="margin:0 0 10px">Cuando tengas las 4 respuestas, envíalas al profesor. Con esto cierras la actividad.</p>
+    <button class="primary" type="button" id="nqGo" ${done<4?'disabled':''}>Enviar mis respuestas y terminar la actividad</button>
+    ${done<4?`<p class="small muted" style="margin:8px 0 0">Te falta responder: ${falta.length>1?'preguntas '+falta.slice(0,-1).join(', ')+' y '+falta.slice(-1):'pregunta '+falta[0]} (mínimo 20 caracteres cada una).</p>`:''}`;
+  }
+  if(!el.dataset.b){el.dataset.b='1';el.addEventListener('click',async e=>{
+    if(e.target.closest('#nqGo')){nqSave();S.fin=Date.now();S.notaDirty=true;lsSave();renderAll();await sync();if(S.notaDirty)setTimeout(sync,1600);renderAll();$('nqSend').scrollIntoView({block:'center'});}
+    else if(e.target.closest('#nqEdit')){S.fin=0;lsSave();renderAll();const q=$('nq1');if(q)q.focus();}
+  });}
 }
 function renderInterp(){
   if(!$('interpData'))return;
