@@ -641,6 +641,17 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
 .req{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#FFCE00;color:#1F2022;border-radius:999px;padding:2px 8px;margin-left:6px}
 .predwarn{margin:10px 0 0;background:#4A2E22;border:1px solid #FF4C00;color:#F2F3F3;border-radius:8px;padding:10px 12px;font-weight:600}
 #predChips.need .chip{border-color:#FF4C00!important;box-shadow:0 0 0 2px rgba(255,76,0,.45)}
+.tbkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
+.tbkpi>div{background:var(--surface2);border-radius:10px;padding:10px 12px}.tbkpi small{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
+.tbkpi b{font:700 1.6rem var(--head)}.tbkpi b span{font-size:1rem;color:var(--muted);font-weight:500}
+.tbbar{height:10px;border-radius:5px;background:var(--surface2);overflow:hidden;margin:6px 0}.tbbar.big{height:14px}.tbbar i{display:block;height:100%;background:#44D62C;border-radius:5px}
+.tbst{border-radius:8px;padding:10px 12px;margin:10px 0;font-weight:600}.tbst.ok{background:#2C4A2A;border:1px solid #44D62C}.tbst.wait{background:#4A4320;border:1px solid #FFCE00}.tbst.neu{background:var(--surface2)}
+.tbps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}
+.tbp{background:var(--surface2);border-radius:10px;padding:12px;border-left:4px solid #FFCE00}.tbp.done{border-left-color:#44D62C}
+.tbh{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}.tbh span{color:var(--muted);font-size:.8rem}
+.tbn{margin-top:6px}.tbn b{font-size:1.3rem}.tbp small{color:var(--muted);font-size:.8rem}
+.tbt td{vertical-align:top}.tbok{color:#5BE045;font-weight:700;white-space:nowrap}.tbno{color:#FFCE00;font-weight:700;white-space:nowrap}
+.tbpend td{background:rgba(255,206,0,.06)}
 </style>
 </head><body>
 <header class="nopm">
@@ -1972,7 +1983,35 @@ function docSesion(r){
   if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
   return false;
 }
-let TR=null,TC=[];
+let TR=null,TC=[],TB=null;
+/* ---------- tablero de control de rondas: quién guardó su decisión, por producto ---------- */
+function tableroHTML(){
+  const nx=(TR?TR.ronda:0)+1,L=(TB&&TB.lista)||[],tot=L.length,ok=L.filter(x=>x.dec).length,falta=tot-ok;
+  const pct=tot?Math.round(ok/tot*100):0;
+  const PL={A:'Mayor en A',B:'Mayor en B','=':'Sin diferencia'};
+  const tl=(pid,t)=>t?priceOf(pid,t.tier)!=null?money(priceOf(pid,t.tier))+(t.pres==='premium'?' · Premium':''):'—':'—';
+  const hora=t=>new Date(t).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+  const estado=!tot?['neu','Todavía no hay estudiantes registrados en esta simulación.']
+    :falta===0?['ok',`Todos guardaron su decisión (${ok} de ${tot}). Puedes ejecutar la ronda ${nx}.`]
+    :ok===0?['wait',`Nadie guardó todavía su decisión para la ronda ${nx}. Pide que la guarden en Decidir → Laboratorio virtual.`]
+    :['wait',`Faltan ${falta} de ${tot} estudiantes. Si ejecutas ahora, quienes faltan no recibirán resultado en la ronda ${nx}.`];
+  const prods=CONFIG.PRODUCTS.map(pr=>{const g=L.filter(x=>x.prod===pr.id),k=g.filter(x=>x.dec).length,eqs=[...new Set(g.map(x=>x.eq))];
+    return `<div class="tbp${g.length&&k===g.length?' done':''}"><div class="tbh"><b>${esc(pr.name)} ${esc(pr.brand)}</b><span>${eqs.length} equipo(s)</span></div>
+      <div class="tbn"><b>${k}</b> de ${g.length} guardaron</div><div class="tbbar"><i style="width:${g.length?k/g.length*100:0}%"></i></div>
+      <small>${g.length?(g.length-k?`Faltan: ${g.filter(x=>!x.dec).map(x=>esc(x.alias)).join(', ')}`:'✓ Completo'):'Sin estudiantes'}</small></div>`;}).join('');
+  const rows=L.map(x=>{const pr=prod(x.prod),d=x.dec;
+    return `<tr class="${d?'':'tbpend'}"><td>${d?'<span class="tbok">✓ Guardó</span>':'<span class="tbno">⏳ Pendiente</span>'}</td><td><b>${esc(x.alias)}</b><br><small>${esc(x.eq)}</small></td><td>${esc(pr.short)}</td><td>${d?esc(PL[d.pred]||'—'):'—'}</td><td>${d?`A: ${esc(tl(x.prod,d.a))}<br>B: ${esc(tl(x.prod,d.b))}`:'—'}</td><td class="num">${d?hora(d.t):'—'}</td><td class="num">${x.obs}</td></tr>`;}).join('');
+  return `<div class="card" data-sec="rondas"><h3>Tablero de control · ronda ${nx}</h3>
+    <p class="small muted" style="margin-top:0">La clase completó <b>${TR?TR.ronda:0}</b> ronda(s). Cada estudiante guarda en Decidir → Laboratorio virtual su hipótesis y sus ofertas A y B; cuando ejecutas la ronda, todos ven su resultado a la vez. El tablero se actualiza solo cada 15 segundos.</p>
+    <div class="tbkpi"><div><small>Guardaron su decisión</small><b>${ok} <span>de ${tot}</span></b></div><div><small>Pendientes</small><b>${falta}</b></div><div><small>Avance</small><b>${pct} %</b></div></div>
+    <div class="tbbar big"><i style="width:${pct}%"></i></div>
+    <div class="tbst ${estado[0]}">${estado[0]==='ok'?'✅':estado[0]==='wait'?'⏳':'ℹ️'} ${estado[1]}</div>
+    <div class="tbps">${prods}</div>
+    <div class="cl-act" style="padding-top:4px"><button class="go" id="rndGo">▶ Ejecutar ronda ${nx}</button><button id="tbRef">↺ Actualizar ahora</button></div>
+    <h3 style="margin-top:18px;font-size:16px!important">Estudiantes (${tot})</h3>
+    ${tot?`<div class="tablewrap w"><table class="tbt"><thead><tr><th>Estado</th><th>Alias · equipo</th><th>Producto</th><th>Hipótesis</th><th>Ofertas</th><th class="num">Hora</th><th class="num">Compañeros medidos</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<p class="small muted">Cuando los equipos se registren, aquí aparecerá cada alias con su estado.</p>'}
+  </div>`;
+}
 function renderSims(){
   const el=$('simsList');if(!el)return;
   const card=c=>`<div class="card"><div class="cl-head"><div><h3>${esc(c.nombre)}</h3><div class="cl-who">👤 ${esc(DNAME||'Docente')}</div></div>
@@ -2031,6 +2070,7 @@ async function loadTeacher(){
     const sel=$('dClase');
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
     try{const q=await rpc('sn_docente_rondas',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TR=q;}catch(e){}
+    try{const q=await rpc('sn_docente_tablero',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TB=q;}catch(e){}
     showD();renderDoc();
     if(DACC===null){try{const a=await rpc('sn_doc_cuenta_info',{p_token:DTOK});if(a&&a.ok){DACC=a;renderAcc();}}catch(e){}}}
   catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
@@ -2078,6 +2118,7 @@ function bindDoc(){
   $('docOut').addEventListener('click',async e=>{
     const b=e.target.closest('button');if(!b)return;
     if(b.dataset.go){admGo(b.dataset.go);return;}
+    if(b.id==='tbRef'){b.disabled=true;await loadTeacher();return;}
     if(b.id==='rndGo'){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro? Toca de nuevo para ejecutar';return;}b.disabled=true;try{const r=await rpc('sn_docente_ronda',{p_token:DTOK,p_clase:T.clase.id});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}return;}
     if(b.id==='cpCod'){const c=T.clase.codigo;try{await navigator.clipboard.writeText(c);b.textContent='✓ Copiado';}catch(err){b.textContent=c;}return;}
     if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
@@ -2149,11 +2190,7 @@ function renderDoc(){
   <div class="card" data-sec="datos"><h3>Exportar datos</h3><p class="small muted">Archivos CSV para analizar en Excel, SPSS o R.</p>
     <div class="row"><button id="exObs">⬇ CSV de participantes</button><button id="exSim">⬇ CSV de rondas simuladas</button></div>
     <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV"></textarea></div>
-  ${demoOn?'':`<div class="card" data-sec="rondas"><h3>Ronda ${TR?TR.ronda+1:1}</h3>
-    <p>La clase completó <b>${TR?TR.ronda:0}</b> ronda(s). Cada estudiante guarda en «Laboratorio virtual» su hipótesis y sus ofertas A y B; cuando ejecutas la ronda, todos ven su resultado a la vez.</p>
-    <div class="cl-act" style="padding-top:4px"><button class="go" id="rndGo">▶ Ejecutar ronda ${TR?TR.ronda+1:1}</button></div>
-    <h3 style="margin-top:18px;font-size:16px!important">Decisiones guardadas para esta ronda (${TR?TR.pendientes.length:0})</h3>
-    ${TR&&TR.pendientes.length?`<div class="tablewrap"><table><thead><tr><th>Equipo</th><th>Alias</th><th>Guardada</th></tr></thead><tbody>${TR.pendientes.map(x=>`<tr><td>${esc(x.eq)}</td><td>${esc(x.inv)}</td><td>${new Date(x.t).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table></div>`:'<p class="small muted">Todavía nadie guardó su decisión. Quien no la guarde no recibe resultado en esta ronda.</p>'}</div>`}
+  ${demoOn?'':tableroHTML()}
   ${teamsCard}
   <div class="card" data-sec="efecto"><h3>Efecto por producto (normal − descuento)</h3>
     ${forest(fr,'Diferencia pareada, IC 95 % (puntos 1–10)')}

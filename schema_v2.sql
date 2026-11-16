@@ -1053,3 +1053,23 @@ begin
   if coalesce(p_datos->>'pred','') not in ('A','B','=') then return jsonb_build_object('ok', false, 'error', 'sin_hipotesis'); end if;$q$);
   execute d;
 end $mig$;
+-- v12: tablero de control de rondas (quién guardó su decisión, por producto y por alias)
+create or replace function public.sn_docente_tablero(p_token text, p_clase uuid) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; r int; d jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  select ronda into r from sn_clases where id = p_clase;
+  select coalesce(jsonb_agg(jsonb_build_object(
+      'alias', i.alias, 'eq', e.nombre, 'prod', e.producto,
+      'dec', (select jsonb_build_object('t', x.actualizada, 'pred', x.datos->>'pred', 'a', x.datos->'a', 'b', x.datos->'b', 'n', x.datos->'n')
+              from sn_decisiones x where x.integrante_id = i.id and x.ronda = coalesce(r,0) + 1),
+      'rondas', (select count(*) from sn_decisiones x where x.integrante_id = i.id and x.ronda <= coalesce(r,0)),
+      'obs', (select count(*) from sn_obs o where o.integrante_id = i.id)
+    ) order by e.producto, e.nombre, i.alias), '[]'::jsonb) into d
+    from sn_integrantes i join sn_equipos e on e.id = i.equipo_id where e.clase_id = p_clase;
+  return jsonb_build_object('ok', true, 'ronda', coalesce(r,0), 'lista', d);
+end $$;
+revoke all on function public.sn_docente_tablero(text,uuid) from public;
+grant execute on function public.sn_docente_tablero(text,uuid) to anon, authenticated;
