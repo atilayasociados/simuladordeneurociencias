@@ -307,7 +307,10 @@ a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-d
 .iqd-t{margin:0 0 8px;font-weight:800;color:#44D62C}.iqd ul{margin:0;padding-left:18px;line-height:1.55}
 .iqd-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:560px){.iqd-g{grid-template-columns:1fr}}
 .iqd-col{background:rgba(255,255,255,.04);border-radius:10px;padding:8px 10px;min-width:0}.iqd-col h5{margin:0 0 4px;font-size:14px}
-.iqd-k{margin:8px 0 0;line-height:1.5}.iqd-rows{display:grid;gap:10px}.iqd-r>b{display:block;margin-bottom:4px}.iqd-r .iqd-g{grid-template-columns:1fr 1fr}.iqd-r .iqd-col small{display:block;opacity:.8;font-weight:700}.iqd-r .iqd-col p{margin:2px 0 0;font-size:14px;line-height:1.4}.iqd-tab{width:100%;font-size:13px}.iqd-tab th,.iqd-tab td{text-align:left;vertical-align:top;padding:5px 6px}
+.iqd-k{margin:8px 0 0;line-height:1.5}
+.rbk{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px}.rbt{font-weight:800;border-radius:999px;padding:2px 10px;background:var(--surface2)}.rbt.ok{background:#44D62C;color:#1F2022}
+.rbq{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}.rbqt{margin:0 0 4px}.rbans{white-space:pre-line;background:var(--surface2);border-radius:8px;padding:6px 8px;margin-bottom:6px}
+.rbsc{display:flex;gap:6px}.rbsc button{min-width:44px;padding:6px 0;font-weight:800}.rbsc button[aria-pressed="true"]{background:#44D62C;border-color:#44D62C;color:#1F2022}.iqd-p{background:rgba(255,255,255,.04);border-radius:10px;padding:8px 10px}.iqd-p p{margin:2px 0 0}.iqd-px{opacity:.85;font-style:italic}.iqcrit{margin:6px 0 0;color:#44D62C}.iqk{display:inline-block;background:#44D62C;color:#1F2022;border-radius:999px;padding:1px 9px;font-size:13px;font-weight:800;margin-right:4px}.iqd-rows{display:grid;gap:10px}.iqd-r>b{display:block;margin-bottom:4px}.iqd-r .iqd-g{grid-template-columns:1fr 1fr}.iqd-r .iqd-col small{display:block;opacity:.8;font-weight:700}.iqd-r .iqd-col p{margin:2px 0 0;font-size:14px;line-height:1.4}.iqd-tab{width:100%;font-size:13px}.iqd-tab th,.iqd-tab td{text-align:left;vertical-align:top;padding:5px 6px}
 .u3 p{margin:6px 0 0}.u3 .u3k{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);margin-bottom:1px}
 .u3 .u3s{background:rgba(68,214,44,.10);border-radius:6px;padding:6px 8px;margin-top:8px}.u3 .u3s .u3k{color:#44D62C}
 .aporta{border:2px solid #44D62C}.aplist{margin:0;padding-left:20px;display:grid;gap:10px}.aplist>li>p{margin:4px 0 0}
@@ -794,39 +797,43 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   </div>
   <div class="card"><h3 class="sh">📌 Tus números (para usarlos en tus respuestas)</h3><div id="interpData"></div></div>
   <div class="card iq">
-    <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> ¿Lo que pasó con tus compañeros se parece a lo que pasó en el laboratorio virtual?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el gris es el laboratorio virtual y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En el laboratorio virtual ganó el precio normal por 1,2 puntos y con mis compañeros también, por 0,9. Se parecen: ganó el mismo y por una cantidad parecida.»</p>
+    <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> <span class="iqk">¿Qué pasó?</span> ¿Tus compañeros respondieron parecido o distinto a las personas del laboratorio virtual?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> comparar los dos resultados con números. Fíjate en <b>quién ganó</b> (el precio normal o el descuento) y <b>por cuánto</b> (cuántos puntos de diferencia), en el laboratorio virtual y con tus compañeros. Los números están en la tarjeta verde de abajo.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En el laboratorio virtual ganó el precio normal por 0,8 puntos y con mis compañeros también, por 1,5. Se parecen: ganó el mismo, aunque con mis compañeros la diferencia fue mayor.»</p>
     <div id="iqd1"></div>
     <label for="nq1">Tu respuesta a la pregunta 1</label>
-    <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En el laboratorio virtual ganó ___ por ___ puntos. Con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque..."></textarea>
+    <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En el laboratorio virtual ganó ___ por ___ puntos; con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque…"></textarea>
+    <p class="small iqcrit">✔️ Tu respuesta está completa si usas al menos un número del laboratorio virtual y uno de tus compañeros, y dices si coinciden o no.</p>
     <p class="small muted nqc" data-k="1" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card iq">
-    <div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span> ¿En qué se diferencian tus compañeros de las personas del laboratorio virtual?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un teléfono móvil. Las personas del laboratorio virtual no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Medí a solo 6 compañeros y todos sabían que la clase trata de precios; eso pudo cambiar sus notas. Los personas virtuales no saben nada de la clase.»</p>
+    <div class="hk"><span class="usn">2</span><span aria-hidden="true">🔍</span> <span class="iqk">¿Por qué pasó?</span> ¿Por qué crees que tus resultados se parecen (o no) a los del laboratorio virtual?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> explicar la comparación de la pregunta 1, no volver a describirla. Muchas veces un resultado distinto no es un error: viene de <b>cómo se obtuvieron los datos</b>. Usa las pistas de la tarjeta de abajo.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Creo que con mis compañeros la diferencia fue mayor porque eran solo 6 y todos sabían que la clase trata de precios; quizás respondieron lo que creían que se esperaba.»</p>
     <div id="iqd2"></div>
     <label for="nq2">Tu respuesta a la pregunta 2</label>
-    <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Mis compañeros eran ___ personas. Se diferencian de los personas virtuales en que..."></textarea>
+    <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Creo que se parecen / no se parecen porque ___. Por ejemplo, ___."></textarea>
+    <p class="small iqcrit">✔️ Tu respuesta está completa si eliges al menos una pista y explicas cómo pudo cambiar el resultado.</p>
     <p class="small muted nqc" data-k="2" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card iq">
-    <div class="hk"><span class="usn">3</span><span aria-hidden="true">🧠</span> Tus compañeros solo vieron una imagen. ¿Qué tendrías que hacer para saber si el precio cambia lo que la persona <b>siente</b> al usar el producto?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Ver una imagen solo muestra lo que la persona <b>espera</b> del producto, no lo que siente al usarlo. Para saberlo, la persona tendría que <b>probar</b> el producto sin saber que en las dos ofertas es el mismo, como hicieron con el vino en Plassmann et al. (2008). Y para no depender solo de lo que la persona dice, se puede medir su cerebro con resonancia magnética funcional (fMRI). Kurz et al. (2023) encontraron que el precio cambia sobre todo lo que la gente espera.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Mi estudio solo mide lo que la gente espera. Para saber lo que siente, tendría que tomar la bebida de las dos ofertas sin saber que es la misma.»</p>
+    <div class="hk"><span class="usn">3</span><span aria-hidden="true">🧠</span> <span class="iqk">¿Hasta dónde llega lo que encontraste?</span> Tus compañeros solo vieron una imagen. ¿Qué <b>no</b> puedes concluir y qué harías para averiguarlo?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> reconocer el límite de tu estudio. Ver una imagen muestra lo que la persona <b>espera</b> del producto, no lo que <b>siente al usarlo</b>. Di qué no puedes afirmar y propón cómo medirlo.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Mi estudio solo mide lo que la gente espera. No puedo decir que la bebida con descuento se disfrute menos. Para saberlo, haría que tomen la misma bebida con las dos etiquetas sin saber que es igual.»</p>
     <div id="iqd3"></div>
     <label for="nq3">Tu respuesta a la pregunta 3</label>
-    <textarea class="nq" id="nq3" data-k="3" maxlength="270" placeholder="Mi estudio solo midió lo que la gente espera. Para saber lo que siente al usar el producto tendría que..."></textarea>
+    <textarea class="nq" id="nq3" data-k="3" maxlength="270" placeholder="Mi estudio solo mide ___. No puedo decir que ___. Para saberlo haría ___."></textarea>
+    <p class="small iqcrit">✔️ Tu respuesta está completa si nombras el límite (mide la expectativa, no la experiencia) y propones una forma concreta de medir la experiencia.</p>
     <p class="small muted nqc" data-k="3" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card iq">
-    <div class="hk"><span class="usn">4</span><span aria-hidden="true">📣</span> ¿Qué le recomiendas a la empresa: la etiqueta de descuento o el precio normal? ¿Por qué?</div>
-    <div class="ubox"><b>💡 En palabras sencillas</b><p>Elige una opción y da tu razón usando <b>un número de tus datos</b>. Si tus datos no muestran una diferencia clara, dilo así: también es una respuesta válida. Puedes añadir un cuidado, por ejemplo, que tus participantes fueron pocos.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Le recomiendo el precio normal, porque mis compañeros esperaron 0,9 puntos más de calidad con él. Pero solo medí a 6 personas, así que convendría repetirlo con más.»</p>
+    <div class="hk"><span class="usn">4</span><span aria-hidden="true">📣</span> <span class="iqk">¿Qué decides?</span> ¿Qué le recomiendas a la empresa: la etiqueta de descuento o el precio normal? ¿Por qué y con qué cuidado?</div>
+    <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> tomar una decisión de negocio apoyada en tus datos. Elige una opción, da tu razón con <b>un número</b> y agrega <b>un cuidado</b> (por ejemplo, que mediste a pocas personas o que solo vieron una imagen). Si tus datos no muestran una diferencia clara, también puedes decirlo.</p></div>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Le recomiendo el precio normal, porque mis compañeros esperaron 1,5 puntos más de calidad con él. Un cuidado es que solo medí a 6 personas y solo vieron una imagen.»</p>
     <div id="iqd4"></div>
     <label for="nq4">Tu respuesta a la pregunta 4</label>
-    <textarea class="nq" id="nq4" data-k="4" maxlength="270" placeholder="Le recomiendo ___ porque mis datos muestran que... Un cuidado es que..."></textarea>
+    <textarea class="nq" id="nq4" data-k="4" maxlength="270" placeholder="Le recomiendo ___ porque ___ (un número de tus datos). Un cuidado es que ___."></textarea>
+    <p class="small iqcrit">✔️ Tu respuesta está completa si eliges una opción, la justificas con al menos un número y mencionas un cuidado.</p>
     <p class="small muted nqc" data-k="4" style="margin:4px 0 0;text-align:right"></p>
   </div>
   <div class="card" id="nqSend"></div>
@@ -2177,7 +2184,7 @@ function docSesion(r){
   if(r.error==='tmp'){AXWHO='doc';AX_mostrar('clave');return true;}
   return false;
 }
-let TR=null,TC=[],TB=null;
+let TR=null,TC=[],TB=null,RB=null;
 /* ---------- tablero de control de rondas: quién guardó su decisión, por producto ---------- */
 function tableroHTML(){
   const nx=(TR?TR.ronda:0)+1,L=(TB&&TB.lista)||[],tot=L.length,ok=L.filter(x=>x.dec).length,falta=tot-ok;
@@ -2265,6 +2272,7 @@ async function loadTeacher(){
     if((r.clases||[]).length>1){sel.hidden=false;sel.innerHTML=r.clases.map(c=>`<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');sel.value=DCLASE;}else sel.hidden=true;
     try{const q=await rpc('sn_docente_rondas',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TR=q;}catch(e){}
     try{const q=await rpc('sn_docente_tablero',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)TB=q;}catch(e){}
+    try{const q=await rpc('sn_docente_rubricas',{p_token:DTOK,p_clase:DCLASE});if(q&&q.ok)RB=q.lista;}catch(e){}
     showD();renderDoc();
     if(DACC===null){try{const a=await rpc('sn_doc_cuenta_info',{p_token:DTOK});if(a&&a.ok){DACC=a;renderAcc();}}catch(e){}}}
   catch(e){$('tMsg').textContent='Sin conexión con el servidor.';}
@@ -2313,6 +2321,12 @@ function bindDoc(){
     const b=e.target.closest('button');if(!b)return;
     if(b.dataset.go){admGo(b.dataset.go);return;}
     if(b.id==='tbRef'){b.disabled=true;await loadTeacher();return;}
+    if(b.id==='rbCsv'){download('calificaciones_interpretacion.csv',csvRubrica());return;}
+    if(b.dataset.rb){const [id,k,n]=b.dataset.rb.split('|');const x=(RB||[]).find(y=>y.id===id);if(!x)return;
+      const p=((x.r&&x.r.p)||[null,null,null,null]).slice();p[+k]=p[+k]===+n?null:+n;
+      const old=x.r;x.r={p,t:new Date().toISOString()};renderDoc();
+      try{const r=await rpc('sn_docente_rubrica',{p_token:DTOK,p_integrante:id,p_puntos:p});if(docSesion(r))return;if(!r||!r.ok){x.r=old;renderDoc();alertDoc('No se pudo guardar el puntaje. Intenta de nuevo.');}}catch(err){x.r=old;renderDoc();alertDoc('Sin conexión: el puntaje no se guardó.');}
+      return;}
     if(b.id==='rndGo'){const ahora=Date.now();if(b.dataset.armed!=='1'){b.dataset.armed='1';b.dataset.t=ahora;b.textContent='¿Seguro? Toca de nuevo para ejecutar la ronda';setTimeout(()=>{if(b.isConnected&&!b.disabled){b.dataset.armed='';b.textContent=b.dataset.txt||b.textContent;}},6000);return;}if(ahora-Number(b.dataset.t||0)<1200)return;b.disabled=true;try{const r=await rpc('sn_docente_ronda',{p_token:DTOK,p_clase:T.clase.id});if(docSesion(r))return;await loadTeacher();}catch(err){b.textContent='Error';}return;}
     if(b.id==='cpCod'){const c=T.clase.codigo;try{await navigator.clipboard.writeText(c);b.textContent='✓ Copiado';}catch(err){b.textContent=c;}return;}
     if(b.dataset.chip){docProd=b.dataset.chip==='all'?0:+b.dataset.chip;renderDoc();}
@@ -2341,6 +2355,27 @@ let docProd=0;
 function toCSV(rows){return rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');}
 function csvObs(t){const r=[['investigador','equipo','producto','equipo_participante','orden','calidad_descuento','gusto_descuento','calidad_normal','gusto_normal','eleccion','fecha']];t.obs.forEach(o=>r.push([o.inv,o.eq,prod(o.prod).name,o.pe,o.orden,o.qd,o.gd,o.qr,o.gr,o.el==='d'?'descuento':'normal',o.t]));return toCSV(r);}
 function csvSims(t){const r=[['investigador','equipo','producto','ronda','A_precio','A_present','B_precio','B_present','n','A_media','B_media','diff','p','dz','prediccion']];t.sims.forEach(s=>{const d=s.datos||{},a=d.a||[],b=d.b||[],w=d.w||{};r.push([s.inv,s.eq,prod(s.prod).name,d.r,a[0],a[1],b[0],b[1],a[2],f(a[3],3),f(b[3],3),f(w.diff,3),f(w.p,4),f(w.d,3),d.pred||'']);});return toCSV(r);}
+const RCRIT=['Usa al menos un número del laboratorio virtual y uno de sus compañeros, y dice si coinciden.','Elige al menos una pista (cuántos, quiénes, si sabían de qué trataba, qué vieron, cómo responde una persona virtual) y explica cómo pudo cambiar el resultado.','Nombra el límite (mide la expectativa, no la experiencia) y propone una forma concreta de medir la experiencia.','Elige una opción, la justifica con al menos un número y menciona un cuidado.'];
+const RQT=['¿Qué pasó?','¿Por qué pasó?','¿Hasta dónde llega?','¿Qué decides?'];
+function rubricaHTML(){
+  if(!RB.length)return '<p class="muted">Todavía no hay respuestas de Interpretación.</p>';
+  const tot=RB.map(x=>{const p=(x.r&&x.r.p)||[null,null,null,null];return p.every(v=>v!=null)?p.reduce((a,b)=>a+b,0):null;});
+  const done=tot.filter(v=>v!=null);
+  const head=`<p class="small" style="margin:0 0 6px"><b>Escala por pregunta:</b> 0 = no responde · 1 = describe sin cumplir el criterio · 2 = cumple el criterio. Total sobre 8. Cada toque se guarda solo.</p>
+    <p class="small muted" style="margin:0 0 10px">Calificados: <b>${done.length} de ${RB.length}</b>${done.length?` · promedio ${f(done.reduce((a,b)=>a+b,0)/done.length,1)} de 8`:''}.</p>
+    <div class="cl-act" style="margin-bottom:10px"><button id="rbCsv">⬇ Descargar calificaciones (CSV)</button></div>`;
+  return head+RB.map((x,ix)=>{const v=nqParse(x.nota),p=(x.r&&x.r.p)||[null,null,null,null],t=tot[ix];
+    const cambio=x.r&&x.r.t&&new Date(x.t)>new Date(x.r.t);
+    return `<div class="rbk"><div class="row" style="justify-content:space-between;gap:8px;flex-wrap:wrap"><div><b>${esc(x.inv)}</b> <span class="muted small">· ${esc(x.eq)} · ${esc(prod(x.prod).short)}</span></div><span class="rbt ${t==null?'':'ok'}">${t==null?'Sin calificar':t+' de 8'}</span></div>
+      ${cambio?'<p class="small" style="color:#FFCE00;margin:4px 0 0">⚠️ El estudiante modificó sus respuestas después de tu calificación.</p>':''}
+      ${[0,1,2,3].map(k=>`<div class="rbq"><p class="rbqt"><b>${k+1}. ${RQT[k]}</b> <span class="small muted">· Criterio: ${RCRIT[k]}</span></p><div class="rbans">${v[k]?esc(v[k]):'<span class="muted">(sin respuesta)</span>'}</div>
+        <div class="rbsc" role="group" aria-label="Puntaje pregunta ${k+1}">${[0,1,2].map(n=>`<button type="button" data-rb="${esc(x.id)}|${k}|${n}" aria-pressed="${p[k]===n}">${n}</button>`).join('')}</div></div>`).join('')}</div>`;}).join('');
+}
+function alertDoc(m){const t=$('tMsg');if(t){t.textContent=m;t.scrollIntoView({block:'center'});}}
+function csvRubrica(){
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  return ['alias,equipo,producto,p1,p2,p3,p4,total,resp1,resp2,resp3,resp4'].concat(RB.map(x=>{const p=(x.r&&x.r.p)||[null,null,null,null],v=nqParse(x.nota);const t=p.every(y=>y!=null)?p.reduce((a,b)=>a+b,0):'';return [q(x.inv),q(x.eq),q(prod(x.prod).short),...p.map(q),q(t),...v.map(q)].join(',');})).join('\n');
+}
 function download(name,text){
   try{const u=URL.createObjectURL(new Blob(['﻿'+text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
   catch(e){const ta=$('csvBox');if(ta){ta.hidden=false;ta.value=text;ta.select();}}
@@ -2366,7 +2401,7 @@ function renderDoc(){
   const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Alias</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${esc(i.eq)}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
   const last=T.obs.slice(-25).reverse();
   const del=!demoOn?`<details class="card" data-sec="datos"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
-  const notas=T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div style="white-space:pre-line">${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
+  const notas=(!demoOn&&RB)?rubricaHTML():T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div style="white-space:pre-line">${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
   const eqs=T.equipos||[];
   const teamsRows=eqs.map(q=>`<tr><td>${esc(q.nombre)}${q.temporal?' <span class="tag sim">temporal</span>':''}</td><td>${esc(prod(q.producto).short)}</td><td class="small">${(q.integrantes||[]).map(x=>esc(x.alias||x)).join(', ')||'–'}</td><td><span style="font-family:ui-monospace,monospace">${esc(q.clave||'–')}</span></td><td class="num">${demoOn?'':`<button class="ghost" data-eqrst="${esc(q.id)}" data-nom="${esc(q.nombre)}">Reiniciar clave</button> <button class="ghost danger" data-eqdel="${esc(q.id)}">Borrar</button>`}</td></tr>`).join('');
   const teamsCard=`<div class="card" data-sec="equipos"><h3>Equipos registrados (${eqs.length})</h3>
@@ -2602,6 +2637,7 @@ lakens:'Lakens, D. (2013). Calculating and reporting effect sizes to facilitate 
 lee:'Lee, N., Broderick, A. J., y Chamberlain, L. (2007). What is ‘neuromarketing’? A discussion and agenda for future research. <i>International Journal of Psychophysiology, 63</i>(2), 199–204. https://doi.org/10.1016/j.ijpsycho.2006.03.007',
 plass08:'Plassmann, H., O’Doherty, J., Shiv, B., y Rangel, A. (2008). Marketing actions can modulate neural representations of experienced pleasantness. <i>Proceedings of the National Academy of Sciences, 105</i>(3), 1050–1054. https://doi.org/10.1073/pnas.0706929105',
 plass12:'Plassmann, H., Ramsøy, T. Z., y Milosavljevic, M. (2012). Branding the brain: A critical review and outlook. <i>Journal of Consumer Psychology, 22</i>(1), 18–36. https://doi.org/10.1016/j.jcps.2011.11.010',
+orne:'Orne, M. T. (1962). On the social psychology of the psychological experiment: With particular reference to demand characteristics and their implications. American Psychologist, 17(11), 776–783. https://doi.org/10.1037/h0043424',
 poldrack:'Poldrack, R. A. (2006). Can cognitive processes be inferred from neuroimaging data? <i>Trends in Cognitive Sciences, 10</i>(2), 59–63. https://doi.org/10.1016/j.tics.2005.12.004',
 rao05:'Rao, A. R. (2005). The quality of price as a quality cue. <i>Journal of Marketing Research, 42</i>(4), 401–405.',
 rao89:'Rao, A. R., y Monroe, K. B. (1989). The effect of price, brand name, and store name on buyers’ perceptions of product quality: An integrative review. <i>Journal of Marketing Research, 26</i>(3), 351–357. https://doi.org/10.2307/3172907',
@@ -2688,7 +2724,7 @@ function unitsData(pid){
    q:[{p:'Según la ASA (Wasserstein y Lazar, 2016), un valor p…',o:['Mide la probabilidad de que la hipótesis sea verdadera','Mide el tamaño del efecto','Indica cuán incompatibles son los datos con un modelo estadístico','Siempre prueba que el resultado es importante'],c:2,e:'El valor p indica incompatibilidad con un modelo; no mide verdad de la hipótesis ni tamaño del efecto.'},
       {p:'Según las convenciones de Cohen (1988), una d de 0,5 es un efecto…',o:['Pequeño','Mediano','Grande','Nulo'],c:1,e:'0,2 pequeño, 0,5 mediano y 0,8 grande, aunque el contexto debe primar.'},
       {p:'¿Qué es un diseño intrasujeto?',o:['Cada persona ve una sola condición','Cada persona ve más de una condición y se compara consigo misma','Solo participan expertos','No se usan números'],c:1,e:'En el diseño intrasujeto cada persona pasa por las dos ofertas.'}],
-   r:['charness','cohen','cumming','lakens','plass08','wass']},
+   r:['charness','cohen','cumming','lakens','orne','plass08','wass']},
 
   {id:'u5',t:'Ética, límites y decisiones de marketing',idea:'Un gráfico del cerebro convence mucho, pero hay que preguntar qué mide, qué se puede concluir y cómo usarlo de forma responsable.',
    s:[
@@ -2901,12 +2937,14 @@ function renderEquipo(){
     <div class="pair"><div>${productSVG(S.equipo,'R',150)}</div><div>${productSVG(S.equipo,'D',150)}</div></div>
     <p class="small muted" style="margin:8px 0 0">Es el mismo producto; solo cambia la etiqueta de precio. Eso es lo que verán tus participantes.</p></div>`;
 }
-const NQL=['1) Simulación vs. compañeros: ','2) Diferencias de la muestra: ','3) Expectativa vs. experiencia: ','4) Recomendación: '];
+const NQL=['1) ¿Qué pasó?: ','2) ¿Por qué pasó?: ','3) ¿Hasta dónde llega?: ','4) ¿Qué decides?: '];
+const NQL_OLD=['1) Simulación vs. compañeros: ','2) Diferencias de la muestra: ','3) Expectativa vs. experiencia: ','4) Recomendación: '];
 function nqParse(t){
   const out=['','','',''];t=t||'';
-  const idx=NQL.map(l=>t.indexOf(l));
+  let L=NQL,idx=NQL.map(l=>t.indexOf(l));
+  if(idx.every(x=>x<0)){L=NQL_OLD;idx=NQL_OLD.map(l=>t.indexOf(l));}
   if(idx.every(x=>x<0)){out[3]=t.trim();return out;}
-  NQL.forEach((l,k)=>{if(idx[k]<0)return;const st=idx[k]+l.length;const nx=idx.filter((x,m)=>m!==k&&x>idx[k]);out[k]=t.slice(st,nx.length?Math.min(...nx):t.length).trim();});
+  L.forEach((l,k)=>{if(idx[k]<0)return;const st=idx[k]+l.length;const nx=idx.filter((x,m)=>m!==k&&x>idx[k]);out[k]=t.slice(st,nx.length?Math.min(...nx):t.length).trim();});
   return out;
 }
 function nqSave(){
@@ -2966,16 +3004,15 @@ function iqCards(){
   if(L&&m.wq){const ld=L.sig?Math.sign(L.d):0,ed=m.wq.p<0.05?Math.sign(m.wq.diff):0;
     par=`<p class="iqd-k">🔎 <b>¿Se parecen?</b> En el laboratorio virtual, ${dirTx(L.d,L.sig)}; con tus compañeros, ${dirTx(m.wq.diff,m.wq.p<0.05)}. ${ld===ed?'<b>Coinciden.</b>':'<b>No coinciden.</b>'} ${Math.sign(L.d)===Math.sign(m.wq.diff)?'Además, en los dos la diferencia fue hacia el mismo lado.':'Además, la diferencia fue hacia lados distintos.'}</p>`;}
   const c1=wrap('Tus resultados para responder la pregunta 1',`<div class="iqd-g">${labBox}${expBox}</div>${claseL}${par}`);
-  /* 2: diferencias entre muestras */
-  const sdR=m.n>1?(sd(m.q.D)+sd(m.q.R))/2:null;
-  const row=(k,v,r)=>`<div class="iqd-r"><b>${k}</b><div class="iqd-g"><div class="iqd-col"><small>🧪 Laboratorio virtual</small><p>${v}</p></div><div class="iqd-col"><small>👥 Tus compañeros</small><p>${r}</p></div></div></div>`;
-  const c2=wrap('Comparación de las dos muestras',`<div class="iqd-rows">
-    ${row('¿Quiénes?','Personas virtuales creadas por la computadora con reglas basadas en estudios','Personas reales: compañeros de otros equipos')}
-    ${row('¿Cuántos?',L?`${L.n}`:'–',`${m.n}`)}
-    ${row('¿Qué vieron?','Las dos ofertas, dentro de un resonador virtual','Una imagen de cada oferta en el teléfono móvil')}
-    ${row('¿Qué se midió?','Nota de calidad y actividad del cerebro (mOFC)','Nota de calidad, gusto y elección final')}
-    ${row('¿Cuánto variaron las notas? (DE promedio)',L?f(L.sdL):'–',sdR!=null?f(sdR):'–')}
-    </div><p class="small" style="margin:6px 0 0">La DE dice si opinaron parecido (chica) o muy distinto (grande).</p>`);
+  /* 2: pistas para explicar (sin dar la respuesta) */
+  const pista=(q,d,x)=>`<div class="iqd-p"><b>${q}</b><p>${d}</p><p class="small iqd-px">${x}</p></div>`;
+  const c2=wrap('Pistas para explicar por qué',`<p class="small" style="margin:0 0 8px">Elige 1 o 2 pistas y explica cómo pudieron cambiar el resultado.</p><div class="iqd-rows">
+    ${pista('¿Cuántos eran?',`Mediste a <b>${m.n}</b> compañero(s); el laboratorio virtual usó <b>${L?L.n:'–'}</b> personas.`,'Con pocas personas, una sola respuesta mueve mucho el promedio y el margen de error es más ancho.')}
+    ${pista('¿Quiénes eran?','Compañeros de tu misma clase, de otros equipos.','¿Responderían igual que cualquier comprador en una tienda?')}
+    ${pista('¿Sabían de qué trataba?','Hacen la misma actividad que tú, así que saben que el estudio trata sobre el precio.','Quien sabe de qué trata un estudio a veces responde lo que cree que se espera de él (Orne, 1962).')}
+    ${pista('¿Qué vieron?','Tus compañeros: una imagen en el teléfono móvil. Las personas virtuales: las ofertas dentro de un resonador virtual.','¿La forma de mostrar el producto pudo cambiar cómo lo calificaron?')}
+    ${pista('¿Cómo responde una persona virtual?','La computadora la crea y la hace responder siguiendo una regla fija, basada en estudios.','Una persona real tiene gustos, experiencias y marcas que conoce; una virtual, no.')}
+  </div>`);
   /* 3: expectativa vs experiencia */
   const c3=wrap('Qué mediste y qué no',`${li([m.n?`<b>Calidad que esperaban</b> al ver la imagen: ${f(qD)} con descuento y ${f(qR)} con precio normal.`:'<b>Calidad que esperaban</b> al ver la imagen: aún sin datos.',m.n?`<b>Gusto</b> al ver la imagen: ${f(gD)} con descuento y ${f(gR)} con precio normal${m.wg?' · ¿casualidad?: '+azar(m.wg):''}.`:'',`<b>Lo que no mediste:</b> cómo se siente usar el producto (tomar la bebida, escuchar los audífonos, correr con las zapatillas). Nadie lo probó.`])}
     <p class="small" style="margin:6px 0 0">En Plassmann et al. (2008) las personas <b>probaron</b> el vino. Kurz et al. (2023) encontraron que el precio cambia lo que la gente <b>espera</b>, pero no tanto lo que siente <b>después de probar</b>.</p>`);

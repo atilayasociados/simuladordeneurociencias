@@ -1073,3 +1073,39 @@ begin
 end $$;
 revoke all on function public.sn_docente_tablero(text,uuid) from public;
 grant execute on function public.sn_docente_tablero(text,uuid) to anon, authenticated;
+
+-- v13: rúbrica de la Interpretación (0 a 2 por pregunta, total 8), calificada por el profesor
+alter table public.sn_notas add column if not exists rubrica jsonb;
+
+create or replace function public.sn_docente_rubricas(p_token text, p_clase uuid) returns jsonb
+language plpgsql stable security definer set search_path = public, extensions as $$
+declare s sn_sesiones; d jsonb;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  select coalesce(jsonb_agg(jsonb_build_object('id', t.integrante_id, 'inv', t.investigador, 'eq', e.nombre, 'prod', e.producto,
+           'nota', t.nota, 't', t.actualizada, 'r', t.rubrica) order by e.producto, e.nombre, t.investigador), '[]'::jsonb)
+    into d from sn_notas t join sn_equipos e on e.id = t.equipo_id where t.clase_id = p_clase;
+  return jsonb_build_object('ok', true, 'lista', d);
+end $$;
+
+create or replace function public.sn_docente_rubrica(p_token text, p_integrante uuid, p_puntos jsonb) returns jsonb
+language plpgsql security definer set search_path = public, extensions as $$
+declare s sn_sesiones; x jsonb; n int;
+begin
+  s := sn_ses(p_token, 'docente');
+  if s.token_hash is null then return jsonb_build_object('ok', false, 'error', 'sesion'); end if;
+  if s.tmp then return jsonb_build_object('ok', false, 'error', 'tmp'); end if;
+  if jsonb_typeof(p_puntos) <> 'array' or jsonb_array_length(p_puntos) <> 4 then return jsonb_build_object('ok', false, 'error', 'datos'); end if;
+  for x in select * from jsonb_array_elements(p_puntos) loop
+    if jsonb_typeof(x) <> 'null' and (jsonb_typeof(x) <> 'number' or (x #>> '{}')::numeric not in (0,1,2)) then
+      return jsonb_build_object('ok', false, 'error', 'datos'); end if;
+  end loop;
+  update sn_notas set rubrica = jsonb_build_object('p', p_puntos, 't', now()) where integrante_id = p_integrante;
+  get diagnostics n = row_count;
+  if n = 0 then return jsonb_build_object('ok', false, 'error', 'no_existe'); end if;
+  return jsonb_build_object('ok', true);
+end $$;
+
+revoke all on function public.sn_docente_rubricas(text,uuid), public.sn_docente_rubrica(text,uuid,jsonb) from public;
+grant execute on function public.sn_docente_rubricas(text,uuid), public.sn_docente_rubrica(text,uuid,jsonb) to anon, authenticated;
