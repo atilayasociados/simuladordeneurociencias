@@ -614,6 +614,12 @@ body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE3
 .lkcard{background:#2E3032;border:1px solid #6E7072;border-radius:12px;padding:16px;max-width:540px;width:100%;box-shadow:0 12px 30px rgba(0,0,0,.45)}
 .lkcard>b{display:block;font-size:1.05rem;margin-top:4px}.lkcard>p{margin:6px 0 0;color:var(--muted)}
 .lkic{font-size:30px;color:#FFCE00;line-height:1}
+#rnModal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.65);padding:16px}
+#rnModal.on{display:flex}
+#rnModal .rnbox{background:#2E3032;border:2px solid #44D62C;border-radius:16px;padding:22px 20px;max-width:440px;width:100%;text-align:center;color:#F2F3F3;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+#rnModal .rnico{font-size:40px;line-height:1}#rnModal h3{margin:10px 0 8px;font-size:20px}
+#rnModal p{margin:0 0 16px;line-height:1.5;color:#D9DADB}#rnModal .btn{width:100%;background:#44D62C;color:#1F2021;font-weight:800;border:0}
+body.rnopen{overflow:hidden}
 #lkToast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,160%);z-index:60;display:flex;gap:12px;align-items:center;background:#2C4A2A;border:1px solid #44D62C;color:#F2F3F3;border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.45);width:min(92vw,460px);transition:transform .35s ease}
 #lkToast.on{transform:translate(-50%,0)}
 #lkToast>span{font-size:26px;color:#44D62C}#lkToast b{display:block}#lkToast a{color:#8FE37F;font-weight:700}
@@ -1435,18 +1441,36 @@ function bindSim(){
   $('runSim').addEventListener('click',runSim);
 }
 /* ---------- rondas controladas por el docente ---------- */
-let CR=null,MYDEC={},DECMSG='';
+let CR=null,CR0=null,MYDEC={},DECMSG='';
 function rondasOn(){return BACKEND&&S.joined&&!!S.token;}
 async function loadEstado(){
   if(!rondasOn())return;
   try{const r=await rpc('sn_estado',{p_token:S.token});if(!r||!r.ok){if(sesionPerdida(r))return;return;}
     CR=r.ronda;MYDEC={};(r.decisiones||[]).forEach(d=>MYDEC[d.ronda]=d.datos);
-    let nuevo=false;
-    Object.keys(MYDEC).map(Number).sort((a,b)=>a-b).forEach(k=>{if(k<=CR&&!S.sims.some(x=>x.r===k&&x.prod===S.equipo)){computeRound(MYDEC[k],k);nuevo=true;}});
-    if(nuevo){DECMSG='';touch(true);}else{renderRonda();$('barRound').textContent=CR;}
+    const prev=CR0;CR0=CR;let nuevas=[];
+    Object.keys(MYDEC).map(Number).sort((a,b)=>a-b).forEach(k=>{if(k<=CR&&!S.sims.some(x=>x.r===k&&x.prod===S.equipo)){computeRound(MYDEC[k],k);nuevas.push(k);}});
+    if(nuevas.length){DECMSG='';touch(true);rnAviso(Math.max(...nuevas),true);}
+    else{renderRonda();$('barRound').textContent=CR;if(prev!==null&&CR>prev&&!MYDEC[CR])rnAviso(CR,false);}
   }catch(e){}
 }
-setInterval(()=>{if(rondasOn()&&!document.hidden)loadEstado();},15000);
+/* consulta cada 5 s si el estudiante ya guardó y espera la ronda; si no, cada 15 s */
+let RNT=0;
+setInterval(()=>{if(!rondasOn()||document.hidden)return;RNT++;const esp=CR!==null&&MYDEC[(CR||0)+1];if(esp||RNT%3===0)loadEstado();},5000);
+/* aviso: el profesor ejecutó la ronda → Aceptar lleva a leer los resultados */
+function rnAviso(r,conRes){
+  if(r<=(S.avR||0))return;S.avR=r;lsSave();
+  const t=$('lkToast');if(t)t.className='';
+  let m=$('rnModal');if(!m){m=document.createElement('div');m.id='rnModal';document.body.appendChild(m);}
+  m.innerHTML=`<div class="rnbox" role="alertdialog" aria-modal="true" aria-labelledby="rnT" aria-describedby="rnD">
+    <div class="rnico" aria-hidden="true">${conRes?'🔔':'⏱️'}</div>
+    <h3 id="rnT">El profesor ejecutó la ronda ${r}</h3>
+    <p id="rnD">${conRes?`Tu resultado de la ronda ${r} ya está listo. Al aceptar, te llevamos a <b>Resultados → Laboratorio virtual</b> para que lo leas.`:`No guardaste una decisión para la ronda ${r}, así que en esta ronda no tienes resultado. Guarda tu hipótesis y tus ofertas A y B para la <b>ronda ${r+1}</b>.`}</p>
+    <button type="button" class="btn" id="rnOk">${conRes?'Aceptar y ver mis resultados':'Aceptar e ir a guardar mi decisión'}</button></div>`;
+  m.className='on';document.body.classList.add('rnopen');
+  const ok=$('rnOk');setTimeout(()=>ok.focus(),50);
+  ok.onclick=()=>{m.className='';document.body.classList.remove('rnopen');const v=conRes?'resultados':'simular';
+    if(currentTab()===v){showTab();renderAll();}else location.hash=v;window.scrollTo(0,0);};
+}
 function renderRonda(){
   const el=$('rondaBox'),bt=$('runSim');if(!el||!bt)return;
   if(!rondasOn()){bt.textContent='Ejecutar ronda de simulación';el.innerHTML='';return;}
@@ -1793,6 +1817,7 @@ function lkCheck(){
   if(nuevos.length){lsSave();lkToast(nuevos[nuevos.length-1]);}
 }
 function lkToast(v){
+  if($('rnModal')&&$('rnModal').className==='on')return;
   let t=$('lkToast');if(!t){t=document.createElement('div');t.id='lkToast';t.setAttribute('role','status');document.body.appendChild(t);}
   t.innerHTML=`<span aria-hidden="true">🔓</span><div><b>¡Desbloqueaste ${esc(LKN[v])}!</b><a href="#${v}" id="lkGo">Ir ahora →</a></div><button type="button" id="lkX" aria-label="Cerrar">✕</button>`;
   t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',9000);
