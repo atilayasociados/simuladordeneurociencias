@@ -307,6 +307,7 @@ a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-d
 .u3 .u3s{background:rgba(68,214,44,.10);border-radius:6px;padding:6px 8px;margin-top:8px}.u3 .u3s .u3k{color:#44D62C}
 .aporta{border:2px solid #44D62C}.aplist{margin:0;padding-left:20px;display:grid;gap:10px}.aplist>li>p{margin:4px 0 0}
 .hlist{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px}.hst{padding:7px 10px;border-radius:8px;border-left:4px solid #555759;background:rgba(255,255,255,.04)}
+.resp{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:rgba(68,214,44,.12);border:1px solid #44D62C;line-height:1.5}
 .hst.ok{border-color:#44D62C}.hst.ko{border-color:#FF4C00}.hst.neu{border-color:#FFCE00}.hst small{display:block;opacity:.8;margin-top:2px}
 
 .usec{scroll-margin-top:110px;border-radius:8px}
@@ -1608,7 +1609,7 @@ function U3(t,que,salio,sig){return `<div class="ubox u3"><b>💡 ${t}, en palab
 const vecesAzar=p=>p<0.01?'menos de 1 de cada 100 veces':`unas ${Math.round(p*100)} de cada 100 veces`;
 const QUE_P='Imagina que A y B fueran exactamente iguales para la gente: aun así, por pura suerte, las notas nunca salen idénticas. El valor p responde: «si fueran iguales, ¿qué tan seguido saldría una diferencia así o mayor solo por casualidad?». Si p es menor que 0,05 (menos de 5 de cada 100 veces), es poco probable que sea casualidad.';
 const QUE_D='El valor p dice si la diferencia puede ser casualidad; el tamaño del efecto dice si es grande o pequeña. Guía de Cohen (1988): menos de 0,2 muy pequeño (trivial), 0,2 pequeño, 0,5 moderado y 0,8 o más grande.';
-function usoD(mag,sig){return (mag==='trivial'?'una diferencia tan pequeña no justificaría cambiar el precio.':mag==='pequeño'?'la diferencia existe, pero en la práctica pesaría poco en la decisión de precio.':mag==='moderado'?'es una diferencia que se notaría en la práctica y conviene tenerla en cuenta al fijar el precio.':'es una diferencia grande: el precio pesaría mucho en lo que la gente espera del producto.')+(sig?'':' Además, recuerda que puede ser casualidad.');}
+function usoD(mag,sig){return (mag==='trivial'?'una diferencia tan pequeña no justificaría cambiar el precio.':mag==='pequeño'?'la diferencia existe, pero en la práctica pesaría poco en la decisión de precio.':mag==='moderado'?'es una diferencia que se notaría en la práctica y conviene tenerla en cuenta al fijar el precio.':'el precio pesaría mucho en lo que la gente espera del producto.')+(sig?'':' Además, recuerda que puede ser casualidad.');}
 function labCase(r){
   const a=r.a,b=r.b,pa=priceOf(r.prod,a[0]),pb=priceOf(r.prod,b[0]);
   const tipo=a[0]===b[0]?(a[1]===b[1]?'igual':'pres'):(a[1]===b[1]?'precio':'ambas');
@@ -1619,6 +1620,23 @@ function labCase(r){
 function hEst(dir,sig){return dir>0&&sig?['ok','✅ Apoyada']:dir>0?['neu','⚖️ Va en esa dirección, pero puede ser casualidad']:dir<0&&sig?['ko','❌ No apoyada: salió al revés']:['ko','❌ No apoyada'];}
 function eleEst(k,n,pb){if(!n)return['neu','⏳ Sin datos'];const pc=k/n;return pc>0.5&&pb!=null&&pb<0.05?['ok','✅ Apoyada: mayoría clara']:pc>0.5?['neu','⚖️ Más de la mitad, pero puede ser casualidad']:pc===0.5?['ko','❌ No apoyada: mitad y mitad']:['ko','❌ No apoyada: la mayoría prefirió la oferta más barata'];}
 const hRow=(t,e,x)=>`<li class="hst ${e[0]}"><b>${t}</b> <span>${e[1]}</span>${x?`<small>${x}</small>`:''}</li>`;
+const PQ='«¿un precio con descuento hace que la gente espere menos calidad del mismo producto?»';
+const PARA=`<br><b>Para la pregunta del estudio</b> ${PQ}: `;
+const cap=x=>x.charAt(0).toUpperCase()+x.slice(1);
+const deX=x=>x.startsWith('el ')?'del '+x.slice(3):'de '+x;
+function respuesta(d,sig,x){x=x||'el precio más bajo';return d>0&&sig?`la respuesta es <b>sí</b>: con ${x} esperaron menos calidad, y la diferencia es lo bastante clara como para no ser casualidad.`:d>0?`la respuesta todavía <b>no es clara</b>: con ${x} esperaron un poco menos de calidad, pero la diferencia es tan pequeña que podría ser casualidad.`:d<0&&sig?`la respuesta es <b>no, fue al revés</b>: con ${x} esperaron más calidad, y no parece casualidad.`:`la respuesta es <b>no</b>: con ${x} no esperaron menos calidad.`;}
+function eleTxt(k,n,pb){if(!n)return 'no se puede evaluar: nadie mostró preferencia';const pc=k/n;return pc>0.5&&pb!=null&&pb<0.05?'queda <b>apoyada</b>: es una mayoría clara, difícil de explicar por casualidad':pc>0.5?'va en esa dirección, pero la mayoría no es tan clara: <b>podría ser casualidad</b>':pc===0.5?'<b>no se apoya</b>: quedaron mitad y mitad':'<b>no se apoya</b>: la mayoría prefirió la oferta más barata';}
+/* «qué significa» para una comparación precio más bajo (nLo) vs precio más alto (nHi); d = mHi − mLo */
+function sigTxt(o){
+  const ab=f(Math.abs(o.d)),ci0=o.lo<=0&&o.hi>=0,R=respuesta(o.d,o.sig,o.xlo),gana=o.d>0?o.nHi:o.nLo,pierde=o.d>0?o.nLo:o.nHi;
+  const h1=`la <b>hipótesis 1</b> («con el precio más alto se espera más calidad»)`;
+  return {R,
+   bar:`<b>¿Cuál pareció de mejor calidad?</b> ${cap(o.who)} pusieron en promedio <b>${f(o.mLo)}</b> con ${o.nLo} y <b>${f(o.mHi)}</b> con ${o.nHi}. ${o.d===0?'Las dos sacaron lo mismo.':`${cap(gana)} sacó <b>${ab} puntos más</b> que ${pierde}, en una escala de 1 a 10.`}${PARA}${R}`,
+   dif:`<b>¿Por cuánto ganó?</b> ${f(o.mHi)} − ${f(o.mLo)} = <b>${f(o.d)}</b> puntos. ${o.d>0?`Es positivo: ${o.nHi} sacó más nota que ${o.nLo}.`:o.d<0?`Es negativo: ${o.nLo} sacó más nota que ${o.nHi}.`:'Es 0: empataron.'} En una escala de 1 a 10, ${ab} puntos es como pasar de una nota de ${f(Math.min(o.mLo,o.mHi))} a una de ${f(Math.max(o.mLo,o.mHi))}.${o.nota||''}`,
+   p:`<b>¿Podemos creerle a esta diferencia o es casualidad?</b> ${o.sig?`Podemos creerle: si el precio no cambiara nada, una diferencia así saldría por pura suerte ${vecesAzar(o.p)}.`:`Todavía no: aunque el precio no cambiara nada, una diferencia así saldría por pura suerte ${vecesAzar(o.p)}.`} Por eso ${h1} ${o.d>0&&o.sig?'queda <b>apoyada</b>.':o.d>0?'va en esa dirección, pero <b>no queda demostrada</b>.':'<b>no se apoya</b>.'}${o.poco||''}`,
+   ef:`<b>¿Es una diferencia grande o pequeña?</b> Es ${{trivial:'muy pequeña (trivial)',pequeño:'pequeña',moderado:'moderada',grande:'grande'}[o.mag]}. Para la empresa: ${usoD(o.mag,o.sig)}`,
+   ci:`<b>¿Qué tan seguro es el resultado?</b> La diferencia real está, muy probablemente, entre <b>${f(o.lo)}</b> y <b>${f(o.hi)}</b> puntos a favor ${deX(o.nHi)}. ${ci0?'Ese rango incluye el 0, que significa «ninguna diferencia»: no se puede descartar que el precio no cambie nada.':o.lo>0?`Todo el rango está por encima de 0: aun en el caso menos favorable, ${o.nHi} saca más nota.`:`Todo el rango está por debajo de 0: aun en el caso menos favorable, ${o.nLo} saca más nota.`}${o.mas||''}`};
+}
 function mriBlock(r,K){
   const a=r.a,b=r.b,dA=a[5]-100,dB=b[5]-100,sc=Math.max(Math.abs(dA),Math.abs(dB),5);
   const bar=(d,cls)=>`<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--surface2);border-radius:5px;height:14px;min-width:0"><div style="width:${Math.max(2,Math.abs(d)/sc*100)}%;height:14px;border-radius:5px;background:var(${cls})"></div></div><b style="font-variant-numeric:tabular-nums;min-width:52px;text-align:right">${d>=0?'+':'−'}${f(Math.abs(d),1)}</b></div>`;
@@ -1626,10 +1644,9 @@ function mriBlock(r,K){
   const dO=b[5]-a[5],dN=b[3]-a[3],sdO=(a[6]+b[6])/2,chica=Math.abs(dO)<0.2*sdO,hiO=dO>0?'B':'A';
   const salio=`A marcó <b>${f(a[5],1)}</b> y B, <b>${f(b[5],1)}</b>: una diferencia de ${f(Math.abs(dO),1)} puntos${chica?`, muy pequeña comparada con cuánto varía el índice entre personas (DE cerca de ${f(sdO,1)})`:` a favor de la oferta ${hiO}`}.`;
   const misma=dO*dN>0;
-  let sig=chica?'Su cerebro casi no distinguió entre las dos ofertas, así que no muestra una preferencia clara.'
-    :`${misma?'Va en la <b>misma dirección</b> que las notas: la oferta que pareció de mejor calidad también activó más esta zona.':'<b>No va en la misma dirección</b> que las notas: lo que dijeron y lo que mostró su cerebro no coinciden.'}`;
-  if(K.tipo==='precio'||K.tipo==='ambas')sig+=` Si el precio cambiara también cuánto valor «siente» el cerebro, la oferta más cara (${K.caro}) activaría más la mOFC, como el vino caro en Plassmann et al. (2008). ${chica?'Aquí no se vio esa diferencia.':dO*K.sgn>0?'Aquí sí se vio.':'Aquí no fue así.'}`;
-  sig+=' Este índice no tiene una prueba de azar propia: úsalo como apoyo de las notas, no como prueba. Y recuerda que este cerebro es simulado.';
+  let sig=`<b>¿Su cerebro reaccionó igual que sus notas?</b> ${chica?'Casi no hubo diferencia de activación entre las dos ofertas.':misma?`Sí: la oferta ${hiO}, que activó más la mOFC, también fue la que sacó mejor nota de calidad.`:`No: la oferta ${hiO} activó más la mOFC, pero sacó menos nota de calidad.`}`;
+  if(K.tipo==='precio'||K.tipo==='ambas')sig+=`${PARA}${chica?'su cerebro no muestra que el descuento le reste valor al producto.':dO*K.sgn>0?`su cerebro le dio más valor a la oferta más cara (${K.caro}), como si el precio más bajo le restara valor; así pasó con el vino caro en Plassmann et al. (2008).`:`su cerebro no le dio más valor a la oferta más cara (${K.caro}).`}`;
+  sig+='<br><b>Ojo:</b> este índice no tiene su propia prueba de casualidad y este cerebro es simulado. Úsalo como apoyo de las notas, no como prueba.';
   return `<h4 style="margin:16px 0 4px;color:var(--uc)">🧠 Lo que mostró su cerebro: índice mOFC</h4>
     <p class="small muted" style="margin:0 0 8px">Medido en las mismas personas y en el mismo momento en que pusieron las notas de arriba. Cambio respecto a la referencia (100).</p>
     <div style="display:grid;gap:6px"><div class="abrow" style="grid-template-columns:30px 1fr"><span class="abl a">A</span>${bar(dA,'--offA')}</div><div class="abrow" style="grid-template-columns:30px 1fr"><span class="abl b">B</span>${bar(dB,'--offB')}</div></div>
@@ -1677,23 +1694,25 @@ function renderSim(){
     pres:`A y B tenían el <b>mismo precio</b> y distinta presentación: esta ronda mide el efecto de la presentación, no del precio, así que no responde directamente la pregunta del estudio.`,
     ambas:`Cambiaste a la vez el precio y la presentación: si hay diferencia, no puedes saber si vino del precio o de la presentación.`,precio:''}[K.tipo];
   const otraVez=K.tipo==='precio'?'':' Para responder la pregunta del estudio, en la próxima ronda pon una oferta con descuento y otra con precio normal, con la misma presentación.';
-  /* barras */
-  const sBar=K.tipo==='igual'?`${ctx} Aquí la diferencia fue de ${ab} puntos.`
-    :K.tipo==='pres'?`${ctx} ${D===0?'Las dos sacaron el mismo promedio.':`${OF(hiK)} sacó ${ab} puntos más.`} Si esa diferencia es clara o casualidad lo dicen los números de más abajo.`
-    :`Si el descuento hiciera esperar menos calidad, la barra de la oferta más barata (${K.barato}) tendría que salir más baja. ${dd>0?`Así fue: la más cara (${K.caro}) sacó ${ab} puntos más. Va en la dirección de la pregunta del estudio.`:dd<0?`Fue al revés: la más barata (${K.barato}) sacó ${ab} puntos más.`:'Las dos sacaron el mismo promedio.'} Si esa diferencia es clara o casualidad lo dicen los números de más abajo.${K.tipo==='ambas'?' '+ctx:''}`;
-  /* números */
-  const sDif=K.tipo==='igual'||K.tipo==='pres'?`${ctx}`
-    :`Es la respuesta directa a la pregunta del estudio: si el descuento hace esperar menos calidad, la oferta más cara (${K.caro}) debería ganar. ${dd>0?`Ganó la más cara, por ${ab} puntos en una escala de 10.`:dd<0?`Ganó la más barata, por ${ab} puntos: lo contrario de lo que plantea el estudio.`:'Ninguna ganó.'}${K.tipo==='ambas'?' '+ctx:''}`;
-  const sP=K.tipo==='igual'?(sig?'Con ofertas idénticas lo esperable es un p grande. Salió menor que 0,05 por pura casualidad, algo que pasa más o menos 1 de cada 20 veces: por eso conviene repetir una ronda antes de creer un resultado.':'Con ofertas idénticas lo esperable es un p grande, y así fue: el laboratorio no mostró una diferencia donde no la había.')
-    :K.tipo==='pres'?(sig?'La presentación sí cambió la calidad esperada y no parece casualidad. Es un dato útil para la empresa, pero no es la pregunta del estudio (el precio).':'No hay evidencia de que la presentación cambie la calidad esperada.')
-    :(sig&&dd>0?`Puedes confiar en que, en este laboratorio, el precio más bajo hizo esperar menos calidad. La <b>hipótesis 1</b> queda apoyada en esta ronda.`:sig?`La diferencia es clara pero al revés: la oferta más barata pareció de mejor calidad. La <b>hipótesis 1</b> no se apoya en esta ronda.`:`No hay evidencia suficiente de que el precio cambie la calidad esperada en esta ronda. La <b>hipótesis 1</b> no queda demostrada (tampoco descartada).`)+(K.tipo==='ambas'?' Recuerda que también cambió la presentación.':'');
-  const sD=K.tipo==='igual'?'Con ofertas idénticas debería salir cerca de 0.':`Sirve para la decisión de la empresa: ${usoD(mag,sig)}`;
-  const nC=K.sgn>0?pref[0]:pref[1],pcC=np?Math.round(nC/np*100):0;
-  const sEle=K.tipo==='igual'?'Con ofertas idénticas lo esperable es cerca de mitad y mitad.'
-    :K.tipo==='pres'?'Muestra qué presentación prefirió la mayoría; no responde la pregunta sobre el precio.'
-    :`La <b>hipótesis 3</b> dice que más de la mitad preferiría la oferta de precio más alto. Aquí ${nC} de ${np} (${pcC} %) prefirieron la más cara (${K.caro}): ${eleEst(nC,np,pbin)[1].replace(/^\S+\s/,'').toLowerCase()}${pbin!=null?' ('+pEq(pbin)+')':''}.${K.tipo==='ambas'?' Ojo: también cambió la presentación.':''}`;
-  const sCI=ci0?`La diferencia real podría favorecer a A o a B: con ${N} personas virtuales no puedes afirmar que una oferta gane.${N<80?' Si quieres más precisión, usa más personas virtuales en la próxima ronda.':''}`
-    :`Aun en el extremo menos favorable, gana ${OF(hiK)}: la diferencia es clara.${K.tipo==='precio'&&dd>0?' Esto refuerza la hipótesis 1.':''}`;
+  const nC=K.sgn>0?pref[0]:pref[1];
+  const loC=K.caro==='B'?r.w.lo:-r.w.hi,hiC=K.caro==='B'?r.w.hi:-r.w.lo;
+  const T=sigTxt({who:'las personas virtuales',nLo:OF(K.barato),nHi:OF(K.caro),mLo:(K.barato==='A'?a:b)[3],mHi:(K.caro==='A'?a:b)[3],d:dd,sig,p:r.w.p,mag,lo:loC,hi:hiC,
+    nota:K.caro==='A'?` (En el recuadro de arriba aparece ${f(D)} porque allí siempre se calcula B − A.)`:'',mas:ci0&&N<80?' Con más personas virtuales el rango se achica: pruébalo en la próxima ronda.':''});
+  const amb=K.tipo==='ambas'?`<br><b>Ojo:</b> ${ctx}`:'';
+  const dif2=`${OF(hiK)} sacó ${ab} puntos más que ${OF(loK)}`;
+  const sBar=K.tipo==='igual'?`<b>¿Cuál pareció de mejor calidad?</b> ${D===0?'Ninguna: sacaron lo mismo.':`${cap(dif2)}.`} ${ctx}`
+    :K.tipo==='pres'?`<b>¿Cuál pareció de mejor calidad?</b> ${D===0?'Ninguna: sacaron lo mismo.':`${cap(dif2)}.`} ${sig?'Esa diferencia es clara: no parece casualidad.':'Esa diferencia es pequeña y podría ser casualidad.'} ${ctx}`
+    :T.bar+amb;
+  const sDif=K.tipo==='igual'||K.tipo==='pres'?`<b>¿Por cuánto ganó?</b> ${D===0?'Empataron.':`${cap(dif2)}.`} ${ctx}`:T.dif+amb;
+  const sP=K.tipo==='igual'?(sig?'<b>¿Podemos creerle a esta diferencia?</b> No. Como A y B eran idénticas, salió «poco probable que sea casualidad» por pura suerte, algo que pasa más o menos 1 de cada 20 veces. Por eso conviene repetir una ronda antes de creer un resultado.':'<b>¿Podemos creerle a esta diferencia?</b> No, y así debía ser: A y B eran idénticas, así que la diferencia es casualidad. El laboratorio no mostró una diferencia donde no la había.')
+    :K.tipo==='pres'?(sig?'<b>¿Podemos creerle a esta diferencia?</b> Sí: la presentación cambió la calidad esperada y no parece casualidad. Es un dato útil para la empresa, pero no responde la pregunta del estudio, que es sobre el precio.':'<b>¿Podemos creerle a esta diferencia?</b> No: podría ser casualidad. No hay evidencia de que la presentación cambie la calidad esperada.')
+    :T.p+amb;
+  const sD=K.tipo==='igual'?'<b>¿Es una diferencia grande o pequeña?</b> Con ofertas idénticas debería salir cerca de 0, y cualquier valor es casualidad.':T.ef;
+  const sEle=K.tipo==='igual'?`<b>¿Cuál prefirió la mayoría?</b> ${pref[0]} prefirieron B y ${pref[1]} prefirieron A. Con ofertas idénticas lo esperable es cerca de mitad y mitad.`
+    :K.tipo==='pres'?`<b>¿Cuál prefirió la mayoría?</b> ${pref[0]} prefirieron B y ${pref[1]} prefirieron A. Muestra qué presentación gustó más; no responde la pregunta sobre el precio.`
+    :`<b>¿Cuál prefirió la mayoría?</b> ${nC} de ${np} prefirieron ${OF(K.caro)} y ${np-nC} prefirieron ${OF(K.barato)}. Por eso la <b>hipótesis 3</b> («más de la mitad prefiere la oferta de precio más alto») ${eleTxt(nC,np,pbin)}.${amb}`;
+  const sCI=K.tipo==='precio'||K.tipo==='ambas'?T.ci+amb
+    :`<b>¿Qué tan seguro es el resultado?</b> La diferencia real (B − A) está, muy probablemente, entre ${f(r.w.lo)} y ${f(r.w.hi)} puntos. ${ci0?'Ese rango incluye el 0, que significa «ninguna diferencia».':'Todo el rango está a un lado del 0: la diferencia es clara.'} ${ctx}`;
   /* tarjeta final */
   const hit=r.pred?r.pred===outcome:null;
   const c1=r.pred?`Dijiste «${lab(r.pred)}». ${hit?'<b>Se cumplió.</b>':`<b>No se cumplió:</b> el resultado fue «${res}». No es un error tuyo: así aprendes qué hace realmente la etiqueta.`}`:'No elegiste hipótesis en esta ronda, así que no puedes comprobar si acertabas. En la próxima ronda elígela antes de guardar.';
@@ -1705,6 +1724,7 @@ function renderSim(){
     :'Comprueba en el Experimento qué hacen tus compañeros reales. Si ellos sí esperan menos calidad con el descuento, tendrás un hallazgo interesante: las personas reales reaccionaron al precio y el laboratorio no lo mostró. Lo discutes en Comparación e Interpretación.';
   const aporta=`<div class="card aporta"><h3 class="sh" style="margin:0 0 8px">🧭 ¿Qué aporta esta ronda a tu estudio?</h3>
     <p class="small muted" style="margin:0 0 10px">La pregunta del estudio: <b>¿un precio con descuento hace que la gente espere menos calidad del mismo producto?</b></p>
+    ${K.tipo==='precio'?`<p class="resp">👉 <b>Respuesta corta, según esta ronda:</b> ${cap(T.R)}</p>`:''}
     <ol class="aplist"><li><b>¿Se cumplió tu hipótesis?</b><p>${c1}</p></li><li><b>¿Qué responde sobre la pregunta del estudio?</b>${c2}</li><li><b>¿Qué sigue?</b><p>${c3}</p></li></ol>
     <p class="small muted" style="margin:10px 0 0">En lenguaje estadístico: ${esc(verdict(r.w,'B','A'))}</p></div>`;
   const qSig=outcome==='='?`<p>La diferencia entre A y B fue tan pequeña que <b>podría deberse a la casualidad</b>: con estos datos, la gente virtual esperó casi la misma calidad de las dos. Al final de esta página verás qué aporta a tu estudio.</p>`
@@ -1950,15 +1970,15 @@ function renderExpRes(){
   const gan=w.diff>0?'el precio normal':'el descuento',ab=f(Math.abs(w.diff)),mag=magOf(w.d),ci0=w.lo<=0&&w.hi>=0;
   const vb=sig?`<div class="vban ${w.diff>0?'ok':'ko'}"><span aria-hidden="true">${w.diff>0?'✅':'❌'}</span><div><b>Tus compañeros esperaron más calidad con ${gan}.</b><p>La diferencia fue de ${ab} puntos y no parece casualidad (${pEq(w.p)}).</p></div></div>`
     :`<div class="vban neu"><span aria-hidden="true">⚖️</span><div><b>Con el precio normal y con el descuento esperaron casi la misma calidad.</b><p>La diferencia (${f(w.diff)} puntos) puede ser casualidad (${pEq(w.p)}). Al final de esta página verás qué aporta a tu estudio.</p></div></div>`;
-  const pocosP=n<META_OBS||n<15?` Con pocos compañeros es difícil que p salga menor que 0,05 aunque el efecto exista; por eso en la Comparación se juntan los datos de toda la clase.`:'';
-  const sBar=`Si el descuento hiciera esperar menos calidad, la barra del descuento tendría que salir más baja. ${w.diff>0?`Así fue: con el precio normal esperaron ${ab} puntos más. Va en la dirección de la pregunta del estudio.`:w.diff<0?`Fue al revés: con el descuento esperaron ${ab} puntos más.`:'Las dos sacaron el mismo promedio.'} Si es una diferencia clara o casualidad lo dicen los números de abajo.`;
-  const sDif=`Es la respuesta directa a la pregunta del estudio con personas reales: si el descuento hace esperar menos calidad, este número debería ser positivo. ${w.diff>0?`Salió positivo: ${ab} puntos a favor del precio normal.`:w.diff<0?`Salió negativo: ${ab} puntos a favor del descuento, lo contrario de lo que plantea el estudio.`:'Salió 0: ninguna ganó.'}`;
-  const sP=(sig&&w.diff>0?'Con tus compañeros, el precio más bajo hizo esperar menos calidad y no parece casualidad. La <b>hipótesis 1</b> queda apoyada en tu experimento.':sig?'La diferencia es clara pero al revés: tus compañeros esperaron más calidad con el descuento. La <b>hipótesis 1</b> no se apoya.':'No hay evidencia suficiente de que el precio cambie la calidad esperada en tus compañeros. La <b>hipótesis 1</b> no queda demostrada (tampoco descartada).')+pocosP;
+  const pocosP=n<15?` Con pocos compañeros es difícil demostrar una diferencia aunque exista; por eso en la Comparación se juntan los datos de toda la clase.`:'';
+  const nLo=`el descuento (${esc(lo)})`,nHi=`el precio normal (${esc(mi)})`;
+  const T=sigTxt({who:'tus compañeros',xlo:'el descuento',nLo,nHi,mLo:qD,mHi:qR,d:w.diff,sig,p:w.p,mag,lo:w.lo,hi:w.hi,poco:sig?'':pocosP,mas:ci0?' En la Comparación verás los datos de toda la clase con tu producto: con más personas, el rango se achica.':''});
+  const sBar=T.bar,sDif=T.dif,sP=T.p;
   const eH2=hEst(gR-gD,gsig),eH3=eleEst(m.rPref,n,m.pbin),eH1=hEst(w.diff,sig);
-  const sG=`La <b>hipótesis 2</b> dice que la oferta a precio normal gusta más. ${eH2[1].replace(/^\S+\s/,'')}${wg?' ('+pEq(wg.p)+')':''}. ${gR-gD>0?'':'Si gustó igual o más con descuento, el precio no hizo que la oferta pareciera menos atractiva.'}`;
-  const sE=`La <b>hipótesis 3</b> dice que más de la mitad elegiría la oferta a precio normal. Aquí ${m.rPref} de ${n} (${Math.round(m.rPref/n*100)} %) la eligieron: ${eH3[1].replace(/^\S+\s/,'').toLowerCase()}${m.pbin!=null?' ('+pEq(m.pbin)+')':''}. Para la empresa, esto dice si la gente pagaría más aunque pueda ahorrar.`;
-  const sCI=ci0?`La diferencia real podría favorecer al precio normal o al descuento: con ${n} compañeros no puedes afirmar cuál gana. En la Comparación verás los datos de toda la clase, que son más.`
-    :`Aun en el extremo menos favorable gana ${gan}: la diferencia es clara.${w.diff>0?' Esto refuerza la hipótesis 1.':''}`;
+  const gd=gR-gD;
+  const sG=`<b>¿Les gustó más con el precio normal?</b> ${gd>0?`Sí, un poco más: le pusieron <b>${f(gR)}</b> con ${nHi} y <b>${f(gD)}</b> con ${nLo} (${f(gd)} puntos más).`:gd<0?`No: les gustó más con ${nLo} (${f(gD)} frente a ${f(gR)}).`:`Les gustó igual con los dos precios (${f(gR)}).`} ${wg?(gsig?'Y no parece casualidad.':'Pero esa diferencia podría ser casualidad.'):''} Por eso la <b>hipótesis 2</b> («la oferta a precio normal gusta más») ${gd>0&&gsig?'queda <b>apoyada</b>.':gd>0?'va en esa dirección, pero <b>no queda demostrada</b>.':'<b>no se apoya</b>.'}`;
+  const sE=`<b>¿Cuál eligieron al final?</b> ${m.rPref} de ${n} eligieron ${nHi} y ${n-m.rPref} eligieron ${nLo}. Por eso la <b>hipótesis 3</b> («más de la mitad elige la oferta a precio normal») ${eleTxt(m.rPref,n,m.pbin)}. Para la empresa, esto dice si la gente pagaría más aunque pueda ahorrar.`;
+  const sCI=T.ci;
   /* comparación con el laboratorio virtual: última ronda que comparó solo precios */
   const lr=S.sims.filter(x=>x.prod===pid).filter(x=>labCase(x).tipo==='precio').slice(-1)[0];
   let cLab;
@@ -1968,6 +1988,7 @@ function renderExpRes(){
     cLab=`En tu laboratorio virtual (ronda ${lr.r}), ${tx(ldir)}; con tus compañeros reales, ${tx(edir)}. ${ldir===edir?'<b>Coinciden.</b>':'<b>No coinciden:</b> esa diferencia es justamente lo que discutirás en la Comparación y en la Interpretación.'}`;}
   const aporta=`<div class="card aporta"><h3 class="sh" style="margin:0 0 8px">🧭 ¿Qué aporta tu experimento al estudio?</h3>
     <p class="small muted" style="margin:0 0 10px">La pregunta del estudio: <b>¿un precio con descuento hace que la gente espere menos calidad del mismo producto?</b> Ahora con personas reales.</p>
+    <p class="resp">👉 <b>Respuesta corta, según tus compañeros:</b> ${cap(T.R)}</p>
     <ol class="aplist"><li><b>¿Qué dicen tus compañeros de las tres hipótesis?</b><ul class="hlist">${hRow('Hipótesis 1 · más calidad esperada con el precio normal:',eH1,`${f(qR)} frente a ${f(qD)} · ${pEq(w.p)}`)}${hRow('Hipótesis 2 · gusta más con el precio normal:',eH2,`${f(gR)} frente a ${f(gD)}${wg?' · '+pEq(wg.p):''}`)}${hRow('Hipótesis 3 · la mayoría elige el precio normal:',eH3,`${m.rPref} de ${n} lo eligieron`)}</ul></li>
     <li><b>¿Coincide con tu laboratorio virtual?</b><p>${cLab}</p></li>
     <li><b>¿Qué sigue?</b><p>En Resultados → Comparación verás los datos de toda la clase con tu producto (más personas, resultado más preciso) junto al laboratorio virtual. Con eso respondes las 4 preguntas de Aprender → Interpretación.${n<META_OBS?' Si aparece otro compañero disponible, aún puedes medirlo.':''}</p></li></ol>
@@ -1991,7 +2012,7 @@ function renderExpRes(){
     </div>
     ${U3(`1 · Diferencia de calidad (${f(w.diff)})`,'La nota de calidad con precio normal menos la nota con descuento, promediada entre tus compañeros. Positivo: ganó el precio normal; negativo: ganó el descuento.',w.diff===0?'Las dos ofertas sacaron el mismo promedio.':`Con ${gan} esperaron ${ab} puntos más de calidad.`,sDif)}
     ${U3(`2 · ¿Puede ser azar? (${pEq(w.p)})`,QUE_P.replace('A y B fueran exactamente iguales','el precio normal y el descuento fueran exactamente iguales'),`${pEq(w.p)}: una diferencia así o mayor saldría por casualidad ${vecesAzar(w.p)}. ${sig?'Es poco probable que sea casualidad.':'Bien podría ser casualidad.'}`,sP)}
-    ${U3(`3 · Tamaño del efecto (${f(w.d)})`,QUE_D,`d_z = ${f(w.d)}: efecto <b>${mag}</b>.`,`Sirve para la decisión de la empresa: ${usoD(mag,sig)}`)}
+    ${U3(`3 · Tamaño del efecto (${f(w.d)})`,QUE_D,`d_z = ${f(w.d)}: efecto <b>${mag}</b>.`,T.ef)}
     ${U3(`4 · Gusto (${f(gR-gD)})`,'Cada compañero también dijo cuánto le gustó cada oferta, del 1 al 10. El número es el gusto con precio normal menos el gusto con descuento.',`Con precio normal, <b>${f(gR)}</b>; con descuento, <b>${f(gD)}</b>.${wg?' '+pEq(wg.p)+': '+(gsig?'poco probable que sea casualidad.':'puede ser casualidad.'):''}`,sG)}
     ${U3(`5 · Elección (${m.rPref} de ${n})`,'Al final, cada compañero eligió con cuál de las dos ofertas se quedaría.',`${m.rPref} de ${n} eligieron el precio normal y ${n-m.rPref} el descuento.`,sE)}
     <div class="fbox"><h4>🎯 Margen de error</h4><p>El punto es la diferencia; la línea, su margen de error (IC 95 %). Si la línea toca el 0 punteado, no se descarta el azar.</p>
