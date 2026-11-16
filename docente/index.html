@@ -1591,7 +1591,7 @@ function offerPrev(){
 function heroDecidir(){
   const mine=S.sims.filter(s=>s.prod===S.equipo).length,n=S.obs.length;
   phero('simular','Laboratorio virtual','Diseña tu estudio en el laboratorio virtual',rondasOn()&&CR!==null?(CR?`La clase va en la ronda ${CR} · ${mine} ronda(s) con resultado`:'La clase aún no ha ejecutado rondas · guarda tu decisión para la ronda 1'):`3 pasos · ${mine} ronda(s) realizadas`);
-  phero('experimento','Experimento','Mide a compañeros reales',`${n} participante(s) medidos · meta sugerida: 6`);
+  phero('experimento','Experimento','Mide a compañeros reales',`${n} participante(s) medidos · meta: ${META_OBS}`);
 }
 function magOf(d){d=Math.abs(d);return d<0.2?'trivial':d<0.5?'pequeño':d<0.8?'moderado':'grande';}
 function roundsChart(list){
@@ -1864,7 +1864,7 @@ function renderExp(){
   }
   $('expRun').innerHTML=h;
   const dd=S.obs.map(o=>o.qr-o.qd),gg=S.obs.map(o=>o.gr-o.gd);
-  let t=(obsOk()?nextHTML('experimento'):'')+contHTML(n)+meter(n,6,'Participantes medidos (meta sugerida)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
+  let t=(obsOk()?nextHTML('experimento'):'')+contHTML(n)+meter(n,META_OBS,'Participantes medidos (meta)')+`<div class="stat"><div><b>${n}</b><span>participantes</span></div><div><b>${n?f(mean(dd)):'–'}</b><span>Δ calidad (normal − descuento)</span></div><div><b>${n?f(mean(gg)):'–'}</b><span>Δ gusto (normal − descuento)</span></div></div>`;
   if(!n)t+='<p class="muted">Todavía no hay registros.</p>';
   else t+=`<div class="tablewrap"><table><thead><tr><th>#</th><th>De</th><th>Orden</th><th class="num">Cal. desc.</th><th class="num">Cal. norm.</th><th class="num">Gusto desc.</th><th class="num">Gusto norm.</th><th>Elige</th><th></th></tr></thead><tbody>${S.obs.map((o,i)=>`<tr><td>${pad(i+1)}</td><td>${o.pe?esc(prod(o.pe).short):'–'}</td><td>${o.o==='DR'?'desc. → norm.':'norm. → desc.'}</td><td class="num">${o.qd}</td><td class="num">${o.qr}</td><td class="num">${o.gd}</td><td class="num">${o.gr}</td><td>${o.el==='d'?'descuento':'normal'}</td><td class="num"><button class="ghost danger" data-del="${i}" style="min-height:32px;padding:2px 10px" aria-label="Borrar participante ${i+1}">Borrar</button></td></tr>`).join('')}</tbody></table></div>`;
   $('obsList').innerHTML=t;
@@ -2923,7 +2923,7 @@ function renderEquipo(){
   const mem=(S.integrantes||[]).map(i=>`<span class="av${i.id===S.iid?' me':''}"><i aria-hidden="true">${ini(i.alias)}</i>${esc(i.alias)}${i.id===S.iid?' <small>(tú)</small>':''}</span>`).join('');
   $('equipoOut').innerHTML=`<div class="card"><h3 class="sh">📊 Tu avance</h3>
     <div class="stat ic"><div><em aria-hidden="true">👤</em><b>${esc(S.alias)}</b><span>tu alias</span></div><div><em aria-hidden="true">🏷️</em><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><em aria-hidden="true">🔁</em><b>${mine}</b><span>rondas simuladas</span></div><div><em aria-hidden="true">🧑‍🤝‍🧑</em><b>${n}</b><span>participantes medidos</span></div></div>
-    ${meter(n,6,'Meta del experimento: participantes medidos')}
+    ${meter(n,META_OBS,'Meta del experimento: participantes medidos')}
     <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este teléfono móvil o computadora.</span>'}</p></div>
   ${BACKEND?`<div class="card"><h3 class="sh">👥 Integrantes</h3><div class="avs">${mem||'–'}</div>
     <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
