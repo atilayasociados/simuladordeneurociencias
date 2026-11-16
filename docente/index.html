@@ -102,6 +102,8 @@ body:not(.adm) button.primary:disabled{background:#4A4C4E!important;border-color
 .nqdone{display:flex;gap:12px;align-items:flex-start;background:rgba(68,214,44,.12);border:1px solid #44D62C;border-radius:12px;padding:12px 14px}
 .nqdone>span{font-size:26px;line-height:1}.nqdone b{font-size:17px}.nqdone p{margin:4px 0 0}.nqest{font-weight:700;color:#44D62C}
 .nq[readonly]{opacity:.75}
+.nqfalta{margin-top:10px;background:rgba(255,206,0,.12);border:1px solid #FFCE00;border-radius:10px;padding:10px 12px;line-height:1.5}
+.card.iq.iqfalta .nqc{color:#FFCE00}
 [hidden]{display:none!important}
 /* ============ Acceso v2.3 · tema SMAA ============ */
 :root{--ax-bg:#555759;--ax-bg2:#4A4C4E;--ax-bg3:#555759;--ax-bg4:#5E6062;--ax-border:#6A6C6E;--ax-border2:#7A7C7E;--ax-text:#F2F3F3;--ax-text2:#D0D2D1;--ax-text3:#B9BCBB;--ax-accent:#44D62C;--ax-accent-h:#5BE045;--ax-accent2:#44D62C;--ax-accent2-h:#5BE045;--ax-accent3:#FFCE00;--ax-accent4:#FF4C00;--ax-gold:#FFCE00;--ax-r:14px;--ax-sans:'Sora',Arial,Helvetica,sans-serif;--ax-mono:'Space Mono',ui-monospace,Menlo,monospace}
@@ -2785,7 +2787,7 @@ function nqSave(){
   const n=$('nota');n.value=t;n.dispatchEvent(new Event('input'));nqUi();
 }
 function nqUi(){
-  let done=0;[1,2,3,4].forEach(k=>{const e=$('nq'+k),c=document.querySelector('.nqc[data-k="'+k+'"]');const L=(e.value||'').trim().length;if(L>=20)done++;if(c)c.textContent=e.value.length+' de 270 caracteres'+(L>=20?' · ✓ respondida':'');});
+  let done=0;[1,2,3,4].forEach(k=>{const e=$('nq'+k),c=document.querySelector('.nqc[data-k="'+k+'"]');const L=(e.value||'').trim().length;if(L>=20)done++;if(c)c.textContent=e.value.length+' de 270 caracteres'+(L>=20?' · ✓ respondida':L?' · faltan '+(20-L)+' para contar':' · sin responder');const cd=e.closest('.card');if(cd)cd.classList.toggle('iqfalta',L<20);});
   const pg=$('iqProg');if(pg)pg.innerHTML=`<div class="mt"><i style="width:${done/4*100}%"></i></div><p><span>Preguntas respondidas</span><b>${done} de 4</b></p>`;
   const nw=document.querySelector('#t-interpretacion>.nxwrap');if(nw)nw.innerHTML=nextHTML('interpretacion');
   nqSendUi(done);
@@ -2804,10 +2806,11 @@ function nqSendUi(done){
     el.innerHTML=`<h3 class="sh" style="margin:0 0 6px">📨 Enviar y terminar</h3>
     <p style="margin:0 0 10px">Cuando tengas las 4 respuestas, envíalas al profesor. Con esto cierras la actividad.</p>
     <button class="primary" type="button" id="nqGo" ${done<4?'disabled':''}>Enviar mis respuestas y terminar la actividad</button>
-    ${done<4?`<p class="small muted" style="margin:8px 0 0">Te falta responder: ${falta.length>1?'preguntas '+falta.slice(0,-1).join(', ')+' y '+falta.slice(-1):'pregunta '+falta[0]} (mínimo 20 caracteres cada una).</p>`:''}`;
+    ${done<4?`<div class="nqfalta"><b>⚠️ Te falta responder ${falta.length>1?'las preguntas '+falta.slice(0,-1).join(', ')+' y '+falta.slice(-1):'la pregunta '+falta[0]}</b> (mínimo 20 caracteres cada una). El botón se activa cuando las 4 estén respondidas.<div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">${falta.map(k=>`<button class="ghost" type="button" data-irq="${k}">Ir a la pregunta ${k}</button>`).join('')}</div></div>`:''}`;
   }
   if(!el.dataset.b){el.dataset.b='1';el.addEventListener('click',async e=>{
     if(e.target.closest('#nqGo')){nqSave();S.fin=Date.now();S.notaDirty=true;lsSave();renderAll();await sync();if(S.notaDirty)setTimeout(sync,1600);renderAll();$('nqSend').scrollIntoView({block:'center'});}
+    else if(e.target.closest('[data-irq]')){const q=$('nq'+e.target.closest('[data-irq]').dataset.irq);if(q){q.closest('.card').scrollIntoView({block:'start',behavior:'smooth'});setTimeout(()=>q.focus({preventScroll:true}),400);}}
     else if(e.target.closest('#nqEdit')){S.fin=0;lsSave();renderAll();const q=$('nq1');if(q)q.focus();}
   });}
 }
