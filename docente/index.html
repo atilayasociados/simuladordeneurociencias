@@ -768,7 +768,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
       <div><i>2</i><span aria-hidden="true">📱</span><p>Elige su equipo y pulsa «Entregar el teléfono móvil». El orden de las ofertas se sortea de forma balanceada.</p></div>
       <div><i>3</i><span aria-hidden="true">👆</span><p>El participante <b>toca él mismo</b> sus calificaciones (calidad esperada y gusto, de 1 a 10) y elige una oferta. No comentes nada en voz alta.</p></div>
       <div><i>4</i><span aria-hidden="true">💬</span><p>Cuando te devuelva el teléfono móvil, explícale que <b>es el mismo producto</b> y que el estudio mide el efecto del precio (debriefing).</p></div>
-      <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: unos 6 compañeros por estudiante. Participación voluntaria y sin datos personales.</p></div>
+      <div><i>5</i><span aria-hidden="true">🎯</span><p>Meta: 2 compañeros por estudiante, que todavía no hayan visto tu producto. Participación voluntaria y sin datos personales.</p></div>
     </div>
     <div class="ubox"><b>💡 ¿Y mis ofertas A y B?, en palabras sencillas</b><p>En el experimento real <b>no</b> se usan las ofertas A y B de tu laboratorio virtual. Todos los equipos comparan siempre las mismas dos: tu producto con su <b>precio normal</b> y con <b>descuento</b>. Así los datos de toda la clase se pueden juntar. En la pantalla del participante verás «oferta 1 de 2» y «oferta 2 de 2»: es solo el orden en que las ve, y ese orden se sortea.</p></div>
     <div class="note" style="margin-bottom:0">Límite del diseño: con una imagen solo se mide la <b>expectativa</b>, no la experiencia de usar el producto. Kurz et al. (2023) hallaron que el precio cambia las expectativas de forma consistente, pero no la calidad percibida ni el agrado una vez probado el producto.</div>
@@ -809,7 +809,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   <div class="card iq">
     <div class="hk"><span class="usn">2</span><span aria-hidden="true">🔍</span> <span class="iqk">¿Por qué pasó?</span> ¿Por qué crees que tus resultados se parecen (o no) a los del laboratorio virtual?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> explicar la comparación de la pregunta 1, no volver a describirla. Muchas veces un resultado distinto no es un error: viene de <b>cómo se obtuvieron los datos</b>. Usa las pistas de la tarjeta de abajo.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Creo que con mis compañeros la diferencia fue mayor porque eran solo 6 y todos sabían que la clase trata de precios; quizás respondieron lo que creían que se esperaba.»</p>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Creo que con mis compañeros la diferencia fue mayor porque medí solo a 2 y todos sabían que la clase trata de precios; quizás respondieron lo que creían que se esperaba.»</p>
     <div id="iqd2"></div>
     <label for="nq2">Tu respuesta a la pregunta 2</label>
     <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Creo que se parecen / no se parecen porque ___. Por ejemplo, ___."></textarea>
@@ -829,7 +829,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
   <div class="card iq">
     <div class="hk"><span class="usn">4</span><span aria-hidden="true">📣</span> <span class="iqk">¿Qué decides?</span> ¿Qué le recomiendas a la empresa: la etiqueta de descuento o el precio normal? ¿Por qué y con qué cuidado?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p><b>Objetivo:</b> tomar una decisión de negocio apoyada en tus datos. Elige una opción, da tu razón con <b>un número</b> y agrega <b>un cuidado</b> (por ejemplo, que mediste a pocas personas o que solo vieron una imagen). Si tus datos no muestran una diferencia clara, también puedes decirlo.</p></div>
-    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Le recomiendo el precio normal, porque mis compañeros esperaron 1,5 puntos más de calidad con él. Un cuidado es que solo medí a 6 personas y solo vieron una imagen.»</p>
+    <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Le recomiendo el precio normal, porque mis compañeros esperaron 1,5 puntos más de calidad con él. Un cuidado es que solo medí a 2 personas y solo vieron una imagen.»</p>
     <div id="iqd4"></div>
     <label for="nq4">Tu respuesta a la pregunta 4</label>
     <textarea class="nq" id="nq4" data-k="4" maxlength="270" placeholder="Le recomiendo ___ porque ___ (un número de tus datos). Un cuidado es que ___."></textarea>
@@ -1886,7 +1886,7 @@ setInterval(()=>{if(currentTab()==='comparar'&&!document.hidden)loadResumen();},
 
 /* ---------- 3. comparar ---------- */
 /* ---------- requisitos antes de ver la comparación real vs. simulado ---------- */
-const META_OBS=6;
+const META_OBS=2;
 /* el estudiante puede continuar con menos de la meta si lo confirma (mínimo 1 participante) */
 function obsOk(){const n=S.obs.length;return n>=META_OBS||(n>=1&&!!S.contObs);}
 function faltaPara(){
@@ -2432,7 +2432,7 @@ function renderDoc(){
   <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
   <details class="card" data-sec="guia"><summary>Guía de clase: plan sugerido para las dos sesiones</summary>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 1 (lunes 16)</b></p>
-    <ol class="steps"><li>Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li>Cada estudiante entra con el código y guarda su decisión en «Laboratorio virtual»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li>Medición por parejas: cada estudiante mide a unos 6 compañeros de otros equipos, en zonas separadas y con el participante tocando sus propias respuestas.</li><li>Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
+    <ol class="steps"><li>Presenta Plassmann et al. (2008) y Kurz et al. (2023): ¿el precio cambia la expectativa, la experiencia o ambas? Forma tres equipos (uno por producto) y pide hipótesis.</li><li>Cada estudiante entra con el código y guarda su decisión en «Laboratorio virtual»; tú ejecutas 2 o 3 rondas desde «Rondas» (pide que una sea A = B) y ellos leen el resultado y el laboratorio de resonancia.</li><li>Medición por parejas: cada estudiante mide a 2 compañeros de otros equipos que todavía no hayan visto su producto, en zonas separadas y con el participante tocando sus propias respuestas.</li><li>Cierre: revisa en este panel cuántos participantes lleva cada equipo.</li></ol>
     <p class="small muted" style="margin:8px 0 4px"><b>Sesión 2 (miércoles 18)</b></p>
     <ol class="steps"><li>Los estudiantes abren «Comparar» y analizan simulado frente a real.</li><li>Discusión con este panel: ¿coinciden los productos? ¿Qué dice un efecto no significativo con n pequeño? Efecto de demanda y validez de medir expectativa.</li><li>Cada estudiante escribe su conclusión; cierra con los límites de la fMRI y del neuromarketing.</li></ol>
     </details>`;
@@ -2500,7 +2500,7 @@ function renderManDoc(){
     `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Laboratorio virtual</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
     B('Por qué rondas','Ejecutar la ronda para todos a la vez evita que unos vean resultados antes que otros y te permite discutir cada ronda en grupo. Mientras no ejecutes la ronda, cada estudiante puede cambiar su decisión.')+go('rondas','Rondas'))}
   ${P(8,'🧑‍🔬','Acompaña el experimento con personas reales','Clase → Investigadores',[
-    `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su teléfono móvil, a unos 6 compañeros de <b>otros equipos</b>. El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
+    `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su teléfono móvil, a 2 compañeros de <b>otros equipos</b> que todavía no hayan visto su producto (así cada compañero califica cada producto una sola vez). El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
     `En <b>«Investigadores»</b> ves cuántos participantes midió cada alias, cuántas rondas simuló y su última actividad.`,
     `Si alguien va retrasado, pídele que mida a más compañeros antes de pasar a Resultados.`])+go('avance','Investigadores')}
 
@@ -2589,7 +2589,7 @@ function renderManual(){
       <li><b>Diseña las ofertas</b>: elige precio (${lo}, ${mid} o ${hi}) y presentación de A y B, y la cantidad de consumidores. Toca <b>Guardar mi decisión</b>. Puedes cambiarla hasta que el profesor ejecute la ronda.</li>
       <li><b>Lee el resultado</b> (Resultados → Laboratorio virtual): aparece cuando el profesor ejecuta la ronda.</li>
       <li><b>Mira cómo funcionó tu laboratorio virtual</b>: las mismas personas virtuales pusieron nota a A y B mientras se medía su cerebro, y qué exigiría hacerlo de verdad.${figResonador()}${figMOFC()}</li>
-      <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el teléfono móvil; califica las dos ofertas y elige una. Meta: unos 6 compañeros de otros equipos.</li>
+      <li><b>Mide a compañeros reales</b> (Decidir → Experimento): elige su equipo, entrégale el teléfono móvil; califica las dos ofertas y elige una. Meta: 2 compañeros de otros equipos.</li>
       <li><b>Mira el resultado de tu experimento</b> (Resultados → Experimento): qué calidad esperaron tus compañeros con cada precio.</li>
       <li><b>Compara</b> (Resultados → Comparación): el laboratorio virtual frente al experimento, con los datos de toda la clase.</li>
       <li><b>Escribe tu conclusión</b> (Aprender → Interpretación): qué encontraste con su número, si coincide con lo simulado y su límite.</li>
@@ -2895,7 +2895,7 @@ function renderCaso(){
   phero('caso','El caso',`${pr.name} ${pr.brand}: ¿descuento o precio normal?`,'Tu misión: reunir evidencia antes de que el directorio decida.');
   const pc=CONFIG.PRODUCTS.map(p=>`<div class="pcard${p.id===S.equipo?' me':''}">${p.id===S.equipo?'<span class="tag sim">Tu equipo</span>':`<span class="tag" style="background:var(--surface2);color:var(--muted)">Equipo ${p.id}</span>`}${usoImg(p.id,'sm')}<b>${esc(p.name)} ${esc(p.brand)}</b><div class="pprices"><span>Descuento<b>${esc(money(p.prices.low))}</b></span><span>Normal<b>${esc(money(p.prices.mid))}</b></span><span>Alto<b>${esc(money(p.prices.high))}</b></span></div></div>`).join('');
   const HC=[['H1','🏷️','La oferta a precio normal recibe mayor <b>calidad esperada</b> que la de descuento.','Se mide: calidad esperada, de 1 a 10'],['H2','😊','La oferta a precio normal recibe mayor <b>gusto</b>.','Se mide: gusto, de 1 a 10'],['H3','🛒','Más de la mitad de los participantes <b>elige</b> la oferta a precio normal.','Se mide: qué oferta elige']];
-  const FL=[['simular','#555759','🧪','1. Decidir → Laboratorio virtual','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta. Guardas tu decisión.'],['resultados','#555759','🧲','2. Resultados → Laboratorio virtual','Cuando el profesor ejecuta la ronda, ves lo que dijeron las personas virtuales en el resonador y lo que mostró su cerebro.'],['experimento','#555759','🧑‍🤝‍🧑','3. Decidir → Experimento','Mides a unos 6 compañeros reales de otros equipos.'],['expres','#555759','📊','4. Resultados → Experimento','Ves qué calidad esperaron tus compañeros con cada precio.'],['comparar','#555759','🆚','5. Resultados → Comparación','Comparas el laboratorio virtual con el experimento.'],['interpretacion','#555759','🎓','6. Aprender → Interpretación','Respondes 4 preguntas con tus números.']];
+  const FL=[['simular','#555759','🧪','1. Decidir → Laboratorio virtual','Formulas tu hipótesis y diseñas dos ofertas del mismo producto, A y B, que solo cambian en la etiqueta. Guardas tu decisión.'],['resultados','#555759','🧲','2. Resultados → Laboratorio virtual','Cuando el profesor ejecuta la ronda, ves lo que dijeron las personas virtuales en el resonador y lo que mostró su cerebro.'],['experimento','#555759','🧑‍🤝‍🧑','3. Decidir → Experimento','Mides a 2 compañeros reales de otros equipos que todavía no hayan visto tu producto.'],['expres','#555759','📊','4. Resultados → Experimento','Ves qué calidad esperaron tus compañeros con cada precio.'],['comparar','#555759','🆚','5. Resultados → Comparación','Comparas el laboratorio virtual con el experimento.'],['interpretacion','#555759','🎓','6. Aprender → Interpretación','Respondes 4 preguntas con tus números.']];
   $('casoOut').innerHTML=`<div class="card"><h3 class="sh">🧩 El dilema de la empresa</h3>
     ${usoImg(S.equipo,'hero')}
     <div class="dilema"><div>${productSVG(S.equipo,'R',140)}</div><div class="dvs" aria-hidden="true">¿?</div><div>${productSVG(S.equipo,'D',140)}</div></div>
