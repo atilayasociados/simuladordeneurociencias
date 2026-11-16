@@ -303,6 +303,11 @@ body.adm .note{color:var(--fg)}
 a.cl{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--azul2);text-underline-offset:3px;cursor:help}
 .ubox{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:6px;padding:10px 12px;margin:10px 0 14px}
 .ubox p{margin:4px 0 0}
+.iqd{border:1px solid #44D62C;border-radius:12px;padding:10px 12px;margin:10px 0 12px;background:rgba(68,214,44,.06)}
+.iqd-t{margin:0 0 8px;font-weight:800;color:#44D62C}.iqd ul{margin:0;padding-left:18px;line-height:1.55}
+.iqd-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:560px){.iqd-g{grid-template-columns:1fr}}
+.iqd-col{background:rgba(255,255,255,.04);border-radius:10px;padding:8px 10px;min-width:0}.iqd-col h5{margin:0 0 4px;font-size:14px}
+.iqd-k{margin:8px 0 0;line-height:1.5}.iqd-rows{display:grid;gap:10px}.iqd-r>b{display:block;margin-bottom:4px}.iqd-r .iqd-g{grid-template-columns:1fr 1fr}.iqd-r .iqd-col small{display:block;opacity:.8;font-weight:700}.iqd-r .iqd-col p{margin:2px 0 0;font-size:14px;line-height:1.4}.iqd-tab{width:100%;font-size:13px}.iqd-tab th,.iqd-tab td{text-align:left;vertical-align:top;padding:5px 6px}
 .u3 p{margin:6px 0 0}.u3 .u3k{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);margin-bottom:1px}
 .u3 .u3s{background:rgba(68,214,44,.10);border-radius:6px;padding:6px 8px;margin-top:8px}.u3 .u3s .u3k{color:#44D62C}
 .aporta{border:2px solid #44D62C}.aplist{margin:0;padding-left:20px;display:grid;gap:10px}.aplist>li>p{margin:4px 0 0}
@@ -792,6 +797,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <div class="hk"><span class="usn">1</span><span aria-hidden="true">🧭</span> ¿Lo que pasó con tus compañeros se parece a lo que pasó en el laboratorio virtual?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p>Fíjate en dos cosas. <b>Quién ganó</b>: ¿la gente esperó más calidad con el precio normal o con el descuento? Y <b>por cuánto ganó</b>: cuántos puntos de diferencia hubo. Busca los dos números grandes en «Tus números»: el gris es el laboratorio virtual y el verde son tus compañeros. Si los dos son positivos, en ambos casos ganó el precio normal.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «En el laboratorio virtual ganó el precio normal por 1,2 puntos y con mis compañeros también, por 0,9. Se parecen: ganó el mismo y por una cantidad parecida.»</p>
+    <div id="iqd1"></div>
     <label for="nq1">Tu respuesta a la pregunta 1</label>
     <textarea class="nq" id="nq1" data-k="1" maxlength="270" placeholder="En el laboratorio virtual ganó ___ por ___ puntos. Con mis compañeros ganó ___ por ___ puntos. Se parecen / no se parecen porque..."></textarea>
     <p class="small muted nqc" data-k="1" style="margin:4px 0 0;text-align:right"></p>
@@ -800,6 +806,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <div class="hk"><span class="usn">2</span><span aria-hidden="true">👥</span> ¿En qué se diferencian tus compañeros de las personas del laboratorio virtual?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p>Piensa en tres cosas: <b>cuántos</b> eran, <b>quiénes</b> eran y <b>dónde</b> respondieron. Tus compañeros eran pocos, estudian un curso sobre precios y respondieron en el aula mirando una imagen en un teléfono móvil. Las personas del laboratorio virtual no existen: son personas inventadas por la computadora que responden siguiendo una regla.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Medí a solo 6 compañeros y todos sabían que la clase trata de precios; eso pudo cambiar sus notas. Los personas virtuales no saben nada de la clase.»</p>
+    <div id="iqd2"></div>
     <label for="nq2">Tu respuesta a la pregunta 2</label>
     <textarea class="nq" id="nq2" data-k="2" maxlength="270" placeholder="Mis compañeros eran ___ personas. Se diferencian de los personas virtuales en que..."></textarea>
     <p class="small muted nqc" data-k="2" style="margin:4px 0 0;text-align:right"></p>
@@ -808,6 +815,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <div class="hk"><span class="usn">3</span><span aria-hidden="true">🧠</span> Tus compañeros solo vieron una imagen. ¿Qué tendrías que hacer para saber si el precio cambia lo que la persona <b>siente</b> al usar el producto?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p>Ver una imagen solo muestra lo que la persona <b>espera</b> del producto, no lo que siente al usarlo. Para saberlo, la persona tendría que <b>probar</b> el producto sin saber que en las dos ofertas es el mismo, como hicieron con el vino en Plassmann et al. (2008). Y para no depender solo de lo que la persona dice, se puede medir su cerebro con resonancia magnética funcional (fMRI). Kurz et al. (2023) encontraron que el precio cambia sobre todo lo que la gente espera.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Mi estudio solo mide lo que la gente espera. Para saber lo que siente, tendría que tomar la bebida de las dos ofertas sin saber que es la misma.»</p>
+    <div id="iqd3"></div>
     <label for="nq3">Tu respuesta a la pregunta 3</label>
     <textarea class="nq" id="nq3" data-k="3" maxlength="270" placeholder="Mi estudio solo midió lo que la gente espera. Para saber lo que siente al usar el producto tendría que..."></textarea>
     <p class="small muted nqc" data-k="3" style="margin:4px 0 0;text-align:right"></p>
@@ -816,6 +824,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
     <div class="hk"><span class="usn">4</span><span aria-hidden="true">📣</span> ¿Qué le recomiendas a la empresa: la etiqueta de descuento o el precio normal? ¿Por qué?</div>
     <div class="ubox"><b>💡 En palabras sencillas</b><p>Elige una opción y da tu razón usando <b>un número de tus datos</b>. Si tus datos no muestran una diferencia clara, dilo así: también es una respuesta válida. Puedes añadir un cuidado, por ejemplo, que tus participantes fueron pocos.</p></div>
     <p class="small muted" style="margin:0 0 8px"><b>Ejemplo</b> (inventado; usa tus propios números): «Le recomiendo el precio normal, porque mis compañeros esperaron 0,9 puntos más de calidad con él. Pero solo medí a 6 personas, así que convendría repetirlo con más.»</p>
+    <div id="iqd4"></div>
     <label for="nq4">Tu respuesta a la pregunta 4</label>
     <textarea class="nq" id="nq4" data-k="4" maxlength="270" placeholder="Le recomiendo ___ porque mis datos muestran que... Un cuidado es que..."></textarea>
     <p class="small muted nqc" data-k="4" style="margin:4px 0 0;text-align:right"></p>
@@ -2933,6 +2942,49 @@ function nqSendUi(done){
     else if(e.target.closest('#nqEdit')){S.fin=0;lsSave();renderAll();const q=$('nq1');if(q)q.focus();}
   });}
 }
+/* ---------- Interpretación: tarjetas con los datos que necesita cada pregunta ---------- */
+function iqCards(){
+  const pid=S.equipo,pr=prod(pid),lo=money(priceOf(pid,'low')),mi=money(priceOf(pid,'mid'));
+  const mine=S.sims.filter(x=>x.prod===pid),lr=mine.filter(x=>labCase(x).tipo==='precio').slice(-1)[0];
+  const m=cols(rowsOfLocal(),pid),cp=BACKEND?cols(CLASSROWS,pid):null;
+  const qD=m.n?mean(m.q.D):null,qR=m.n?mean(m.q.R):null,gD=m.n?mean(m.g.D):null,gR=m.n?mean(m.g.R):null;
+  const azar=w=>!w?'no se puede calcular (hacen falta al menos 2 personas)':w.p<0.05?`poco probable (${pEq(w.p)})`:`puede ser casualidad (${pEq(w.p)})`;
+  const dirTx=(d,sig)=>!sig?'no hubo una diferencia clara':d>0?'el precio más alto hizo esperar más calidad':'el precio más bajo hizo esperar más calidad';
+  const box=(t,x)=>`<div class="iqd-col"><h5>${t}</h5>${x}</div>`;
+  const li=a=>`<ul>${a.filter(Boolean).map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  const wrap=(t,x)=>`<div class="iqd"><p class="iqd-t">📌 ${t}</p>${x}</div>`;
+  /* laboratorio */
+  let L=null;
+  if(lr){const K=labCase(lr),A=lr.a,B=lr.b,cL=K.barato==='A'?A:B,cH=K.caro==='A'?A:B,dd=lr.w.diff*K.sgn;
+    L={r:lr.r,n:A[2],mLo:cL[3],mHi:cH[3],sdL:(A[4]+B[4])/2,d:dd,w:lr.w,sig:lr.w.p<0.05,pLo:money(priceOf(pid,cL[0])),pHi:money(priceOf(pid,cH[0])),tLo:TIERL[cL[0]],tHi:TIERL[cH[0]],oLo:cL[5],oHi:cH[5]};}
+  const labBox=L?box(`🧪 Laboratorio virtual (ronda ${L.r})`,li([`Precio más bajo (${esc(L.pLo)}, ${L.tLo}): <b>${f(L.mLo)}</b>`,`Precio más alto (${esc(L.pHi)}, ${L.tHi}): <b>${f(L.mHi)}</b>`,`Diferencia: <b>${f(L.d)}</b> puntos ${L.d>0?'a favor del precio más alto':L.d<0?'a favor del precio más bajo':''}`,`¿Casualidad?: ${azar(L.w)}`]))
+    :box('🧪 Laboratorio virtual',`<p class="small">No tienes una ronda que compare solo el precio (misma presentación). ${mine.length?'Tus rondas cambiaron también la presentación o usaron el mismo precio.':'Aún no tienes rondas.'}</p>`);
+  const expBox=m.n?box(`👥 Tus compañeros (${m.n})`,li([`Con descuento (${esc(lo)}): <b>${f(qD)}</b>`,`Con precio normal (${esc(mi)}): <b>${f(qR)}</b>`,`Diferencia: <b>${f(qR-qD)}</b> puntos ${qR>qD?'a favor del precio normal':qR<qD?'a favor del descuento':''}`,`¿Casualidad?: ${azar(m.wq)}`])):box('👥 Tus compañeros','<p class="small">Aún no mediste a nadie.</p>');
+  const claseL=cp&&cp.n>m.n?`<p class="small" style="margin:6px 0 0">👥👥 <b>Toda la clase con ${esc(pr.short.toLowerCase())}</b> (${cp.n} personas): con descuento ${f(mean(cp.q.D))}, con precio normal ${f(mean(cp.q.R))}; diferencia ${f(cp.wq?cp.wq.diff:mean(cp.q.R)-mean(cp.q.D))} · ¿casualidad?: ${azar(cp.wq)}.</p>`:'';
+  /* 1: ¿se parece? */
+  let par='';
+  if(L&&m.wq){const ld=L.sig?Math.sign(L.d):0,ed=m.wq.p<0.05?Math.sign(m.wq.diff):0;
+    par=`<p class="iqd-k">🔎 <b>¿Se parecen?</b> En el laboratorio virtual, ${dirTx(L.d,L.sig)}; con tus compañeros, ${dirTx(m.wq.diff,m.wq.p<0.05)}. ${ld===ed?'<b>Coinciden.</b>':'<b>No coinciden.</b>'} ${Math.sign(L.d)===Math.sign(m.wq.diff)?'Además, en los dos la diferencia fue hacia el mismo lado.':'Además, la diferencia fue hacia lados distintos.'}</p>`;}
+  const c1=wrap('Tus resultados para responder la pregunta 1',`<div class="iqd-g">${labBox}${expBox}</div>${claseL}${par}`);
+  /* 2: diferencias entre muestras */
+  const sdR=m.n>1?(sd(m.q.D)+sd(m.q.R))/2:null;
+  const row=(k,v,r)=>`<div class="iqd-r"><b>${k}</b><div class="iqd-g"><div class="iqd-col"><small>🧪 Laboratorio virtual</small><p>${v}</p></div><div class="iqd-col"><small>👥 Tus compañeros</small><p>${r}</p></div></div></div>`;
+  const c2=wrap('Comparación de las dos muestras',`<div class="iqd-rows">
+    ${row('¿Quiénes?','Personas virtuales creadas por la computadora con reglas basadas en estudios','Personas reales: compañeros de otros equipos')}
+    ${row('¿Cuántos?',L?`${L.n}`:'–',`${m.n}`)}
+    ${row('¿Qué vieron?','Las dos ofertas, dentro de un resonador virtual','Una imagen de cada oferta en el teléfono móvil')}
+    ${row('¿Qué se midió?','Nota de calidad y actividad del cerebro (mOFC)','Nota de calidad, gusto y elección final')}
+    ${row('¿Cuánto variaron las notas? (DE promedio)',L?f(L.sdL):'–',sdR!=null?f(sdR):'–')}
+    </div><p class="small" style="margin:6px 0 0">La DE dice si opinaron parecido (chica) o muy distinto (grande).</p>`);
+  /* 3: expectativa vs experiencia */
+  const c3=wrap('Qué mediste y qué no',`${li([m.n?`<b>Calidad que esperaban</b> al ver la imagen: ${f(qD)} con descuento y ${f(qR)} con precio normal.`:'<b>Calidad que esperaban</b> al ver la imagen: aún sin datos.',m.n?`<b>Gusto</b> al ver la imagen: ${f(gD)} con descuento y ${f(gR)} con precio normal${m.wg?' · ¿casualidad?: '+azar(m.wg):''}.`:'',`<b>Lo que no mediste:</b> cómo se siente usar el producto (tomar la bebida, escuchar los audífonos, correr con las zapatillas). Nadie lo probó.`])}
+    <p class="small" style="margin:6px 0 0">En Plassmann et al. (2008) las personas <b>probaron</b> el vino. Kurz et al. (2023) encontraron que el precio cambia lo que la gente <b>espera</b>, pero no tanto lo que siente <b>después de probar</b>.</p>`);
+  /* 4: recomendación */
+  const R=m.wq?respuesta(m.wq.diff,m.wq.p<0.05,'el descuento'):null;
+  const c4=wrap('Datos para tu recomendación',`${li([`Precios: descuento <b>${esc(lo)}</b> · normal <b>${esc(mi)}</b>.`,m.wq?`Calidad esperada: ${f(qR)} con precio normal y ${f(qD)} con descuento (diferencia ${f(m.wq.diff)}; efecto ${magOf(m.wq.d)}; ¿casualidad?: ${azar(m.wq)}).`:'Calidad esperada: faltan datos (al menos 2 compañeros).',m.n?`Gusto: ${f(gR)} con precio normal y ${f(gD)} con descuento.`:'',m.n?`Elección final: <b>${m.rPref} de ${m.n}</b> (${Math.round(m.rPref/m.n*100)} %) eligieron el precio normal.`:'',L?`Laboratorio virtual: ${dirTx(L.d,L.sig)} (diferencia ${f(L.d)}).`:'',cp&&cp.n>m.n&&cp.wq?`Toda la clase con tu producto (${cp.n} personas): diferencia ${f(cp.wq.diff)} · ¿casualidad?: ${azar(cp.wq)}.`:''])}
+    ${R?`<p class="iqd-k">👉 <b>Respuesta corta, según tus compañeros:</b> ${cap(R)}</p>`:''}${m.n&&m.n<META_OBS?`<p class="small" style="margin:6px 0 0">Ojo: mediste a ${m.n} de ${META_OBS} compañeros; menciónalo como un cuidado en tu recomendación.</p>`:''}`);
+  [c1,c2,c3,c4].forEach((h,i)=>{const e=$('iqd'+(i+1));if(e)e.innerHTML=h;});
+}
 function renderInterp(){
   if(!$('interpData'))return;
   const pid=S.equipo,pr=prod(pid),rows=BACKEND?CLASSROWS:rowsOfLocal(),cp=cols(rows,pid);
@@ -2954,6 +3006,7 @@ function renderInterp(){
   const ae=document.activeElement,typing=ae&&ae.classList&&ae.classList.contains('nq');
   if(!typing){const v=nqParse(S.nota);[1,2,3,4].forEach(k=>{const e=$('nq'+k);if(e)e.value=v[k-1];});}
   document.querySelectorAll('.nq').forEach(e=>{if(!e.dataset.b){e.dataset.b='1';e.addEventListener('input',nqSave);}});
+  try{iqCards();}catch(e){}
   nqUi();
 }
 function renderAll(){
