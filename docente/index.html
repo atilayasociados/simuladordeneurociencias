@@ -1082,7 +1082,7 @@ async function sync(){
 function pending(){return S.obs.filter(x=>!x.sent).length+S.sims.filter(x=>!x.sent).length+(S.notaDirty?1:0);}
 function renderStatus(){
   const el=$('status');if(!el)return;
-  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este dispositivo.';return;}
+  if(!BACKEND){el.textContent='Modo práctica: sin servidor, tus datos quedan solo en este celular o computadora.';return;}
   const n=pending();
   el.textContent=conn==='sesion'?'Tu sesión venció. Ingresa de nuevo para enviar los datos pendientes.':
     conn==='offline'?'Sin conexión. Tus datos están guardados aquí y se enviarán solos'+(n?' ('+n+' pendientes).':'.'):
@@ -1169,7 +1169,7 @@ function AX_mostrar(modo,msg){
       ((S.integrantes||[]).length>=5?'<p class="ax-hint">El equipo ya tiene el máximo de 5 integrantes.</p>':'<label for="axNa">¿Tu alias no está? Agrégalo (máximo 5 integrantes)</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>')+
       '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
   }else if(modo==='practica'){
-    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este dispositivo.</p>'+
+    h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este celular o computadora.</p>'+
       '<label for="axPa">Alias</label><input class="ax-in" id="axPa" maxlength="24" autocomplete="off" onkeydown="AX_enter(event,AX_practica)">'+
       '<label for="axPp">Producto</label><select class="ax-in" id="axPp">'+prodOptions()+'</select>'+
       '<button class="ax-btn" id="axGo" onclick="AX_practica()">Entrar →</button><div id="axErr" class="ax-err"></div>'+
@@ -2650,7 +2650,7 @@ function renderUnidades(){
   const prog=`<div class="uprog" aria-label="Avance">${U.map((u,i)=>`<button class="upd${done.includes(u.id)?' done':''}${UCUR===u.id?' cur':''}" data-ugo="${u.id}" style="--uc:${UVIS[u.id].c}" title="Unidad ${i+1}${done.includes(u.id)?' (completada)':''}">${done.includes(u.id)?'✓':i+1}</button>`).join('<span class="upl"></span>')}<span class="small muted" style="margin-left:10px">${done.length} de ${U.length} completadas</span></div>`;
   const ix=`<div class="card"><h2>Unidades de aprendizaje</h2><p>Cinco lecturas cortas sobre neurociencia aplicada al consumidor, con evidencia científica. En todo el simulador, las palabras <a class="cl" href="#unidades" data-c="calidad-esperada">subrayadas así</a> te traen aquí, al concepto que necesitas.</p>${prog}
     <div class="ubtns" role="tablist" aria-label="Unidades">${U.map((u,i)=>`<button role="tab" class="ubtn${UCUR===u.id?' on':''}" aria-selected="${UCUR===u.id}" data-ugo="${u.id}" style="--uc:${UVIS[u.id].c}"><span>${UVIS[u.id].ic} Unidad ${i+1}${done.includes(u.id)?' · ✓':''}</span>${esc(u.t)}</button>`).join('')}<button role="tab" class="ubtn${UCUR==='az'?' on':''}" aria-selected="${UCUR==='az'}" data-ugo="az" style="--uc:#3F4A5C"><span>📖 Glosario</span>Conceptos de la A a la Z</button></div>
-    <p class="small muted" style="margin:10px 0 0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2. El avance se recuerda solo en este dispositivo.</p></div>`;
+    <p class="small muted" style="margin:10px 0 0">Sugerencia: unidades 1 y 3 antes de la sesión 1; 2 y 4 durante la sesión 1; 4 y 5 en la sesión 2. El avance se recuerda solo en este celular o computadora.</p></div>`;
   const body=U.map((u,i)=>{const v=UVIS[u.id],nc=UDEF.filter(d=>u.s.some(x=>x.k===d.k)).length;
     return `<div class="card unit" id="${u.id}" style="--uc:${v.c}"${UCUR===u.id?'':' hidden'}>
     <div class="uhero"><div class="unum">${String(i+1).padStart(2,'0')}</div><div><p class="uic">${v.ic} Unidad ${i+1}</p><h2>${esc(u.t)}</h2><p class="umeta">⏱ ${uMin(u)} min · 📌 ${nc} conceptos · ✅ ${u.q.length} preguntas</p></div></div>
@@ -2719,7 +2719,7 @@ function renderEquipo(){
   $('equipoOut').innerHTML=`<div class="card"><h3 class="sh">📊 Tu avance</h3>
     <div class="stat ic"><div><em aria-hidden="true">👤</em><b>${esc(S.alias)}</b><span>tu alias</span></div><div><em aria-hidden="true">🏷️</em><b>${esc(pr.short)}</b><span>${esc(pr.name)}</span></div><div><em aria-hidden="true">🔁</em><b>${mine}</b><span>rondas simuladas</span></div><div><em aria-hidden="true">🧑‍🤝‍🧑</em><b>${n}</b><span>participantes medidos</span></div></div>
     ${meter(n,6,'Meta del experimento: participantes medidos')}
-    <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este dispositivo.</span>'}</p></div>
+    <p class="small" style="margin:6px 0 0">${BACKEND?(pend?`<span class="sem y">⏳ ${pend} dato(s) pendientes de envío</span>`:'<span class="sem g">✓ Todos tus datos están enviados a tu docente</span>'):'<span class="muted">Modo práctica: tus datos quedan solo en este celular o computadora.</span>'}</p></div>
   ${BACKEND?`<div class="card"><h3 class="sh">👥 Integrantes</h3><div class="avs">${mem||'–'}</div>
     <div class="row"><input type="text" id="eqNew" maxlength="24" placeholder="Agregar un alias" autocomplete="off" style="flex:1 1 180px;width:auto"><button id="eqAdd">Agregar</button></div>
     <p class="small" id="eqMsg" style="margin:8px 0 0;color:var(--bad)" role="alert"></p></div>
@@ -2784,7 +2784,7 @@ function renderAll(){
 }
 function init(){
   const ban=$('banner');
-  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este dispositivo y el docente no los verá.';}
+  if(!BACKEND){ban.hidden=false;ban.innerHTML='<b>Modo práctica.</b> Esta copia de la página no está conectada a un servidor: tus datos quedan solo en este celular o computadora y el docente no los verá.';}
   bindLogin();bindSim();bindExp();bindDoc();
   $('nota').value=S.nota||'';
   let nt=null;
