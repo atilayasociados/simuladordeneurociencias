@@ -673,6 +673,7 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
 .req{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#FFCE00;color:#1F2022;border-radius:999px;padding:2px 8px;margin-left:6px}
 .predwarn{margin:10px 0 0;background:#4A2E22;border:1px solid #FF4C00;color:#F2F3F3;border-radius:8px;padding:10px 12px;font-weight:600}
 #predChips.need .chip{border-color:#FF4C00!important;box-shadow:0 0 0 2px rgba(255,76,0,.45)}
+.encbar{height:10px;border-radius:6px;background:var(--surface2);overflow:hidden;margin-bottom:2px}.encbar i{display:block;height:100%;background:#44D62C;border-radius:6px}.encz{color:#FF4C00;font-weight:700}
 .tbkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
 .tbkpi>div{background:var(--surface2);border-radius:10px;padding:10px 12px}.tbkpi small{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
 .tbkpi b{font:700 1.6rem var(--head)}.tbkpi b span{font-size:1rem;color:var(--muted);font-weight:500}
@@ -2123,7 +2124,7 @@ let DTOK='',DPW='',DCLASE=null,DNAME='',dReset=null,DACC=null;
 try{DTOK=sessionStorage.getItem('sn-doc-b2')||'';}catch(e){}
 
 /* ---------- panel docente con barra lateral (solo /docente) ---------- */
-const ADM=[['Clase',[['simulaciones','🎮','Simulaciones','Cada simulación es una clase independiente con sus propios equipos, rondas y resultados.'],['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','🧑‍🔬','Investigadores','Avance de cada alias: participantes medidos, rondas simuladas y última actividad.']]],
+const ADM=[['Clase',[['simulaciones','🎮','Simulaciones','Cada simulación es una clase independiente con sus propios equipos, rondas y resultados.'],['clase','🏫','Resumen de la clase','Estado de la clase, código de acceso y registro de equipos.'],['rondas','🔁','Rondas','Ejecuta la siguiente ronda cuando los estudiantes hayan guardado su decisión.'],['equipos','👥','Equipos','Equipos registrados, sus alias y contraseñas. Desde aquí reinicias la clave de un equipo.'],['avance','📋','Encuestas por estudiante','Cuántas encuestas (compañeros medidos) logró captar cada estudiante, frente a la meta.']]],
   ['Resultados',[['efecto','📈','Efecto por producto','Diferencia pareada (normal − descuento) en calidad esperada y gusto, con IC 95 %.'],['calidad','📊','Calidad esperada','Distribución de la calidad esperada en cada oferta.'],['notas','💬','Conclusiones','Conclusiones escritas por los estudiantes.']]],
   ['Datos',[['datos','💾','Exportar y depurar','Descarga en CSV y borrado de observaciones cargadas por error.']]],
   ['Docencia',[['manualdoc','📘','Manual del profesor','Paso a paso: qué hacer antes, durante y después de la clase.'],['guia','🗓','Guía de clase','Plan sugerido para las dos sesiones.']]],
@@ -2398,7 +2399,16 @@ function renderDoc(){
     hist+=`<rect class="lo" x="${x}" y="${120-h1}" width="14" height="${h1}" rx="2"/><rect class="hi" x="${x+15}" y="${120-h2}" width="14" height="${h2}" rx="2"/><text class="lab" x="${x+15}" y="136" text-anchor="middle">${i+1}</text>`;}
   hist+='</svg>';
   const chips=[['all','Todos'],...CONFIG.PRODUCTS.map(p=>[String(p.id),p.short])].map(([v,l])=>`<button class="chip" data-chip="${v}" aria-pressed="${(docProd===0&&v==='all')||String(docProd)===v}">${esc(l)}</button>`).join('');
-  const body=list.length?`<div class="tablewrap"><table><thead><tr><th>Alias</th><th>Equipo</th><th class="num">Participantes</th><th class="num">Rondas sim.</th><th>Última actividad</th></tr></thead><tbody>${list.map(i=>`<tr><td>${esc(i.inv)}</td><td>${esc(i.eq)}</td><td class="num">${i.n}</td><td class="num">${i.s}</td><td>${i.t?ago(i.t):'–'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay registros.</p>';
+  /* encuestas por estudiante: todos los alias (tablero) o, en demo, los que tienen actividad */
+  const enc=(!demoOn&&TB&&TB.lista)?TB.lista.map(x=>{const v=invs[x.alias+'|'+x.eq]||Object.values(invs).find(i=>i.inv===x.alias&&i.eq===x.eq);return {inv:x.alias,eq:x.eq,prod:x.prod,n:x.obs||0,t:v?v.t:0};})
+    :list.map(i=>({inv:i.inv,eq:i.eq,prod:i.prod,n:i.n,t:i.t}));
+  enc.sort((a,b)=>(a.prod-b.prod)||String(a.eq).localeCompare(String(b.eq))||String(a.inv).localeCompare(String(b.inv)));
+  const eTot=enc.reduce((a,b)=>a+b.n,0),eOk=enc.filter(e=>e.n>=META_OBS).length,e0=enc.filter(e=>!e.n).length;
+  const eRow=e=>{const pc=Math.min(100,e.n/META_OBS*100),st=e.n>=META_OBS?'<span class="tbok">✓ Meta cumplida</span>':e.n?`<span class="tbno">⏳ Falta${META_OBS-e.n>1?'n':''} ${META_OBS-e.n}</span>`:'<span class="encz">⚠️ Sin encuestas</span>';
+    return `<tr><td><b>${esc(e.inv)}</b><br><span class="small muted">${esc(e.eq)}</span></td><td>${esc(prod(e.prod).short)}</td><td class="num"><b style="font-size:20px">${e.n}</b></td><td style="min-width:140px"><div class="encbar"><i style="width:${pc}%"></i></div><span class="small muted">${Math.min(e.n,META_OBS)} de ${META_OBS}</span></td><td>${st}</td><td class="small">${e.t?ago(e.t):'–'}</td></tr>`;};
+  const body=enc.length?`<div class="tbkpi"><div><small>Encuestas captadas</small><b>${eTot}</b></div><div><small>Estudiantes con la meta (${META_OBS})</small><b>${eOk} de ${enc.length}</b></div><div><small>Sin encuestas</small><b>${e0}</b></div><div><small>Promedio por estudiante</small><b>${f(eTot/enc.length,1)}</b></div></div>
+    <p class="small muted" style="margin:8px 0">Cada encuesta es un compañero que respondió las dos ofertas en el teléfono móvil del estudiante. Meta: ${META_OBS} por estudiante. Se actualiza solo cada 15 segundos.</p>
+    <div class="tablewrap"><table><thead><tr><th>Estudiante (alias · equipo)</th><th>Producto</th><th class="num">Encuestas</th><th>Avance</th><th>Estado</th><th>Última actividad</th></tr></thead><tbody>${enc.map(eRow).join('')}</tbody></table></div>`:'<p class="muted">Aún no hay estudiantes registrados.</p>';
   const last=T.obs.slice(-25).reverse();
   const del=!demoOn?`<details class="card" data-sec="datos"><summary>Últimas observaciones (para borrar errores)</summary><div class="tablewrap"><table><thead><tr><th>#</th><th>Investigador</th><th>Prod.</th><th class="num">Cal. d/n</th><th></th></tr></thead><tbody>${last.map(o=>`<tr><td>${o.id}</td><td>${esc(o.inv)} · ${esc(o.eq)}</td><td>${o.prod}</td><td class="num">${o.qd}/${o.qr}</td><td class="num"><button class="ghost danger" data-del="${o.id}" style="min-height:32px;padding:2px 10px">Borrar</button></td></tr>`).join('')}</tbody></table></div></details>`:'';
   const notas=(!demoOn&&RB)?rubricaHTML():T.notas.length?T.notas.map(n=>`<div style="margin-bottom:10px"><b>${esc(n.inv)}</b> <span class="muted small">· ${esc(n.eq)}</span><div style="white-space:pre-line">${esc(n.nota)}</div></div>`).join(''):'<p class="muted">Todavía no hay conclusiones.</p>';
@@ -2427,7 +2437,7 @@ function renderDoc(){
     <p class="small muted" style="margin:8px 0 0">Con pocos participantes por producto la mayoría de los efectos moderados no saldrá significativa: discútelo como parte de la lección.</p></div>
   <div class="card" data-sec="calidad"><h3>Calidad esperada por oferta</h3><div class="chips" style="margin-bottom:8px">${chips}</div>${hist}
     <div class="legend"><span><i style="background:var(--sim)"></i>Descuento</span><span><i style="background:var(--azul);outline:1px solid var(--line)"></i>Normal</span></div></div>
-  <div class="card" data-sec="avance"><h3>Avance por investigador</h3>${body}</div>
+  <div class="card" data-sec="avance"><h3>Encuestas por estudiante</h3>${body}</div>
   ${del}
   <div class="card" data-sec="notas"><h3>Conclusiones de los estudiantes</h3>${notas}</div>
   <details class="card" data-sec="guia"><summary>Guía de clase: plan sugerido para las dos sesiones</summary>
@@ -2499,10 +2509,10 @@ function renderManDoc(){
     `Cuando hayan guardado todos (o los que alcancen), pulsa <b>«▶ Ejecutar ronda 1»</b>. El botón pide confirmación: <b>tócalo dos veces</b>.`,
     `Todos los estudiantes ven su resultado al mismo tiempo en <b>Resultados → Laboratorio virtual</b>. Coméntalo con ellos y repite el ciclo para la ronda 2, 3…`],
     B('Por qué rondas','Ejecutar la ronda para todos a la vez evita que unos vean resultados antes que otros y te permite discutir cada ronda en grupo. Mientras no ejecutes la ronda, cada estudiante puede cambiar su decisión.')+go('rondas','Rondas'))}
-  ${P(8,'🧑‍🔬','Acompaña el experimento con personas reales','Clase → Investigadores',[
+  ${P(8,'📋','Acompaña el experimento con personas reales','Clase → Encuestas por estudiante',[
     `Los estudiantes entran a <b>Decidir → Experimento</b> y miden, en su teléfono móvil, a 2 compañeros de <b>otros equipos</b> que todavía no hayan visto su producto (así cada compañero califica cada producto una sola vez). El participante califica las dos ofertas (precio normal y descuento) y elige una.`,
-    `En <b>«Investigadores»</b> ves cuántos participantes midió cada alias, cuántas rondas simuló y su última actividad.`,
-    `Si alguien va retrasado, pídele que mida a más compañeros antes de pasar a Resultados.`])+go('avance','Investigadores')}
+    `En <b>«Encuestas por estudiante»</b> ves cuántas encuestas logró captar cada alias, si cumplió la meta de ${META_OBS} y su última actividad.`,
+    `Si alguien va retrasado, pídele que mida a más compañeros antes de pasar a Resultados.`])+go('avance','Encuestas por estudiante')}
 
   <h2 class="mdsec">Después de la clase</h2>
   ${P(9,'📈','Revisa los resultados de toda la clase','Resultados → Efecto por producto · Resultados → Calidad esperada',[
