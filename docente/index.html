@@ -1071,7 +1071,7 @@ function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
 let CLASSROWS=[];          // filas anónimas de la clase [prod, orden, qd, gd, qr, gr, el]
 let T=null,demoOn=false;   // datos del docente
 let conn='ok';             // ok | offline | sesion
-const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',sin_hipotesis:'Primero elige tu hipótesis: Mayor en A, Mayor en B o Sin diferencia.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de la simulación incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 5 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
+const ERR={pregunta:'La pregunta debe tener al menos 8 caracteres y la respuesta al menos 2.',codigo_corto:'El código debe tener al menos 4 caracteres.',sin_hipotesis:'Primero elige tu hipótesis: Mayor en A, Mayor en B o Sin diferencia.',datos:'Datos incorrectos.',bloqueado:'Demasiados intentos fallidos. Espera 15 minutos o pide a tu docente que reinicie la contraseña.',codigo:'Código de la simulación incorrecto.',vacio:'Completa todos los campos.',cerrado:'El registro de equipos está cerrado por ahora.',nombre:'El nombre del equipo debe tener entre 3 y 40 caracteres.',producto:'Elige un producto.',clave:'La contraseña es demasiado corta.',integrantes:'Escribe al menos un alias.',alias:'Cada alias debe tener entre 2 y 24 caracteres.',alias_repetido:'Hay alias repetidos.',repetido:'Ya existe un equipo con ese nombre en esta clase.',limite:'Máximo 7 integrantes por equipo.',actual:'La contraseña actual no coincide.',igual:'La nueva contraseña debe ser distinta de la actual.',sesion:'Tu sesión venció. Ingresa de nuevo.',tmp:'Primero cambia la contraseña temporal.',integrante:'Alias no válido.',respuesta:'La respuesta no coincide.',accion:'Acción no válida.'};
 const em=r=>(r&&ERR[r.error])||'No se pudo completar. Revisa tu conexión e inténtalo de nuevo.';
 function stash(){if(S.iid)S.byId[S.iid]={sims:S.sims,obs:S.obs,nota:S.nota,notaDirty:S.notaDirty,cfg:S.cfg,pred:S.pred,draft:S.draft};}
 function unstash(iid){const b=S.byId[iid];S.iid=iid;S.sims=b?b.sims:[];S.obs=b?b.obs:[];S.nota=b?b.nota:'';S.notaDirty=b?b.notaDirty:false;S.cfg=b?b.cfg:NEWCFG();S.pred=b?b.pred:null;S.draft=b?b.draft:NEWDRAFT();}
@@ -1181,7 +1181,7 @@ function AX_mostrar(modo,msg){
       '<div class="ax-2col"><div><label for="axRp">Contraseña</label>'+AX_pw('axRp','Mínimo 4 caracteres','new-password')+'</div><div><label for="axRp2">Confirmar contraseña</label>'+AX_pw('axRp2','','new-password')+'</div></div>'+
       '<label for="axRc">Código de la simulación</label><input class="ax-in ax-code" id="axRc" placeholder="Te lo da tu docente" autocomplete="off" autocapitalize="characters" spellcheck="false" oninput="this.value=this.value.toUpperCase();AX_validarCod()"><div id="axRcm"></div>'+
       '<label for="axRpr">Producto que estudia el equipo</label><select class="ax-in" id="axRpr">'+prodOptions()+'</select>'+
-      '<div class="ax-inth"><b>INTEGRANTES DE TU EQUIPO</b></div><p class="ax-hint" style="margin-top:0">📌 Escribe solo un alias por integrante (un apodo de 2 a 24 caracteres), nunca el nombre real. El equipo puede tener de 1 a 5 integrantes.</p><div id="axFilas"></div>'+
+      '<div class="ax-inth"><b>INTEGRANTES DE TU EQUIPO</b></div><p class="ax-hint" style="margin-top:0">📌 Escribe solo un alias por integrante (un apodo de 2 a 24 caracteres), nunca el nombre real. El equipo puede tener de 1 a 7 integrantes.</p><div id="axFilas"></div>'+
       '<button class="ax-ghost" id="axAdd" onclick="AX_fila()">+ ¿Deseas agregar otro integrante? <span id="axCnt"></span></button>'+
       '<div class="ax-warn">⚠ Guarda bien la contraseña — la necesitará todo el equipo en cada sesión.</div>'+
       '<button class="ax-green" id="axGo" onclick="AX_registrar()">✓ Registrar Equipo</button><div id="axErr" class="ax-err"></div>'+
@@ -1202,7 +1202,7 @@ function AX_mostrar(modo,msg){
   }else if(modo==='elegir'){
     h='<h2>¿Quién eres?</h2><p class="ax-hint" style="text-align:center">📌 '+esc(S.equipoNombre||'Tu equipo')+': toca tu alias para que tus aportes queden registrados con él.</p>'+
       (S.integrantes||[]).map(i=>'<button class="ax-pick" onclick="AX_elegir(\''+esc(i.id)+'\')">'+esc(i.alias)+'</button>').join('')+
-      ((S.integrantes||[]).length>=5?'<p class="ax-hint">El equipo ya tiene el máximo de 5 integrantes.</p>':'<label for="axNa">¿Tu alias no está? Agrégalo (máximo 5 integrantes)</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>')+
+      ((S.integrantes||[]).length>=7?'<p class="ax-hint">El equipo ya tiene el máximo de 7 integrantes.</p>':'<label for="axNa">¿Tu alias no está? Agrégalo (máximo 7 integrantes)</label><div class="ax-2col" style="grid-template-columns:1fr auto"><input class="ax-in" id="axNa" maxlength="24" placeholder="Nuevo alias" autocomplete="off" onkeydown="AX_enter(event,AX_addAlias)"><button class="ax-add" style="height:42px" onclick="AX_addAlias()">+ Agregar</button></div>')+
       '<div id="axErr" class="ax-err"></div><button class="ax-back" onclick="AX_volver()">← Volver</button>';
   }else if(modo==='practica'){
     h='<h2>Modo práctica</h2><p class="ax-hint" style="text-align:center">Esta copia no está conectada a un servidor: tus datos quedan solo en este teléfono móvil o computadora.</p>'+
@@ -1245,8 +1245,8 @@ async function AX_ingresar(){
   }catch(e){AX_busy(b,false);AX_err('No hay conexión con el servidor. Revisa tu internet.');}
 }
 /* registrar */
-function AX_numFilas(){const f=AX_$('axFilas');if(!f)return;[...f.children].forEach((d,i)=>{d.querySelector('.ax-n').textContent='INTEGRANTE '+(i+1);d.querySelector('.ax-x').style.display=f.children.length>1?'':'none';});const n=f.children.length,b=AX_$('axAdd');b.hidden=n>=5;AX_$('axCnt').textContent='('+n+' de 5)';}
-function AX_fila(){const f=AX_$('axFilas');if(f.children.length>=5)return;const d=document.createElement('div');d.className='ax-fila';
+function AX_numFilas(){const f=AX_$('axFilas');if(!f)return;[...f.children].forEach((d,i)=>{d.querySelector('.ax-n').textContent='INTEGRANTE '+(i+1);d.querySelector('.ax-x').style.display=f.children.length>1?'':'none';});const n=f.children.length,b=AX_$('axAdd');b.hidden=n>=7;AX_$('axCnt').textContent='('+n+' de 7)';}
+function AX_fila(){const f=AX_$('axFilas');if(f.children.length>=7)return;const d=document.createElement('div');d.className='ax-fila';
   d.innerHTML='<span class="ax-n"></span><button class="ax-x" title="Quitar integrante" aria-label="Quitar integrante" onclick="AX_quitarFila(this)">✕</button><input class="ax-in" maxlength="24" placeholder="Alias del integrante" autocomplete="off" aria-label="Alias">';
   f.appendChild(d);AX_numFilas();}
 function AX_quitarFila(b){b.parentNode.remove();AX_numFilas();}
@@ -1303,7 +1303,7 @@ async function AX_elegir(id){
   }catch(e){AX_err('No hay conexión con el servidor.');}
 }
 async function AX_addAlias(){
-  AX_err('');const a=AX_$('axNa').value.trim();if(!a)return;if((S.integrantes||[]).length>=5){AX_err('Máximo 5 integrantes por equipo.');return;}
+  AX_err('');const a=AX_$('axNa').value.trim();if(!a)return;if((S.integrantes||[]).length>=7){AX_err('Máximo 7 integrantes por equipo.');return;}
   try{const r=await rpc('sn_agregar_integrante',{p_token:S.token,p_alias:a});
     if(!r||!r.ok){if(sesionPerdida(r))return;AX_err(em(r));return;}
     S.integrantes=r.integrantes||S.integrantes;lsSave();AX_mostrar('elegir');
@@ -2489,7 +2489,7 @@ function renderManDoc(){
 
   <h2 class="mdsec">Durante la clase</h2>
   ${P(6,'👥','Acompaña el registro de los equipos','Clase → Equipos · Clase → Resumen de la clase',[
-    `Un integrante de cada equipo pulsa <b>«Registrar mi equipo»</b> y completa: nombre del equipo, contraseña (mínimo 4 caracteres), código de la simulación, <b>producto</b> que estudiará (VOLTA, AURA o PASO) y un <b>alias</b> por integrante (de 1 a 5; nunca el nombre real).`,
+    `Un integrante de cada equipo pulsa <b>«Registrar mi equipo»</b> y completa: nombre del equipo, contraseña (mínimo 4 caracteres), código de la simulación, <b>producto</b> que estudiará (VOLTA, AURA o PASO) y un <b>alias</b> por integrante (de 1 a 7; nunca el nombre real).`,
     `Revisa en <b>«Equipos»</b> que aparezcan todos, con su producto y sus alias. Conviene que los tres productos queden repartidos entre los equipos.`,
     `Cuando estén todos, ve a <b>«Resumen de la clase»</b> y pulsa <b>«⏸ Cerrar registro de equipos»</b>. Así nadie crea equipos de más; los equipos registrados siguen entrando normalmente.`,
     `Si un equipo olvida su contraseña, en «Equipos» pulsa reiniciar contraseña: el panel muestra una contraseña temporal que dictas al equipo; al entrar, el equipo elige una nueva.`])+go('equipos','Equipos')}
