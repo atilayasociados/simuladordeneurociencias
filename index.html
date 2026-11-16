@@ -1820,11 +1820,15 @@ function renderExp(){
   if(d.step===0){
     const others=CONFIG.PRODUCTS.filter(p=>p.id!==S.equipo);
     h=`${d.saved?'<div class="okbox">Participante guardado. Puedes medir al siguiente.</div>':''}
-    <p>Tu producto es <b>${esc(pr.name)}</b>. Mides a compañeros de otros equipos.</p>
-    <label>¿De qué equipo es el participante?</label>
-    <div class="chips" style="margin-bottom:14px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${esc(p.name)}</button>`).join('')}</div>
+    <p>Tu compañero va a calificar <b>tu producto: ${esc(pr.name)}</b>. Antes de entregarle el teléfono móvil, indica de qué equipo viene él.</p>
+    <h3 class="sh"><span class="usn">1</span> ¿Qué producto estudia el equipo de tu compañero? <span class="req">obligatoria</span></h3>
+    <p class="small muted" style="margin:0 0 8px">Pregúntale a tu compañero y toca el producto de <b>su</b> equipo. No es el producto que va a calificar: él calificará tu ${esc(pr.name)}.</p>
+    <div class="chips hyp" style="margin-bottom:10px">${others.map(p=>`<button class="chip" data-pe="${p.id}" aria-pressed="${d.pe===p.id}">${d.pe===p.id?'✓ ':''}${esc(p.name)}</button>`).join('')}</div>
+    ${d.pe?`<div class="okbox" style="margin-bottom:12px">✓ Tu compañero es del equipo de <b>${esc(prod(d.pe).name)}</b>.</div>`:''}
     <div class="ubox"><b>💡 Por qué solo compañeros de otros equipos, en palabras sencillas</b><p>Ellos no conocen tu producto ni tu hipótesis, así que responden sin saber qué «debería» salir. Si midieras a alguien de tu propio equipo, sus respuestas podrían inclinarse hacia lo que ustedes esperan. Elegir su equipo sirve para saber de qué grupo viene cada respuesta.</p></div>
-    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el teléfono móvil al participante</button>`;
+    <h3 class="sh" style="margin-top:14px"><span class="usn">2</span> Entrega el teléfono móvil</h3>
+    <button class="primary" data-act="start" ${d.pe?'':'disabled'}>Entregar el teléfono móvil al participante</button>
+    ${d.pe?'':'<p class="small muted" style="margin:8px 0 0">Para activar el botón, primero toca en el paso 1 el producto del equipo de tu compañero.</p>'}`;
   } else if(d.step===1||d.step===2){
     const ver=d.order[d.step-1],q=d.v['q'+ver],g=d.v['g'+ver];
     h=`${pmSteps(d.step)}<p class="pmhead">${d.step===1?'Primera oferta':'Segunda oferta: el mismo producto con otra etiqueta de precio'}</p>
