@@ -1527,7 +1527,7 @@ function nextStep(v){
   if(!sims&&!dec)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 1 · Guarda tu decisión en el laboratorio virtual',d:'En Decidir → Laboratorio virtual: (1) toca tu hipótesis, (2) elige el precio y la presentación de las ofertas A y B, (3) elige cuántas personas virtuales entran al resonador y pulsa el botón verde «Guardar mi decisión».'};
   if(!sims)return{h:'simular',b:'Ir a Decidir → Laboratorio virtual',t:'Paso 2 · Espera a que el profesor ejecute la ronda',d:'Tu decisión está guardada. Cuando el profesor ejecute la ronda, el resultado de tu laboratorio virtual aparecerá en Resultados → Laboratorio virtual. Hasta entonces puedes cambiar tu decisión.'};
   if(!vis.resultados)return{h:'resultados',b:'Ir a Resultados → Laboratorio virtual',t:'Paso 2 · Lee el resultado de tu laboratorio virtual',d:'El profesor ya ejecutó la ronda. Mira lo que dijeron las personas virtuales y lo que mostró su cerebro.'};
-  if(!obsOk())return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el teléfono móvil al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'+(n>=1?' Si no puedes llegar a '+META_OBS+', más arriba puedes elegir «Continuar con '+n+'».':'')};
+  if(!obsOk())return{h:'experimento',b:'Ir a Decidir → Experimento',t:`Paso 3 · Mide a tus compañeros (${n} de ${META_OBS})`,d:'En Decidir → Experimento: (1) busca a un compañero de otro equipo, (2) toca el producto de su equipo, (3) pulsa «Entregar el teléfono móvil al participante» y deja que él califique las dos ofertas. Repite hasta llegar a la meta.'+(n>=1?' Si no hay más compañeros disponibles, más arriba, en «Tus registros», puedes elegir «Terminar la toma de datos».':'')};
   if(!vis.expres)return{h:'expres',b:'Ir a Resultados → Experimento',t:'Paso 4 · Mira el resultado de tu experimento',d:'Ya terminaste de medir. Mira qué calidad esperaron con el precio normal y con el descuento.'};
   if(!vis.comparar)return{h:'comparar',b:'Ir a Resultados → Comparación',t:'Paso 5 · Compara el laboratorio virtual con el experimento',d:'¿Las personas reales respondieron parecido a las virtuales? Ábrelo en Resultados → Comparación.'};
   if(qn<4)return{h:'interpretacion',b:'Ir a Aprender → Interpretación',t:'Paso 6 · Escribe tu interpretación',d:`Responde las 4 preguntas de Aprender → Interpretación con tus números (llevas ${qn} de 4).`};
@@ -1702,20 +1702,21 @@ function bindExp(){
   });
   $('obsList').addEventListener('click',e=>{
     if(e.target.closest('#contSi')){S.contObs=true;touch(true);return;}
-    if(e.target.closest('#contNo')){const c=document.querySelector('#obsList .contobs');if(c)c.remove();return;}
+    if(e.target.closest('#contNo')){const c=document.querySelector('#obsList .contobs');if(c)c.remove();const r=$('expRun');if(r)window.scrollTo(0,Math.max(0,r.getBoundingClientRect().top+window.scrollY-12));return;}
     const b=e.target.closest('button[data-del]');if(!b)return;
     if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='¿Seguro?';return;}
     S.obs.splice(+b.dataset.del,1);if(!S.obs.length)S.contObs=false;touch(true);});
 }
 function contHTML(n){
   if(n<1||n>=META_OBS)return '';
-  if(S.contObs)return `<div class="note" style="margin-bottom:12px">Elegiste continuar con <b>${n}</b> compañero(s). Si alguien más puede participar, sigue midiendo: tus resultados se actualizan solos.</div>`;
-  return `<div class="card contobs" style="margin-bottom:12px"><h3 class="sh" style="margin:0 0 6px">¿Deseas continuar con ${n} compañero${n>1?'s':''}?</h3>
-    <p style="margin:0 0 8px">La meta es medir a <b>${META_OBS}</b>. Si no hay más compañeros disponibles, puedes seguir al resultado de tu experimento con los que ya mediste.</p>
+  const cp=n===1?'1 compañero':n+' compañeros';
+  if(S.contObs)return `<div class="note" style="margin-bottom:12px">✅ <b>Terminaste la toma de datos con ${cp}.</b> Ya puedes ver tu resultado en Resultados → Experimento. Si después aparece otro compañero disponible, aún puedes medirlo: tu resultado se actualiza solo.</div>`;
+  return `<div class="card contobs" style="margin-bottom:12px"><h3 class="sh" style="margin:0 0 6px">Llevas ${cp} de ${META_OBS}. ¿Qué quieres hacer?</h3>
+    <p style="margin:0 0 8px">Tienes dos caminos:</p>
+    <ul style="margin:0 0 10px;padding-left:20px;line-height:1.55"><li><b>Seguir midiendo:</b> buscas a otro compañero de otro equipo y le entregas el teléfono móvil, hasta llegar a ${META_OBS}. Es lo recomendado.</li><li><b>Terminar la toma de datos:</b> si ya no hay compañeros disponibles, cierras la medición con ${cp} y pasas a ver el resultado de tu experimento.</li></ul>
     <div class="ubox"><b>💡 Ten en cuenta</b><p>Con menos personas, el resultado es menos confiable: una sola respuesta puede cambiar mucho el promedio.${n<2?' Con 1 compañero solo verás su respuesta; para calcular si la diferencia puede ser azar hacen falta al menos 2.':''} En la Comparación también verás los datos de toda la clase para tu producto.</p></div>
-    <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap"><button class="primary" type="button" id="contSi">Sí, continuar con ${n}</button><button class="ghost" type="button" id="contNo">No, sigo midiendo</button></div></div>`;
+    <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap"><button class="primary" type="button" id="contNo">Seguir midiendo compañeros</button><button class="ghost" type="button" id="contSi">Terminar la toma de datos con ${n} y ver mi resultado</button></div></div>`;
 }
-function pmSteps(k){return `<ol class="pmsteps" aria-label="Avance del participante">${['Oferta 1','Oferta 2','Elección'].map((t,i)=>`<li class="${i+1<k?'done':i+1===k?'cur':''}"${i+1===k?' aria-current="step"':''}>${i+1<k?'✓ ':''}${t}</li>`).join('')}</ol>`;}
 function renderExp(){
   if(S.draft&&(S.draft.step===1||S.draft.step===2)&&!(S.draft.order&&S.draft.order.length===2))S.draft={step:0,order:null,v:{},pe:null,pm:false};
   const d=S.draft,n=S.obs.length,pad=x=>String(x).padStart(2,'0'),pr=prod(S.equipo);
@@ -1799,7 +1800,7 @@ function lkReq(v){
   const R={
     resultados:()=>[pDec,pRonda],
     experimento:()=>[pRonda,{ok:sims>0&&!!vis.resultados,t:'Revisar el resultado de tu laboratorio virtual',d:'Abre Resultados → Laboratorio virtual y lee qué encontró tu laboratorio virtual.',h:'resultados',b:'Ir al resultado del laboratorio'}],
-    expres:()=>[{ok:obsOk(),t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el teléfono móvil a un compañero de otro equipo y deja que él responda.${n>=1?' Si no puedes llegar a '+META_OBS+', al final de Decidir → Experimento puedes elegir «Continuar con '+n+'».':''}`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
+    expres:()=>[{ok:obsOk(),t:`Medir a ${META_OBS} compañeros de otros equipos`,d:`Llevas ${Math.min(n,META_OBS)} de ${META_OBS}. En Decidir → Experimento entrega el teléfono móvil a un compañero de otro equipo y deja que él responda.${n>=1?' Si no hay más compañeros disponibles, en Decidir → Experimento puedes elegir «Terminar la toma de datos con '+n+'».':''}`,h:'experimento',b:'Ir a Experimento',m:[Math.min(n,META_OBS),META_OBS]}],
     comparar:()=>[{ok:lkOpen0('expres')&&!!vis.expres,t:'Revisar el resultado de tu experimento',d:'Abre Resultados → Experimento y mira qué respondieron tus compañeros.',h:'expres',b:'Ir al resultado del experimento'}],
     interpretacion:()=>[{ok:lkOpen0('comparar')&&!!vis.comparar,t:'Revisar la Comparación',d:'Abre Resultados → Comparación y compara tu laboratorio virtual con tus compañeros.',h:'comparar',b:'Ir a Comparación'}]
   };
