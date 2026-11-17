@@ -583,6 +583,9 @@ body:not(.adm) nav .sub a:hover{border-color:#44D62C;background:#404244}
 body:not(.adm) nav .sub a.on{background:#2C4A2A;border-color:#44D62C;color:#8FE37F;box-shadow:inset 0 0 0 1px #44D62C}
 .simcod{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .adm-topr{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.adm-pres{background:#FFCE00!important;text-decoration:none;display:inline-flex;align-items:center;margin-left:8px}
+.prescard{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:2px solid #FFCE00!important;margin-bottom:14px}.prescard-i{font-size:34px}
+.presbtn{background:#FFCE00!important;color:#1F2022!important;font-weight:800;text-decoration:none;border-radius:10px;padding:12px 18px;display:inline-block}
 .adm-man{background:#44D62C!important;color:#1F2022!important;border:0!important;border-radius:8px;padding:8px 14px;font:700 13px var(--head);letter-spacing:0;text-transform:none;cursor:pointer;min-height:36px}
 .adm-man:hover{background:#5BE045!important}
 #mdOut .card,#mdOut .mdstep{max-width:980px}
@@ -843,9 +846,11 @@ body:not(.adm) .ab svg.ptag,body:not(.adm) .pcard svg.ptag,.ab svg.ptag{backgrou
 
 <!-- APRENDER · Manual -->
 <main id="t-unidades" class="hidden-tab">
+  <div class="card prescard"><div class="prescard-i" aria-hidden="true">🎞️</div><div style="flex:1;min-width:0"><h3 style="margin:0 0 4px">Presentación de la clase</h3><p class="small muted" style="margin:0">«Descifrando la mente transparente del consumidor» · Ing. Jhonny David Atila Lijerón, MSc. · PDF, 22 láminas (6 MB)</p></div><a class="btn presbtn" data-pres download="Neurociencias_aplicada_al_Consumidor_Jhonny_Atila.pdf" target="_blank" rel="noopener">⬇ Descargar presentación</a></div>
   <div id="unidadesOut"></div>
 </main>
 <main id="t-manual" class="hidden-tab">
+  <div class="card prescard"><div class="prescard-i" aria-hidden="true">🎞️</div><div style="flex:1;min-width:0"><h3 style="margin:0 0 4px">Presentación de la clase</h3><p class="small muted" style="margin:0">«Descifrando la mente transparente del consumidor» · Ing. Jhonny David Atila Lijerón, MSc. · PDF, 22 láminas (6 MB)</p></div><a class="btn presbtn" data-pres download="Neurociencias_aplicada_al_Consumidor_Jhonny_Atila.pdf" target="_blank" rel="noopener">⬇ Descargar presentación</a></div>
   <div id="manualOut"></div>
 </main>
 
@@ -1049,6 +1054,10 @@ const BACKEND=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
 const VIEWS=['caso','equipo','simular','experimento','resultados','expres','comparar','interpretacion','unidades','manual','docente'];
 const GROUPS=[{n:'Situación',v:[['caso','El caso'],['equipo','Mi equipo']]},{n:'Decidir',v:[['simular','Laboratorio virtual'],['experimento','Experimento']]},{n:'Resultados',v:[['resultados','Laboratorio virtual'],['expres','Experimento'],['comparar','Comparación']]},{n:'Aprender',v:[['interpretacion','Interpretación'],['unidades','Unidades'],['manual','Manual y referencias']]},{n:'Docente',v:[['docente','Panel docente']]}];
 const DOCMODE=/\/docente(\/|\/index\.html)?$/.test(location.pathname),BASE=DOCMODE?'../':'';
+const PRES_URL=BASE+'docs/Neurociencias_aplicada_al_Consumidor_Jhonny_Atila.pdf';
+document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('a[data-pres]').forEach(a=>a.href=PRES_URL));
+document.querySelectorAll('a[data-pres]').forEach(a=>a.href=PRES_URL);
+
 const LOGO_AI=BASE+'img/logo-atila-ieac.png';document.querySelectorAll('img[data-logo]').forEach(i=>i.src=i.dataset.logo==='w'?BASE+'img/logo-atila-ieac-blanco.png':LOGO_AI);
 if(location.search){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 if(!DOCMODE){VIEWS.splice(VIEWS.indexOf('docente'),1);GROUPS.pop();}
@@ -2137,7 +2146,7 @@ function admBuild(){
   const a=document.createElement('div');a.id='adm';
   a.innerHTML=`<aside class="adm-side" aria-label="Menú del panel docente"><div class="adm-brand"><img src="${BASE}img/logo3.png" alt="" onerror="this.style.display='none'"><div><b>Simulador de Neurociencias</b><span>Panel docente</span></div></div><div class="adm-logo"><img src="${LOGO_AI}" alt="Atila y Asociados · IEAC Business School"></div>
     <div class="adm-menu" id="admMenu" role="navigation" aria-label="Secciones del panel"></div><div class="adm-foot"><b id="admWho"></b><button class="adm-btn" id="admOut" style="min-height:38px;padding:6px 16px;font-size:13.5px">Salir</button></div></aside>
-    <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span class="adm-topr"><button class="adm-man" id="admMan" type="button">📘 Manual del profesor</button><span id="admSel"></span></span></div>
+    <div class="adm-main"><div class="adm-top"><span id="admLbl"></span><span class="adm-topr"><button class="adm-man" id="admMan" type="button">📘 Manual del profesor</button><a class="adm-man adm-pres" data-pres download="Neurociencias_aplicada_al_Consumidor_Jhonny_Atila.pdf" target="_blank" rel="noopener">⬇ Presentación (PDF)</a><span id="admSel"></span></span></div>
     <div class="adm-body"><h1 class="adm-h" id="admH"></h1><p class="adm-sub" id="admSub"></p><div class="adm-tools"><button class="adm-btn" id="admRef">↺ Actualizar</button><button class="adm-btn go" id="admDemo" hidden>Ver clase de ejemplo</button></div><div id="admSlot"></div></div></div>`;
   document.body.appendChild(a);
   $('admSlot').appendChild($('t-docente'));bindSims();$('admSel').appendChild($('dClase'));
