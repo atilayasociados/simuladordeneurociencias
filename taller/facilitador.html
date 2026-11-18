@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Panel del facilitador · Tu oficina en el bolsillo</title>
+<title>Panel del facilitador · Taller práctico «Inteligencia Artificial»</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,7 @@ td.n{text-align:right}
 <body>
 <div id="vLogin" class="login">
   <div class="card">
-    <h2 id="lTit">Panel del facilitador</h2>
+    <h2 id="lTit">Panel del facilitador</h2><p class="mini">Taller práctico «Inteligencia Artificial» · Facilitador: Ing. Jhonny David Atila Lijerón, MSc.</p>
     <p id="lTxt" class="mini">Escriba la contraseña del panel.</p>
     <label for="c1">Contraseña</label><input type="password" id="c1" onkeydown="if(event.key==='Enter')entrar()">
     <div id="c2box" class="oculto"><label for="c2">Repita la contraseña</label><input type="password" id="c2"></div>
@@ -68,7 +68,7 @@ td.n{text-align:right}
 </div>
 
 <div id="vPanel" class="oculto">
-  <header><b>Panel del facilitador · Tu oficina en el bolsillo</b><span class="mini" id="hora"></span><button class="btn sec" onclick="cargar(true)">Actualizar</button><button class="btn sec" onclick="salir()">Salir</button></header>
+  <header><b>Panel del facilitador · Taller práctico «Inteligencia Artificial»<br><span class="mini" style="font-weight:400">Facilitador: Ing. Jhonny David Atila Lijerón, MSc.</span></b><span class="mini" id="hora"></span><button class="btn sec" onclick="cargar(true)">Actualizar</button><button class="btn sec" onclick="salir()">Salir</button></header>
   <main>
     <div class="codigo"><div><div class="k">Código del taller (muéstrelo en pantalla)</div><div class="v" id="cod">—</div></div><div class="mini" style="flex:1;min-width:220px">Los participantes abren el enlace (o el código QR) y escriben este código. Se actualiza solo cada 30 segundos.</div></div>
     <div class="card"><div class="kpis" id="kpis"></div></div>

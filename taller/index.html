@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Tu oficina en el bolsillo · UAGRM</title>
+<title>Taller práctico «Inteligencia Artificial» · UAGRM</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,7 +90,7 @@ th{color:var(--suave);font-weight:600}
 
 <!-- ======================= INGRESO ======================= -->
 <div id="vLogin" class="login">
-  <div class="hero"><div class="paso">Taller práctico · UAGRM</div><h1 id="lTitulo">Tu oficina en el bolsillo: IA y orden digital</h1><p>Entre con el código que muestra el facilitador.</p></div>
+  <div class="hero"><div class="paso">UAGRM · Departamento de Desarrollo Humano</div><h1 id="lTitulo">Taller práctico «Inteligencia Artificial»</h1><p>Capacitación dirigida al Personal Administrativo<br>Facilitador: Ing. Jhonny David Atila Lijerón, MSc.</p><p class="mini" style="margin-top:6px">Entre con el código que muestra el facilitador.</p></div>
   <div class="card">
     <label for="fCodigo">Código del taller</label>
     <input type="text" id="fCodigo" autocomplete="off" autocapitalize="characters" placeholder="Ejemplo: IA123">
@@ -130,7 +130,7 @@ th{color:var(--suave);font-weight:600}
 <!-- ======================= APLICACIÓN ======================= -->
 <div id="vApp" class="oculto">
   <header>
-    <div class="marca" id="hTitulo">Tu oficina en el bolsillo<small>UAGRM</small></div>
+    <div class="marca" id="hTitulo">Taller práctico «Inteligencia Artificial»<small>Facilitador: Ing. Jhonny David Atila Lijerón, MSc.</small></div>
     <span class="quien" id="hQuien"></span>
     <button class="btn salir" onclick="salir()">Salir</button>
   </header>
@@ -205,7 +205,7 @@ function botonGuardar(o, datosJs, txt) { return '<div style="margin-top:12px"><b
 // ---------- ingreso
 document.querySelectorAll('#fCuenta input').forEach(function (r) { r.addEventListener('change', function () { $('ayudaCuenta').classList.toggle('oculto', r.value !== 'nose' || !r.checked); }); });
 run('iniciar').then(function (c) {
-  S.cfg = c; $('lTitulo').textContent = c.titulo; $('hTitulo').innerHTML = esc(c.titulo) + '<small>UAGRM · ' + esc(c.fecha) + '</small>';
+  S.cfg = c; $('lTitulo').textContent = c.titulo; $('hTitulo').innerHTML = esc(c.titulo) + '<small>Facilitador: Ing. Jhonny David Atila Lijerón, MSc.</small>';
   var id = leerLocal('tallerIA_id');
   if (id) run('volver', id).then(abrir).catch(function () { guardarLocal('tallerIA_id', null); });
 }).catch(function (e) { aviso(e); });
