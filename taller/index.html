@@ -152,7 +152,7 @@ var GRUPOS = [['ini', 'Inicio', ['inicio']], ['uni', 'Unidades', UNI], ['cie', '
 var TABS = {
   inicio: { n: 1, t: 'Bienvenida', c: 'Inicio', d: 'Las 5 unidades, las reglas de oro y cómo trabaja su equipo.' },
   o1: { n: 2, t: 'Unidad 1 · Redacta un oficio con IA hablándole al teléfono móvil', c: '1 · Oficio', d: '25 minutos. 3 pasos: pedido simple, pedido con R-T-C-F y comparación.' },
-  o2: { n: 3, t: 'Unidad 2 · Evita que la IA invente datos', c: '2 · FIEL', d: '25 minutos. Detectives y Reparadores con el método FIEL.' },
+  o2: { n: 3, t: 'Unidad 2 · Evita que la IA invente datos', c: '2 · FIEL', d: '25 minutos. 3 pasos: entender FIEL, Detectives y Reparadores.' },
   o3: { n: 4, t: 'Unidad 3 · Consulta un documento con NotebookLM', c: '3 · NotebookLM', d: '20 minutos. Pregunte al documento y compruebe la fuente.' },
   o4: { n: 5, t: 'Unidad 4 · Escanea y guarda con orden', c: '4 · Escanear', d: '25 minutos. Escanee el Anexo B y guárdelo con la regla de nombre.' },
   o5: { n: 6, t: 'Unidad 5 · Qué información nunca compartir con una IA', c: '5 · Semáforo', d: '20 minutos. El semáforo de datos y cómo anonimizar.' },
@@ -330,24 +330,41 @@ VISTAS.o1 = function () {
 };
 VISTAS.o2 = function () {
   var d = ev('o2'), q = d.detectives || [];
-  var fiel = 'Actúa como secretaria de una dirección universitaria. Con el texto que te pego, redacta un oficio solicitando [lo que necesitas]. Usa solo datos del texto. Si falta un dato, escribe [FALTA DATO]. No inventes cifras, fechas ni artículos de normas. Después del oficio, lista los datos que usaste y copia entre comillas la frase del texto que los respalda.';
+  var fiel = 'Actúa como secretaria de una dirección universitaria. Con el texto que te pego abajo, redacta un oficio solicitando 10 resmas de papel y 5 cartuchos de tóner. Usa solo datos del texto. Si falta un dato, escribe [FALTA DATO]. No inventes cifras, fechas ni artículos de normas. Después del oficio, lista los datos que usaste y copia entre comillas la frase del texto que los respalda.\n\nTEXTO:\n' + ANEXO_A;
+  function paso(n, t) { return '<div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--verdeT);text-transform:uppercase">Paso ' + n + ' de 3</div><h2>' + t + '</h2>'; }
   var preg = [
     ['La <b>fecha</b> del oficio.', [['a', 'No existe: noviembre tiene 30 días'], ['x', 'Falta el día de la semana'], ['y', 'La fecha está bien']]],
     ['Una <b>cifra</b> del oficio.', [['x', 'El precio del tóner está mal'], ['b', '10 × Bs 40 = Bs 400, no 600; el total es Bs 1.400'], ['y', 'Las cifras están bien']]],
     ['La <b>cita de artículo</b>.', [['x', 'El artículo 9 trata otro tema'], ['y', 'Debió citar una ley nacional'], ['c', 'El Anexo A solo tiene 5 artículos: el 9 no existe']]]
   ];
   return estadoObj('o2') +
-    '<div class="card"><h2>La idea clave</h2><p>Cuando la IA inventa un dato se llama <b>alucinación</b>. Es como un vecino que nunca dice «no sé». La IA no consulta una enciclopedia: adivina qué texto suena bien. Lo que más inventa: <b>cifras, fechas, nombres y números de artículos</b>.</p></div>' +
-    '<div class="card"><h2>El método FIEL («sé fiel a la fuente»)</h2>' +
-    tabla([['<b>F</b>uente', 'Dale el texto base y pide: «Responde solo con este texto.»'], ['<b>I</b>nforma si no sabes', '«Si el dato no está, escribe: No tengo ese dato.»'], ['<b>E</b>videncia', '«Copia entre comillas la frase que respalda cada dato.»'], ['<b>L</b>ímites', '«No inventes cifras, fechas, nombres ni artículos.»']], ['Letra', 'Qué le dice a la IA']) +
-    '<p class="mini" style="margin-top:8px">FIEL reduce los errores, pero no los elimina. Por eso siempre verifica usted.</p></div>' +
-    '<div class="card"><h2>Anexo A · Reglamento de ejemplo</h2><p class="mini">Texto inventado solo para el taller. Tiene 5 artículos.</p>' + bloqueCopiar('anA', ANEXO_A) + '</div>' +
-    '<div class="card"><h2>Ejercicio «Detectives» (6 minutos)</h2><p>Este oficio (Anexo B) tiene 3 errores escondidos. Compruebe con el Anexo A. Busque solo 2 minutos y luego comparen en equipo. <b>Después</b> marque aquí lo que encontró.</p>' + bloqueCopiar('anB', ANEXO_B) +
+    '<div class="card"><h2>Lo que hará en esta unidad</h2><ol class="pasos">' +
+    '<li><b>Paso 1 · Entender:</b> por qué la IA inventa datos y el método FIEL.</li>' +
+    '<li><b>Paso 2 · Detectives:</b> encontrar 3 errores en un oficio (Anexo B) usando el reglamento (Anexo A).</li>' +
+    '<li><b>Paso 3 · Reparadores:</b> pedirle un oficio a la IA con las reglas FIEL y revisar que no invente.</li></ol></div>' +
+    '<div class="card">' + paso(1, 'Entender: la IA a veces inventa') +
+    '<p>Cuando la IA inventa un dato se llama <b>alucinación</b>. Es como un vecino que nunca dice «no sé»: siempre responde con seguridad, aunque se equivoque. La IA no consulta una enciclopedia; adivina qué texto suena bien.</p>' +
+    '<p>Lo que más inventa: <b>cifras, fechas, nombres y números de artículos</b>.</p>' +
+    '<p>Para evitarlo usamos <b>FIEL</b> («sé fiel a la fuente»):</p>' +
+    tabla([['<b>F</b>uente', 'Dele el texto base: «Responde solo con este texto.»'], ['<b>I</b>nforma si no sabes', '«Si el dato no está, escribe [FALTA DATO].»'], ['<b>E</b>videncia', '«Copia entre comillas la frase que respalda cada dato.»'], ['<b>L</b>ímites', '«No inventes cifras, fechas, nombres ni artículos.»']], ['Letra', 'Qué le dice a la IA']) +
+    '<p class="mini" style="margin-top:8px">FIEL reduce los errores, pero no los elimina. Por eso siempre verifica usted: <b>la IA propone, yo verifico</b>.</p></div>' +
+    '<div class="card">' + paso(2, 'Detectives: encuentre 3 errores') +
+    '<ol class="pasos"><li>Lea el <b>Anexo A</b>: es el reglamento de ejemplo (5 artículos).</li><li>Lea el <b>Anexo B</b>: es un oficio que parece correcto, pero tiene 3 errores: <b>una fecha, una cifra y una cita de artículo</b>.</li><li>Búsquelos 2 minutos. Revise el calendario, haga las cuentas y compare con el Anexo A.</li><li>Compare con su equipo y marque abajo lo que encontró.</li></ol>' +
+    '<h3>Anexo A · Reglamento de ejemplo</h3>' + bloqueCopiar('anA', ANEXO_A) +
+    '<h3>Anexo B · Oficio con 3 errores</h3>' + bloqueCopiar('anB', ANEXO_B) +
     preg.map(function (p, i) { return '<div class="caso"><p><b>Error ' + (i + 1) + '.</b> ' + p[0] + ' ¿Qué está mal?</p>' + opciones('o2d' + i, p[1], q[i]) + '</div>'; }).join('') + '</div>' +
-    '<div class="card"><h2>Ejercicio «Reparadores» (8 minutos)</h2><p>Pedido débil: <b>«Hazme un oficio sobre el reglamento.»</b> Reescríbalo con FIEL. Puede partir de este modelo:</p>' + bloqueCopiar('pO2', fiel) +
-    '<ol class="pasos"><li>Copie el Anexo A (botón de arriba) y péguelo en Gemini o ChatGPT.</li><li>Debajo, escriba o dicte su pedido con las reglas FIEL y envíe.</li><li>Revise que la IA haya citado frases del texto.</li></ol>' +
-    '<label for="o2Rep">Pegue aquí el pedido que usted reescribió</label><textarea id="o2Rep" rows="5">' + esc(d.reparado) + '</textarea>' +
-    botonGuardar('o2', '{detectives: [radio(\'o2d0\'), radio(\'o2d1\'), radio(\'o2d2\')], reparado: $(\'o2Rep\').value}') + '</div>' +
+    '<div class="card">' + paso(3, 'Reparadores: pida un oficio con FIEL') +
+    '<p>Un pedido débil sería: <b>«Hazme un oficio sobre el reglamento.»</b> Ahora lo hacemos bien:</p><ol class="pasos">' +
+    '<li>Toque <b>Copiar texto</b> en el recuadro de abajo. Ya trae las reglas FIEL y el reglamento (Anexo A) juntos.</li>' +
+    '<li>Abra <span class="ruta-a-only">Gemini (o ChatGPT) en un chat nuevo</span><span class="ruta-b-only">chatgpt.com</span>, mantenga presionado el cuadro de texto y toque <b>Pegar</b>.</li>' +
+    '<li>Envíe y espere la respuesta.</li>' +
+    '<li>Revise la respuesta: ¿escribió <b>[FALTA DATO]</b> donde el reglamento no dice algo (por ejemplo, el precio)? ¿Copió frases del reglamento <b>entre comillas</b>?</li></ol>' +
+    bloqueCopiar('pO2', fiel) +
+    '<label for="o2Rep">Pegue aquí el pedido que envió (puede cambiarlo antes de enviarlo)</label><textarea id="o2Rep" rows="5">' + esc(d.reparado) + '</textarea>' +
+    '<label>En la respuesta de la IA:</label>' +
+    '<label class="chk"><input type="checkbox" id="o2V1"' + (d.faltaDato ? ' checked' : '') + '> Escribió [FALTA DATO] donde faltaba información</label>' +
+    '<label class="chk"><input type="checkbox" id="o2V2"' + (d.citas ? ' checked' : '') + '> Copió frases del reglamento entre comillas</label>' +
+    botonGuardar('o2', '{detectives: [radio(\'o2d0\'), radio(\'o2d1\'), radio(\'o2d2\')], reparado: $(\'o2Rep\').value, faltaDato: $(\'o2V1\').checked, citas: $(\'o2V2\').checked}') + '</div>' +
     '<div class="card"><h2>Reto extra</h2><p>Pregunte a Gemini por un artículo concreto de un reglamento sin darle el texto. Luego pídalo con FIEL y el texto. Compare.</p></div>';
 };
 VISTAS.o3 = function () {
