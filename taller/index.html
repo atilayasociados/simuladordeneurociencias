@@ -387,7 +387,9 @@ VISTAS.o2 = function () {
     '<li>Envíe y espere la respuesta.</li>' +
     '<li>Revise la respuesta: ¿escribió <b>[FALTA DATO]</b> donde el reglamento no dice algo (por ejemplo, el precio)? ¿Copió frases del reglamento <b>entre comillas</b>?</li></ol>' +
     bloqueCopiar('pO2', fiel) +
-    '<label for="o2Rep">Pegue aquí el pedido que envió (puede cambiarlo antes de enviarlo)</label><textarea id="o2Rep" rows="5">' + esc(d.reparado) + '</textarea>' +
+    '<label for="o2Rep">¿Qué le pidió a la IA? Pegue aquí el mismo texto que envió</label><p class="mini" style="margin:0 0 6px">Es el pedido FIEL que copió arriba. Si lo envió tal cual, toque el botón y se llena solo. Si le cambió algo, pegue su versión.</p>' +
+    '<button class="btn peq sec" style="margin-bottom:8px" onclick="$(\'o2Rep\').value = $(\'pO2\').innerText; guardarBorrador({ target: $(\'o2Rep\') });">Lo envié tal cual: llenar con el pedido de arriba</button>' +
+    '<textarea id="o2Rep" rows="5">' + esc(d.reparado) + '</textarea>' +
     '<label>En la respuesta de la IA:</label>' +
     '<label class="chk"><input type="checkbox" id="o2V1"' + (d.faltaDato ? ' checked' : '') + '> Escribió [FALTA DATO] donde faltaba información</label>' +
     '<label class="chk"><input type="checkbox" id="o2V2"' + (d.citas ? ' checked' : '') + '> Copió frases del reglamento entre comillas</label>' +
