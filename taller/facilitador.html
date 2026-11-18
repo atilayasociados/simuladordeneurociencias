@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Panel del facilitador · Tu oficina en el bolsillo</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--fondo:#2E3032;--tarjeta:#3A3C3E;--sup:#46484A;--borde:#5A5C5E;--texto:#F2F2F2;--suave:#C9CACB;--verde:#44D62C;--verdeT:#9BE38C;--gris:#555759;--naranja:#FF4C00;--amarillo:#FFCE00;--oscuro:#1F2022}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fondo);color:var(--texto);font:15px/1.5 'Sora',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+a{color:var(--amarillo)}
+h1,h2{line-height:1.25;margin:0 0 8px}
+h2{font-size:17px;color:var(--verdeT)}
+.oculto{display:none!important}
+header{background:#252729;border-bottom:3px solid var(--verde);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header b{font-size:16px;flex:1}
+main{max-width:1200px;margin:0 auto;padding:12px 16px 40px}
+.card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:16px;margin:12px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 16px;border-radius:10px;border:2px solid var(--verde);background:var(--verde);color:var(--oscuro);font:600 14px 'Sora',system-ui,sans-serif;cursor:pointer;text-decoration:none}
+.btn.sec{background:transparent;color:var(--texto);border-color:var(--borde)}
+.btn.on{border-color:var(--verde);color:var(--verdeT)}
+input[type=text],input[type=password]{width:100%;font:15px 'Sora',system-ui,sans-serif;color:var(--texto);background:var(--oscuro);border:2px solid var(--borde);border-radius:10px;padding:9px 12px}
+label{display:block;font-weight:600;font-size:13px;margin:10px 0 4px}
+.codigo{background:var(--sup);border-left:6px solid var(--verde);border-radius:14px;padding:14px 18px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.codigo .k{font-size:13px;color:var(--suave)}
+.codigo .v{font-size:40px;font-weight:700;letter-spacing:.08em;color:var(--amarillo)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--sup);border-radius:12px;padding:12px}
+.kpi .k{font-size:12px;color:var(--suave)}
+.kpi .v{font-size:26px;font-weight:700}
+.objs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.obj{background:var(--sup);border-radius:12px;padding:12px;font-size:13px}
+.obj b{display:block;margin-bottom:6px}
+.barra{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--gris);margin:6px 0}
+.barra i{display:block;height:100%}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--borde);white-space:nowrap}
+th{color:var(--suave);font-weight:600;position:sticky;top:0;background:var(--tarjeta)}
+tr.f{cursor:pointer}
+tr.f:hover{background:var(--sup)}
+td.n{text-align:right}
+.ch{display:inline-block;min-width:34px;text-align:center;border-radius:99px;padding:1px 6px;font-weight:700;font-size:12px}
+.ch.L{background:var(--verde);color:var(--oscuro)}.ch.P{background:var(--amarillo);color:var(--oscuro)}.ch.N{background:var(--gris);color:var(--suave)}
+.atasc{color:#FFB08A;font-weight:600}
+.fila{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.ev{border-top:1px solid var(--borde);padding:10px 0;font-size:13px}
+.ev pre{white-space:pre-wrap;word-break:break-word;background:var(--oscuro);border-radius:8px;padding:8px;margin:6px 0 0;font:12px/1.45 'Sora',system-ui,sans-serif}
+.mini{font-size:12px;color:var(--suave)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:20;background:var(--oscuro);border:2px solid var(--naranja);border-radius:12px;padding:10px 16px}
+.toast.ok{border-color:var(--verde)}
+.login{max-width:440px;margin:40px auto;padding:0 16px}
+</style>
+</head>
+<body>
+<div id="vLogin" class="login">
+  <div class="card">
+    <h2 id="lTit">Panel del facilitador</h2>
+    <p id="lTxt" class="mini">Escriba la contraseña del panel.</p>
+    <label for="c1">Contraseña</label><input type="password" id="c1" onkeydown="if(event.key==='Enter')entrar()">
+    <div id="c2box" class="oculto"><label for="c2">Repita la contraseña</label><input type="password" id="c2"></div>
+    <div style="margin-top:12px"><button class="btn" id="bEnt" onclick="entrar()">Entrar</button></div>
+  </div>
+</div>
+
+<div id="vPanel" class="oculto">
+  <header><b>Panel del facilitador · Tu oficina en el bolsillo</b><span class="mini" id="hora"></span><button class="btn sec" onclick="cargar(true)">Actualizar</button><button class="btn sec" onclick="salir()">Salir</button></header>
+  <main>
+    <div class="codigo"><div><div class="k">Código del taller (muéstrelo en pantalla)</div><div class="v" id="cod">—</div></div><div class="mini" style="flex:1;min-width:220px">Los participantes abren el enlace (o el código QR) y escriben este código. Se actualiza solo cada 30 segundos.</div></div>
+    <div class="card"><div class="kpis" id="kpis"></div></div>
+    <div class="card"><h2>Avance por unidad</h2><div class="objs" id="objs"></div><p class="mini" style="margin-top:8px"><span class="ch L">L</span> Logrado (16-20) · <span class="ch P">P</span> En proceso (1-15) · <span class="ch N">–</span> No iniciado</p></div>
+    <div class="card">
+      <h2>Participantes</h2>
+      <div class="fila" style="margin-bottom:10px">
+        <button class="btn sec on" data-f="todos" onclick="filtro(this)">Todos</button>
+        <button class="btn sec" data-f="atasc" onclick="filtro(this)">Necesitan ayuda</button>
+        <button class="btn sec" data-f="B" onclick="filtro(this)">Sin cuenta de Google</button>
+        <input type="text" id="buscar" placeholder="Buscar por nombre o unidad" oninput="tabla()" style="max-width:280px">
+      </div>
+      <p class="mini">«Necesitan ayuda»: más de 10 minutos sin guardar nada y con unidades pendientes. Toque una fila para ver sus evidencias.</p>
+      <div class="scroll"><table id="tab"></table></div>
+    </div>
+    <div class="card oculto" id="evBox"></div>
+    <div class="grid2">
+      <div class="card"><h2>Turnos para NotebookLM (Unidad 3)</h2><div id="parejas"></div></div>
+      <div class="card"><h2>Configuración</h2>
+        <label for="cfCod">Código del taller</label><input type="text" id="cfCod">
+        <label for="cfDocN">Nombre del documento público (Unidad 3)</label><input type="text" id="cfDocN" placeholder="Ejemplo: Reglamento de …">
+        <label for="cfEst">Enlace al PDF del documento (corto, menos de 1 MB)</label><input type="text" id="cfEst" placeholder="https://…">
+        <label for="cfPre">Enlace a la presentación</label><input type="text" id="cfPre" placeholder="https://… (compartido como «cualquier persona con el enlace»)">
+        <div class="fila" style="margin-top:12px"><button class="btn" onclick="guardarCfg(this)">Guardar configuración</button></div>
+        <div class="fila" style="margin-top:14px"><button class="btn sec" onclick="csv(this)">Descargar resultados (CSV)</button><a class="btn sec" id="lHoja" target="_blank" rel="noopener">Abrir la hoja de resultados</a></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="toast" class="toast oculto"></div>
+<script>
+var CL = '', D = null, F = 'todos', T = null;
+var OBJ = ['U1 · Oficio (R-T-C-F)', 'U2 · FIEL', 'U3 · NotebookLM', 'U4 · Escanear', 'U5 · Semáforo'];
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+// Llamada al servidor del taller. Si falla la red o hay demasiadas personas a la vez, se reintenta sola dos veces.
+var API = 'https://xlkjssypdayyaxwjokry.supabase.co/functions/v1/taller';
+function llamar(fn, args) {
+  return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fn: fn, args: args }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (j.error) throw new Error(j.error); return j.r; });
+}
+function run(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  function intento(n) {
+    return llamar(fn, args)
+      .catch(function (e) {
+        var m = String(e && e.message || e);
+        if (n < 2 && /simult|too many|demasiad|lock|bloqueo|timed out|tiempo de espera|NetworkError|network|Failed to fetch|Load failed|JSON/i.test(m)) return new Promise(function (r) { setTimeout(r, 1500 + Math.random() * 2500); }).then(function () { return intento(n + 1); });
+        throw e;
+      });
+  }
+  return intento(0);
+}
+function aviso(m, ok) { var t = $('toast'); t.textContent = String(m && m.message ? m.message : m).replace(/^Error:\s*/, ''); t.className = 'toast' + (ok ? ' ok' : ''); clearTimeout(aviso.t); aviso.t = setTimeout(function () { t.className = 'toast oculto'; }, 5000); }
+var NUEVA = false;
+run('fcEstado').then(function (e) {
+  NUEVA = !e.tieneClave;
+  if (NUEVA) { $('lTit').textContent = 'Cree la contraseña del panel'; $('lTxt').textContent = 'Es la primera vez que abre el panel. La contraseña queda guardada en el proyecto (no en el código). Mínimo 6 caracteres.'; $('c2box').classList.remove('oculto'); $('bEnt').textContent = 'Crear y entrar'; }
+  try { var s = sessionStorage.getItem('fcClave'); if (s && !NUEVA) { CL = s; cargar(true); } } catch (x) {}
+}).catch(aviso);
+function entrar() {
+  var c = $('c1').value;
+  var p = NUEVA ? (c !== $('c2').value ? Promise.reject(new Error('Las contraseñas no coinciden.')) : run('fcCrearClave', c)) : Promise.resolve();
+  p.then(function () { CL = c; NUEVA = false; return cargar(true); }).catch(aviso);
+}
+function salir() { try { sessionStorage.removeItem('fcClave'); } catch (x) {} location.reload(); }
+function cargar(primera) {
+  return run('fcPanel', CL).then(function (d) {
+    D = d; try { sessionStorage.setItem('fcClave', CL); } catch (x) {}
+    $('vLogin').classList.add('oculto'); $('vPanel').classList.remove('oculto');
+    if (primera) { $('cfCod').value = d.codigo; $('cfDocN').value = d.nombreDocumento; $('cfEst').value = d.urlDocumento; $('cfPre').value = d.urlPresentacion; }
+    $('lHoja').classList.add('oculto');
+    pintar(); clearTimeout(T); T = setTimeout(function () { cargar(false); }, 30000);
+  }).catch(function (e) { if (primera) { $('vLogin').classList.remove('oculto'); $('vPanel').classList.add('oculto'); } aviso(e); });
+}
+function niv(p) { return p === null || p === undefined ? 'N' : (p >= 16 ? 'L' : (p > 0 ? 'P' : 'N')); }
+function atascado(x) { return x.minutos !== null && x.minutos > 10 && x.o.some(function (p) { return niv(p) !== 'L'; }); }
+function pintar() {
+  var P = D.participantes, n = P.length, b = P.filter(function (x) { return x.ruta === 'B'; }).length;
+  var prom = n ? Math.round(P.reduce(function (s, x) { return s + x.total; }, 0) / n) : 0, fin = P.filter(function (x) { return x.o.every(function (p) { return niv(p) === 'L'; }); }).length;
+  var qz = P.filter(function (x) { return x.quiz !== null; }).map(function (x) { return x.quiz; });
+  $('cod').textContent = D.codigo; $('hora').textContent = 'Actualizado ' + D.hora;
+  $('kpis').innerHTML = [['Participantes', n], ['Con cuenta de Google', n - b], ['Sin cuenta de Google', b], ['Puntaje promedio', prom + '/100'], ['Lograron las 5 unidades', fin], ['Quiz: 4 o más de 5', qz.filter(function (x) { return x >= 4; }).length + ' de ' + qz.length], ['Necesitan ayuda', P.filter(atascado).length]].map(function (k) { return '<div class="kpi"><div class="k">' + k[0] + '</div><div class="v">' + k[1] + '</div></div>'; }).join('');
+  $('objs').innerHTML = OBJ.map(function (t, i) {
+    var L = 0, Pp = 0; P.forEach(function (x) { var v = niv(x.o[i]); if (v === 'L') L++; else if (v === 'P') Pp++; });
+    var N = n - L - Pp, w = function (k) { return n ? (k / n * 100) : 0; };
+    return '<div class="obj"><b>' + t + '</b><div class="barra"><i style="width:' + w(L) + '%;background:#44D62C"></i><i style="width:' + w(Pp) + '%;background:#FFCE00"></i></div>Logrado ' + L + ' · En proceso ' + Pp + ' · No iniciado ' + N + '</div>';
+  }).join('');
+  tabla(); parejas();
+}
+function filtro(b) { F = b.getAttribute('data-f'); document.querySelectorAll('[data-f]').forEach(function (x) { x.classList.toggle('on', x === b); }); tabla(); }
+function tabla() {
+  if (!D) return;
+  var q = ($('buscar').value || '').toLowerCase();
+  var P = D.participantes.filter(function (x) { if (F === 'atasc' && !atascado(x)) return false; if (F === 'B' && x.ruta !== 'B') return false; return !q || (x.nombre + ' ' + x.unidad + ' equipo ' + x.equipo).toLowerCase().indexOf(q) >= 0; });
+  P.sort(function (a, b) { return a.total - b.total || a.nombre.localeCompare(b.nombre); });
+  $('tab').innerHTML = '<tr><th>Nombre</th><th>Unidad</th><th>Equipo</th><th>Ruta</th>' + OBJ.map(function (t, i) { return '<th>U' + (i + 1) + '</th>'; }).join('') + '<th class="n">Total</th><th class="n">Quiz</th><th class="n">Últ. actividad</th></tr>' +
+    (P.length ? P.map(function (x) {
+      return '<tr class="f" onclick="verEv(\'' + x.id + '\')"><td>' + esc(x.nombre) + '</td><td>' + esc(x.unidad) + '</td><td>' + esc(x.equipo) + '</td><td>' + (x.ruta === 'B' ? 'B' : 'A') + '</td>' +
+        x.o.map(function (p) { var v = niv(p); return '<td><span class="ch ' + v + '">' + (p === null ? '–' : p) + '</span></td>'; }).join('') +
+        '<td class="n"><b>' + x.total + '</b></td><td class="n">' + (x.quiz === null ? '–' : x.quiz + '/5') + '</td><td class="n' + (atascado(x) ? ' atasc' : '') + '">' + (x.minutos === null ? '—' : 'hace ' + x.minutos + ' min') + '</td></tr>';
+    }).join('') : '<tr><td colspan="12" class="mini">Nadie en este filtro.</td></tr>');
+}
+function parejas() {
+  var P = D.participantes, sin = P.filter(function (x) { return x.ruta === 'B' && !x.pareja && niv(x.o[2]) !== 'L'; }), con = P.filter(function (x) { return x.ruta === 'A'; });
+  $('parejas').innerHTML = '<p class="mini">Sin cuenta de Google y todavía sin compañero para su turno (' + sin.length + '):</p><p>' + (sin.length ? sin.map(function (x) { return esc(x.nombre) + ' <span class="mini">(' + (x.equipo ? 'equipo ' + esc(x.equipo) : esc(x.unidad)) + ')</span>'; }).join(' · ') : '<span class="mini">Ninguno.</span>') + '</p>' +
+    '<p class="mini">Con cuenta de Google (' + con.length + '): pueden recibir a un compañero.</p><p>' + (con.length ? con.slice(0, 60).map(function (x) { return esc(x.nombre); }).join(' · ') : '<span class="mini">Ninguno.</span>') + '</p>';
+}
+function verEv(id) {
+  var x = D.participantes.filter(function (p) { return p.id === id; })[0], box = $('evBox');
+  box.classList.remove('oculto'); box.innerHTML = '<h2>Evidencias de ' + esc(x ? x.nombre : '') + '</h2><p class="mini">Cargando…</p>'; box.scrollIntoView({ behavior: 'smooth' });
+  run('fcEvidencias', CL, id).then(function (L) {
+    box.innerHTML = '<h2>Evidencias de ' + esc(x ? x.nombre : '') + ' <span class="mini">(' + esc(x ? x.unidad : '') + ')</span></h2>' + (L.length ? L.slice().reverse().map(function (e) {
+      var d = {}; try { d = JSON.parse(e.datos); } catch (z) {}
+      var t = Object.keys(d).map(function (k) { var v = d[k]; return k + ': ' + (Array.isArray(v) ? v.join(', ') : v); }).join('\n');
+      return '<div class="ev"><b>' + esc(e.objetivo) + '</b> · ' + esc(e.fecha) + ' · <span class="ch ' + niv(e.puntos) + '">' + esc(e.puntos) + '</span> ' + esc(e.nivel) + '<div class="mini">' + esc(e.detalle) + '</div><pre>' + esc(t) + '</pre></div>';
+    }).join('') : '<p class="mini">Todavía no guardó evidencias.</p>') + '<button class="btn sec" onclick="$(\'evBox\').classList.add(\'oculto\')">Cerrar</button>';
+  }).catch(aviso);
+}
+function guardarCfg(b) {
+  b.disabled = true;
+  run('fcConfig', CL, { codigo: $('cfCod').value, nombreDocumento: $('cfDocN').value, urlDocumento: $('cfEst').value, urlPresentacion: $('cfPre').value })
+    .then(function (d) { D = d; $('cfCod').value = d.codigo; pintar(); aviso('Configuración guardada.', true); }).catch(aviso).then(function () { b.disabled = false; });
+}
+function csv(b) {
+  b.disabled = true;
+  run('fcCSV', CL).then(function (t) {
+    try {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + t], { type: 'text/csv;charset=utf-8' }));
+      a.download = 'taller-ia-resultados.csv'; document.body.appendChild(a); a.click(); a.remove();
+      aviso('Descarga iniciada: taller-ia-resultados.csv', true);
+    } catch (e) { aviso('No se pudo descargar el archivo en este navegador.'); }
+  }).catch(aviso).then(function () { b.disabled = false; });
+}
+</script>
+</body>
+</html>

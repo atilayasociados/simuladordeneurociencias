@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Tu oficina en el bolsillo · UAGRM</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--fondo:#2E3032;--tarjeta:#3A3C3E;--sup:#46484A;--borde:#5A5C5E;--texto:#F2F2F2;--suave:#C9CACB;--verde:#44D62C;--verdeT:#9BE38C;--gris:#555759;--naranja:#FF4C00;--amarillo:#FFCE00;--oscuro:#1F2022}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fondo);color:var(--texto);font:16px/1.5 'Sora',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+a{color:var(--amarillo)}
+h1,h2,h3{font-family:'Sora',system-ui,sans-serif;line-height:1.25;margin:0 0 8px}
+h2{font-size:18px;color:var(--verdeT)}
+h3{font-size:16px}
+p{margin:0 0 10px}
+.oculto{display:none!important}
+header{background:#252729;border-bottom:3px solid var(--verde);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+header .marca{font-weight:700;font-size:15px;flex:1;min-width:180px}
+header .marca small{display:block;font-weight:400;color:var(--suave);font-size:12px}
+header .quien{font-size:12px;color:var(--suave)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:10px 18px;border-radius:12px;border:2px solid var(--verde);background:var(--verde);color:var(--oscuro);font:600 16px 'Sora',system-ui,sans-serif;cursor:pointer;text-decoration:none}
+.btn.sec{background:transparent;color:var(--texto);border-color:var(--borde)}
+.btn.peq{min-height:38px;padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn.salir{background:var(--naranja);border-color:var(--naranja);color:#fff;min-height:34px;padding:4px 12px;font-size:13px}
+nav.grupos{position:sticky;top:0;z-index:5;background:#2A2C2E;border-bottom:1px solid var(--borde);display:flex;gap:6px;padding:8px 10px;overflow-x:auto}
+nav.grupos button{flex:1;min-width:96px;border:0;background:transparent;color:var(--suave);font:600 15px 'Sora',sans-serif;padding:10px 8px;border-radius:10px;cursor:pointer}
+nav.grupos button.on{background:var(--verde);color:var(--oscuro)}
+.subnav{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.subnav button{border:2px solid var(--borde);background:transparent;color:var(--texto);border-radius:999px;padding:8px 14px;font:600 14px 'Sora',sans-serif;cursor:pointer}
+.subnav button.on{border-color:var(--verde);color:var(--verdeT);background:rgba(68,214,44,.12)}
+.subnav button .ok{color:var(--verde)}
+main{max-width:860px;margin:0 auto;padding:0 14px 40px}
+.avance{margin:12px 0 0;font-size:13px;color:var(--suave)}
+.barra{height:10px;background:var(--sup);border-radius:99px;overflow:hidden;margin-top:4px}
+.barra i{display:block;height:100%;background:var(--verde);border-radius:99px;transition:width .4s}
+.hero{background:var(--sup);border-left:6px solid var(--verde);border-radius:14px;padding:14px 16px;margin:12px 0}
+.hero .paso{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--verdeT);text-transform:uppercase}
+.hero h1{font-size:22px;margin:4px 0}
+.hero p{color:var(--suave);margin:0}
+.card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:16px;margin:12px 0}
+.pasos{margin:0;padding-left:22px}
+.pasos li{margin:0 0 8px}
+.copiar{background:var(--oscuro);border:1px dashed var(--borde);border-radius:12px;padding:12px;margin:8px 0}
+.copiar pre{white-space:pre-wrap;word-break:break-word;margin:0 0 8px;font:14px/1.5 'Sora',system-ui,sans-serif;color:var(--texto)}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+input[type=text],textarea,select{width:100%;font:16px 'Sora',system-ui,sans-serif;color:var(--texto);background:var(--oscuro);border:2px solid var(--borde);border-radius:10px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--verde)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px;margin:8px 0;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--verde)}
+.opciones{display:flex;flex-wrap:wrap;gap:8px}
+.opciones label{display:flex;align-items:center;gap:8px;margin:0;border:2px solid var(--borde);border-radius:10px;padding:8px 12px;font-weight:400;font-size:15px;cursor:pointer}
+.opciones input{width:20px;height:20px;accent-color:var(--verde)}
+.opciones label:has(input:checked){border-color:var(--verde);background:rgba(68,214,44,.12)}
+.aviso{border-radius:12px;padding:12px 14px;margin:10px 0;font-size:15px}
+.aviso.am{background:rgba(255,206,0,.12);border:1px solid var(--amarillo)}
+.aviso.na{background:rgba(255,76,0,.14);border:1px solid var(--naranja)}
+.aviso.ve{background:rgba(68,214,44,.12);border:1px solid var(--verde)}
+.res ul{margin:6px 0 0;padding-left:18px}
+.res li{margin:4px 0}
+.nivel{display:inline-block;font-weight:700;border-radius:99px;padding:2px 10px;font-size:13px}
+.nivel.L{background:var(--verde);color:var(--oscuro)}
+.nivel.P{background:var(--amarillo);color:var(--oscuro)}
+.nivel.N{background:var(--gris);color:var(--texto)}
+.sig{background:rgba(68,214,44,.10);border:2px solid var(--verde);border-radius:14px;padding:14px 16px;margin:18px 0 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.sig div{flex:1;min-width:200px}
+.sig small{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--verdeT);text-transform:uppercase}
+.sig b{font-size:16px}
+.caso{border-top:1px solid var(--borde);padding:12px 0}
+.caso:first-of-type{border-top:0}
+.caso p{margin:0 0 8px}
+.fb{font-size:14px;margin-top:6px}
+.fb.ok{color:var(--verdeT)}.fb.mal{color:#FFB08A}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--borde);vertical-align:top}
+th{color:var(--suave);font-weight:600}
+.valida{font-size:14px;margin-top:6px}
+.login{max-width:520px;margin:20px auto;padding:0 14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:20;max-width:92vw;background:var(--oscuro);border:2px solid var(--naranja);color:var(--texto);border-radius:12px;padding:12px 16px;font-size:15px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.toast.ok{border-color:var(--verde)}
+.fuentes li{margin:6px 0;font-size:14px}
+.mini{font-size:13px;color:var(--suave)}
+@media (max-width:520px){.hero h1{font-size:19px} .btn{width:100%} .btn.salir{width:auto} header .marca{font-size:14px} .sig .btn{width:100%} nav.grupos button{min-width:0;font-size:14px}}
+</style>
+</head>
+<body class="ruta-A">
+
+<!-- ======================= INGRESO ======================= -->
+<div id="vLogin" class="login">
+  <div class="hero"><div class="paso">Taller práctico · UAGRM</div><h1 id="lTitulo">Tu oficina en el bolsillo: IA y orden digital</h1><p>Entre con el código que muestra el facilitador.</p></div>
+  <div class="card">
+    <label for="fCodigo">Código del taller</label>
+    <input type="text" id="fCodigo" autocomplete="off" autocapitalize="characters" placeholder="Ejemplo: IA123">
+    <label for="fNombre">Nombre y apellido</label>
+    <input type="text" id="fNombre" autocomplete="name" placeholder="Ejemplo: María Pérez">
+    <label for="fUnidad">Unidad o dependencia donde trabaja</label>
+    <input type="text" id="fUnidad" placeholder="Ejemplo: Secretaría de la Facultad">
+    <label for="fEquipo">Número de su equipo (opcional)</label>
+    <input type="text" id="fEquipo" inputmode="numeric" placeholder="Ejemplo: 7">
+    <label>¿Tiene cuenta de Google en este teléfono móvil?</label>
+    <div class="opciones" id="fCuenta">
+      <label><input type="radio" name="cuenta" value="si"> Sí</label>
+      <label><input type="radio" name="cuenta" value="no"> No</label>
+      <label><input type="radio" name="cuenta" value="nose"> No sé</label>
+    </div>
+    <div id="ayudaCuenta" class="aviso am oculto">
+      <b>Cómo saberlo, en 3 pasos:</b>
+      <ol class="pasos" style="margin-top:6px">
+        <li>¿Tiene un correo que termina en <b>@gmail.com</b>? Entonces tiene cuenta de Google.</li>
+        <li>¿Descarga aplicaciones desde <b>Play Store</b> en un teléfono Android? Esa tienda usa una cuenta de Google.</li>
+        <li>Si aún no sabe, elija «No». Puede cambiarlo después en la pantalla de Inicio.</li>
+      </ol>
+    </div>
+    <p class="mini" style="margin-top:12px">No le pedimos carnet, teléfono ni correo: en este taller aprendemos a no entregar datos que no hacen falta.</p>
+    <button class="btn" id="bEntrar" onclick="entrar()" style="margin-top:6px">Entrar al taller →</button>
+  </div>
+</div>
+
+<!-- ======================= APLICACIÓN ======================= -->
+<div id="vApp" class="oculto">
+  <header>
+    <div class="marca" id="hTitulo">Tu oficina en el bolsillo<small>UAGRM</small></div>
+    <span class="quien" id="hQuien"></span>
+    <button class="btn salir" onclick="salir()">Salir</button>
+  </header>
+  <nav class="grupos" id="nav"></nav>
+  <main>
+    <div class="avance"><span id="tAvance"></span><div class="barra"><i id="bAvance" style="width:0"></i></div></div>
+    <div id="sub"></div>
+    <div id="hero"></div>
+    <div id="cont"></div>
+    <div id="sig"></div>
+  </main>
+</div>
+<div id="toast" class="toast oculto" role="status"></div>
+
+<script>
+var S = { cfg: {}, est: null, tab: 'inicio', res: {} };
+var UNI = ['o1', 'o2', 'o3', 'o4', 'o5'];
+var GRUPOS = [['ini', 'Inicio', ['inicio']], ['uni', 'Unidades', UNI], ['cie', 'Cierre', ['cierre']]];
+var TABS = {
+  inicio: { n: 1, t: 'Bienvenida', c: 'Inicio', d: 'Las 5 unidades, las reglas de oro y cómo trabaja su equipo.' },
+  o1: { n: 2, t: 'Unidad 1 · Redacta un oficio con IA hablándole al teléfono móvil', c: '1 · Oficio', d: '25 minutos. Usamos R-T-C-F: Rol, Tarea, Contexto y Formato.' },
+  o2: { n: 3, t: 'Unidad 2 · Evita que la IA invente datos', c: '2 · FIEL', d: '25 minutos. Detectives y Reparadores con el método FIEL.' },
+  o3: { n: 4, t: 'Unidad 3 · Consulta un documento con NotebookLM', c: '3 · NotebookLM', d: '20 minutos. Pregunte al documento y compruebe la fuente.' },
+  o4: { n: 5, t: 'Unidad 4 · Escanea y guarda con orden', c: '4 · Escanear', d: '25 minutos. Escanee el Anexo B y guárdelo con la regla de nombre.' },
+  o5: { n: 6, t: 'Unidad 5 · Qué información nunca compartir con una IA', c: '5 · Semáforo', d: '20 minutos. El semáforo de datos y cómo anonimizar.' },
+  cierre: { n: 7, t: 'Cierre', c: 'Cierre', d: 'Revisión cruzada, quiz final y su resultado.' }
+};
+var ORDEN = ['inicio', 'o1', 'o2', 'o3', 'o4', 'o5', 'cierre'];
+var ANEXO_A = 'REGLAMENTO DE EJEMPLO PARA SOLICITUD DE MATERIALES\nArt. 1 (Objeto). Este reglamento regula cómo las unidades piden materiales de oficina.\nArt. 2 (Quién solicita). Solo el jefe de unidad puede firmar la solicitud.\nArt. 3 (Plazo). La solicitud se presenta con al menos 5 días hábiles de anticipación.\nArt. 4 (Contenido). Debe indicar cantidad, descripción y precio unitario de cada material.\nArt. 5 (Aprobación). La Dirección Administrativa responde en un plazo máximo de 3 días hábiles.';
+var ANEXO_B = 'OFICIO N.º 045/2026\nSanta Cruz de la Sierra, 31 de noviembre de 2026\nSeñor: Lic. Pedro Ejemplo Muestra, Director Administrativo\nPresente.-\nRef.: Solicitud de materiales de oficina\nDe mi mayor consideración:\nMediante el presente, y en cumplimiento del artículo 9 del Reglamento de Ejemplo, solicito la entrega de los siguientes materiales:\n• 10 resmas de papel tamaño carta, a Bs 40 cada una: Bs 600\n• 5 cartuchos de tóner, a Bs 200 cada uno: Bs 1.000\nTotal solicitado: Bs 1.600\nSin otro particular, saludo a usted atentamente.\n[Firma del jefe de unidad] · Unidad de Ejemplo';
+
+// ---------- utilidades
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+// Llamada al servidor del taller. Si falla la red o hay demasiadas personas a la vez, se reintenta sola dos veces.
+var API = 'https://xlkjssypdayyaxwjokry.supabase.co/functions/v1/taller';
+function llamar(fn, args) {
+  return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fn: fn, args: args }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (j.error) throw new Error(j.error); return j.r; });
+}
+function run(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  function intento(n) {
+    return llamar(fn, args)
+      .catch(function (e) {
+        var m = String(e && e.message || e);
+        if (n < 2 && /simult|too many|demasiad|lock|bloqueo|timed out|tiempo de espera|NetworkError|network|Failed to fetch|Load failed|JSON/i.test(m)) return new Promise(function (r) { setTimeout(r, 1500 + Math.random() * 2500); }).then(function () { return intento(n + 1); });
+        throw e;
+      });
+  }
+  return intento(0);
+}
+function aviso(m, ok) { var t = $('toast'); t.textContent = String(m && m.message ? m.message : m).replace(/^Error:\s*/, ''); t.className = 'toast' + (ok ? ' ok' : ''); clearTimeout(aviso.t); aviso.t = setTimeout(function () { t.className = 'toast oculto'; }, ok ? 3000 : 7000); }
+function guardarLocal(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+function leerLocal(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function nivel(p) { if (p === null || p === undefined) return ['N', 'No iniciado']; return p >= 16 ? ['L', 'Logrado'] : (p > 0 ? ['P', 'En proceso'] : ['N', 'No iniciado']); }
+function chipNivel(p) { var n = nivel(p); return '<span class="nivel ' + n[0] + '">' + n[1] + (p !== null && p !== undefined ? ' · ' + p + '/20' : '') + '</span>'; }
+function copiar(id, btn) {
+  var el = $(id), txt = el.innerText;
+  function hecho() { if (btn) { var o = btn.textContent; btn.textContent = '✔ Copiado'; setTimeout(function () { btn.textContent = o; }, 1800); } }
+  function alterno() { var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.focus(); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta); if (ok) hecho(); else aviso('No se pudo copiar automáticamente. Mantenga presionado el texto y elija «Copiar».'); }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(hecho, alterno); else alterno();
+}
+function bloqueCopiar(id, txt) { return '<div class="copiar"><pre id="' + id + '">' + esc(txt) + '</pre><button class="btn peq sec" onclick="copiar(\'' + id + '\', this)">Copiar texto</button></div>'; }
+function ev(o) { return (S.est && S.est.evidencias && S.est.evidencias[o]) || {}; }
+function radio(n) { var r = document.querySelector('input[name="' + n + '"]:checked'); return r ? r.value : ''; }
+function opciones(nombre, lista, actual) { return '<div class="opciones">' + lista.map(function (o) { return '<label><input type="radio" name="' + nombre + '" value="' + o[0] + '"' + (actual === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</div>'; }
+function tabla(filas, cab) { return '<div style="overflow-x:auto"><table>' + (cab ? '<tr>' + cab.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr>' : '') + filas.map(function (f) { return '<tr>' + f.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') + '</table></div>'; }
+function botonGuardar(o, datosJs, txt) { return '<div style="margin-top:12px"><button class="btn" onclick="enviar(\'' + o + '\', ' + datosJs + ', this)">' + (txt || 'Guardar evidencia') + '</button></div><div id="res-' + o + '"></div>'; }
+
+// ---------- ingreso
+document.querySelectorAll('#fCuenta input').forEach(function (r) { r.addEventListener('change', function () { $('ayudaCuenta').classList.toggle('oculto', r.value !== 'nose' || !r.checked); }); });
+run('iniciar').then(function (c) {
+  S.cfg = c; $('lTitulo').textContent = c.titulo; $('hTitulo').innerHTML = esc(c.titulo) + '<small>UAGRM · ' + esc(c.fecha) + '</small>';
+  var id = leerLocal('tallerIA_id');
+  if (id) run('volver', id).then(abrir).catch(function () { guardarLocal('tallerIA_id', null); });
+}).catch(function (e) { aviso(e); });
+
+function entrar() {
+  var cuenta = (document.querySelector('#fCuenta input:checked') || {}).value;
+  if (!cuenta) { aviso('Responda si tiene cuenta de Google (Sí, No o No sé).'); return; }
+  var b = $('bEntrar'); b.disabled = true; b.textContent = 'Entrando…';
+  run('ingresar', { codigo: $('fCodigo').value, nombre: $('fNombre').value, unidad: $('fUnidad').value, equipo: $('fEquipo').value, ruta: cuenta === 'si' ? 'A' : 'B' })
+    .then(function (e) { abrir(e); if (cuenta === 'nose') aviso('Empezamos con la ruta sin cuenta de Google. Puede cambiarla en Inicio.', true); })
+    .catch(aviso).then(function () { b.disabled = false; b.textContent = 'Entrar al taller →'; });
+}
+function abrir(e) {
+  S.est = e; guardarLocal('tallerIA_id', e.id);
+  if ($('toast').className.indexOf('ok') < 0) $('toast').className = 'toast oculto';
+  $('vLogin').classList.add('oculto'); $('vApp').classList.remove('oculto');
+  var t = leerLocal('tallerIA_tab'); if (t && TABS[t]) S.tab = t;
+  pintar();
+}
+function salir() { guardarLocal('tallerIA_id', null); guardarLocal('tallerIA_tab', null); location.reload(); }
+
+// ---------- navegación
+function grupoDe(t) { for (var i = 0; i < GRUPOS.length; i++) if (GRUPOS[i][2].indexOf(t) >= 0) return GRUPOS[i]; return GRUPOS[0]; }
+function ir(t) {
+  var g = null; GRUPOS.forEach(function (x) { if (x[0] === t) g = x; });
+  if (g) { t = g[0] === 'uni' ? (S.ultUni || primerPendiente()) : g[2][0]; }
+  S.tab = t; if (UNI.indexOf(t) >= 0) S.ultUni = t; guardarLocal('tallerIA_tab', t); pintar(); window.scrollTo(0, 0);
+}
+function primerPendiente() { for (var i = 0; i < UNI.length; i++) if ((S.est.puntos[UNI[i]] || 0) < 16) return UNI[i]; return 'o1'; }
+function pintar() {
+  var e = S.est, g = grupoDe(S.tab), T = TABS[S.tab];
+  document.body.className = 'ruta-' + (e.ruta === 'B' ? 'B' : 'A');
+  $('hQuien').textContent = e.nombre + (e.equipo ? ' · equipo ' + e.equipo : '') + ' · ' + (e.ruta === 'B' ? 'ruta sin cuenta de Google' : 'ruta con cuenta de Google');
+  $('nav').innerHTML = GRUPOS.map(function (x) { return '<button class="' + (x[0] === g[0] ? 'on' : '') + '" onclick="ir(\'' + x[0] + '\')">' + x[1] + '</button>'; }).join('');
+  var log = 0; UNI.forEach(function (k) { if ((e.puntos[k] || 0) >= 16) log++; });
+  $('tAvance').textContent = 'Su avance: ' + log + ' de 5 unidades logradas · ' + (e.total || 0) + ' de 100 puntos' + (e.quiz !== null && e.quiz !== undefined ? ' · quiz ' + e.quiz + ' de 5' : '');
+  $('bAvance').style.width = (e.total || 0) + '%';
+  $('sub').innerHTML = g[2].length > 1 ? '<div class="subnav">' + g[2].map(function (k) { return '<button class="' + (k === S.tab ? 'on' : '') + '" onclick="ir(\'' + k + '\')">' + ((e.puntos[k] || 0) >= 16 ? '<span class="ok">✔</span> ' : '') + TABS[k].c + '</button>'; }).join('') + '</div>' : '';
+  $('hero').innerHTML = '<div class="hero"><div class="paso">' + g[1] + ' · Paso ' + T.n + ' de 7</div><h1>' + T.t + '</h1><p>' + T.d + '</p></div>';
+  $('cont').innerHTML = VISTAS[S.tab]();
+  var i = ORDEN.indexOf(S.tab), nx = ORDEN[i + 1];
+  $('sig').innerHTML = nx ? '<div class="sig"><div><small>Tu siguiente paso</small><b>' + TABS[nx].t + '</b></div><button class="btn" onclick="ir(\'' + nx + '\')">Continuar →</button></div>' : '';
+  if (S.tab === 'o4') validarArchivo();
+  if (S.res[S.tab]) mostrarRes(S.tab, S.res[S.tab]);
+  if (S.tab === 'cierre' && S.res.quiz) mostrarRes('quiz', S.res.quiz);
+}
+
+// ---------- guardar evidencias
+function enviar(o, datos, btn) {
+  btn.disabled = true; var txt = btn.textContent; btn.textContent = 'Guardando…';
+  run('guardar', S.est.id, o, datos).then(function (r) {
+    S.est = r.estado; S.res[o] = r; pintar();
+    var box = $('res-' + o); if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (o === 'quiz') aviso('Quiz guardado: ' + r.puntos + ' de 5.', r.puntos >= 4);
+    else aviso(r.nivel === 'Logrado' ? '¡Unidad lograda! ' + r.puntos + ' de 20 puntos.' : 'Evidencia guardada: ' + r.puntos + ' de 20. Revise lo que falta.', r.nivel === 'Logrado');
+  }).catch(aviso).then(function () { btn.disabled = false; btn.textContent = txt; });
+}
+function mostrarRes(o, r) {
+  var box = $('res-' + o); if (!box) return;
+  var bien = o === 'quiz' ? r.puntos >= 4 : r.nivel === 'Logrado';
+  var chip = o === 'quiz' ? '<span class="nivel ' + (bien ? 'L' : 'P') + '">' + r.puntos + ' de 5</span>' : chipNivel(r.puntos);
+  box.innerHTML = '<div class="aviso ' + (bien ? 've' : 'am') + ' res"><b>Resultado:</b> ' + chip + '<ul>' + r.detalle.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul></div>';
+}
+function estadoObj(o) { var p = S.est.puntos[o]; return p === null || p === undefined ? '' : '<p>Estado de esta unidad: ' + chipNivel(p) + '</p>'; }
+
+// ---------- vistas
+var VISTAS = {};
+VISTAS.inicio = function () {
+  var e = S.est, c = S.cfg;
+  return '<div class="card"><h2>Mapa de las 5 unidades</h2>' + tabla([
+      ['1', 'Redactar un oficio con IA dictando al teléfono móvil', '25 min'],
+      ['2', 'Evitar que la IA invente datos', '25 min'],
+      ['3', 'Consultar un documento con NotebookLM', '20 min'],
+      ['4', 'Escanear y guardar con orden', '25 min'],
+      ['5', 'Qué información nunca compartir con una IA', '20 min']], ['N.º', 'Unidad', 'Tiempo']) +
+    '<p class="mini" style="margin-top:8px">En cada unidad deja una evidencia corta. El simulador le dice al momento si la logró y qué le falta.</p></div>' +
+    '<div class="card"><h2>Reglas de oro del taller</h2><ul class="pasos">' +
+    '<li><b>Solo información pública.</b> Nunca use datos personales reales ni documentos reservados.</li>' +
+    '<li><b>La IA propone, usted verifica.</b> Un texto bien escrito puede tener datos falsos.</li>' +
+    '<li><b>Primero Gemini.</b> Si falla o se acaba el límite, use ChatGPT.</li></ul></div>' +
+    '<div class="card"><h2>Su equipo: todos practican, una persona guía</h2><p>Todos hacen todos los ejercicios en su propio teléfono móvil. La persona guía ayuda en 3 niveles:</p><ol class="pasos">' +
+    '<li><b>Señalar:</b> muestra dónde mirar.</li><li><b>Decir:</b> explica el paso con palabras, sin tocar el teléfono móvil del compañero.</li><li><b>Mostrar:</b> solo si sigue atorado, lo hace en su propio teléfono móvil y el compañero lo repite en el suyo.</li></ol>' +
+    '<p class="mini">Manos fuera: nadie toca el teléfono móvil de otro. Primero intente 1 minuto, luego pregunte.</p></div>' +
+    '<div class="card"><h2>Su ruta de trabajo</h2>' +
+    '<p>' + (e.ruta === 'B' ? '<b>Ruta B: sin cuenta de Google.</b> Usará ChatGPT sin iniciar sesión, hará NotebookLM con turnos de 2 minutos en el teléfono móvil de un compañero y guardará su escaneo en su teléfono móvil.' : '<b>Ruta A: con cuenta de Google.</b> Usará Gemini (o ChatGPT), NotebookLM y su Drive personal.') + '</p>' +
+    '<button class="btn sec peq" onclick="cambiarRuta(\'' + (e.ruta === 'B' ? 'A' : 'B') + '\')">Cambiar a la ruta ' + (e.ruta === 'B' ? 'A (sí tengo cuenta de Google)' : 'B (no tengo cuenta de Google)') + '</button></div>' +
+    '<div class="card"><h2>Presentación del taller</h2>' + (c.urlPresentacion ? '<a class="btn" href="' + esc(c.urlPresentacion) + '" target="_blank" rel="noopener">Descargar la presentación</a>' : '<p class="mini">El facilitador todavía no cargó la presentación.</p>') + '</div>';
+};
+VISTAS.o1 = function () {
+  var d = ev('o1'), r = d.rtcf || [];
+  var prompt = 'Actúa como secretaria de una dirección universitaria. Redacta un oficio dirigido al Decano de una facultad. Solicita 10 resmas de papel y 5 tóner para la oficina. Explica que el material se acabó este mes. Usa tono formal y respetuoso. Máximo 150 palabras. Si falta un dato, escribe [FALTA DATO].';
+  return estadoObj('o1') +
+    '<div class="card"><h2>La idea clave</h2><p>La IA es como un ayudante nuevo, muy rápido, pero que no conoce su oficina. Si le dice solo «haz comida», cocinará cualquier cosa. Con la IA usamos 4 datos: <b>R-T-C-F</b>.</p>' +
+    tabla([['<b>Rol</b>', '¿Quién es la IA? «Actúa como secretaria de una dirección universitaria.»'], ['<b>Tarea</b>', '¿Qué debe hacer? «Redacta un oficio solicitando materiales de oficina.»'], ['<b>Contexto</b>', '¿Qué debe saber? A quién va, para qué, fecha, cantidad.'], ['<b>Formato</b>', '¿Cómo lo quiere? «Tono formal, máximo 150 palabras.»']], ['Letra', 'Pregunta que responde']) + '</div>' +
+    '<div class="card"><h2>Pasos en el teléfono móvil</h2><ol class="pasos">' +
+    '<li class="ruta-a-only">Abra la aplicación <b>Gemini</b>. Si falla, use <b>ChatGPT</b>.</li>' +
+    '<li class="ruta-b-only">Abra <b>chatgpt.com</b> en el navegador, sin iniciar sesión.</li>' +
+    '<li>Toque el cuadro de texto. Aparece el teclado.</li>' +
+    '<li>Toque el <b>micrófono 🎤 del teclado</b> y hable despacio, con frases claras.</li>' +
+    '<li>Cuando termine, toque el micrófono otra vez. Lea lo que escribió el teléfono móvil y corrija.</li>' +
+    '<li>Toque el botón de enviar y espere la respuesta.</li>' +
+    '<li>Lea el oficio. Si falta algo, pida un cambio: «Hazlo más corto» o «Agrega la fecha».</li></ol>' +
+    '<div class="aviso na ruta-b-only"><b>Ruta B:</b> sin cuenta, ChatGPT tiene una sola conversación y no se guarda. Copie su oficio aquí antes de cerrar.</div></div>' +
+    '<div class="card"><h2>Ejercicio: copie, adapte y dicte</h2>' + bloqueCopiar('pO1', prompt) +
+    '<p>Después compare: escriba solo <b>«hazme un oficio»</b> y mire la diferencia.</p></div>' +
+    '<div class="card"><h2>Su evidencia</h2>' +
+    '<label for="o1Of">Pegue aquí el oficio que obtuvo con R-T-C-F</label><textarea id="o1Of" rows="8">' + esc(d.oficio) + '</textarea>' +
+    '<label>Su prompt incluyó:</label>' + ['Rol', 'Tarea', 'Contexto', 'Formato'].map(function (t, i) { return '<label class="chk"><input type="checkbox" id="o1R' + i + '"' + (r[i] ? ' checked' : '') + '> ' + t + '</label>'; }).join('') +
+    '<label for="o1Cmp">Comparado con «hazme un oficio», ¿cuál salió mejor y por qué?</label><textarea id="o1Cmp" rows="3">' + esc(d.comparacion) + '</textarea>' +
+    botonGuardar('o1', '{oficio: $(\'o1Of\').value, rtcf: [0,1,2,3].map(function(i){return $(\'o1R\'+i).checked;}), comparacion: $(\'o1Cmp\').value}') + '</div>' +
+    '<div class="card"><h2>Reto extra</h2><p>Pida el mismo oficio con otro tono: más cálido, más corto o para otro destinatario. ¿Cuál prefiere?</p></div>';
+};
+VISTAS.o2 = function () {
+  var d = ev('o2'), q = d.detectives || [];
+  var fiel = 'Actúa como secretaria de una dirección universitaria. Con el texto que te pego, redacta un oficio solicitando [lo que necesitas]. Usa solo datos del texto. Si falta un dato, escribe [FALTA DATO]. No inventes cifras, fechas ni artículos de normas. Después del oficio, lista los datos que usaste y copia entre comillas la frase del texto que los respalda.';
+  var preg = [
+    ['La <b>fecha</b> del oficio.', [['a', 'No existe: noviembre tiene 30 días'], ['x', 'Falta el día de la semana'], ['y', 'La fecha está bien']]],
+    ['Una <b>cifra</b> del oficio.', [['x', 'El precio del tóner está mal'], ['b', '10 × Bs 40 = Bs 400, no 600; el total es Bs 1.400'], ['y', 'Las cifras están bien']]],
+    ['La <b>cita de artículo</b>.', [['x', 'El artículo 9 trata otro tema'], ['y', 'Debió citar una ley nacional'], ['c', 'El Anexo A solo tiene 5 artículos: el 9 no existe']]]
+  ];
+  return estadoObj('o2') +
+    '<div class="card"><h2>La idea clave</h2><p>Cuando la IA inventa un dato se llama <b>alucinación</b>. Es como un vecino que nunca dice «no sé». La IA no consulta una enciclopedia: adivina qué texto suena bien. Lo que más inventa: <b>cifras, fechas, nombres y números de artículos</b>.</p></div>' +
+    '<div class="card"><h2>El método FIEL («sé fiel a la fuente»)</h2>' +
+    tabla([['<b>F</b>uente', 'Dale el texto base y pide: «Responde solo con este texto.»'], ['<b>I</b>nforma si no sabes', '«Si el dato no está, escribe: No tengo ese dato.»'], ['<b>E</b>videncia', '«Copia entre comillas la frase que respalda cada dato.»'], ['<b>L</b>ímites', '«No inventes cifras, fechas, nombres ni artículos.»']], ['Letra', 'Qué le dice a la IA']) +
+    '<p class="mini" style="margin-top:8px">FIEL reduce los errores, pero no los elimina. Por eso siempre verifica usted.</p></div>' +
+    '<div class="card"><h2>Anexo A · Reglamento de ejemplo</h2><p class="mini">Texto inventado solo para el taller. Tiene 5 artículos.</p>' + bloqueCopiar('anA', ANEXO_A) + '</div>' +
+    '<div class="card"><h2>Ejercicio «Detectives» (6 minutos)</h2><p>Este oficio (Anexo B) tiene 3 errores escondidos. Compruebe con el Anexo A. Busque solo 2 minutos y luego comparen en equipo. <b>Después</b> marque aquí lo que encontró.</p>' + bloqueCopiar('anB', ANEXO_B) +
+    preg.map(function (p, i) { return '<div class="caso"><p><b>Error ' + (i + 1) + '.</b> ' + p[0] + ' ¿Qué está mal?</p>' + opciones('o2d' + i, p[1], q[i]) + '</div>'; }).join('') + '</div>' +
+    '<div class="card"><h2>Ejercicio «Reparadores» (8 minutos)</h2><p>Pedido débil: <b>«Hazme un oficio sobre el reglamento.»</b> Reescríbalo con FIEL. Puede partir de este modelo:</p>' + bloqueCopiar('pO2', fiel) +
+    '<ol class="pasos"><li>Copie el Anexo A (botón de arriba) y péguelo en Gemini o ChatGPT.</li><li>Debajo, escriba o dicte su pedido con las reglas FIEL y envíe.</li><li>Revise que la IA haya citado frases del texto.</li></ol>' +
+    '<label for="o2Rep">Pegue aquí el pedido que usted reescribió</label><textarea id="o2Rep" rows="5">' + esc(d.reparado) + '</textarea>' +
+    botonGuardar('o2', '{detectives: [radio(\'o2d0\'), radio(\'o2d1\'), radio(\'o2d2\')], reparado: $(\'o2Rep\').value}') + '</div>' +
+    '<div class="card"><h2>Reto extra</h2><p>Pregunte a Gemini por un artículo concreto de un reglamento sin darle el texto. Luego pídalo con FIEL y el texto. Compare.</p></div>';
+};
+VISTAS.o3 = function () {
+  var d = ev('o3'), c = S.cfg, doc = c.nombreDocumento || 'el documento público que entrega el facilitador';
+  return estadoObj('o3') +
+    '<div class="card"><h2>La idea clave</h2><p>NotebookLM es como un bibliotecario que solo usa el libro que usted le da. Cuando responde, le señala el párrafo exacto. No elimina el error, pero lo hace <b>visible y fácil de comprobar</b>.</p>' +
+    '<p>Documento de hoy: <b>' + esc(doc) + '</b></p>' +
+    (c.urlDocumento ? '<a class="btn" href="' + esc(c.urlDocumento) + '" target="_blank" rel="noopener">Descargar el documento (PDF)</a>' : '<p class="mini">El facilitador le dará el documento por código QR.</p>') + '</div>' +
+    '<div class="card"><h2>Pasos en el teléfono móvil</h2>' +
+    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> mire el teléfono móvil de un compañero con cuenta de Google y luego haga su turno de 2 minutos. Las preguntas y la evidencia son suyas.</div><ol class="pasos">' +
+    '<li>Abra la aplicación <b>NotebookLM</b>. Si no la tiene, abra Chrome y escriba <b>notebooklm.google.com</b>.</li>' +
+    '<li>Entre con su cuenta de Google (la misma de Gmail).</li>' +
+    '<li>Cree un cuaderno nuevo y agregue como fuente el PDF del documento.</li>' +
+    '<li>Espere a que termine de cargar. Con datos móviles puede tardar un poco.</li>' +
+    '<li>Escriba o dicte una pregunta.</li>' +
+    '<li>En la respuesta verá <b>números pequeños</b>. Tóquelos: le llevan al párrafo original.</li>' +
+    '<li>Compare la respuesta con ese párrafo. ¿Dice lo mismo?</li></ol>' +
+    '<p class="mini">Si no le deja entrar: algunas cuentas institucionales tienen restricciones; use una cuenta personal de Gmail. Si no carga el archivo, use un documento corto.</p></div>' +
+    '<div class="card"><h2>Ejercicio: 2 preguntas</h2>' +
+    '<label for="o3P1">1. Una pregunta cuya respuesta <b>sí</b> está en el documento</label><input type="text" id="o3P1" value="' + esc(d.pregunta1) + '">' +
+    '<label>¿Tocó el número de la cita y comprobó que el párrafo dice lo mismo?</label>' + opciones('o3c', [['si', 'Sí, lo comprobé'], ['no', 'No pude comprobarlo']], d.comprobado) +
+    '<label for="o3F">Copie una frase del párrafo original</label><textarea id="o3F" rows="3">' + esc(d.frase) + '</textarea>' +
+    '<label for="o3P2">2. Una pregunta cuya respuesta <b>no</b> está en el documento</label><input type="text" id="o3P2" value="' + esc(d.pregunta2) + '">' +
+    '<label>¿Qué hizo NotebookLM con esa pregunta?</label>' + opciones('o3r', [['no_encuentra', 'Dijo que no lo encuentra'], ['invento', 'Inventó una respuesta'], ['otra', 'Otra cosa']], d.reaccion) +
+    '<label for="o3Par">Si hizo su turno en el teléfono móvil de un compañero, ¿de quién? (opcional)</label><input type="text" id="o3Par" value="' + esc(d.pareja || S.est.pareja) + '">' +
+    botonGuardar('o3', '{pregunta1: $(\'o3P1\').value, comprobado: radio(\'o3c\'), frase: $(\'o3F\').value, pregunta2: $(\'o3P2\').value, reaccion: radio(\'o3r\'), pareja: $(\'o3Par\').value}') + '</div>' +
+    '<div class="card"><h2>Reto extra</h2><p>Pida un resumen de 5 puntos del documento. Verifique 2 puntos tocando sus números de cita.</p></div>';
+};
+VISTAS.o4 = function () {
+  var d = ev('o4'), f = S.cfg.fecha || '2026-11-18';
+  return estadoObj('o4') +
+    '<div class="card"><h2>Primero: la regla de orden</h2><p><b>Carpetas:</b> Año › Unidad › Tipo de documento. Ejemplo: 2026 › Planificación › Oficios.</p>' +
+    '<p><b>Nombre del archivo:</b> fecha primero, luego tipo, asunto y versión. Sin tildes, sin espacios, con guiones.</p>' +
+    bloqueCopiar('nO4', f + '_Oficio_Solicitud-Materiales_v1') + '</div>' +
+    '<div class="card"><h2>Pasos para escanear</h2>' +
+    '<h3>Android (con Google Drive)</h3><ol class="pasos"><li>Abra <b>Google Drive</b>.</li><li>Toque el botón <b>+</b>.</li><li>Toque <b>Escanear</b>. Si pide permiso para la cámara, toque <b>Permitir</b>.</li><li>Ponga el papel sobre una superficie plana, con buena luz, y apunte la cámara.</li><li>Tome la foto y revise que se vea todo el texto.</li><li>Guarde con el nombre de la regla.</li></ol>' +
+    '<h3>iPhone (con la aplicación Notas)</h3><ol class="pasos"><li>Abra <b>Notas</b> y cree una nota nueva.</li><li>Toque el ícono de la cámara y luego <b>Escanear documentos</b>.</li><li>Apunte al papel y toque <b>Guardar</b>.</li><li class="ruta-a-only">Para pasarlo a Drive: toque <b>Compartir</b> y elija Drive.</li></ol>' +
+    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> sin cuenta de Google no hay Drive. Guarde el escaneo en una carpeta de su teléfono móvil con la misma regla de nombre y de carpetas.</div>' +
+    '<p class="mini">Si no encuentra la opción Escanear, pida ayuda a su persona guía. Si no hay señal, el archivo queda en el teléfono móvil y se sube después.</p></div>' +
+    '<div class="card"><h2>Ejercicio</h2><p>Escanee la hoja del <b>Anexo B</b> (el oficio de ejemplo). Guárdela con la regla y en las carpetas Año › Unidad › Tipo.</p>' +
+    '<label for="o4N">Nombre exacto del archivo</label><input type="text" id="o4N" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="' + esc(f) + '_Oficio_Solicitud-Materiales_v1" value="' + esc(d.archivo) + '" oninput="validarArchivo()"><div class="valida" id="o4V"></div>' +
+    '<label>Carpetas donde lo guardó</label><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">' +
+    '<input type="text" id="o4A" placeholder="Año: 2026" value="' + esc(d.carpAnio) + '"><input type="text" id="o4U" placeholder="Su unidad" value="' + esc(d.carpUnidad) + '"><input type="text" id="o4T" placeholder="Tipo: Oficios" value="' + esc(d.carpTipo) + '"></div>' +
+    '<label class="chk"><input type="checkbox" id="o4X"' + (d.anexoB ? ' checked' : '') + '> Escaneé la hoja del Anexo B (no un documento real)</label>' +
+    botonGuardar('o4', '{archivo: $(\'o4N\').value, carpAnio: $(\'o4A\').value, carpUnidad: $(\'o4U\').value, carpTipo: $(\'o4T\').value, anexoB: $(\'o4X\').checked}') + '</div>' +
+    '<div class="card"><h2>Reto extra</h2><p>Escanee 2 páginas y únalas en un solo archivo. Dele un nombre con versión <b>v2</b>.</p></div>';
+};
+function validarArchivo() {
+  var el = $('o4N'), v = $('o4V'); if (!el || !v) return;
+  var s = el.value.trim(); if (!s) { v.innerHTML = ''; return; }
+  var faltas = [];
+  if (/\s/.test(s)) faltas.push('tiene espacios');
+  if (/[áéíóúÁÉÍÓÚñÑüÜ]/.test(s)) faltas.push('tiene tildes o ñ');
+  if (!/^\d{4}-\d{2}-\d{2}_/.test(s)) faltas.push('debe empezar con la fecha AAAA-MM-DD y un guion bajo');
+  if (s.replace(/\.[a-z]+$/i, '').split('_').length < 4) faltas.push('faltan partes: Fecha_Tipo_Asunto_v1');
+  if (!/_v\d+(\.[a-z]+)?$/i.test(s)) faltas.push('debe terminar con la versión, por ejemplo _v1');
+  v.innerHTML = faltas.length ? '<span style="color:#FFB08A">✘ Revise: ' + faltas.join('; ') + '.</span>' : '<span style="color:#9BE38C">✔ El nombre cumple las 4 partes: fecha, tipo, asunto y versión.</span>';
+}
+var CASOS5 = ['Calendario académico publicado en la web', 'Lista de estudiantes con sus notas finales', 'Modelo de oficio con [nombre] en vez de nombres reales', 'Correo de un docente con su número de teléfono móvil', 'Acta interna de reunión, ya sin nombres ni datos personales', 'Contraseña de un sistema institucional', 'Instructivo interno para pedir materiales, sin nombres', 'Foto del carnet de un estudiante'];
+var TEXTO_E3 = 'La estudiante Ana Ejemplo Pérez, registro 12345678, celular 70000000, solicita permiso para faltar del 20 al 22 de noviembre por un viaje familiar. Su jefe de carrera, Lic. Carlos Muestra, debe autorizarlo.';
+VISTAS.o5 = function () {
+  var d = ev('o5'), rc = d.casos || [];
+  return estadoObj('o5') +
+    '<div class="card"><h2>La idea clave</h2><p>Lo que escribe en una IA sale de su teléfono móvil y viaja a servidores externos. Es como gritar en una plaza: ya no controla quién escucha ni quién lo guarda. Usamos un <b>semáforo</b>:</p>' +
+    tabla([['<span class="nivel L">VERDE</span> puede usarla', 'Información pública. Ejemplo: un reglamento publicado, el calendario académico, un modelo de oficio con [nombre].'], ['<span class="nivel P">AMARILLO</span> con cuidado', 'Información interna, sin datos personales. Úsela solo si quita nombres, cargos con nombre y cifras sensibles.'], ['<span class="nivel" style="background:#FF4C00;color:#fff">ROJO</span> nunca la suba', 'Notas, cédulas, registros, números de teléfono móvil, direcciones, fotos de carnets, datos de salud, contraseñas, documentos reservados, finanzas internas.']]) + '</div>' +
+    '<div class="card"><h2>El test de 3 preguntas</h2><ol class="pasos"><li><b>¿Es público?</b> ¿Cualquier persona puede verlo en la web oficial? Si sí, es verde.</li><li><b>¿Identifica a alguien?</b> Nombre, cédula, registro, teléfono móvil, dirección, notas o salud: es rojo.</li><li><b>¿Podría perjudicar</b> a una persona o a la universidad si se publica? Si sí, es rojo. Si no, pero es interno, es amarillo: quite lo que identifica.</li></ol>' +
+    '<div class="aviso na"><b>Regla de oro: si duda, es rojo.</b> Consulte a su jefe de unidad.</div>' +
+    '<p class="mini">Ejercicio 1 (juego de los dedos): lo dirige el facilitador en voz alta. 1 dedo = verde, 2 = amarillo, 3 = rojo.</p></div>' +
+    '<div class="card"><h2>Ejercicio 2: clasifique usted solo</h2>' + CASOS5.map(function (t, i) { return '<div class="caso"><p><b>' + (i + 1) + '.</b> ' + esc(t) + '</p>' + opciones('o5c' + i, [['V', 'Verde'], ['A', 'Amarillo'], ['R', 'Rojo']], rc[i]) + '</div>'; }).join('') + '</div>' +
+    '<div class="card"><h2>Ejercicio 3: anonimice y use la IA</h2><p>Practique con este texto <b>inventado</b>:</p>' + bloqueCopiar('e3', TEXTO_E3) +
+    '<ol class="pasos"><li>Identifique todo lo que identifica a alguien: nombre, registro, celular y nombre del jefe.</li><li>Reescriba el texto cambiando esos datos por etiquetas: «Persona A», [registro], [celular], «jefe de carrera».</li><li>Pida a un compañero que revise que no quedó ningún dato real.</li><li>Abra Gemini (o ChatGPT), pegue <b>solo el texto anonimizado</b> y pida: «Redacta una respuesta formal de la jefatura autorizando este permiso.»</li><li>Cambie las etiquetas por los datos reales <b>fuera de la IA</b>, en su propio documento.</li></ol>' +
+    '<label for="o5An">Pegue aquí su texto anonimizado</label><textarea id="o5An" rows="4">' + esc(d.anonimizado) + '</textarea>' +
+    botonGuardar('o5', '{casos: [0,1,2,3,4,5,6,7].map(function(i){return radio(\'o5c\'+i);}), anonimizado: $(\'o5An\').value}', 'Guardar y ver las respuestas') + '</div>' +
+    '<div class="card"><h2>Fuentes</h2><p class="mini">Lista elaborada con fuentes externas: la UAGRM no tiene una política propia publicada sobre este tema.</p><ul class="fuentes">' +
+    '<li>Constitución Política del Estado de Bolivia, art. 21, numeral 2: derecho a la privacidad, intimidad, honra, honor, propia imagen y dignidad. <a href="https://bolivia.justia.com/nacionales/nueva-constitucion-politica-del-estado/primera-parte/titulo-ii/capitulo-tercero/seccion-i/" target="_blank" rel="noopener">Ver texto</a></li>' +
+    '<li>Bolivia no tiene todavía una ley general de protección de datos personales; la AGETIC presentó un anteproyecto. <a href="https://agetic.gob.bo/wp-content/uploads/2024/08/DATOS-PERSONALES-PRESENTACION-ANTEPROYECTO-DE-LEY-2024-firmado.pdf" target="_blank" rel="noopener">AGETIC</a> · <a href="https://cursos.internetbolivia.org/wp-content/uploads/2024/10/cartilla-derecho-privacidad.pdf" target="_blank" rel="noopener">Fundación InternetBolivia.org</a></li>' +
+    '<li>Google, Aviso de privacidad de las Apps de Gemini: revisores humanos leen parte de las conversaciones; pide no escribir información confidencial. <a href="https://support.google.com/gemini/answer/13594961?hl=es" target="_blank" rel="noopener">Ver aviso</a></li>' +
+    '<li>OpenAI, uso de ChatGPT sin cuenta. <a href="https://help.openai.com/en/articles/9125172" target="_blank" rel="noopener">Ver ayuda</a></li></ul></div>';
+};
+var QUIZ = [
+  ['¿Qué significan R-T-C-F?', [['a', 'Rol, Tarea, Contexto, Formato'], ['b', 'Respuesta, Texto, Cita, Fuente'], ['c', 'Revisar, Tachar, Corregir, Firmar']]],
+  ['Una alucinación de la IA es…', [['a', 'Cuando se apaga sola'], ['b', 'Cuando inventa un dato y lo dice con seguridad'], ['c', 'Cuando responde lento']]],
+  ['En NotebookLM, los números pequeños de la respuesta sirven para…', [['a', 'Contar palabras'], ['b', 'Ir al párrafo original y comprobar'], ['c', 'Cambiar el idioma']]],
+  ['¿Cuál es un buen nombre de archivo?', [['a', 'oficio final nuevo.pdf'], ['b', '2026-11-18_Oficio_Solicitud-Materiales_v1'], ['c', 'Documento1']]],
+  ['¿De qué color es una lista de notas de un curso?', [['a', 'Verde'], ['b', 'Amarillo'], ['c', 'Rojo']]]
+];
+VISTAS.cierre = function () {
+  var e = S.est, c = S.cfg, dq = ev('quiz').respuestas || [];
+  var filas = UNI.map(function (k) { return [TABS[k].c, chipNivel(e.puntos[k]), '<button class="btn peq sec" onclick="ir(\'' + k + '\')">Ir</button>']; });
+  return '<div class="card"><h2>Su resultado</h2>' + tabla(filas, ['Unidad', 'Nivel', '']) + '<p style="margin-top:10px"><b>Total: ' + (e.total || 0) + ' de 100 puntos.</b></p></div>' +
+    '<div class="card"><h2>Revisión cruzada (5 minutos)</h2><p>Revise en el teléfono móvil de un compañero estos 4 puntos y dígaselos de palabra:</p><ul class="pasos">' +
+    '<li>Su oficio usó R-T-C-F.</li><li>Su prompt incluyó FIEL (por ejemplo, [FALTA DATO] o «no inventes»).</li><li>Su escaneo está guardado con nombre estándar.</li><li>No quedó ningún dato personal real en lo que pegó en la IA.</li></ul></div>' +
+    '<div class="card"><h2>Quiz final (7 minutos)</h2>' + QUIZ.map(function (p, i) { return '<div class="caso"><p><b>' + (i + 1) + '.</b> ' + esc(p[0]) + '</p>' + opciones('qz' + i, p[1], dq[i]) + '</div>'; }).join('') +
+    botonGuardar('quiz', '{respuestas: [0,1,2,3,4].map(function(i){return radio(\'qz\'+i);})}', 'Enviar quiz') + '</div>' +
+    '<div class="card"><h2>Para llevar al trabajo</h2><ul class="pasos"><li><b>La IA propone, yo verifico.</b></li><li><b>Lo que escribo sale de mi teléfono móvil</b> hacia servidores externos.</li><li><b>Si dudo, es rojo.</b></li><li>Nombre de archivo: <b>AAAA-MM-DD_Tipo_Asunto_v1</b>; carpetas <b>Año › Unidad › Tipo</b>.</li></ul></div>' +
+    (c.urlPresentacion ? '<div class="card"><h2>Presentación</h2><a class="btn" href="' + esc(c.urlPresentacion) + '" target="_blank" rel="noopener">Descargar la presentación</a></div>' : '');
+};
+function cambiarRuta(r) { run('cambiarRuta', S.est.id, r, S.est.pareja).then(function (e) { S.est = e; pintar(); aviso('Ruta cambiada.', true); }).catch(aviso); }
+</script>
+<style>
+body.ruta-A .ruta-b-only{display:none}
+body.ruta-B .ruta-a-only{display:none}
+</style>
+</body>
+</html>
