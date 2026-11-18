@@ -153,9 +153,9 @@ var TABS = {
   inicio: { n: 1, t: 'Bienvenida', c: 'Inicio', d: 'Las 5 unidades, las reglas de oro y cómo trabaja su equipo.' },
   o1: { n: 2, t: 'Unidad 1 · Redacta un oficio con IA hablándole al teléfono móvil', c: '1 · Oficio', d: '25 minutos. 3 pasos: pedido simple, pedido con R-T-C-F y comparación.' },
   o2: { n: 3, t: 'Unidad 2 · Evita que la IA invente datos', c: '2 · FIEL', d: '25 minutos. 3 pasos: entender FIEL, Detectives y Reparadores.' },
-  o3: { n: 4, t: 'Unidad 3 · Consulta un documento con NotebookLM', c: '3 · NotebookLM', d: '20 minutos. Pregunte al documento y compruebe la fuente.' },
-  o4: { n: 5, t: 'Unidad 4 · Escanea y guarda con orden', c: '4 · Escanear', d: '25 minutos. Escanee el Anexo B y guárdelo con la regla de nombre.' },
-  o5: { n: 6, t: 'Unidad 5 · Qué información nunca compartir con una IA', c: '5 · Semáforo', d: '20 minutos. El semáforo de datos y cómo anonimizar.' },
+  o3: { n: 4, t: 'Unidad 3 · Consulta un documento con NotebookLM', c: '3 · NotebookLM', d: '20 minutos. 3 pasos: preparar, preguntar y comprobar, y poner a prueba.' },
+  o4: { n: 5, t: 'Unidad 4 · Escanea y guarda con orden', c: '4 · Escanear', d: '25 minutos. 3 pasos: la regla de orden, escanear y guardar.' },
+  o5: { n: 6, t: 'Unidad 5 · Qué información nunca compartir con una IA', c: '5 · Semáforo', d: '20 minutos. 3 pasos: el semáforo, clasificar y anonimizar.' },
   cierre: { n: 7, t: 'Cierre', c: 'Cierre', d: 'Revisión cruzada, quiz final y su resultado.' }
 };
 var ORDEN = ['inicio', 'o1', 'o2', 'o3', 'o4', 'o5', 'cierre'];
@@ -394,28 +394,38 @@ VISTAS.o2 = function () {
     botonGuardar('o2', '{detectives: [radio(\'o2d0\'), radio(\'o2d1\'), radio(\'o2d2\')], reparado: $(\'o2Rep\').value, faltaDato: $(\'o2V1\').checked, citas: $(\'o2V2\').checked}') + '</div>' +
     '<div class="card"><h2>Reto extra</h2><p>Pregunte a Gemini por un artículo concreto de un reglamento sin darle el texto. Luego pídalo con FIEL y el texto. Compare.</p></div>';
 };
+function pasoN(n, t) { return '<div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--verdeT);text-transform:uppercase">Paso ' + n + ' de 3</div><h2>' + t + '</h2>'; }
 VISTAS.o3 = function () {
   var d = ev('o3'), c = S.cfg, doc = c.nombreDocumento || 'el documento público que entrega el facilitador';
   return estadoObj('o3') +
-    '<div class="card"><h2>La idea clave</h2><p>NotebookLM es como un bibliotecario que solo usa el libro que usted le da. Cuando responde, le señala el párrafo exacto. No elimina el error, pero lo hace <b>visible y fácil de comprobar</b>.</p>' +
+    '<div class="card"><h2>Lo que hará en esta unidad</h2><p>NotebookLM es como un bibliotecario que <b>solo usa el libro que usted le da</b>, y le señala el párrafo exacto de donde sacó la respuesta. Hará 3 pasos:</p><ol class="pasos">' +
+    '<li><b>Paso 1 · Preparar:</b> subir el documento a NotebookLM.</li>' +
+    '<li><b>Paso 2 · Preguntar y comprobar:</b> una pregunta cuya respuesta <b>sí</b> está en el documento, y revisar la cita.</li>' +
+    '<li><b>Paso 3 · Poner a prueba:</b> una pregunta cuya respuesta <b>no</b> está, y ver qué hace.</li></ol>' +
+    '<p class="mini">No elimina el error, pero lo hace visible y fácil de comprobar.</p></div>' +
+    '<div class="card">' + pasoN(1, 'Preparar el documento') +
     '<p>Documento de hoy: <b>' + esc(doc) + '</b></p>' +
-    (c.urlDocumento ? '<a class="btn" href="' + esc(c.urlDocumento) + '" target="_blank" rel="noopener">Descargar el documento (PDF)</a>' : '<p class="mini">El facilitador le dará el documento por código QR.</p>') + '</div>' +
-    '<div class="card"><h2>Pasos en el teléfono móvil</h2>' +
-    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> mire el teléfono móvil de un compañero con cuenta de Google y luego haga su turno de 2 minutos. Las preguntas y la evidencia son suyas.</div><ol class="pasos">' +
+    (c.urlDocumento ? '<a class="btn" href="' + esc(c.urlDocumento) + '" target="_blank" rel="noopener">1. Descargar el documento (PDF)</a>' : '<p class="mini">El facilitador le dará el documento por código QR.</p>') +
+    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> mire el teléfono móvil de un compañero con cuenta de Google y luego haga su turno de 2 minutos. Las preguntas y la evidencia son suyas.</div>' +
+    '<ol class="pasos" start="2" style="margin-top:10px">' +
     '<li>Abra la aplicación <b>NotebookLM</b>. Si no la tiene, abra Chrome y escriba <b>notebooklm.google.com</b>.</li>' +
     '<li>Entre con su cuenta de Google (la misma de Gmail).</li>' +
-    '<li>Cree un cuaderno nuevo y agregue como fuente el PDF del documento.</li>' +
-    '<li>Espere a que termine de cargar. Con datos móviles puede tardar un poco.</li>' +
-    '<li>Escriba o dicte una pregunta.</li>' +
+    '<li>Cree un cuaderno nuevo.</li>' +
+    '<li>Agregue como fuente el PDF que descargó.</li>' +
+    '<li>Espere a que termine de cargar. Con datos móviles puede tardar un poco.</li></ol>' +
+    '<p class="mini">Si no le deja entrar: algunas cuentas institucionales tienen restricciones; use una cuenta personal de Gmail. Si no carga el archivo, pida ayuda a su persona guía.</p></div>' +
+    '<div class="card">' + pasoN(2, 'Preguntar y comprobar la cita') +
+    '<ol class="pasos"><li>Escriba o dicte una pregunta cuya respuesta <b>sí</b> esté en el documento. Ejemplo: «¿Cuáles son los fines de la universidad?»</li>' +
     '<li>En la respuesta verá <b>números pequeños</b>. Tóquelos: le llevan al párrafo original.</li>' +
     '<li>Compare la respuesta con ese párrafo. ¿Dice lo mismo?</li></ol>' +
-    '<p class="mini">Si no le deja entrar: algunas cuentas institucionales tienen restricciones; use una cuenta personal de Gmail. Si no carga el archivo, use un documento corto.</p></div>' +
-    '<div class="card"><h2>Ejercicio: 2 preguntas</h2>' +
-    '<label for="o3P1">1. Una pregunta cuya respuesta <b>sí</b> está en el documento</label><input type="text" id="o3P1" value="' + esc(d.pregunta1) + '">' +
-    '<label>¿Tocó el número de la cita y comprobó que el párrafo dice lo mismo?</label>' + opciones('o3c', [['si', 'Sí, lo comprobé'], ['no', 'No pude comprobarlo']], d.comprobado) +
-    '<label for="o3F">Copie una frase del párrafo original</label><textarea id="o3F" rows="3">' + esc(d.frase) + '</textarea>' +
-    '<label for="o3P2">2. Una pregunta cuya respuesta <b>no</b> está en el documento</label><input type="text" id="o3P2" value="' + esc(d.pregunta2) + '">' +
-    '<label>¿Qué hizo NotebookLM con esa pregunta?</label>' + opciones('o3r', [['no_encuentra', 'Dijo que no lo encuentra'], ['invento', 'Inventó una respuesta'], ['otra', 'Otra cosa']], d.reaccion) +
+    '<label for="o3P1">Su pregunta</label><input type="text" id="o3P1" value="' + esc(d.pregunta1) + '">' +
+    '<label>¿Tocó el número de la cita y el párrafo dice lo mismo?</label>' + opciones('o3c', [['si', 'Sí, lo comprobé'], ['no', 'No pude comprobarlo']], d.comprobado) +
+    '<label for="o3F">Copie una frase de ese párrafo original</label><textarea id="o3F" rows="3">' + esc(d.frase) + '</textarea></div>' +
+    '<div class="card">' + pasoN(3, 'Poner a prueba: una pregunta sin respuesta') +
+    '<ol class="pasos"><li>Ahora pregunte algo que <b>no</b> está en el documento. Ejemplo: «¿Cuál es el horario de atención de la biblioteca?»</li>' +
+    '<li>Lea la respuesta: ¿dice que no lo encuentra o inventa algo?</li></ol>' +
+    '<label for="o3P2">Su pregunta sin respuesta en el documento</label><input type="text" id="o3P2" value="' + esc(d.pregunta2) + '">' +
+    '<label>¿Qué hizo NotebookLM?</label>' + opciones('o3r', [['no_encuentra', 'Dijo que no lo encuentra'], ['invento', 'Inventó una respuesta'], ['otra', 'Otra cosa']], d.reaccion) +
     '<label for="o3Par">Si hizo su turno en el teléfono móvil de un compañero, ¿de quién? (opcional)</label><input type="text" id="o3Par" value="' + esc(d.pareja || S.est.pareja) + '">' +
     botonGuardar('o3', '{pregunta1: $(\'o3P1\').value, comprobado: radio(\'o3c\'), frase: $(\'o3F\').value, pregunta2: $(\'o3P2\').value, reaccion: radio(\'o3r\'), pareja: $(\'o3Par\').value}') + '</div>' +
     '<div class="card"><h2>Reto extra</h2><p>Pida un resumen de 5 puntos del documento. Verifique 2 puntos tocando sus números de cita.</p></div>';
@@ -423,15 +433,26 @@ VISTAS.o3 = function () {
 VISTAS.o4 = function () {
   var d = ev('o4'), f = S.cfg.fecha || '2026-11-18';
   return estadoObj('o4') +
-    '<div class="card"><h2>Primero: la regla de orden</h2><p><b>Carpetas:</b> Año › Unidad › Tipo de documento. Ejemplo: 2026 › Planificación › Oficios.</p>' +
-    '<p><b>Nombre del archivo:</b> fecha primero, luego tipo, asunto y versión. Sin tildes, sin espacios, con guiones.</p>' +
-    bloqueCopiar('nO4', f + '_Oficio_Solicitud-Materiales_v1') + '</div>' +
-    '<div class="card"><h2>Pasos para escanear</h2>' +
-    '<h3>Android (con Google Drive)</h3><ol class="pasos"><li>Abra <b>Google Drive</b>.</li><li>Toque el botón <b>+</b>.</li><li>Toque <b>Escanear</b>. Si pide permiso para la cámara, toque <b>Permitir</b>.</li><li>Ponga el papel sobre una superficie plana, con buena luz, y apunte la cámara.</li><li>Tome la foto y revise que se vea todo el texto.</li><li>Guarde con el nombre de la regla.</li></ol>' +
-    '<h3>iPhone (con la aplicación Notas)</h3><ol class="pasos"><li>Abra <b>Notas</b> y cree una nota nueva.</li><li>Toque el ícono de la cámara y luego <b>Escanear documentos</b>.</li><li>Apunte al papel y toque <b>Guardar</b>.</li><li class="ruta-a-only">Para pasarlo a Drive: toque <b>Compartir</b> y elija Drive.</li></ol>' +
-    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> sin cuenta de Google no hay Drive. Guarde el escaneo en una carpeta de su teléfono móvil con la misma regla de nombre y de carpetas.</div>' +
+    '<div class="card"><h2>Lo que hará en esta unidad</h2><p>Un papel escaneado y bien nombrado se encuentra en segundos. Hará 3 pasos:</p><ol class="pasos">' +
+    '<li><b>Paso 1 · Aprender la regla:</b> cómo se llaman las carpetas y los archivos.</li>' +
+    '<li><b>Paso 2 · Escanear:</b> la hoja del Anexo B con su teléfono móvil.</li>' +
+    '<li><b>Paso 3 · Guardar con orden:</b> en sus carpetas y con el nombre correcto.</li></ol></div>' +
+    '<div class="card">' + pasoN(1, 'Aprender la regla de orden') +
+    '<p><b>Carpetas:</b> Año › Unidad › Tipo de documento.<br>Ejemplo: <b>2026 › Planificación › Oficios</b></p>' +
+    '<p><b>Nombre del archivo:</b> 4 partes separadas por guion bajo ( _ ):</p>' +
+    tabla([['1. Fecha', 'Año-mes-día: ' + esc(f)], ['2. Tipo', 'Oficio, Informe, Nota…'], ['3. Asunto', 'Palabras unidas con guion: Solicitud-Materiales'], ['4. Versión', 'v1 (v2 si lo corrige)']]) +
+    '<p style="margin-top:10px">Así queda:</p>' + bloqueCopiar('nO4', f + '_Oficio_Solicitud-Materiales_v1') +
+    '<p class="mini">Sin tildes, sin espacios y sin ñ.</p></div>' +
+    '<div class="card">' + pasoN(2, 'Escanear la hoja del Anexo B') +
+    '<p>Ponga la hoja del Anexo B sobre una superficie plana, con buena luz.</p>' +
+    '<h3>Android (con Google Drive)</h3><ol class="pasos"><li>Abra <b>Google Drive</b>.</li><li>Toque el botón <b>+</b>.</li><li>Toque <b>Escanear</b>. Si pide permiso para la cámara, toque <b>Permitir</b>.</li><li>Apunte la cámara, tome la foto y revise que se vea todo el texto.</li></ol>' +
+    '<h3>iPhone (con la aplicación Notas)</h3><ol class="pasos"><li>Abra <b>Notas</b> y cree una nota nueva.</li><li>Toque el ícono de la cámara y luego <b>Escanear documentos</b>.</li><li>Apunte al papel y toque <b>Guardar</b>.</li></ol>' +
+    '<div class="aviso am ruta-b-only"><b>Ruta B:</b> sin cuenta de Google no hay Drive. Use la aplicación de escaneo de su teléfono móvil y guarde el archivo en el teléfono.</div>' +
     '<p class="mini">Si no encuentra la opción Escanear, pida ayuda a su persona guía. Si no hay señal, el archivo queda en el teléfono móvil y se sube después.</p></div>' +
-    '<div class="card"><h2>Ejercicio</h2><p>Escanee la hoja del <b>Anexo B</b> (el oficio de ejemplo). Guárdela con la regla y en las carpetas Año › Unidad › Tipo.</p>' +
+    '<div class="card">' + pasoN(3, 'Guardar con orden') +
+    '<ol class="pasos"><li>Cree la carpeta del año (<b>2026</b>), dentro la de su unidad y dentro la del tipo (<b>Oficios</b>).</li>' +
+    '<li>Guarde el escaneo ahí con el nombre de la regla. Para cambiar el nombre, toque los tres puntos del archivo y elija cambiar nombre.</li>' +
+    '<li>Escriba abajo cómo lo guardó. El simulador le dice al momento si el nombre cumple la regla.</li></ol>' +
     '<label for="o4N">Nombre exacto del archivo</label><input type="text" id="o4N" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="' + esc(f) + '_Oficio_Solicitud-Materiales_v1" value="' + esc(d.archivo) + '" oninput="validarArchivo()"><div class="valida" id="o4V"></div>' +
     '<label>Carpetas donde lo guardó</label><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">' +
     '<input type="text" id="o4A" placeholder="Año: 2026" value="' + esc(d.carpAnio) + '"><input type="text" id="o4U" placeholder="Su unidad" value="' + esc(d.carpUnidad) + '"><input type="text" id="o4T" placeholder="Tipo: Oficios" value="' + esc(d.carpTipo) + '"></div>' +
@@ -455,15 +476,27 @@ var TEXTO_E3 = 'La estudiante Ana Ejemplo Pérez, registro 12345678, celular 700
 VISTAS.o5 = function () {
   var d = ev('o5'), rc = d.casos || [];
   return estadoObj('o5') +
-    '<div class="card"><h2>La idea clave</h2><p>Lo que escribe en una IA sale de su teléfono móvil y viaja a servidores externos. Es como gritar en una plaza: ya no controla quién escucha ni quién lo guarda. Usamos un <b>semáforo</b>:</p>' +
-    tabla([['<span class="nivel L">VERDE</span> puede usarla', 'Información pública. Ejemplo: un reglamento publicado, el calendario académico, un modelo de oficio con [nombre].'], ['<span class="nivel P">AMARILLO</span> con cuidado', 'Información interna, sin datos personales. Úsela solo si quita nombres, cargos con nombre y cifras sensibles.'], ['<span class="nivel" style="background:#FF4C00;color:#fff">ROJO</span> nunca la suba', 'Notas, cédulas, registros, números de teléfono móvil, direcciones, fotos de carnets, datos de salud, contraseñas, documentos reservados, finanzas internas.']]) + '</div>' +
-    '<div class="card"><h2>El test de 3 preguntas</h2><ol class="pasos"><li><b>¿Es público?</b> ¿Cualquier persona puede verlo en la web oficial? Si sí, es verde.</li><li><b>¿Identifica a alguien?</b> Nombre, cédula, registro, teléfono móvil, dirección, notas o salud: es rojo.</li><li><b>¿Podría perjudicar</b> a una persona o a la universidad si se publica? Si sí, es rojo. Si no, pero es interno, es amarillo: quite lo que identifica.</li></ol>' +
+    '<div class="card"><h2>Lo que hará en esta unidad</h2><p>Lo que escribe en una IA sale de su teléfono móvil y viaja a servidores externos: es como gritar en una plaza. Hará 3 pasos:</p><ol class="pasos">' +
+    '<li><b>Paso 1 · Aprender el semáforo</b> y el test de 3 preguntas.</li>' +
+    '<li><b>Paso 2 · Clasificar</b> 8 casos: verde, amarillo o rojo.</li>' +
+    '<li><b>Paso 3 · Anonimizar</b> un texto y recién entonces usarlo con la IA.</li></ol></div>' +
+    '<div class="card">' + pasoN(1, 'Aprender el semáforo') +
+    tabla([['<span class="nivel L">VERDE</span> puede usarla', 'Información pública. Ejemplo: un reglamento publicado, el calendario académico, un modelo de oficio con [nombre].'], ['<span class="nivel P">AMARILLO</span> con cuidado', 'Información interna, sin datos personales. Úsela solo si quita nombres, cargos con nombre y cifras sensibles.'], ['<span class="nivel" style="background:#FF4C00;color:#fff">ROJO</span> nunca la suba', 'Notas, cédulas, registros, números de teléfono móvil, direcciones, fotos de carnets, datos de salud, contraseñas, documentos reservados, finanzas internas.']]) +
+    '<p style="margin-top:12px"><b>El test de 3 preguntas:</b></p><ol class="pasos"><li><b>¿Es público?</b> ¿Cualquier persona puede verlo en la web oficial? Si sí, es verde.</li><li><b>¿Identifica a alguien?</b> Nombre, cédula, registro, teléfono móvil, dirección, notas o salud: es rojo.</li><li><b>¿Podría perjudicar</b> a una persona o a la universidad si se publica? Si sí, es rojo. Si no, pero es interno, es amarillo: quite lo que identifica.</li></ol>' +
     '<div class="aviso na"><b>Regla de oro: si duda, es rojo.</b> Consulte a su jefe de unidad.</div>' +
-    '<p class="mini">Ejercicio 1 (juego de los dedos): lo dirige el facilitador en voz alta. 1 dedo = verde, 2 = amarillo, 3 = rojo.</p></div>' +
-    '<div class="card"><h2>Ejercicio 2: clasifique usted solo</h2>' + CASOS5.map(function (t, i) { return '<div class="caso"><p><b>' + (i + 1) + '.</b> ' + esc(t) + '</p>' + opciones('o5c' + i, [['V', 'Verde'], ['A', 'Amarillo'], ['R', 'Rojo']], rc[i]) + '</div>'; }).join('') + '</div>' +
-    '<div class="card"><h2>Ejercicio 3: anonimice y use la IA</h2><p>Practique con este texto <b>inventado</b>:</p>' + bloqueCopiar('e3', TEXTO_E3) +
-    '<ol class="pasos"><li>Identifique todo lo que identifica a alguien: nombre, registro, celular y nombre del jefe.</li><li>Reescriba el texto cambiando esos datos por etiquetas: «Persona A», [registro], [celular], «jefe de carrera».</li><li>Pida a un compañero que revise que no quedó ningún dato real.</li><li>Abra Gemini (o ChatGPT), pegue <b>solo el texto anonimizado</b> y pida: «Redacta una respuesta formal de la jefatura autorizando este permiso.»</li><li>Cambie las etiquetas por los datos reales <b>fuera de la IA</b>, en su propio documento.</li></ol>' +
-    '<label for="o5An">Pegue aquí su texto anonimizado</label><textarea id="o5An" rows="4">' + esc(d.anonimizado) + '</textarea>' +
+    '<p class="mini">El juego de los dedos lo dirige el facilitador en voz alta: 1 dedo = verde, 2 = amarillo, 3 = rojo.</p></div>' +
+    '<div class="card">' + pasoN(2, 'Clasificar 8 casos') +
+    '<p>Para cada caso, aplique el test de 3 preguntas y elija un color. Luego compare con su equipo.</p>' +
+    CASOS5.map(function (t, i) { return '<div class="caso"><p><b>' + (i + 1) + '.</b> ' + esc(t) + '</p>' + opciones('o5c' + i, [['V', 'Verde'], ['A', 'Amarillo'], ['R', 'Rojo']], rc[i]) + '</div>'; }).join('') + '</div>' +
+    '<div class="card">' + pasoN(3, 'Anonimizar y usar la IA') +
+    '<p>Este texto es <b>inventado</b>. Tiene datos que identifican a personas:</p>' + bloqueCopiar('e3', TEXTO_E3) +
+    '<ol class="pasos"><li>Busque todo lo que identifica a alguien: nombre, registro, celular y nombre del jefe.</li>' +
+    '<li>Reescriba el texto cambiando esos datos por etiquetas: «Persona A», [registro], [celular], «jefe de carrera».</li>' +
+    '<li>Pida a un compañero que revise que no quedó ningún dato real.</li>' +
+    '<li>Pegue abajo su texto anonimizado. El simulador le avisa si quedó algún dato real.</li>' +
+    '<li>Después abra Gemini (o ChatGPT), pegue <b>solo el texto anonimizado</b> y pida: «Redacta una respuesta formal de la jefatura autorizando este permiso.»</li>' +
+    '<li>Cambie las etiquetas por los datos reales <b>fuera de la IA</b>, en su propio documento.</li></ol>' +
+    '<label for="o5An">Su texto anonimizado</label><textarea id="o5An" rows="4">' + esc(d.anonimizado) + '</textarea>' +
     botonGuardar('o5', '{casos: [0,1,2,3,4,5,6,7].map(function(i){return radio(\'o5c\'+i);}), anonimizado: $(\'o5An\').value}', 'Guardar y ver las respuestas') + '</div>' +
     '<div class="card"><h2>Fuentes</h2><p class="mini">Lista elaborada con fuentes externas: la UAGRM no tiene una política propia publicada sobre este tema.</p><ul class="fuentes">' +
     '<li>Constitución Política del Estado de Bolivia, art. 21, numeral 2: derecho a la privacidad, intimidad, honra, honor, propia imagen y dignidad. <a href="https://bolivia.justia.com/nacionales/nueva-constitucion-politica-del-estado/primera-parte/titulo-ii/capitulo-tercero/seccion-i/" target="_blank" rel="noopener">Ver texto</a></li>' +
