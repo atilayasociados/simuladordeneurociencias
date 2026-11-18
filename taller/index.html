@@ -151,7 +151,7 @@ var UNI = ['o1', 'o2', 'o3', 'o4', 'o5'];
 var GRUPOS = [['ini', 'Inicio', ['inicio']], ['uni', 'Unidades', UNI], ['cie', 'Cierre', ['cierre']]];
 var TABS = {
   inicio: { n: 1, t: 'Bienvenida', c: 'Inicio', d: 'Las 5 unidades, las reglas de oro y cómo trabaja su equipo.' },
-  o1: { n: 2, t: 'Unidad 1 · Redacta un oficio con IA hablándole al teléfono móvil', c: '1 · Oficio', d: '25 minutos. Usamos R-T-C-F: Rol, Tarea, Contexto y Formato.' },
+  o1: { n: 2, t: 'Unidad 1 · Redacta un oficio con IA hablándole al teléfono móvil', c: '1 · Oficio', d: '25 minutos. 3 pasos: pedido simple, pedido con R-T-C-F y comparación.' },
   o2: { n: 3, t: 'Unidad 2 · Evita que la IA invente datos', c: '2 · FIEL', d: '25 minutos. Detectives y Reparadores con el método FIEL.' },
   o3: { n: 4, t: 'Unidad 3 · Consulta un documento con NotebookLM', c: '3 · NotebookLM', d: '20 minutos. Pregunte al documento y compruebe la fuente.' },
   o4: { n: 5, t: 'Unidad 4 · Escanea y guarda con orden', c: '4 · Escanear', d: '25 minutos. Escanee el Anexo B y guárdelo con la regla de nombre.' },
@@ -297,25 +297,35 @@ VISTAS.inicio = function () {
 VISTAS.o1 = function () {
   var d = ev('o1'), r = d.rtcf || [];
   var prompt = 'Actúa como secretaria de una dirección universitaria. Redacta un oficio dirigido al Decano de una facultad. Solicita 10 resmas de papel y 5 tóner para la oficina. Explica que el material se acabó este mes. Usa tono formal y respetuoso. Máximo 150 palabras. Si falta un dato, escribe [FALTA DATO].';
+  function paso(n, t) { return '<div class="paso" style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--verdeT);text-transform:uppercase">Paso ' + n + ' de 3</div><h2>' + t + '</h2>'; }
   return estadoObj('o1') +
-    '<div class="card"><h2>La idea clave</h2><p>La IA es como un ayudante nuevo, muy rápido, pero que no conoce su oficina. Si le dice solo «haz comida», cocinará cualquier cosa. Con la IA usamos 4 datos: <b>R-T-C-F</b>.</p>' +
-    tabla([['<b>Rol</b>', '¿Quién es la IA? «Actúa como secretaria de una dirección universitaria.»'], ['<b>Tarea</b>', '¿Qué debe hacer? «Redacta un oficio solicitando materiales de oficina.»'], ['<b>Contexto</b>', '¿Qué debe saber? A quién va, para qué, fecha, cantidad.'], ['<b>Formato</b>', '¿Cómo lo quiere? «Tono formal, máximo 150 palabras.»']], ['Letra', 'Pregunta que responde']) + '</div>' +
-    '<div class="card"><h2>Pasos en el teléfono móvil</h2><ol class="pasos">' +
+    '<div class="card"><h2>Lo que hará en esta unidad</h2><p>Le pedirá a la IA <b>el mismo oficio dos veces</b> y al final <b>comparará</b> los resultados:</p><ol class="pasos">' +
+    '<li><b>Paso 1 · Pedido simple:</b> solo «Hazme un oficio».</li>' +
+    '<li><b>Paso 2 · Pedido con R-T-C-F:</b> con Rol, Tarea, Contexto y Formato.</li>' +
+    '<li><b>Paso 3 · Comparar:</b> ¿cuál salió mejor y por qué?</li></ol>' +
+    '<p class="mini">Pegue cada respuesta en su casilla. Así, al final, tendrá los dos oficios uno debajo del otro.</p></div>' +
+    '<div class="card"><h2>Cómo dictar en el teléfono móvil</h2><ol class="pasos">' +
     '<li class="ruta-a-only">Abra la aplicación <b>Gemini</b>. Si falla, use <b>ChatGPT</b>.</li>' +
     '<li class="ruta-b-only">Abra <b>chatgpt.com</b> en el navegador, sin iniciar sesión.</li>' +
     '<li>Toque el cuadro de texto. Aparece el teclado.</li>' +
     '<li>Toque el <b>micrófono 🎤 del teclado</b> y hable despacio, con frases claras.</li>' +
-    '<li>Cuando termine, toque el micrófono otra vez. Lea lo que escribió el teléfono móvil y corrija.</li>' +
-    '<li>Toque el botón de enviar y espere la respuesta.</li>' +
-    '<li>Lea el oficio. Si falta algo, pida un cambio: «Hazlo más corto» o «Agrega la fecha».</li></ol>' +
-    '<div class="aviso na ruta-b-only"><b>Ruta B:</b> sin cuenta, ChatGPT tiene una sola conversación y no se guarda. Copie su oficio aquí antes de cerrar.</div></div>' +
-    '<div class="card"><h2>Ejercicio: copie, adapte y dicte</h2>' + bloqueCopiar('pO1', prompt) +
-    '<p>Después compare: escriba solo <b>«hazme un oficio»</b> y mire la diferencia.</p></div>' +
-    '<div class="card"><h2>Su evidencia</h2>' +
+    '<li>Toque el micrófono otra vez para parar. Lea lo que se escribió y corrija.</li>' +
+    '<li>Toque el botón de enviar y espere la respuesta.</li></ol>' +
+    '<div class="aviso na ruta-b-only"><b>Ruta B:</b> sin cuenta, ChatGPT tiene una sola conversación y no se guarda. Haga los dos pedidos en esa misma conversación y copie cada respuesta aquí antes de cerrar.</div></div>' +
+    '<div class="card">' + paso(1, 'Pedido simple') +
+    '<p>Dicte o escriba solo esto y envíe:</p>' + bloqueCopiar('pO1a', 'Hazme un oficio') +
+    '<label for="o1Deb">Pegue aquí lo que respondió la IA</label><textarea id="o1Deb" rows="6" placeholder="Copie la respuesta de la IA y péguela aquí">' + esc(d.oficioDebil) + '</textarea></div>' +
+    '<div class="card"><h2>La idea clave: R-T-C-F</h2><p>La IA es como un ayudante nuevo, muy rápido, pero que no conoce su oficina. Si le dice solo «haz comida», cocinará cualquier cosa. Por eso le damos 4 datos:</p>' +
+    tabla([['<b>Rol</b>', '¿Quién es la IA? «Actúa como secretaria de una dirección universitaria.»'], ['<b>Tarea</b>', '¿Qué debe hacer? «Redacta un oficio solicitando materiales de oficina.»'], ['<b>Contexto</b>', '¿Qué debe saber? A quién va, para qué, fecha, cantidad.'], ['<b>Formato</b>', '¿Cómo lo quiere? «Tono formal, máximo 150 palabras.»']], ['Letra', 'Pregunta que responde']) + '</div>' +
+    '<div class="card">' + paso(2, 'Pedido con R-T-C-F') +
+    '<p>Abra un <span class="ruta-a-only">chat nuevo</span><span class="ruta-b-only">nuevo mensaje en la misma conversación</span>. Copie, adapte y dicte este pedido:</p>' + bloqueCopiar('pO1', prompt) +
+    '<p class="mini">Si falta algo, pida un cambio: «Hazlo más corto» o «Agrega la fecha».</p>' +
     '<label for="o1Of">Pegue aquí el oficio que obtuvo con R-T-C-F</label><textarea id="o1Of" rows="8">' + esc(d.oficio) + '</textarea>' +
-    '<label>Su prompt incluyó:</label>' + ['Rol', 'Tarea', 'Contexto', 'Formato'].map(function (t, i) { return '<label class="chk"><input type="checkbox" id="o1R' + i + '"' + (r[i] ? ' checked' : '') + '> ' + t + '</label>'; }).join('') +
-    '<label for="o1Cmp">Comparado con «hazme un oficio», ¿cuál salió mejor y por qué?</label><textarea id="o1Cmp" rows="3">' + esc(d.comparacion) + '</textarea>' +
-    botonGuardar('o1', '{oficio: $(\'o1Of\').value, rtcf: [0,1,2,3].map(function(i){return $(\'o1R\'+i).checked;}), comparacion: $(\'o1Cmp\').value}') + '</div>' +
+    '<label>Marque las partes que tuvo su pedido:</label>' + ['Rol', 'Tarea', 'Contexto', 'Formato'].map(function (t, i) { return '<label class="chk"><input type="checkbox" id="o1R' + i + '"' + (r[i] ? ' checked' : '') + '> ' + t + '</label>'; }).join('') + '</div>' +
+    '<div class="card">' + paso(3, 'Comparar los dos oficios') +
+    '<p>Mire el oficio del Paso 1 y el del Paso 2. Fíjese en: ¿a quién va dirigido?, ¿dice qué se pide y cuánto?, ¿tiene un tono formal?, ¿inventó algo?</p>' +
+    '<label for="o1Cmp">¿Cuál salió mejor y por qué?</label><textarea id="o1Cmp" rows="3" placeholder="Ejemplo: el del Paso 2, porque dice a quién va y qué se pide">' + esc(d.comparacion) + '</textarea>' +
+    botonGuardar('o1', '{oficioDebil: $(\'o1Deb\').value, oficio: $(\'o1Of\').value, rtcf: [0,1,2,3].map(function(i){return $(\'o1R\'+i).checked;}), comparacion: $(\'o1Cmp\').value}') + '</div>' +
     '<div class="card"><h2>Reto extra</h2><p>Pida el mismo oficio con otro tono: más cálido, más corto o para otro destinatario. ¿Cuál prefiere?</p></div>';
 };
 VISTAS.o2 = function () {
