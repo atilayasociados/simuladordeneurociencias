@@ -426,7 +426,7 @@ VISTAS.o3 = function () {
     '<li>Lea la respuesta: ¿dice que no lo encuentra o inventa algo?</li></ol>' +
     '<label for="o3P2">Su pregunta sin respuesta en el documento</label><input type="text" id="o3P2" value="' + esc(d.pregunta2) + '">' +
     '<label>¿Qué hizo NotebookLM?</label>' + opciones('o3r', [['no_encuentra', 'Dijo que no lo encuentra'], ['invento', 'Inventó una respuesta'], ['otra', 'Otra cosa']], d.reaccion) +
-    '<label for="o3Par">Si hizo su turno en el teléfono móvil de un compañero, ¿de quién? (opcional)</label><input type="text" id="o3Par" value="' + esc(d.pareja || S.est.pareja) + '">' +
+    '<label for="o3Par">¿Usó el teléfono móvil de un compañero? Escriba su nombre (opcional)</label><p class="mini" style="margin:0 0 6px">Solo si no pudo usar NotebookLM en su propio teléfono móvil (por ejemplo, porque no tiene cuenta de Google). Si lo hizo en el suyo, déjelo en blanco.</p><input type="text" id="o3Par" value="' + esc(d.pareja || S.est.pareja) + '">' +
     botonGuardar('o3', '{pregunta1: $(\'o3P1\').value, comprobado: radio(\'o3c\'), frase: $(\'o3F\').value, pregunta2: $(\'o3P2\').value, reaccion: radio(\'o3r\'), pareja: $(\'o3Par\').value}') + '</div>' +
     '<div class="card"><h2>Reto extra</h2><p>Pida un resumen de 5 puntos del documento. Verifique 2 puntos tocando sus números de cita.</p></div>';
 };
