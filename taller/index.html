@@ -202,6 +202,31 @@ function opciones(nombre, lista, actual) { return '<div class="opciones">' + lis
 function tabla(filas, cab) { return '<div style="overflow-x:auto"><table>' + (cab ? '<tr>' + cab.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr>' : '') + filas.map(function (f) { return '<tr>' + f.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') + '</table></div>'; }
 function botonGuardar(o, datosJs, txt) { return '<div style="margin-top:12px"><button class="btn" onclick="enviar(\'' + o + '\', ' + datosJs + ', this)">' + (txt || 'Guardar evidencia') + '</button></div><div id="res-' + o + '"></div>'; }
 
+// ---------- borrador automático: lo que escribe se guarda en el teléfono móvil hasta que toca «Guardar»
+function claveBorrador(t) { return 'tallerIA_b_' + (S.est ? S.est.id : '') + '_' + (t || S.tab); }
+function guardarBorrador(e) {
+  if (!S.est || !$('cont') || !$('cont').contains(e.target)) return;
+  var o = {};
+  $('cont').querySelectorAll('input, textarea').forEach(function (el) {
+    if (el.type === 'radio') { if (el.checked) o['r:' + el.name] = el.value; }
+    else if (el.type === 'checkbox') { if (el.id) o['c:' + el.id] = el.checked; }
+    else if (el.id) o['v:' + el.id] = el.value;
+  });
+  guardarLocal(claveBorrador(), JSON.stringify(o));
+}
+function restaurarBorrador() {
+  var t = leerLocal(claveBorrador()), o; if (!t) return;
+  try { o = JSON.parse(t); } catch (e) { return; }
+  Object.keys(o).forEach(function (k) {
+    var tipo = k.slice(0, 2), n = k.slice(2);
+    if (tipo === 'v:' && $(n)) $(n).value = o[k];
+    else if (tipo === 'c:' && $(n)) $(n).checked = o[k];
+    else if (tipo === 'r:') { var r = document.querySelector('input[name="' + n + '"][value="' + String(o[k]).replace(/"/g, '') + '"]'); if (r) r.checked = true; }
+  });
+}
+document.addEventListener('input', guardarBorrador);
+document.addEventListener('change', guardarBorrador);
+
 // ---------- ingreso
 document.querySelectorAll('#fCuenta input').forEach(function (r) { r.addEventListener('change', function () { $('ayudaCuenta').classList.toggle('oculto', r.value !== 'nose' || !r.checked); }); });
 run('iniciar').then(function (c) {
@@ -246,6 +271,7 @@ function pintar() {
   $('sub').innerHTML = g[2].length > 1 ? '<div class="subnav">' + g[2].map(function (k) { return '<button class="' + (k === S.tab ? 'on' : '') + '" onclick="ir(\'' + k + '\')">' + ((e.puntos[k] || 0) >= 16 ? '<span class="ok">✔</span> ' : '') + TABS[k].c + '</button>'; }).join('') + '</div>' : '';
   $('hero').innerHTML = '<div class="hero"><div class="paso">' + g[1] + ' · Paso ' + T.n + ' de 7</div><h1>' + T.t + '</h1><p>' + T.d + '</p></div>';
   $('cont').innerHTML = VISTAS[S.tab]();
+  restaurarBorrador();
   var i = ORDEN.indexOf(S.tab), nx = ORDEN[i + 1];
   $('sig').innerHTML = nx ? '<div class="sig"><div><small>Tu siguiente paso</small><b>' + TABS[nx].t + '</b></div><button class="btn" onclick="ir(\'' + nx + '\')">Continuar →</button></div>' : '';
   if (S.tab === 'o4') validarArchivo();
@@ -257,6 +283,7 @@ function pintar() {
 function enviar(o, datos, btn) {
   btn.disabled = true; var txt = btn.textContent; btn.textContent = 'Guardando…';
   run('guardar', S.est.id, o, datos).then(function (r) {
+    guardarLocal(claveBorrador(), null);
     S.est = r.estado; S.res[o] = r; pintar();
     var box = $('res-' + o); if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     if (o === 'quiz') aviso('Quiz guardado: ' + r.puntos + ' de 5.', r.puntos >= 4);

@@ -81,7 +81,7 @@ td.n{text-align:right}
         <button class="btn sec" data-f="B" onclick="filtro(this)">Sin cuenta de Google</button>
         <input type="text" id="buscar" placeholder="Buscar por apellido, unidad o teléfono" oninput="tabla()" style="max-width:280px">
       </div>
-      <p class="mini">«Necesitan ayuda»: más de 10 minutos sin guardar nada y con unidades pendientes. Toque una fila para ver sus evidencias.</p>
+      <p class="mini">«Necesitan ayuda»: más de 25 minutos sin guardar nada y con unidades pendientes. Toque una fila para ver sus evidencias.</p>
       <div class="scroll"><table id="tab"></table></div>
     </div>
     <div class="card oculto" id="evBox"></div>
@@ -146,7 +146,7 @@ function cargar(primera) {
   }).catch(function (e) { if (primera) { $('vLogin').classList.remove('oculto'); $('vPanel').classList.add('oculto'); } aviso(e); });
 }
 function niv(p) { return p === null || p === undefined ? 'N' : (p >= 16 ? 'L' : (p > 0 ? 'P' : 'N')); }
-function atascado(x) { return x.minutos !== null && x.minutos > 10 && x.o.some(function (p) { return niv(p) !== 'L'; }); }
+function atascado(x) { return x.minutos !== null && x.minutos > 25 && x.o.some(function (p) { return niv(p) !== 'L'; }); }
 function pintar() {
   var P = D.participantes, n = P.length, b = P.filter(function (x) { return x.ruta === 'B'; }).length;
   var prom = n ? Math.round(P.reduce(function (s, x) { return s + x.total; }, 0) / n) : 0, fin = P.filter(function (x) { return x.o.every(function (p) { return niv(p) === 'L'; }); }).length;
