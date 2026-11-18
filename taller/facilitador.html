@@ -79,7 +79,7 @@ td.n{text-align:right}
         <button class="btn sec on" data-f="todos" onclick="filtro(this)">Todos</button>
         <button class="btn sec" data-f="atasc" onclick="filtro(this)">Necesitan ayuda</button>
         <button class="btn sec" data-f="B" onclick="filtro(this)">Sin cuenta de Google</button>
-        <input type="text" id="buscar" placeholder="Buscar por nombre o unidad" oninput="tabla()" style="max-width:280px">
+        <input type="text" id="buscar" placeholder="Buscar por apellido, unidad o teléfono" oninput="tabla()" style="max-width:280px">
       </div>
       <p class="mini">«Necesitan ayuda»: más de 10 minutos sin guardar nada y con unidades pendientes. Toque una fila para ver sus evidencias.</p>
       <div class="scroll"><table id="tab"></table></div>
@@ -164,14 +164,14 @@ function filtro(b) { F = b.getAttribute('data-f'); document.querySelectorAll('[d
 function tabla() {
   if (!D) return;
   var q = ($('buscar').value || '').toLowerCase();
-  var P = D.participantes.filter(function (x) { if (F === 'atasc' && !atascado(x)) return false; if (F === 'B' && x.ruta !== 'B') return false; return !q || (x.nombre + ' ' + x.unidad + ' equipo ' + x.equipo).toLowerCase().indexOf(q) >= 0; });
-  P.sort(function (a, b) { return a.total - b.total || a.nombre.localeCompare(b.nombre); });
-  $('tab').innerHTML = '<tr><th>Nombre</th><th>Unidad</th><th>Equipo</th><th>Ruta</th>' + OBJ.map(function (t, i) { return '<th>U' + (i + 1) + '</th>'; }).join('') + '<th class="n">Total</th><th class="n">Quiz</th><th class="n">Últ. actividad</th></tr>' +
+  var P = D.participantes.filter(function (x) { if (F === 'atasc' && !atascado(x)) return false; if (F === 'B' && x.ruta !== 'B') return false; return !q || (x.nombre + ' ' + x.unidad + ' equipo ' + x.equipo + ' ' + (x.telefono || '') + ' ' + (x.codigoAdm || '')).toLowerCase().indexOf(q) >= 0; });
+  P.sort(function (a, b) { return a.nombre.localeCompare(b.nombre); });
+  $('tab').innerHTML = '<tr><th>Apellidos y nombres</th><th>Teléfono</th><th>Cód. adm.</th><th>Unidad</th><th>Equipo</th><th>Ruta</th>' + OBJ.map(function (t, i) { return '<th>U' + (i + 1) + '</th>'; }).join('') + '<th class="n">Total</th><th class="n">Quiz</th><th class="n">Últ. actividad</th></tr>' +
     (P.length ? P.map(function (x) {
-      return '<tr class="f" onclick="verEv(\'' + x.id + '\')"><td>' + esc(x.nombre) + '</td><td>' + esc(x.unidad) + '</td><td>' + esc(x.equipo) + '</td><td>' + (x.ruta === 'B' ? 'B' : 'A') + '</td>' +
+      return '<tr class="f" onclick="verEv(\'' + x.id + '\')"><td>' + esc(x.nombre) + '</td><td>' + esc(x.telefono || '') + '</td><td>' + esc(x.codigoAdm || '') + '</td><td>' + esc(x.unidad) + '</td><td>' + esc(x.equipo) + '</td><td>' + (x.ruta === 'B' ? 'B' : 'A') + '</td>' +
         x.o.map(function (p) { var v = niv(p); return '<td><span class="ch ' + v + '">' + (p === null ? '–' : p) + '</span></td>'; }).join('') +
         '<td class="n"><b>' + x.total + '</b></td><td class="n">' + (x.quiz === null ? '–' : x.quiz + '/5') + '</td><td class="n' + (atascado(x) ? ' atasc' : '') + '">' + (x.minutos === null ? '—' : 'hace ' + x.minutos + ' min') + '</td></tr>';
-    }).join('') : '<tr><td colspan="12" class="mini">Nadie en este filtro.</td></tr>');
+    }).join('') : '<tr><td colspan="14" class="mini">Nadie en este filtro.</td></tr>');
 }
 function parejas() {
   var P = D.participantes, sin = P.filter(function (x) { return x.ruta === 'B' && !x.pareja && niv(x.o[2]) !== 'L'; }), con = P.filter(function (x) { return x.ruta === 'A'; });

@@ -94,8 +94,16 @@ th{color:var(--suave);font-weight:600}
   <div class="card">
     <label for="fCodigo">Código del taller</label>
     <input type="text" id="fCodigo" autocomplete="off" autocapitalize="characters" placeholder="Ejemplo: IA123">
-    <label for="fNombre">Nombre y apellido</label>
-    <input type="text" id="fNombre" autocomplete="name" placeholder="Ejemplo: María Pérez">
+    <label for="fApP">Apellido paterno</label>
+    <input type="text" id="fApP" autocomplete="family-name" placeholder="Ejemplo: Pérez">
+    <label for="fApM">Apellido materno</label>
+    <input type="text" id="fApM" placeholder="Ejemplo: Rojas">
+    <label for="fNom">Nombres</label>
+    <input type="text" id="fNom" autocomplete="given-name" placeholder="Ejemplo: María Elena">
+    <label for="fCodAdm">Código de administrativo (opcional)</label>
+    <input type="text" id="fCodAdm" autocomplete="off" placeholder="Si no lo recuerda, déjelo en blanco">
+    <label for="fTel">Número de teléfono</label>
+    <input type="tel" id="fTel" inputmode="tel" autocomplete="tel" placeholder="Ejemplo: 71234567">
     <label for="fUnidad">Unidad o dependencia donde trabaja</label>
     <input type="text" id="fUnidad" placeholder="Ejemplo: Secretaría de la Facultad">
     <label for="fEquipo">Número de su equipo (opcional)</label>
@@ -114,7 +122,7 @@ th{color:var(--suave);font-weight:600}
         <li>Si aún no sabe, elija «No». Puede cambiarlo después en la pantalla de Inicio.</li>
       </ol>
     </div>
-    <p class="mini" style="margin-top:12px">No le pedimos carnet, teléfono ni correo: en este taller aprendemos a no entregar datos que no hacen falta.</p>
+    <p class="mini" style="margin-top:12px">Sus datos solo los ve el facilitador del taller, para el registro de asistencia.</p>
     <button class="btn" id="bEntrar" onclick="entrar()" style="margin-top:6px">Entrar al taller →</button>
   </div>
 </div>
@@ -206,7 +214,7 @@ function entrar() {
   var cuenta = (document.querySelector('#fCuenta input:checked') || {}).value;
   if (!cuenta) { aviso('Responda si tiene cuenta de Google (Sí, No o No sé).'); return; }
   var b = $('bEntrar'); b.disabled = true; b.textContent = 'Entrando…';
-  run('ingresar', { codigo: $('fCodigo').value, nombre: $('fNombre').value, unidad: $('fUnidad').value, equipo: $('fEquipo').value, ruta: cuenta === 'si' ? 'A' : 'B' })
+  run('ingresar', { codigo: $('fCodigo').value, apPaterno: $('fApP').value, apMaterno: $('fApM').value, nombres: $('fNom').value, codigoAdm: $('fCodAdm').value, telefono: $('fTel').value, unidad: $('fUnidad').value, equipo: $('fEquipo').value, ruta: cuenta === 'si' ? 'A' : 'B' })
     .then(function (e) { abrir(e); if (cuenta === 'nose') aviso('Empezamos con la ruta sin cuenta de Google. Puede cambiarla en Inicio.', true); })
     .catch(aviso).then(function () { b.disabled = false; b.textContent = 'Entrar al taller →'; });
 }
